@@ -10,9 +10,9 @@ function IndexPage () {
   const content = (
     <>
       <Jumbotron>
-        <h1>Evan <span style={{color: Styles.$orange}}>Tahler</span></h1>
+        <h1>Evan <span style={{ color: Styles.$orange }}>Tahler</span></h1>
         <h4>Product Management, Software Engineering, and Leadership</h4>
-        <hr/>
+        <hr />
         <p><a href='mailto:evan@evantahler.com'>evan@evantahler.com</a></p>
       </Jumbotron>
 
