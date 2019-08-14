@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+const scssToJson = require('scss-to-json')
+const path = require('path')
+const fs = require('fs')
+
+console.log('Compile JSON styles from SCSS...')
+
+const files = [
+  {
+    source: path.join(__dirname, '..', 'static', 'css', '_variables.scss'),
+    destination: path.join(__dirname, '..', 'components', 'styles', 'variables.json')
+  }
+]
+
+for (let i in files) {
+  const source = files[i].source
+  const destination = files[i].destination
+  const data = scssToJson(source)
+  fs.writeFileSync(destination, JSON.stringify(data, null, 2))
+  console.log(`wrote ${destination}`)
+}
+
+console.log('Done building Styles!')

@@ -12,26 +12,23 @@
   "scripts": {
     "dev": "next dev",
     "sitemap": "node ./bin/sitemap.js",
+    "postinstall": "./bin/build-styles",
     "start": "NODE_ENV=production node server.js",
     "test": "jest",
     "pretest": "standard"
   },
   "dependencies": {
     "acorn": "^7.0.0",
-    "babel-core": "7.0.0-bridge.0",
-    "github-api": "^3.2.2",
     "next": "^9.0.3",
     "react": "^16.9.0",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.9.0",
     "react-fontawesome": "^1.6.1",
-    "react-ga": "^2.6.0"
+    "react-ga": "^2.6.0",
+    "scss-to-json": "^2.0.0"
   },
   "devDependencies": {
-    "babel-jest": "24.8.0",
-    "jest": "24.8.0",
-    "react-addons-test-utils": "15.6.2",
-    "react-test-renderer": "16.9.0",
+    "jest": "^24.8.0",
     "standard": "^13.1.0"
   },
   "standard": {
