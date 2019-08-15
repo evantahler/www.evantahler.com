@@ -13,8 +13,7 @@ function BigGlyf ({ name }) {
 function Contact () {
   return (
     <>
-      <br />
-      <h2 id='contact' >Contact</h2>
+      <h2>Contact</h2>
       <hr />
 
       <Row>

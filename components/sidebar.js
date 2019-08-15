@@ -14,6 +14,7 @@ function Sidebar ({ title, content }) {
 
   const linksStyle = {
     color: 'black',
+    fontWeight: 'bold',
     margin: 20
   }
 

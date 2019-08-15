@@ -1,11 +1,20 @@
 import React from 'react'
+import { Alert, Row, Col } from 'react-bootstrap'
 
 function Resume () {
+  const logoStyle = {
+    maxWidth: 100,
+    maxHeight: 100,
+  }
+
   return (
     <>
-      <br />
-      <h2 id='resume' >Resume</h2>
+      <h2>Resume</h2>
       <hr />
+
+      <Alert bsStyle='info'>
+        <a href='/static/evan-tahler-resume.pdf'>Download Full Resume</a>
+      </Alert>
 
       <p>
         Evan is the Chief Product Officer at <a href='https://www.voom.flights'>Voom, an Airbus Company</a>, providing an urban air mobility to cities around the world.
@@ -19,9 +28,17 @@ function Resume () {
         Evan holds a Masters in Entertainment Technology and BS in Mechanical Engineering from Carnegie Mellon University.
       </p>
 
-      <p>
-        ↠ <a href='/static/evan-tahler-resume.pdf'>Download Full Resume</a>
-      </p>
+      <br />
+
+      <Row>
+        <Col md={1} />
+        <Col md={2}><img style={logoStyle} src='/static/images/logos/taskrabbit.png' /></Col>
+        <Col md={2}><img style={logoStyle} src='/static/images/logos/airbus.png' /></Col>
+        <Col md={2}><img style={logoStyle} src='/static/images/logos/voom.png' /></Col>
+        <Col md={2}><img style={logoStyle} src='/static/images/logos/modcloth.jpg' /></Col>
+        <Col md={2}><img style={logoStyle} src='/static/images/logos/disney.png' /></Col>
+        <Col md={1} />
+      </Row>
     </>
   )
 }
