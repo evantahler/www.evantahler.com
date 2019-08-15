@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 
-import IndexPage from '../../pages/index.js'
+import IndexPage from '../../components/sections/introduction'
 
 let container
 
@@ -16,8 +16,8 @@ afterEach(() => {
   container = undefined
 })
 
-describe('Index Page', () => {
-  it('renders the page', () => {
+describe('Introcudtion Section', () => {
+  it('renders the section', () => {
     act(() => { render(<IndexPage />, container) })
     const header = container.querySelector('h1')
     expect(header.textContent).toBe('Evan Tahler')

@@ -14,8 +14,6 @@ function Writing () {
     fetchBlogPosts()
   }, [])
 
-  console.log(data)
-
   return (
     <>
       <h2>Writing</h2>

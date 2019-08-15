@@ -4,7 +4,7 @@ import { Alert, Row, Col } from 'react-bootstrap'
 function Resume () {
   const logoStyle = {
     maxWidth: 100,
-    maxHeight: 100,
+    maxHeight: 100
   }
 
   return (
