@@ -30,7 +30,7 @@ function Resume () {
 
       <br />
 
-      <Row>
+      <Row style={{ textAlign: 'center' }}>
         <Col md={1} />
         <Col md={2}><img style={logoStyle} src='/static/images/logos/taskrabbit.png' /></Col>
         <Col md={2}><img style={logoStyle} src='/static/images/logos/airbus.png' /></Col>

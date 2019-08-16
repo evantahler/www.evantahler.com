@@ -37,7 +37,7 @@ function OpenSource () {
 
       <p>A selction of my open source contributions:</p>
 
-      <Table striped condensed hover>
+      <Table striped condensed>
         <thead>
           <tr>
             <th />

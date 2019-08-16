@@ -3,11 +3,8 @@ import Styles from './styles/variables.json'
 import { Image } from 'react-bootstrap'
 import Trianglify from 'trianglify'
 
-let renderCount = 0
-const maxRenders = 100
-
 function renderTriangles () {
-  if (process.browser & renderCount < maxRenders) {
+  if (process.browser) {
     const sidebar = document.getElementById('sidebar')
     const dimensions = sidebar.getClientRects()[0]
     const pattern = Trianglify({
@@ -16,9 +13,8 @@ function renderTriangles () {
       x_colors: 'YlOrRd',
       cell_size: 30
     })
-    // sidebar.appendChild(pattern.canvas())
+
     sidebar.style['background-image'] = `url(${pattern.png()})`
-    renderCount++
   }
 }
 
@@ -37,7 +33,6 @@ function Sidebar ({ title, content }) {
   }
 
   setTimeout(renderTriangles, 1)
-  setInterval(renderTriangles, 1000 * 5)
 
   return (
     <div className='sidebar' id='sidebar' style={SidebarStyle}>

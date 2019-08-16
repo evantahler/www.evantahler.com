@@ -8,7 +8,8 @@ function Writing () {
   useEffect(() => {
     async function fetchBlogPosts () {
       const data = await fetch(feedUrl).then(response => response.json()) //eslint-disable-line
-      setData({ posts: data.items })
+      const posts = data.items.filter(item => item.thumbnail.indexOf('_/stat?') < 0)
+      setData({ posts })
     }
 
     fetchBlogPosts()
@@ -24,7 +25,7 @@ function Writing () {
         <a href='https://medium.com/@evantahler'>See all psots</a>
       </Alert>
 
-      <Table striped condensed hover>
+      <Table striped condensed>
         <thead>
           <tr>
             <th />
