@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Table } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
+import Card from './../card'
 import GitHub from 'github-api'
 
 const projects = [
@@ -37,30 +38,22 @@ function OpenSource () {
 
       <p>A selction of my open source contributions:</p>
 
-      <Table striped condensed>
-        <thead>
-          <tr>
-            <th />
-            <th>Name</th>
-            <th>Description</th>
-            <th>Stars</th>
-            <th>Link</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            data.repositories.map((repository) => {
-              return <tr key={repository.url}>
-                <td><img style={{ maxWidth: 75 }} src={repository.owner.avatar_url} /></td>
-                <td><strong>{repository.name}</strong></td>
-                <td>{repository.description}</td>
-                <td>{repository.stargazers_count}</td>
-                <td><a href={repository.url}>{repository.full_name}</a></td>
-              </tr>
-            })
-          }
-        </tbody>
-      </Table>
+      <Row>
+        {
+          data.repositories.map((repository) => {
+            console.log(repository)
+            return <Col md={6} key={repository.url}>
+              <Card header={repository.name} title={<a href={repository.html_url}>{repository.full_name}</a>} text={
+                <>
+                  <p>✨ {repository.stargazers_count}, 🍴 {repository.forks_count}</p>
+                  <p><img style={{ maxWidth: 75 }} src={repository.owner.avatar_url} /></p>
+                  <p>{repository.description}</p>
+                </>
+              } />
+            </Col>
+          })
+        }
+      </Row>
     </>
   )
 }

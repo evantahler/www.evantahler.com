@@ -12,7 +12,7 @@ function Resume () {
       <h2>Resume</h2>
       <hr />
 
-      <Alert bsStyle='info'>
+      <Alert bsStyle='warning'>
         <a href='/static/evan-tahler-resume.pdf'>Download Full Resume</a>
       </Alert>
 

@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Alert } from 'react-bootstrap'
+import { Row, Col, Alert } from 'react-bootstrap'
+import Card from './../card'
+
+function stripHtml (html) {
+  const temporalDivElement = document.createElement('div')
+  temporalDivElement.innerHTML = html
+  return temporalDivElement.textContent || temporalDivElement.innerText || ' '
+}
 
 function Writing () {
   const [data, setData] = useState({ posts: [] })
@@ -21,32 +28,25 @@ function Writing () {
       <hr />
 
       <p>I blog at Medium under the name <a href='https://medium.com/@evantahler'>@evantahler</a>.</p>
-      <Alert bsStyle='info'>
-        <a href='https://medium.com/@evantahler'>See all psots</a>
+      <Alert bsStyle='warning'>
+        <a href='https://medium.com/@evantahler'>See all Posts</a>
       </Alert>
 
-      <Table striped condensed>
-        <thead>
-          <tr>
-            <th />
-            <th>Date</th>
-            <th>Title</th>
-            <th>Categiroes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            data.posts.map((post) => {
-              return <tr key={post.guid}>
-                <td><img style={{ maxWidth: 75 }} src={post.thumbnail} /></td>
-                <td>{post.pubDate.split(' ')[0]}</td>
-                <td><strong><a href={post.link}>{post.title}</a></strong></td>
-                <td>{post.categories.join(', ')}</td>
-              </tr>
-            })
-          }
-        </tbody>
-      </Table>
+      <Row>
+        {
+          data.posts.map((post) => {
+            return <Col md={6} key={post.guid}>
+              <Card header={post.pubDate.split(' ')[0]} title={<a href={post.link}>{post.title}</a>} text={
+                <>
+                  <p><em>Categories: {post.categories.join(', ')}</em></p>
+                  <p><img style={{ maxWidth: '99%', maxHeight: 300 }} src={post.thumbnail} /></p>
+                  <p>{stripHtml(post.description.substring(0, 500))}...</p>
+                </>
+              } />
+            </Col>
+          })
+        }
+      </Row>
     </>
   )
 }

@@ -9,8 +9,8 @@ function renderTriangles () {
     const dimensions = sidebar.getClientRects()[0]
     const pattern = Trianglify({
       width: dimensions.width,
-      height: dimensions.height * 2,
-      x_colors: 'YlOrRd',
+      height: dimensions.height * 5,
+      x_colors: 'Greys',
       cell_size: 30
     })
 
@@ -20,7 +20,7 @@ function renderTriangles () {
 
 function Sidebar ({ title, content }) {
   const SidebarStyle = {
-    backgroundColor: Styles.$orange,
+    backgroundColor: Styles['$gray-600'],
     height: '100%',
     textAlign: 'center',
     paddingTop: 100
@@ -36,7 +36,8 @@ function Sidebar ({ title, content }) {
 
   return (
     <div className='sidebar' id='sidebar' style={SidebarStyle}>
-      <Image src='static/images/evan.jpg' className='rounded-circle' style={{ maxWidth: '80%' }} />
+      <div className='d-none d-md-block'><Image src='static/images/evan.jpg' className='rounded-circle' style={{ maxWidth: '80%' }} /></div>
+      <div className='d-md-none'><Image src='static/images/evan.jpg' className='rounded-circle' style={{ maxWidth: 200 }} /></div>
 
       <div style={{
         paddingTop: 20

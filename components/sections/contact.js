@@ -1,14 +1,6 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
-import FontAwesome from 'react-fontawesome'
-
-function BigGlyf ({ name }) {
-  return <span style={{
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'black'
-  }}><FontAwesome name={name} /></span>
-}
+import BigGlyf from './../BigGlyf'
 
 function Contact () {
   return (
