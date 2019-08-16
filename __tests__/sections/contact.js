@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 
-import IntrocudtionSection from '../../components/sections/introduction'
+import ContactSection from '../../components/sections/contact'
 
 let container
 
@@ -18,8 +18,8 @@ afterEach(() => {
 
 describe('Introcudtion Section', () => {
   it('renders the section', () => {
-    act(() => { render(<IntrocudtionSection />, container) })
-    const header = container.querySelector('h1')
-    expect(header.textContent).toBe('Evan Tahler')
+    act(() => { render(<ContactSection />, container) })
+    const header = container.querySelector('div')
+    expect(header.textContent).toContain('@evantahler')
   })
 })

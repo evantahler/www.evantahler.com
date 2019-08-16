@@ -41,7 +41,6 @@ function OpenSource () {
       <Row>
         {
           data.repositories.map((repository) => {
-            console.log(repository)
             return <Col md={6} key={repository.url}>
               <Card header={repository.name} title={<a href={repository.html_url}>{repository.full_name}</a>} text={
                 <>
