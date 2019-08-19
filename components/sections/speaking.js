@@ -33,6 +33,7 @@ function Speaking () {
               </Card.Text>
             </Card.Body>
           </Card>
+          <br />
         </Col>
 
         <Col md={4}>
@@ -59,6 +60,7 @@ function Speaking () {
               </Card.Text>
             </Card.Body>
           </Card>
+          <br />
         </Col>
       </Row>
     </>
