@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col } from 'react-bootstrap'
-import Card from './../card'
+import { Row, Col, ListGroup } from 'react-bootstrap'
 import GitHub from 'github-api'
 
 const projects = [
@@ -38,21 +37,31 @@ function OpenSource () {
 
       <p>A selction of my open source contributions:</p>
 
-      <Row>
+      <ListGroup>
         {
           data.repositories.map((repository) => {
-            return <Col md={6} key={repository.url}>
-              <Card header={repository.name} title={<a href={repository.html_url}>{repository.full_name}</a>} text={
-                <>
-                  <p>✨ {repository.stargazers_count}, 🍴 {repository.forks_count}</p>
-                  <p><img style={{ maxWidth: 75 }} src={repository.owner.avatar_url} /></p>
-                  <p>{repository.description}</p>
-                </>
-              } />
-            </Col>
+            return (
+              <ListGroup.Item key={repository.html_url}>
+                <Row>
+                  <Col md={12}>
+                    <h5><a href={repository.html_url}>{repository.full_name}</a></h5>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col md={1}>
+                    <img style={{ maxWidth: 75 }} src={repository.owner.avatar_url} />
+                  </Col>
+                  <Col md={11}>
+                    <p>✨ {repository.stargazers_count}, 🍴 {repository.forks_count}</p>
+                    <p>{repository.description}</p>
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+            )
           })
         }
-      </Row>
+      </ListGroup>
     </>
   )
 }

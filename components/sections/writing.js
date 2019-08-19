@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Alert } from 'react-bootstrap'
-import Card from './../card'
+import { Row, Col, Alert, Card } from 'react-bootstrap'
 
 function stripHtml (html) {
   const temporalDivElement = document.createElement('div')
@@ -28,21 +27,27 @@ function Writing () {
       <hr />
 
       <p>I blog at Medium under the name <a href='https://medium.com/@evantahler'>@evantahler</a>.</p>
-      <Alert bsStyle='warning'>
+      <Alert variant='info'>
         <a href='https://medium.com/@evantahler'>See all Posts</a>
       </Alert>
 
       <Row>
         {
           data.posts.map((post) => {
-            return <Col md={6} key={post.guid}>
-              <Card header={post.pubDate.split(' ')[0]} title={<a href={post.link}>{post.title}</a>} text={
-                <>
-                  <p><em>Categories: {post.categories.join(', ')}</em></p>
-                  <p><img style={{ maxWidth: '99%', maxHeight: 300 }} src={post.thumbnail} /></p>
-                  <p>{stripHtml(post.description.substring(0, 500))}...</p>
-                </>
-              } />
+            return <Col md={4} key={post.guid}>
+              <Card>
+                <Card.Img variant='top' src={post.thumbnail} />
+                <Card.Body>
+                  <Card.Title><a href={post.link}>{post.title}</a></Card.Title>
+                  <Card.Subtitle className='mb-2 text-muted'>{post.pubDate.split(' ')[0]}</Card.Subtitle>
+                  <Card.Text>
+                    <em>Categories: {post.categories.join(', ')}</em>
+                    <br />
+                    {stripHtml(post.description.substring(0, 500))}...
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+              <br />
             </Col>
           })
         }

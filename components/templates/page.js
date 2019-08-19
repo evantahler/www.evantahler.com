@@ -1,9 +1,11 @@
 import React from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import Head from 'next/head'
-import Sidebar from './../sidebar'
+import Header from './../header'
 
 function PageTemplate ({ title, content }) {
+  const year = new Date().getFullYear()
+
   return (
     <>
       <Head>
@@ -14,17 +16,25 @@ function PageTemplate ({ title, content }) {
         <script src='/static/js/googleAnalytics.js' />
       </Head>
 
-      <Grid fluid>
+      <Header />
+
+      <Container fluid>
         <Row>
-          <Col md={3} style={{ padding: 0 }}>
-            <Sidebar />
-          </Col>
-          <Col md={9}>
+          <Col md={12}>
+            <br />
+            <br />
+            <br />
             <br />
             { content }
           </Col>
         </Row>
-      </Grid>
+
+        <Row>
+          <Col md={12} style={{ textAlign: 'center' }}>
+            <p>Copyright, Evan Tahler {year}</p>
+          </Col>
+        </Row>
+      </Container>
     </>
   )
 }

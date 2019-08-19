@@ -20,11 +20,10 @@
     "github-api": "^3.2.2",
     "next": "^9.0.3",
     "react": "^16.9.0",
-    "react-bootstrap": "^0.32.4",
+    "react-bootstrap": "^1.0.0-beta.12",
     "react-dom": "^16.9.0",
     "react-fontawesome": "^1.6.1",
-    "scss-to-json": "^2.0.0",
-    "trianglify": "^2.0.0"
+    "scss-to-json": "^2.0.0"
   },
   "devDependencies": {
     "jest": "^24.8.0",
