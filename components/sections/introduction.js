@@ -29,13 +29,13 @@ function Introduction () {
 
             <Row>
               <Col md={4} style={{ textAlign: 'center' }}>
-                <a href='https://twitter.com/evantahler'><BigGlyf name='twitter' /><br /> <Badge variant='secondary'>@evantahler</Badge></a>
+                <a target='_blank' href='https://twitter.com/evantahler'><BigGlyf name='twitter' /><br /> <Badge variant='secondary'>@evantahler</Badge></a>
               </Col>
               <Col md={4} style={{ textAlign: 'center' }}>
-                <a href='https://linkedin.com/in/evantahler'><BigGlyf name='linkedin' /><br /> <Badge variant='secondary'>@evantahler</Badge></a>
+                <a target='_blank' href='https://linkedin.com/in/evantahler'><BigGlyf name='linkedin' /><br /> <Badge variant='secondary'>@evantahler</Badge></a>
               </Col>
               <Col md={4} style={{ textAlign: 'center' }}>
-                <a href='mailto:evan@evantahler.com'><BigGlyf name='inbox' /><br /><Badge variant='secondary'>evan@evantahler.com</Badge></a>
+                <a target='_blank' href='mailto:evan@evantahler.com'><BigGlyf name='inbox' /><br /><Badge variant='secondary'>evan@evantahler.com</Badge></a>
               </Col>
             </Row>
           </Col>

@@ -38,7 +38,7 @@ function Writing () {
               <Card>
                 <Card.Img variant='top' src={post.thumbnail} />
                 <Card.Body>
-                  <Card.Title><a href={post.link}>{post.title}</a></Card.Title>
+                  <Card.Title><a target='_blank' href={post.link}>{post.title}</a></Card.Title>
                   <Card.Subtitle className='mb-2 text-muted'>{post.pubDate.split(' ')[0]}</Card.Subtitle>
                   <Card.Text>
                     <em>Categories: {post.categories.join(', ')}</em>
