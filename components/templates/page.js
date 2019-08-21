@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import Head from 'next/head'
 import Header from './../header'
 
-function PageTemplate ({ title, content }) {
+function PageTemplate ({ title, children }) {
   const year = new Date().getFullYear()
 
   return (
@@ -25,7 +25,7 @@ function PageTemplate ({ title, content }) {
             <br />
             <br />
             <br />
-            { content }
+            { children }
           </Col>
         </Row>
 

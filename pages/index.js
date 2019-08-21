@@ -8,16 +8,16 @@ import OpenSource from './../components/sections/open-souce'
 import Writing from './../components/sections/writing'
 import Speaking from './../components/sections/speaking'
 
-function IndexPage () {
-  const title = 'Evan Tahler'
+const title = 'Evan Tahler'
 
+function IndexPage () {
   const sectionStyle = {
     paddingTop: 50,
     paddingBottom: 50
   }
 
-  const content = (
-    <>
+  return (
+    <Page title={title}>
       <Introduction />
 
       <div style={sectionStyle} id='resume'>
@@ -42,10 +42,8 @@ function IndexPage () {
 
       <br />
       <br />
-    </>
+    </Page>
   )
-
-  return <Page title={title} content={content} />
 }
 
 export default IndexPage
