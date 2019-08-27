@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Alert, Card } from 'react-bootstrap'
+import { Row, Col, Alert, Card, Badge } from 'react-bootstrap'
 
 function stripHtml (html) {
   const temporalDivElement = document.createElement('div')
@@ -36,14 +36,15 @@ function Writing () {
           data.posts.map((post) => {
             return <Col md={4} key={post.guid}>
               <Card>
-                <Card.Img variant='top' src={post.thumbnail} />
+                <Card.Img style={{ maxHeight: 300 }} variant='top' src={post.thumbnail} />
                 <Card.Body>
                   <Card.Title><a target='_blank' href={post.link}>{post.title}</a></Card.Title>
                   <Card.Subtitle className='mb-2 text-muted'>{post.pubDate.split(' ')[0]}</Card.Subtitle>
                   <Card.Text>
-                    <em>Categories: {post.categories.join(', ')}</em>
-                    <br />
                     {stripHtml(post.description.substring(0, 500))}...
+                    <br />
+                    <br />
+                    <em>Categories: {post.categories.map(category => <Badge variant='secondary'>{category}</Badge>)}</em>
                   </Card.Text>
                 </Card.Body>
               </Card>
