@@ -18,7 +18,7 @@ function PageTemplate ({ title, children }) {
 
       <Header />
 
-      <Container fluid>
+      <Container>
         <Row>
           <Col md={12}>
             <br />
