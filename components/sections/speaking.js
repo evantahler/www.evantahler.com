@@ -25,11 +25,9 @@ function Speaking () {
                 <br />
                 <br />
 
-                <ul>
-                  <li><a target='_blank' href='https://www.youtube.com/watch?list=PL83Wfqi-zYZHtHoGv3PcGQA3lvE9p1eRl&time_continue=218&v=NNTsHzER31I'>Video</a></li>
-                  <li><a target='_blank' href='https://speakerdeck.com/evantahler/background-jobs-in-node-dot-js-redisconf-2016'>Slides</a></li>
-                  <li><a target='_blank' href='https://blog.evantahler.com/background-tasks-in-node-js-a-survey-with-redis-971d3575d9d2'>Post</a></li>
-                </ul>
+                * <a target='_blank' href='https://www.youtube.com/watch?list=PL83Wfqi-zYZHtHoGv3PcGQA3lvE9p1eRl&time_continue=218&v=NNTsHzER31I'>Video</a><br />
+                * <a target='_blank' href='https://speakerdeck.com/evantahler/background-jobs-in-node-dot-js-redisconf-2016'>Slides</a><br />
+                * <a target='_blank' href='https://blog.evantahler.com/background-tasks-in-node-js-a-survey-with-redis-971d3575d9d2'>Post</a><br />
               </Card.Text>
             </Card.Body>
           </Card>
@@ -53,10 +51,8 @@ function Speaking () {
                 <br />
                 <br />
 
-                <ul>
-                  <li><a target='_blank' href='https://speakerdeck.com/evantahler/node-for-not-http'>Slides</a></li>
-                  <li><a target='_blank' href='https://github.com/evantahler/node_for_not_http'>Code</a></li>
-                </ul>
+                * <a target='_blank' href='https://speakerdeck.com/evantahler/node-for-not-http'>Slides</a><br />
+                * <a target='_blank' href='https://github.com/evantahler/node_for_not_http'>Code</a><br />
               </Card.Text>
             </Card.Body>
           </Card>
