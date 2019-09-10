@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import Head from 'next/head'
 import Header from './../header'
 
-function PageTemplate ({ title, children }) {
+function PageTemplate({ title, children }) {
   const year = new Date().getFullYear()
 
   return (
@@ -40,13 +40,14 @@ function PageTemplate ({ title, children }) {
             <br />
             <br />
             <br />
-            { children }
+            {children}
           </Col>
         </Row>
 
         <Row>
-          <Col md={12} style={{ textAlign: 'center' }}>
-            <p>Copyright, Evan Tahler {year}</p>
+          <Col md={12} style={{ textAlign: 'center', paddingTop: 100 }}>
+            <p><small className='text-muted'>Copyright, Evan Tahler {year}</small></p>
+            <p><small className='text-muted'><a href='https://github.com/evantahler/www.evantahler.com' target='_new'>source for this site</a></small></p>
           </Col>
         </Row>
       </Container>

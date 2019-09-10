@@ -1,18 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
 
-function Sidebar ({ title, content }) {
+function HilightableNavLink({ href, text }) {
+  const [active, setActive] = useState(false)
+  useEffect(() => {
+    const active = (window.location.pathname === href)
+    setActive(active)
+  }, [])
+
+  return <Nav.Link active={active} href={href}>{text}</Nav.Link>
+}
+
+function Sidebar({ title, content }) {
   return (
-    <Navbar fixed='top' bg='dark' variant='dark' expand='lg'>
+    <Navbar fixed='top' bg='info' variant='dark' expand='lg'>
       <Navbar.Toggle aria-controls='basic-navbar-nav' />
       <Navbar.Brand href='/'>Evan Tahler</Navbar.Brand>
       <Navbar.Collapse id='basic-navbar-nav'>
         <Nav className='mr-auto'>
-          <Nav.Link href='#resume'>Resume</Nav.Link>
-          <Nav.Link href='#writing'>Writing</Nav.Link>
-          <Nav.Link href='#speaking'>Speaking</Nav.Link>
-          <Nav.Link href='#open-source'>Open Source</Nav.Link>
-          <Nav.Link href='#contact'>Contact</Nav.Link>
+          <HilightableNavLink href='/resume' text='Resume' />
+          <HilightableNavLink href='/writing' text='Writing' />
+          <HilightableNavLink href='/open-source' text='Open Source' />
+          <HilightableNavLink href='/speaking' text='Speaking' />
+          <HilightableNavLink href='/contact' text='Contact' />
         </Nav>
       </Navbar.Collapse>
     </Navbar>
