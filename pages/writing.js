@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Alert, Card, Badge, Spinner } from 'react-bootstrap'
 import Page from './../components/templates/page'
+import JumboImage from './../components/jumboImage'
 
 const title = 'Evan Tahler: Writing'
 
@@ -29,6 +30,8 @@ function WritingPage () {
       <>
         <h2>Writing</h2>
         <hr />
+
+        <JumboImage src='/static/images/writing.jpg' />
 
         <p>I blog at Medium under the name <a href='https://medium.com/@evantahler'>@evantahler</a>.</p>
         <Alert variant='info'>

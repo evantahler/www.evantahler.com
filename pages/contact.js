@@ -2,6 +2,7 @@ import React from 'react'
 import { Row, Col, Badge } from 'react-bootstrap'
 import BigGlyf from './../components/BigGlyf'
 import Page from './../components/templates/page'
+import JumboImage from './../components/jumboImage'
 
 const title = 'Evan Tahler: Contact'
 
@@ -11,6 +12,8 @@ function ContactPage () {
       <>
         <h2>Contact</h2>
         <hr />
+
+        <JumboImage src='/static/images/contact.jpg' />
 
         <p>Please feel to reach out! I advise a nubmer of startups and non profits, and am always looking for new ways to help out.</p>
         <p>If you are looking to hire me on a contractor basis, please reach out via <a href='https://www.delicioushat.com' target='_new'>Delicious Hat</a>, my Web Technology Development and Consulting firm.</p>

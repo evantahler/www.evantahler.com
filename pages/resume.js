@@ -1,6 +1,7 @@
 import React from 'react'
 import { Alert, Row, Col } from 'react-bootstrap'
 import Page from './../components/templates/page'
+import JumboImage from './../components/jumboImage'
 
 const title = 'Evan Tahler: Resume'
 
@@ -15,6 +16,8 @@ function ResumePage () {
       <>
         <h2>Resume</h2>
         <hr />
+
+        <JumboImage src='/static/images/resume.jpg' />
 
         <Alert variant='success'>
           <a href='/static/evan-tahler-resume.pdf'><strong>Download Full Resume</strong></a>

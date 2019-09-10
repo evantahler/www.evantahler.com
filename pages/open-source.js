@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Row, Col, ListGroup, Spinner } from 'react-bootstrap'
 import GitHub from 'github-api'
 import Page from './../components/templates/page'
+import JumboImage from './../components/jumboImage'
 
 const title = 'Evan Tahler: Open Source'
 
@@ -38,6 +39,8 @@ function OpenSourcePage () {
       <>
         <h2>Open Source</h2>
         <hr />
+
+        <JumboImage src='/static/images/open-source.jpg' />
 
         <p>I contribute to a number of Open Source projects because I belive it is a great way to give back to the programming community in both a professional and personal capacity... and a great way to learn about new technologies and tools!</p>
         <p>I am the creator and community manager for a number of popular Open Source projects:</p>

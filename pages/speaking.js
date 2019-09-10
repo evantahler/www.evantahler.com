@@ -1,6 +1,7 @@
 import React from 'react'
 import { Row, Col, Card } from 'react-bootstrap'
 import Page from './../components/templates/page'
+import JumboImage from './../components/jumboImage'
 
 const title = 'Evan Tahler: Speaking'
 
@@ -10,6 +11,8 @@ function SpeakingPage () {
       <>
         <h2>Speaking</h2>
         <hr />
+
+        <JumboImage src='/static/images/speaking.jpg' />
 
         <p>I've given a number of technical talks, focusing on Node.js, Ruby, and DevOps.</p>
 
