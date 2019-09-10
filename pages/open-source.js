@@ -13,12 +13,12 @@ const projects = [
   { org: 'evantahler', name: 'dont-be-a-jerk' }
 ]
 
-function OpenSourcePage() {
+function OpenSourcePage () {
   const [data, setData] = useState({ repositories: [] })
   const github = new GitHub()
 
   useEffect(() => {
-    async function fetchRepositories() {
+    async function fetchRepositories () {
       const repositories = []
       for (const i in projects) {
         const project = projects[i]
@@ -44,8 +44,8 @@ function OpenSourcePage() {
 
         <ListGroup>
           {
-            data.repositories.length > 0 ?
-              data.repositories.map((repository) => {
+            data.repositories.length > 0
+              ? data.repositories.map((repository) => {
                 return (
                   <ListGroup.Item key={repository.html_url}>
                     <Row>

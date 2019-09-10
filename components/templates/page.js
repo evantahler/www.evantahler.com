@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import Head from 'next/head'
 import Header from './../header'
 
-function PageTemplate({ title, children }) {
+function PageTemplate ({ title, children }) {
   const year = new Date().getFullYear()
 
   return (

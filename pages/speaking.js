@@ -4,7 +4,7 @@ import Page from './../components/templates/page'
 
 const title = 'Evan Tahler: Speaking'
 
-function SpeakingPage() {
+function SpeakingPage () {
   return (
     <Page title={title}>
       <>

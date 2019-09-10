@@ -4,13 +4,13 @@ import Page from './../components/templates/page'
 import Styles from './../components/styles/variables.json'
 import BigGlyf from './../components/BigGlyf'
 
-function BoldWords({ text }) {
+function BoldWords ({ text }) {
   return <span style={{ color: Styles.$blue }}>{text}</span>
 }
 
 const title = 'Evan Tahler'
 
-function IndexPage() {
+function IndexPage () {
   return (
     <Page title={title}>
       <>

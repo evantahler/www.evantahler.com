@@ -9,7 +9,7 @@ const logoStyle = {
   maxHeight: 100
 }
 
-function ResumePage() {
+function ResumePage () {
   return (
     <Page title={title}>
       <>

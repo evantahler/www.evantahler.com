@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
 
-function HilightableNavLink({ href, text }) {
+function HilightableNavLink ({ href, text }) {
   const [active, setActive] = useState(false)
   useEffect(() => {
     const active = (window.location.pathname === href)
@@ -11,7 +11,7 @@ function HilightableNavLink({ href, text }) {
   return <Nav.Link active={active} href={href}>{text}</Nav.Link>
 }
 
-function Sidebar({ title, content }) {
+function Sidebar ({ title, content }) {
   return (
     <Navbar fixed='top' bg='info' variant='dark' expand='lg'>
       <Navbar.Toggle aria-controls='basic-navbar-nav' />

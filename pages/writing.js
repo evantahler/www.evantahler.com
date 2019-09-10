@@ -4,18 +4,18 @@ import Page from './../components/templates/page'
 
 const title = 'Evan Tahler: Writing'
 
-function stripHtml(html) {
+function stripHtml (html) {
   const temporalDivElement = document.createElement('div')
   temporalDivElement.innerHTML = html
   return temporalDivElement.textContent || temporalDivElement.innerText || ' '
 }
 
-function WritingPage() {
+function WritingPage () {
   const [data, setData] = useState({ posts: [] })
   const feedUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@evantahler'
 
   useEffect(() => {
-    async function fetchBlogPosts() {
+    async function fetchBlogPosts () {
       const data = await fetch(feedUrl).then(response => response.json()) //eslint-disable-line
       const posts = data.items.filter(item => item.thumbnail.indexOf('_/stat?') < 0)
       setData({ posts })

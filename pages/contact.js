@@ -5,7 +5,7 @@ import Page from './../components/templates/page'
 
 const title = 'Evan Tahler: Contact'
 
-function ContactPage() {
+function ContactPage () {
   return (
     <Page title={title}>
       <>
