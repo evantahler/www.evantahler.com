@@ -67,6 +67,29 @@ function SpeakingPage () {
             </Card>
             <br />
           </Col>
+
+          <Col md={4}>
+            <Card>
+              <Card.Img variant='top' src='/static/images/seattlejs.jpg' />
+              <Card.Body>
+                <Card.Title>Using Next.JS to build Static Dynamic Websites… and never pay for font-end hosting again!</Card.Title>
+                <Card.Subtitle className='mb-2 text-muted'>September, 2019</Card.Subtitle>
+                <Card.Text>
+                  <em>for SeattleJS, 2019</em>
+
+                  <br />
+                  <br />
+                  This talk was inspired by a group of students learning to code in Seattle who were being taught tools like React and Angular, but struggling to learn how to deploy their sites using modern methods. Specifically, how to set up CI/CD (Continuous Integration + Continuous Deployment) and HTTPS.
+                  <br />
+                  <br />
+
+                  * <a target='_blank' href='https://speakerdeck.com/evantahler/using-next-dot-js-to-build-static-dynamic-websites-dot-dot-dot-and-never-pay-for-font-end-hosting-again'>Slides</a><br />
+                  * <a target='_blank' href='https://github.com/evantahler/next-static-hosting'>Code</a><br />
+                </Card.Text>
+              </Card.Body>
+            </Card>
+            <br />
+          </Col>
         </Row>
       </>
     </Page>
