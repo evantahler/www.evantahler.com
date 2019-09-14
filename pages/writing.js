@@ -59,7 +59,7 @@ function WritingPage () {
                   <br />
                 </Col>
               })
-              : <Row><Col md={12} style={{ textAlign: 'center' }}><Spinner animation='grow' /></Col></Row>
+              : <Col md={12} style={{ textAlign: 'center' }}><Spinner animation='grow' /></Col>
           }
         </Row>
       </>
