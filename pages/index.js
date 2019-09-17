@@ -25,7 +25,7 @@ function IndexPage () {
                 <Col md={12}>
                   <h1>Evan Tahler</h1>
                   <br />
-                  <h4>I use my <BoldWords text='Product Management' />, <BoldWords text='Software Engineering' />, and <BoldWords text='Leadership' /> skills to build teams capable of creating world-class Digital Consumer Products.</h4>
+                  <h4>I use my <BoldWords text='Product Management' />, <BoldWords text='Software Engineering' />, and <BoldWords text='Leadership' /> skills to build teams that create world-class Digital Consumer Products.</h4>
                 </Col>
               </Row>
 
