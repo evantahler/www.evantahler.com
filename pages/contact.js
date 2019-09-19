@@ -3,6 +3,7 @@ import { Row, Col, Badge } from 'react-bootstrap'
 import BigGlyf from './../components/BigGlyf'
 import Page from './../components/templates/page'
 import JumboImage from './../components/jumboImage'
+import Calendly from './../components/calendly'
 
 const title = 'Evan Tahler: Contact'
 
@@ -32,6 +33,10 @@ function ContactPage () {
             <a target='_blank' href='mailto:evan@evantahler.com'><BigGlyf name='inbox' /><br /><Badge variant='primary'>evan@evantahler.com</Badge></a>
           </Col>
         </Row>
+
+        <hr />
+        <p>Or schedule a chat with me!</p>
+        <Calendly />
       </>
     </Page>
   )
