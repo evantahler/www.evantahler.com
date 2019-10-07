@@ -9,12 +9,13 @@ function SpeakingPage () {
   return (
     <Page title={title}>
       <>
-        <h2>Speaking</h2>
+        <h1>Speaking</h1>
         <hr />
 
         <JumboImage src='/static/images/speaking.jpg' />
 
         <p>I've given a number of technical talks, focusing on Node.js, Ruby, and DevOps.</p>
+        <h2>Featured Talks</h2>
 
         <Row>
           <Col md={4}>

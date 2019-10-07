@@ -11,7 +11,7 @@ function ContactPage () {
   return (
     <Page title={title}>
       <>
-        <h2>Contact</h2>
+        <h1>Contact</h1>
         <hr />
 
         <JumboImage src='/static/images/contact.jpg' />

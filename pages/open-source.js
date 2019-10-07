@@ -37,7 +37,7 @@ function OpenSourcePage () {
   return (
     <Page title={title}>
       <>
-        <h2>Open Source</h2>
+        <h1>Open Source</h1>
         <hr />
 
         <JumboImage src='/static/images/open-source.jpg' />
