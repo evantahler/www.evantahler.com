@@ -38,13 +38,12 @@ function ResumePage () {
         <br />
 
         <Row style={{ textAlign: 'center' }}>
-          <Col md={1} />
+          <Col md={2}><img style={logoStyle} src='/static/images/logos/actionhero.png' /></Col>
           <Col md={2}><img style={logoStyle} src='/static/images/logos/taskrabbit.png' /></Col>
           <Col md={2}><img style={logoStyle} src='/static/images/logos/airbus.png' /></Col>
           <Col md={2}><img style={logoStyle} src='/static/images/logos/voom.png' /></Col>
           <Col md={2}><img style={logoStyle} src='/static/images/logos/modcloth.jpg' /></Col>
           <Col md={2}><img style={logoStyle} src='/static/images/logos/disney.png' /></Col>
-          <Col md={1} />
         </Row>
       </>
     </Page>

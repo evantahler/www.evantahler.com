@@ -24,13 +24,13 @@ function ContactPage () {
 
         <Row>
           <Col md={4} style={{ textAlign: 'center' }}>
-            <a target='_blank' href='https://twitter.com/evantahler'><BigGlyf name='twitter' /><br /> <Badge variant='success'>@evantahler</Badge></a>
+            <a target='_new' href='https://twitter.com/evantahler'><BigGlyf name='twitter' /><br /> <Badge variant='success'>@evantahler</Badge></a>
           </Col>
           <Col md={4} style={{ textAlign: 'center' }}>
-            <a target='_blank' href='https://linkedin.com/in/evantahler'><BigGlyf name='linkedin' /><br /> <Badge variant='info'>@evantahler</Badge></a>
+            <a target='_new' href='https://linkedin.com/in/evantahler'><BigGlyf name='linkedin' /><br /> <Badge variant='info'>@evantahler</Badge></a>
           </Col>
           <Col md={4} style={{ textAlign: 'center' }}>
-            <a target='_blank' href='mailto:evan@evantahler.com'><BigGlyf name='inbox' /><br /><Badge variant='primary'>evan@evantahler.com</Badge></a>
+            <a target='_new' href='mailto:evan@evantahler.com'><BigGlyf name='inbox' /><br /><Badge variant='primary'>evan@evantahler.com</Badge></a>
           </Col>
         </Row>
 

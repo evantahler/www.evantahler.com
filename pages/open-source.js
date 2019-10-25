@@ -64,7 +64,7 @@ function OpenSourcePage () {
                   <ListGroup.Item key={repository.html_url}>
                     <Row>
                       <Col md={12}>
-                        <h5><a target='_blank' href={repository.html_url}>{repository.full_name}</a></h5>
+                        <h5><a target='_new' href={repository.html_url}>{repository.full_name}</a></h5>
                       </Col>
                     </Row>
 

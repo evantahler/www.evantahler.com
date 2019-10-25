@@ -33,8 +33,8 @@ function SpeakingPage () {
                   <br />
                   <br />
 
-                  * <a target='_blank' href='https://speakerdeck.com/evantahler/using-next-dot-js-to-build-static-dynamic-websites-dot-dot-dot-and-never-pay-for-font-end-hosting-again'>Slides</a><br />
-                  * <a target='_blank' href='https://github.com/evantahler/next-static-hosting'>Code</a><br />
+                  * <a target='_new' href='https://speakerdeck.com/evantahler/using-next-dot-js-to-build-static-dynamic-websites-dot-dot-dot-and-never-pay-for-font-end-hosting-again'>Slides</a><br />
+                  * <a target='_new' href='https://github.com/evantahler/next-static-hosting'>Code</a><br />
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -58,9 +58,9 @@ function SpeakingPage () {
                   <br />
                   <br />
 
-                  * <a target='_blank' href='https://www.youtube.com/watch?list=PL83Wfqi-zYZHtHoGv3PcGQA3lvE9p1eRl&time_continue=218&v=NNTsHzER31I'>Video</a><br />
-                  * <a target='_blank' href='https://speakerdeck.com/evantahler/background-jobs-in-node-dot-js-redisconf-2016'>Slides</a><br />
-                  * <a target='_blank' href='https://blog.evantahler.com/background-tasks-in-node-js-a-survey-with-redis-971d3575d9d2'>Post</a><br />
+                  * <a target='_new' href='https://www.youtube.com/watch?list=PL83Wfqi-zYZHtHoGv3PcGQA3lvE9p1eRl&time_continue=218&v=NNTsHzER31I'>Video</a><br />
+                  * <a target='_new' href='https://speakerdeck.com/evantahler/background-jobs-in-node-dot-js-redisconf-2016'>Slides</a><br />
+                  * <a target='_new' href='https://blog.evantahler.com/background-tasks-in-node-js-a-survey-with-redis-971d3575d9d2'>Post</a><br />
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -84,8 +84,8 @@ function SpeakingPage () {
                   <br />
                   <br />
 
-                  * <a target='_blank' href='https://speakerdeck.com/evantahler/node-for-not-http'>Slides</a><br />
-                  * <a target='_blank' href='https://github.com/evantahler/node_for_not_http'>Code</a><br />
+                  * <a target='_new' href='https://speakerdeck.com/evantahler/node-for-not-http'>Slides</a><br />
+                  * <a target='_new' href='https://github.com/evantahler/node_for_not_http'>Code</a><br />
                 </Card.Text>
               </Card.Body>
             </Card>

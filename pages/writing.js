@@ -77,13 +77,13 @@ function WritingPage () {
                   <Card>
                     <Card.Img style={{ maxHeight: 300 }} variant='top' src={post.thumbnail} />
                     <Card.Body>
-                      <Card.Title><a target='_blank' href={post.link}>{post.title}</a></Card.Title>
+                      <Card.Title><a target='_new' href={post.link}>{post.title}</a></Card.Title>
                       <Card.Subtitle className='mb-2 text-muted'>{post.date}</Card.Subtitle>
                       <Card.Text>
                         {post.description}
                         <br />
                         <br />
-                        <em>Categories: {post.categories.map(category => <Badge key={`${post.guid}-${category}`} variant='secondary' > {category}</Badge>)}</em>
+                        <em>Categories: {post.categories.map(category => <Badge key={`${post.guid}-${category}`} variant='secondary'> {category}</Badge>)}</em>
                       </Card.Text>
                     </Card.Body>
                   </Card>
@@ -100,28 +100,30 @@ function WritingPage () {
           {
             data.posts.length > 0
               ? data.posts.map((post) => {
-                return <Col md={4} key={post.guid}>
-                  <Card>
-                    <Card.Img style={{ maxHeight: 300 }} variant='top' src={post.thumbnail} />
-                    <Card.Body>
-                      <Card.Title><a target='_blank' href={post.link}>{post.title}</a></Card.Title>
-                      <Card.Subtitle className='mb-2 text-muted'>{post.pubDate.split(' ')[0]}</Card.Subtitle>
-                      <Card.Text>
-                        {stripHtml(post.description.substring(0, 500))}...
-                        <br />
-                        <br />
-                        <em>Categories: {post.categories.map(category => <Badge key={`${post.guid}-${category}`} variant='secondary' > {category}</Badge>)}</em>
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                  <br />
-                </Col>
+                return (
+                  <Col md={4} key={post.guid}>
+                    <Card>
+                      <Card.Img style={{ maxHeight: 300 }} variant='top' src={post.thumbnail} />
+                      <Card.Body>
+                        <Card.Title><a target='_new' href={post.link}>{post.title}</a></Card.Title>
+                        <Card.Subtitle className='mb-2 text-muted'>{post.pubDate.split(' ')[0]}</Card.Subtitle>
+                        <Card.Text>
+                          {stripHtml(post.description.substring(0, 500))}...
+                          <br />
+                          <br />
+                          <em>Categories: {post.categories.map(category => <Badge key={`${post.guid}-${category}`} variant='secondary'> {category}</Badge>)}</em>
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                    <br />
+                  </Col>
+                )
               })
               : <Col md={12} style={{ textAlign: 'center' }}><Spinner animation='grow' /></Col>
           }
         </Row>
       </>
-    </Page >
+    </Page>
   )
 }
 
