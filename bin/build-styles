@@ -8,7 +8,7 @@ console.log('Compile JSON styles from SCSS...')
 
 const files = [
   {
-    source: path.join(__dirname, '..', 'static', 'css', '_variables.scss'),
+    source: path.join(__dirname, '..', 'public', 'static', 'css', '_variables.scss'),
     destination: path.join(__dirname, '..', 'components', 'styles', 'variables.json')
   }
 ]
