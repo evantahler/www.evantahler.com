@@ -32,7 +32,7 @@ function ResumePage () {
         </p>
 
         <p>
-          Evan holds a Masters in Entertainment Technology and BS in Mechanical Engineering from Carnegie Mellon University.
+          Evan holds a Masters in Entertainment Technology and BS in Mechanical Engineering from <a target='_new' href='https://www.cmu.edu/homepage/creativity/2014/fall/the-greater-good.shtml'>Carnegie Mellon University</a>.
         </p>
 
         <br />
