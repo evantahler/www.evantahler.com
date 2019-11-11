@@ -11,10 +11,11 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
-    "postinstall": "./bin/build-styles",
     "start": "NODE_ENV=production node server.js",
     "test": "jest",
-    "pretest": "standard"
+    "pretest": "npm run lint",
+    "lint": "prettier --check pages/*/**.tsx components/*/**.tsx __test__/*/**.tsx",
+    "pretty": "prettier --write pages/*/**.tsx components/*/**.tsx __test__/*/**.tsx"
   },
   "dependencies": {
     "github-api": "^3.3.0",
@@ -26,20 +27,14 @@
     "scss-to-json": "^2.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.22",
+    "@types/node": "^12.12.7",
+    "@types/react": "^16.9.11",
+    "@types/react-dom": "^16.9.4",
     "jest": "^24.9.0",
+    "prettier": "^1.19.1",
     "react-test-renderer": "^16.11.0",
-    "standard": "^14.3.1"
-  },
-  "standard": {
-    "ignore": [
-      "static/*"
-    ],
-    "globals": [
-      "describe",
-      "expect",
-      "it",
-      "beforeEach",
-      "afterEach"
-    ]
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.7.2"
   }
 }
