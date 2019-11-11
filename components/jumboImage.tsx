@@ -1,15 +1,15 @@
-import React from 'react'
-import { Image, Row, Col } from 'react-bootstrap'
+import React from "react";
+import { Image, Row, Col } from "react-bootstrap";
 
-function JumboImage ({ src }) {
+function JumboImage({ src }) {
   const style = {
     height: 300,
-    width: '100%',
+    width: "100%",
     paddingTop: 10,
     paddingBottom: 10,
-    objectFit: 'cover',
+    objectFit: "cover" as "cover",
     borderRadius: 15
-  }
+  };
 
   return (
     <>
@@ -19,7 +19,7 @@ function JumboImage ({ src }) {
         </Col>
       </Row>
     </>
-  )
+  );
 }
 
-export default JumboImage
+export default JumboImage;
