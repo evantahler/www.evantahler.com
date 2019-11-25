@@ -26,8 +26,8 @@ function ResumePage() {
         </Alert>
 
         <p>
-          Evan is looking for what's next! Most recently, he was the Chief
-          Product Officer at{" "}
+          Evan is launching on a new stealth startup. Prior to that, he was the
+          Chief Product Officer at{" "}
           <a target="_new" href="https://www.voom.flights">
             Voom, an Airbus Company
           </a>
