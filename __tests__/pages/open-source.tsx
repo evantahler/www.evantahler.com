@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
-import ContactPage from "../../pages/contact";
+import OpenSourcePage from "../../pages/open-source";
 
 let container;
 
@@ -16,12 +16,12 @@ afterEach(() => {
   container = undefined;
 });
 
-describe("Introduction Section", () => {
+describe("Resume Section", () => {
   it("renders the section", () => {
     act(() => {
-      render(<ContactPage />, container);
+      render(<OpenSourcePage />, container);
     });
     const header = container.querySelector("p");
-    expect(header.textContent).toContain("reach out");
+    expect(header.textContent).toContain("Sponsorships");
   });
 });

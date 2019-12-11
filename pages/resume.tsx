@@ -26,17 +26,20 @@ function ResumePage() {
         </Alert>
 
         <p>
-          Evan is launching on a new stealth startup. Prior to that, he was the
-          Chief Product Officer at{" "}
-          <a target="_new" href="https://www.voom.flights">
-            Voom, an Airbus Company
+          Evan Tahler is the CTO and co-founder of{" "}
+          <a href="https://www.grouparoo.com" target="_new">
+            Grouparoo
           </a>
-          , providing an urban air mobility to cities around the world.
+          , a new company building tools that empower marketers to do their best
+          work.
         </p>
 
         <p>
-          Evan has deep expertise in building the technical side of B2C products
-          as well as the teams required to do so. He’s helped companies like{" "}
+          Prior to that, he was the Chief Product Officer at Voom (an Airbus
+          Company) providing an urban air mobility to cities around the world.
+          Evan's expertise lies in building the technical side of digital
+          products, as well as the teams required to do so. He’s helped
+          companies like{" "}
           <a target="_new" href="https://www.disney.com">
             Disney
           </a>
@@ -55,8 +58,8 @@ function ResumePage() {
           launch new global digital initiatives. He is named on a number of
           patents focusing on mobile interactions and digital entertainment.
           Evan is an open-source innovator, and frequent speaker at software
-          development conferences focusing on Product Managment, Node.JS, Rails,
-          and databases.
+          development conferences focusing on Product Management, Node.JS,
+          Rails, and databases.
         </p>
 
         <p>
