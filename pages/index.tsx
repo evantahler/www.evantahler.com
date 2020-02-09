@@ -1,7 +1,19 @@
-import { Jumbotron, Row, Col, Image, Badge } from "react-bootstrap";
+import { Fragment } from "react";
+import {
+  Jumbotron,
+  Row,
+  Col,
+  Image,
+  Badge,
+  Alert,
+  Card
+} from "react-bootstrap";
 import Page from "../components/templates/page";
 import Styles from "../components/styles/variables.json";
 import BigGlyf from "../components/BigGlyf";
+
+import featuredPosts from "./../data/featuredPosts.json";
+import talks from "./../data/talks.json";
 
 function BoldWords({ text }) {
   return <span style={{ color: Styles.$blue }}>{text}</span>;
@@ -62,6 +74,93 @@ function IndexPage() {
             </Col>
           </Row>
         </Jumbotron>
+
+        <Row>
+          <Col>
+            <h2>Featured Posts</h2>
+            <Alert variant="info">
+              <a href="/writing">See all Posts</a>
+            </Alert>
+
+            {featuredPosts.map(post => {
+              return (
+                <Fragment key={post.title}>
+                  <Card>
+                    <Card.Img
+                      style={{ maxHeight: 400 }}
+                      variant="top"
+                      src={post.thumbnail}
+                    />
+                    <Card.Body>
+                      <Card.Title>
+                        <a target="_new" href={post.link}>
+                          {post.title}
+                        </a>
+                      </Card.Title>
+                      <Card.Subtitle className="mb-2 text-muted">
+                        {post.date}
+                      </Card.Subtitle>
+                      <Card.Text>
+                        {post.description}
+                        <br />
+                        <br />
+                        <em>
+                          Categories:{" "}
+                          {post.categories.map(category => (
+                            <Badge
+                              key={`${post.guid}-${category}`}
+                              variant="secondary"
+                            >
+                              {" "}
+                              {category}
+                            </Badge>
+                          ))}
+                        </em>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                  <br />
+                </Fragment>
+              );
+            })}
+          </Col>
+
+          <Col>
+            <h2>Featured Talks</h2>
+            <Alert variant="info">
+              <a href="/speaking">See all Talks</a>
+            </Alert>
+            {talks.map(talk => (
+              <Fragment key={talk.title}>
+                <Card>
+                  <Card.Img variant="top" src={talk.image} />
+                  <Card.Body>
+                    <Card.Title>{talk.title}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">
+                      {talk.date}
+                    </Card.Subtitle>
+                    <Card.Text>
+                      <em>for {talk.where}</em>
+                      <br />
+                      <br />
+                      {talk.description}
+                      <br />
+                      {talk.links.map(l => (
+                        <Fragment key={`${talk.title}-${l.title}`}>
+                          <br />*{" "}
+                          <a target="_new" href={l.url}>
+                            {l.title}
+                          </a>
+                        </Fragment>
+                      ))}
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+                <br />
+              </Fragment>
+            ))}
+          </Col>
+        </Row>
       </>
     </Page>
   );
