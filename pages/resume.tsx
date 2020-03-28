@@ -7,7 +7,7 @@ const title = "Evan Tahler: Resume";
 
 const logoStyle = {
   maxWidth: 100,
-  maxHeight: 100
+  maxHeight: 100,
 };
 
 function ResumePage() {

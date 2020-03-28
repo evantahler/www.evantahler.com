@@ -19,9 +19,9 @@ function WritingPage() {
 
   useEffect(() => {
     async function fetchBlogPosts() {
-      const data = await fetch(feedUrl).then(response => response.json()); //eslint-disable-line
+      const data = await fetch(feedUrl).then((response) => response.json()); //eslint-disable-line
       const posts = data.items.filter(
-        item => item.thumbnail.indexOf("_/stat?") < 0
+        (item) => item.thumbnail.indexOf("_/stat?") < 0
       );
       setData({ posts });
     }
@@ -47,7 +47,7 @@ function WritingPage() {
 
         <h2>Featured Writing</h2>
         <Row>
-          {featuredPosts.map(post => {
+          {featuredPosts.map((post) => {
             return (
               <Col md={4} key={post.guid}>
                 <Card>
@@ -71,7 +71,7 @@ function WritingPage() {
                       <br />
                       <em>
                         Categories:{" "}
-                        {post.categories.map(category => (
+                        {post.categories.map((category) => (
                           <Badge
                             key={`${post.guid}-${category}`}
                             variant="secondary"
@@ -94,7 +94,7 @@ function WritingPage() {
         <h2>Latest Posts</h2>
         <Row>
           {data.posts.length > 0 ? (
-            data.posts.map(post => {
+            data.posts.map((post) => {
               return (
                 <Col md={4} key={post.guid}>
                   <Card>
@@ -118,7 +118,7 @@ function WritingPage() {
                         <br />
                         <em>
                           Categories:{" "}
-                          {post.categories.map(category => (
+                          {post.categories.map((category) => (
                             <Badge
                               key={`${post.guid}-${category}`}
                               variant="secondary"

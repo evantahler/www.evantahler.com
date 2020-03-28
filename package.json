@@ -14,8 +14,7 @@
     "start": "NODE_ENV=production node server.js",
     "test": "jest",
     "pretest": "npm run lint",
-    "lint": "prettier --check pages/*/**.tsx components/*/**.tsx __test__/*/**.tsx",
-    "pretty": "prettier --write pages/*/**.tsx components/*/**.tsx __test__/*/**.tsx"
+    "lint": "prettier --check pages components __tests__"
   },
   "dependencies": {
     "github-api": "^3.3.0",

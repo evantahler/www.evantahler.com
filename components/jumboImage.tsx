@@ -8,7 +8,7 @@ function JumboImage({ src }) {
     paddingTop: 10,
     paddingBottom: 10,
     objectFit: "cover" as "cover",
-    borderRadius: 15
+    borderRadius: 15,
   };
 
   return (

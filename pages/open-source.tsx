@@ -11,7 +11,7 @@ const projects = [
   { org: "taskrabbit", name: "node-resque" },
   { org: "taskrabbit", name: "elasticsearch-dump" },
   { org: "actionhero", name: "ah-sequelize-plugin" },
-  { org: "evantahler", name: "dont-be-a-jerk" }
+  { org: "evantahler", name: "dont-be-a-jerk" },
 ];
 
 function OpenSourcePage() {
@@ -90,7 +90,7 @@ function OpenSourcePage() {
 
         <ListGroup>
           {data.repositories.length > 0 ? (
-            data.repositories.map(repository => {
+            data.repositories.map((repository) => {
               return (
                 <ListGroup.Item key={repository.html_url}>
                   <Row>
