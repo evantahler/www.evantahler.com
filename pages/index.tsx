@@ -6,7 +6,7 @@ import {
   Image,
   Badge,
   Alert,
-  Card
+  Card,
 } from "react-bootstrap";
 import Page from "../components/templates/page";
 import Styles from "../components/styles/variables.json";
@@ -82,7 +82,7 @@ function IndexPage() {
               <a href="/writing">See all Posts</a>
             </Alert>
 
-            {featuredPosts.map(post => {
+            {featuredPosts.map((post) => {
               return (
                 <Fragment key={post.title}>
                   <Card>
@@ -106,7 +106,7 @@ function IndexPage() {
                         <br />
                         <em>
                           Categories:{" "}
-                          {post.categories.map(category => (
+                          {post.categories.map((category) => (
                             <Badge
                               key={`${post.guid}-${category}`}
                               variant="secondary"
@@ -130,7 +130,7 @@ function IndexPage() {
             <Alert variant="info">
               <a href="/speaking">See all Talks</a>
             </Alert>
-            {talks.map(talk => (
+            {talks.map((talk) => (
               <Fragment key={talk.title}>
                 <Card>
                   <Card.Img variant="top" src={talk.image} />
@@ -145,7 +145,7 @@ function IndexPage() {
                       <br />
                       {talk.description}
                       <br />
-                      {talk.links.map(l => (
+                      {talk.links.map((l) => (
                         <Fragment key={`${talk.title}-${l.title}`}>
                           <br />*{" "}
                           <a target="_new" href={l.url}>

@@ -22,7 +22,7 @@ function SpeakingPage() {
         <h2>Featured Talks</h2>
 
         <Row>
-          {talks.map(talk => (
+          {talks.map((talk) => (
             <Col md={4} key={talk.title}>
               <Card>
                 <Card.Img variant="top" src={talk.image} />
@@ -37,7 +37,7 @@ function SpeakingPage() {
                     <br />
                     {talk.description}
                     <br />
-                    {talk.links.map(l => (
+                    {talk.links.map((l) => (
                       <Fragment key={`${talk.title}-${l.title}`}>
                         <br />*{" "}
                         <a target="_new" href={l.url}>
