@@ -17,7 +17,7 @@ afterEach(() => {
 });
 
 describe("Resume Section", () => {
-  it("renders the section", () => {
+  it("renders the section", async () => {
     act(() => {
       render(<OpenSourcePage />, container);
     });
