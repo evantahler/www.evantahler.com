@@ -36,9 +36,9 @@ function ResumePage() {
 
         <p>
           Prior to that, he was the Chief Product Officer at Voom (an Airbus
-          Company) providing an urban air mobility to cities around the world.
+          Company) providing urban air mobility to cities around the world.
           Evan's expertise lies in building the technical side of digital
-          products, as well as the teams required to do so. He’s helped
+          products, and growing the teams required to do so. He’s helped
           companies like{" "}
           <a target="_new" href="https://www.disney.com">
             Disney
