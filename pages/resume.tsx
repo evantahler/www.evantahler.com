@@ -77,23 +77,46 @@ function ResumePage() {
         <br />
 
         <Row style={{ textAlign: "center" }}>
-          <Col md={2}>
-            <img style={logoStyle} src="/static/images/logos/actionhero.png" />
+          <Col md={1}>
+            <a href="https://www.grouparoo.com" target="_blank">
+              <img style={logoStyle} src="/static/images/logos/grouparoo.png" />
+            </a>
           </Col>
-          <Col md={2}>
-            <img style={logoStyle} src="/static/images/logos/taskrabbit.png" />
+          <Col md={1} />
+          <Col md={1}>
+            <a href="https://www.actionhero.com" target="_blank">
+              <img
+                style={logoStyle}
+                src="/static/images/logos/actionhero.png"
+              />
+            </a>
           </Col>
-          <Col md={2}>
-            <img style={logoStyle} src="/static/images/logos/airbus.png" />
+          <Col md={1} />
+          <Col md={1}>
+            <a href="https://www.taskrabbit.com" target="_blank">
+              <img
+                style={logoStyle}
+                src="/static/images/logos/taskrabbit.png"
+              />
+            </a>
           </Col>
-          <Col md={2}>
-            <img style={logoStyle} src="/static/images/logos/voom.png" />
+          <Col md={1} />
+          <Col md={1}>
+            <a href="https://www.airbus.com" target="_blank">
+              <img style={logoStyle} src="/static/images/logos/airbus.png" />
+            </a>
           </Col>
-          <Col md={2}>
-            <img style={logoStyle} src="/static/images/logos/modcloth.jpg" />
+          <Col md={1} />
+          <Col md={1}>
+            <a href="https://www.modcloth.com" target="_blank">
+              <img style={logoStyle} src="/static/images/logos/modcloth.jpg" />
+            </a>
           </Col>
-          <Col md={2}>
-            <img style={logoStyle} src="/static/images/logos/disney.png" />
+          <Col md={1} />
+          <Col md={1}>
+            <a href="https://www.disney.com" target="_blank">
+              <img style={logoStyle} src="/static/images/logos/disney.png" />
+            </a>
           </Col>
         </Row>
       </>

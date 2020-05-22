@@ -16,10 +16,7 @@ function ContactPage() {
 
         <JumboImage src="/static/images/contact.jpg" />
 
-        <p>
-          Please feel to reach out! I advise a nubmer of startups and non
-          profits, and am always looking for new ways to help out.
-        </p>
+        <p>Let's Chat!</p>
         <p>
           If you are looking to hire me on a contractor basis, please reach out
           via{" "}

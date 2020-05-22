@@ -43,7 +43,7 @@ function IndexPage() {
                     I use my <BoldWords text="Product Management" />,{" "}
                     <BoldWords text="Software Engineering" />, and{" "}
                     <BoldWords text="Leadership" /> skills to build teams that
-                    create world-class Digital Consumer Products.
+                    create world-class digital products.
                   </h4>
                 </Col>
               </Row>

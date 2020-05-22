@@ -8,6 +8,7 @@ const title = "Evan Tahler: Open Source";
 
 const projects = [
   { org: "actionhero", name: "actionhero" },
+  { org: "grouparoo", name: "grouparoo" },
   { org: "taskrabbit", name: "node-resque" },
   { org: "taskrabbit", name: "elasticsearch-dump" },
   { org: "actionhero", name: "ah-sequelize-plugin" },
