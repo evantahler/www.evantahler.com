@@ -17,7 +17,7 @@ function ResumePage() {
         <h1>Resume</h1>
         <hr />
 
-        <JumboImage src="/static/images/resume.jpg" />
+        <JumboImage src="/static/images/resume-2.jpg" />
 
         <Alert variant="success">
           <a href="/static/evan-tahler-resume.pdf">
