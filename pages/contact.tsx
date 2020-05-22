@@ -16,7 +16,7 @@ function ContactPage() {
 
         <JumboImage src="/static/images/contact.jpg" />
 
-        <p>Let's Chat!</p>
+        <p>Let's chat!</p>
         <p>
           If you are looking to hire me on a contractor basis, please reach out
           via{" "}
