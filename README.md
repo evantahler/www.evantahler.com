@@ -1,7 +1,5 @@
 # www.evantahler.com
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/evantahler/www.evantahler.com.svg)](https://greenkeeper.io/)
-
 [![Build Status](https://circleci.com/gh/evantahler/www.evantahler.com.png)](https://circleci.com/gh/evantahler/www.evantahler.com)
 
 ## Install
