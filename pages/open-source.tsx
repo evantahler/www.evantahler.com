@@ -67,14 +67,16 @@ function OpenSourcePage() {
             Help me continue to provide the open-source coomunity with these
             tools... and of course, more features and code :D
           </p>
-          <p>
-            <a
-              href="https://github.com/users/evantahler/sponsorship"
-              target="_new"
-            >
-              <Button>Donate Today</Button>
-            </a>
-          </p>
+          <div style={{ textAlign: "center" }}>
+            <p>
+              <a
+                href="https://github.com/users/evantahler/sponsorship"
+                target="_new"
+              >
+                <Button size="lg">Donate Today</Button>
+              </a>
+            </p>
+          </div>
         </Alert>
 
         <p>
