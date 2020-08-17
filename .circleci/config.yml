@@ -52,20 +52,6 @@ jobs:
       - store_artifacts:
           path: ./reports/junit/
 
-  deploy:
-    docker:
-      - image: circleci/node:12
-    steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "90:b9:1e:76:c6:56:b2:6d:66:1f:ec:28:34:99:5f:ae"
-      - checkout
-      - restore_cache:
-          <<: *cache-options
-      - run:
-          name: deploy-gh-pages
-          command: ./bin/deploy
-
 workflows:
   version: 2
   build_and_test:
@@ -79,11 +65,3 @@ workflows:
             <<: *ignored-branches
           requires:
             - build
-
-      - deploy:
-          filters:
-            branches:
-              only:
-                - master
-          requires:
-            - test
