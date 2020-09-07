@@ -76,7 +76,7 @@ function IndexPage() {
         </Jumbotron>
 
         <Row>
-          <Col>
+          <Col md={6}>
             <h2>Featured Posts</h2>
             <Alert variant="info">
               <a href="/writing">See all Posts</a>
@@ -125,7 +125,7 @@ function IndexPage() {
             })}
           </Col>
 
-          <Col>
+          <Col md={6}>
             <h2>Featured Talks</h2>
             <Alert variant="info">
               <a href="/speaking">See all Talks</a>
