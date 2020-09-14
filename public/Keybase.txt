@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/evantahler
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://www.evantahler.com
+  * I am evantahler (https://keybase.io/evantahler) on keybase.
+  * I have a public key ASAZluUZMx9kEK5WImM0m7wyAt7BhesnCnhihw3I-Ygwmgo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0101a43672165c407b201fc474831e56da9316768b3e3db37a7456f72f6ed7210e5d0a",
+      "host": "keybase.io",
+      "kid": "01201996e519331f6410ae562263349bbc3202dec185eb270a7862870dc8f988309a0a",
+      "uid": "830bfe4008351ab798963dde17e62c00",
+      "username": "evantahler"
+    },
+    "merkle_root": {
+      "ctime": 1600126761,
+      "hash": "d4a2c43fb6e4ac6bf61cb00425f784691d930b6ddd3f4106971ac0fec63e89133e1c8da24018b72bc60cf033dfbafc6cbedcb04101f2e48f7d0950aa5979678b",
+      "hash_meta": "e822c3c9fc7fc9fd9cb1d837de2a087a9a9a317eb021fbcb5ded35f26adace9f",
+      "seqno": 17569235
+    },
+    "service": {
+      "entropy": "tz4kH4MhNdO3TpqJ3JxmeTm3",
+      "hostname": "www.evantahler.com",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "5.5.0"
+  },
+  "ctime": 1600126794,
+  "expire_in": 504576000,
+  "prev": "f55d8f8b0c301e949fe413af1241f82f649419c71820f618c57b2763d2d0769a",
+  "seqno": 41,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgGZblGTMfZBCuViJjNJu8MgLewYXrJwp4YocNyPmIMJoKp3BheWxvYWTESpcCKcQg9V2PiwwwHpSf5BOvEkH4L2SUGccYIPYYxXsnY9LQdprEIAI0u+DZAxmS33c1vvIgBClpty6DQX/JQBICA3SHj+yuAgHCo3NpZ8RAdPfPKlzeHbBpth0mGcqExSVCFEIWqbHWnyZCypIx5Jkbzx9a0EBMB/IwuuYqnkBubtDUgxqqqJ9RSEDgp5MtAqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIJuVLzV+Zrv7uAR4FwgX5vtlGQ4q2ljqO8vuygdIAbaso3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/evantahler
+
+==================================================================
