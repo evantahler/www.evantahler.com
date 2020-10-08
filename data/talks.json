@@ -1,5 +1,18 @@
 [
   {
+    "title": "How I learned to Stop Worrying and Let the Robot Publish to NPM",
+    "date": "September, 2020",
+    "where": "CascadiaJS",
+    "image": "/static/images/evan-tahler-illustration.png",
+    "description": "As professional developers, we /probably/ don’t deploy code directly to production and we /usually/ test things first. There’s a whole world of tools and best practices like Git Flow, Continuous Integration, and Review Apps to help us build and deploy our apps and websites... but what about the developer tools we use every day? This talk will focus on how to parallel some of these same best-practices when making developer tools and frameworks. Together we will build a CI/CD pipeline for publishing to packages to NPM.",
+    "links": [
+      {
+        "title": "speaker page",
+        "url": "https://2020.cascadiajs.com/speakers/evan-tahler"
+      }
+    ]
+  },
+  {
     "title": "Using Next.JS to build Static Dynamic Websites… and never pay for font-end hosting again!",
     "date": "September, 2019",
     "where": "SeattleJS",

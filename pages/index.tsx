@@ -130,7 +130,7 @@ function IndexPage() {
             <Alert variant="info">
               <a href="/speaking">See all Talks</a>
             </Alert>
-            {talks.map((talk) => (
+            {talks.slice(0, 3).map((talk) => (
               <Fragment key={talk.title}>
                 <Card>
                   <Card.Img variant="top" src={talk.image} />
