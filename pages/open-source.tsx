@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, ListGroup, Spinner, Alert, Button } from "react-bootstrap";
+import Image from "next/image";
 import GitHub from "github-api";
 import Page from "../components/templates/page";
 import JumboImage from "../components/jumboImage";
@@ -108,8 +109,9 @@ function OpenSourcePage() {
 
                   <Row>
                     <Col md={1}>
-                      <img
-                        style={{ maxWidth: 75 }}
+                      <Image
+                        width={75}
+                        height={75}
                         src={repository.owner.avatar_url}
                       />
                     </Col>

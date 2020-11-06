@@ -2,13 +2,10 @@ import React from "react";
 import { Alert, Row, Col } from "react-bootstrap";
 import Page from "../components/templates/page";
 import JumboImage from "../components/jumboImage";
+import Image from "next/image";
 
 const title = "Evan Tahler: Resume";
-
-const logoStyle = {
-  maxWidth: 100,
-  maxHeight: 100,
-};
+const logoSize = 100;
 
 function ResumePage() {
   return (
@@ -79,14 +76,19 @@ function ResumePage() {
         <Row style={{ textAlign: "center" }}>
           <Col md={1}>
             <a href="https://www.grouparoo.com" target="_blank">
-              <img style={logoStyle} src="/static/images/logos/grouparoo.png" />
+              <Image
+                height={logoSize}
+                width={logoSize}
+                src="/static/images/logos/grouparoo.png"
+              />
             </a>
           </Col>
           <Col md={1} />
           <Col md={1}>
             <a href="https://www.actionhero.com" target="_blank">
-              <img
-                style={logoStyle}
+              <Image
+                height={logoSize}
+                width={logoSize}
                 src="/static/images/logos/actionhero.png"
               />
             </a>
@@ -94,8 +96,9 @@ function ResumePage() {
           <Col md={1} />
           <Col md={1}>
             <a href="https://www.taskrabbit.com" target="_blank">
-              <img
-                style={logoStyle}
+              <Image
+                height={logoSize}
+                width={logoSize}
                 src="/static/images/logos/taskrabbit.png"
               />
             </a>
@@ -103,19 +106,31 @@ function ResumePage() {
           <Col md={1} />
           <Col md={1}>
             <a href="https://www.airbus.com" target="_blank">
-              <img style={logoStyle} src="/static/images/logos/airbus.png" />
+              <Image
+                height={logoSize}
+                width={logoSize * 1.3}
+                src="/static/images/logos/airbus.png"
+              />
             </a>
           </Col>
           <Col md={1} />
           <Col md={1}>
             <a href="https://www.modcloth.com" target="_blank">
-              <img style={logoStyle} src="/static/images/logos/modcloth.jpg" />
+              <Image
+                height={logoSize}
+                width={logoSize}
+                src="/static/images/logos/modcloth.jpg"
+              />
             </a>
           </Col>
           <Col md={1} />
           <Col md={1}>
             <a href="https://www.disney.com" target="_blank">
-              <img style={logoStyle} src="/static/images/logos/disney.png" />
+              <Image
+                height={logoSize}
+                width={logoSize}
+                src="/static/images/logos/disney.png"
+              />
             </a>
           </Col>
         </Row>

@@ -1,16 +1,9 @@
 import { Fragment } from "react";
-import {
-  Jumbotron,
-  Row,
-  Col,
-  Image,
-  Badge,
-  Alert,
-  Card,
-} from "react-bootstrap";
+import { Jumbotron, Row, Col, Badge, Alert, Card } from "react-bootstrap";
 import Page from "../components/templates/page";
 import Styles from "../components/styles/variables.json";
 import BigGlyf from "../components/BigGlyf";
+import Image from "next/image";
 
 import featuredPosts from "./../data/featuredPosts.json";
 import talks from "./../data/talks.json";
@@ -29,8 +22,9 @@ function IndexPage() {
           <Row>
             <Col md={3} style={{ textAlign: "center" }}>
               <Image
+                width={203}
+                height={376}
                 src="/static/images/bitmoji.png"
-                style={{ maxWidth: "100%" }}
               />
             </Col>
 

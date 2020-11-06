@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 function JumboImage({ src }) {
   const style = {
@@ -8,14 +8,14 @@ function JumboImage({ src }) {
     paddingTop: 10,
     paddingBottom: 10,
     objectFit: "cover" as "cover",
-    borderRadius: 15,
+    borderRadius: 30,
   };
 
   return (
     <>
       <Row>
         <Col md={12}>
-          <Image style={style} src={src} />
+          <img style={style} src={src} />
         </Col>
       </Row>
     </>
