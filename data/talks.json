@@ -55,7 +55,7 @@
     "date": "Dec, 2015",
     "where": "SF Node",
     "image": "/static/images/sfnode.jpg",
-    "description": "Node.js is great for all sorts of projects. In this demo, we will use NOde.js to control the lights in our house via the DMX protocol.",
+    "description": "Node.js is great for all sorts of projects. In this demo, we will use Node.js to control the lights in our house via the DMX protocol.",
     "links": [
       {
         "title": "slides",
