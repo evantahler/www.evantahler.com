@@ -17,7 +17,7 @@
     "lint": "prettier --check pages components __tests__"
   },
   "dependencies": {
-    "github-api": "^3.3.0",
+    "github-api": "^3.4.0",
     "next": "^10.0.6",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
