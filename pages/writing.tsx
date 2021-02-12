@@ -39,7 +39,11 @@ function WritingPage() {
 
         <p>
           I blog at Medium under the name{" "}
-          <a href="https://medium.com/@evantahler">@evantahler</a> and for <a href="https://www.grouparoo.com/blog/author/evan_tahler">Grouparoo</a>.
+          <a href="https://medium.com/@evantahler">@evantahler</a> and for{" "}
+          <a href="https://www.grouparoo.com/blog/author/evan_tahler">
+            Grouparoo
+          </a>
+          .
         </p>
         <Alert variant="info">
           <a href="https://medium.com/@evantahler">See all Posts</a>
