@@ -11,7 +11,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
-    "start": "NODE_ENV=production node server.js",
+    "build": "next build",
+    "start": "next start",
     "test": "jest",
     "pretest": "npm run lint",
     "lint": "prettier --check pages components __tests__"

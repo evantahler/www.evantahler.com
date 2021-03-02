@@ -1,5 +1,26 @@
 [
   {
+    "title": "Sharing Typescript Types Across the Stack",
+    "date": "February, 2020",
+    "where": "SeattleJS",
+    "image": "/static/images/types-presentation.png",
+    "description": "Use Typescript to share types between your Frontend and Backend.  Discover the shape of your data to avoid mistakes!",
+    "links": [
+      {
+        "title": "Slides",
+        "url": "https://docs.google.com/presentation/d/1LrG0ptT7K-AG1d_1f_mefgVLUGm-TcEqzPdP7n0jf_4"
+      },
+      {
+        "title": "Code",
+        "url": "https://github.com/evantahler/pokemon-typescript"
+      },
+      {
+        "title": "Video",
+        "url": "https://www.youtube.com/watch?v=tJtL4LtKQnA"
+      }
+    ]
+  },
+  {
     "title": "How I learned to Stop Worrying and Let the Robot Publish to NPM",
     "date": "September, 2020",
     "where": "CascadiaJS",
