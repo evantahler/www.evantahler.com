@@ -45,8 +45,13 @@ function WritingPage() {
           </a>
           .
         </p>
+        <Alert variant="success">
+          <a href="https://medium.com/@evantahler">See all Medium Posts</a>
+        </Alert>
         <Alert variant="info">
-          <a href="https://medium.com/@evantahler">See all Posts</a>
+          <a href="https://www.grouparoo.com/blog/author/evan_tahler">
+            See all Grouparoo Posts
+          </a>
         </Alert>
 
         <h2>Featured Writing</h2>
