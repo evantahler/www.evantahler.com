@@ -1,18 +1,13 @@
 import React from "react";
 import FontAwesome from "react-fontawesome";
+import { Button } from "react-bootstrap";
 
-function BigGlyf({ name }) {
+export default function BigGlyf({ name }) {
   return (
-    <span
-      style={{
-        fontSize: 30,
-        fontWeight: "bold",
-        color: "black",
-      }}
-    >
+    <Button size="lg" variant="dark">
       <FontAwesome name={name} />
-    </span>
+      {/* <br />
+      <small> {name}</small> */}
+    </Button>
   );
 }
-
-export default BigGlyf;

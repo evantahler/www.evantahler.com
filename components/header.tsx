@@ -17,16 +17,16 @@ function HilightableNavLink({ href, text }) {
 
 function Sidebar() {
   return (
-    <Navbar fixed="top" bg="info" variant="dark" expand="lg">
+    <Navbar fixed="top" bg="light" variant="light" expand="lg">
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Brand href="/">Evan Tahler</Navbar.Brand>
+      <Navbar.Brand href="/">&nbsp;&nbsp;&nbsp;Evan Tahler</Navbar.Brand>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <HilightableNavLink href="/resume" text="Resume" />
-          <HilightableNavLink href="/writing" text="Writing" />
-          <HilightableNavLink href="/open-source" text="Open Source" />
-          <HilightableNavLink href="/speaking" text="Speaking" />
-          <HilightableNavLink href="/contact" text="Contact" />
+          <HilightableNavLink href="/resume" text="&nbsp;Resume" />
+          <HilightableNavLink href="/writing" text="&nbsp;Writing" />
+          <HilightableNavLink href="/open-source" text="&nbsp;Open Source" />
+          <HilightableNavLink href="/speaking" text="&nbsp;Speaking" />
+          <HilightableNavLink href="/contact" text="&nbsp;Contact" />
         </Nav>
       </Navbar.Collapse>
     </Navbar>

@@ -1,6 +1,5 @@
 import React from "react";
-import { Row, Col, Badge } from "react-bootstrap";
-import BigGlyf from "../components/BigGlyf";
+import ContactCards from "../components/contactCards";
 import Page from "../components/templates/page";
 import JumboImage from "../components/jumboImage";
 import Calendly from "../components/calendly";
@@ -16,7 +15,12 @@ function ContactPage() {
 
         <JumboImage src="/static/images/contact.jpg" />
 
-        <p>Let's chat!</p>
+        <strong>
+          <p>Let's chat!</p>
+        </strong>
+
+        <ContactCards />
+
         <p>
           If you are looking to hire me on a contractor basis, please reach out
           via{" "}
@@ -31,30 +35,6 @@ function ContactPage() {
             join the ActionHero community
           </a>
         </p>
-
-        <hr />
-
-        <Row>
-          <Col md={4} style={{ textAlign: "center" }}>
-            <a target="_new" href="https://twitter.com/evantahler">
-              <BigGlyf name="twitter" />
-              <br /> <Badge variant="success">@evantahler</Badge>
-            </a>
-          </Col>
-          <Col md={4} style={{ textAlign: "center" }}>
-            <a target="_new" href="https://linkedin.com/in/evantahler">
-              <BigGlyf name="linkedin" />
-              <br /> <Badge variant="info">@evantahler</Badge>
-            </a>
-          </Col>
-          <Col md={4} style={{ textAlign: "center" }}>
-            <a target="_new" href="mailto:evan@evantahler.com">
-              <BigGlyf name="inbox" />
-              <br />
-              <Badge variant="primary">evan@evantahler.com</Badge>
-            </a>
-          </Col>
-        </Row>
 
         <hr />
         <p>Or schedule a chat with me!</p>

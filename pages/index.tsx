@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Jumbotron, Row, Col, Badge, Alert, Card } from "react-bootstrap";
 import Page from "../components/templates/page";
 import Styles from "../components/styles/variables.json";
-import BigGlyf from "../components/BigGlyf";
+import ContactCards from "../components/contactCards";
 import Image from "next/image";
 
 import featuredPosts from "./../data/featuredPosts.json";
@@ -18,7 +18,7 @@ function IndexPage() {
   return (
     <Page title={title}>
       <>
-        <Jumbotron>
+        <Jumbotron style={{ padding: 10 }}>
           <Row>
             <Col md={3} style={{ textAlign: "center" }}>
               <Image
@@ -44,27 +44,7 @@ function IndexPage() {
 
               <div style={{ padding: 30 }} />
 
-              <Row>
-                <Col md={4} style={{ textAlign: "center" }}>
-                  <a target="_new" href="https://twitter.com/evantahler">
-                    <BigGlyf name="twitter" />
-                    <br /> <Badge variant="success">@evantahler</Badge>
-                  </a>
-                </Col>
-                <Col md={4} style={{ textAlign: "center" }}>
-                  <a target="_new" href="https://linkedin.com/in/evantahler">
-                    <BigGlyf name="linkedin" />
-                    <br /> <Badge variant="info">@evantahler</Badge>
-                  </a>
-                </Col>
-                <Col md={4} style={{ textAlign: "center" }}>
-                  <a target="_new" href="mailto:evan@evantahler.com">
-                    <BigGlyf name="inbox" />
-                    <br />
-                    <Badge variant="primary">evan@evantahler.com</Badge>
-                  </a>
-                </Col>
-              </Row>
+              <ContactCards />
             </Col>
           </Row>
         </Jumbotron>
