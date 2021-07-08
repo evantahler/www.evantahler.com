@@ -24,4 +24,3 @@ We use [prettier](https://prettier.io) to manage our lint rules.  We run `pretti
 - we use a default boostrap CSS file
 - all components provide thier own CSS inline
 
-
