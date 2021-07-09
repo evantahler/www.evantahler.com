@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Jumbotron, Row, Col, Badge, Button, Card } from "react-bootstrap";
+import { Row, Col, Badge, Button, Card } from "react-bootstrap";
 import ContactCards from "../components/contactCards";
 import SEO from "../components/seo";
 import Image from "next/image";
@@ -16,32 +16,51 @@ function IndexPage() {
     <>
       <SEO title="Evan Tahler" path="/" />
 
-      <Jumbotron style={{ padding: 10 }}>
-        <Row>
-          <Col md={3} style={{ textAlign: "center" }}>
-            <Image width={203} height={376} src="/static/images/bitmoji.png" />
-          </Col>
+      <Card>
+        <Card.Body>
+          <Row>
+            <Col md={3} style={{ textAlign: "center" }}>
+              <Image
+                width={203}
+                height={376}
+                src="/static/images/bitmoji.png"
+              />
+            </Col>
 
-          <Col md={9}>
-            <Row>
-              <Col md={12}>
-                <h1>Hi, I'm Evan Tahler</h1>
-                <br />
-                <h4>
-                  I use my <BoldWords text="Product Management" />,{" "}
-                  <BoldWords text="Software Engineering" />, and{" "}
-                  <BoldWords text="Leadership" /> skills to build teams that
-                  create world-class digital products.
-                </h4>
-              </Col>
-            </Row>
+            <Col md={9}>
+              <Row>
+                <Col md={12}>
+                  <h1>Hi, I'm Evan Tahler</h1>
+                  <br />
+                  <h4>
+                    I use my <BoldWords text="Product Management" />,{" "}
+                    <BoldWords text="Software Engineering" />, and{" "}
+                    <BoldWords text="Leadership" /> skills to build teams that
+                    create world-class digital products.
+                  </h4>
 
-            <div style={{ padding: 30 }} />
+                  <br />
 
-            <ContactCards />
-          </Col>
-        </Row>
-      </Jumbotron>
+                  <p>
+                    I am the CTO and co-founder of{" "}
+                    <a href="https://www.grouparoo.com" target="_blank">
+                      Grouparoo
+                    </a>{" "}
+                    & Creator of{" "}
+                    <a href="https://www.actionherojs.com" target="_blank">
+                      Actionherojs
+                    </a>
+                  </p>
+                </Col>
+              </Row>
+
+              <div style={{ padding: 30 }} />
+
+              <ContactCards />
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
 
       <br />
 
@@ -53,6 +72,8 @@ function IndexPage() {
               See all Posts
             </Button>
           </h2>
+
+          <br />
 
           {featuredPosts.map((post) => {
             return (
@@ -104,6 +125,8 @@ function IndexPage() {
               See all Talks
             </Button>
           </h2>
+
+          <br />
 
           {talks.slice(0, 3).map((talk) => (
             <Fragment key={talk.title}>

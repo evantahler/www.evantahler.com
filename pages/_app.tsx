@@ -1,11 +1,10 @@
 import Head from "next/head";
 import { Container, Row, Col } from "react-bootstrap";
 import Header from "../components/header";
+import Footer from "../components/footer";
 import "../scss/site.scss";
 
 export default function SITE(props) {
-  const year = new Date().getFullYear();
-
   return (
     <>
       <Head>
@@ -100,27 +99,9 @@ export default function SITE(props) {
             <props.Component {...props} />
           </Col>
         </Row>
-
-        <Row>
-          <Col md={12} style={{ textAlign: "center", paddingTop: 100 }}>
-            <p>
-              <small className="text-muted">
-                Copyright, Evan Tahler {year}
-              </small>
-            </p>
-            <p>
-              <small className="text-muted">
-                <a
-                  href="https://github.com/evantahler/www.evantahler.com"
-                  target="_new"
-                >
-                  source for this site
-                </a>
-              </small>
-            </p>
-          </Col>
-        </Row>
       </Container>
+
+      <Footer />
     </>
   );
 }

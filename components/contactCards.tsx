@@ -1,26 +1,16 @@
-import { Alert, Row, Col } from "react-bootstrap";
+import { Row, Col, ButtonGroup } from "react-bootstrap";
 import BigGlyf from "./BigGlyf";
 
 export default function ContactCards() {
   return (
-    <Alert>
-      <Row>
-        <Col md={4} style={{ textAlign: "center" }}>
-          <a target="_new" href="https://twitter.com/evantahler">
-            <BigGlyf name="twitter" />
-          </a>
-        </Col>
-        <Col md={4} style={{ textAlign: "center" }}>
-          <a target="_new" href="https://linkedin.com/in/evantahler">
-            <BigGlyf name="linkedin" />
-          </a>
-        </Col>
-        <Col md={4} style={{ textAlign: "center" }}>
-          <a target="_new" href="mailto:evan@evantahler.com">
-            <BigGlyf name="inbox" />
-          </a>
-        </Col>
-      </Row>
-    </Alert>
+    <Row>
+      <Col style={{ textAlign: "center" }}>
+        <ButtonGroup style={{ width: "90%" }}>
+          <BigGlyf name="twitter" href="https://twitter.com/evantahler" />
+          <BigGlyf name="linkedin" href="https://linkedin.com/in/evantahler" />
+          <BigGlyf name="inbox" href="mailto:evan@evantahler.com" />
+        </ButtonGroup>
+      </Col>
+    </Row>
   );
 }
