@@ -12,6 +12,9 @@ if (!dirname || dirname === "/") {
 }
 rootDir = rootDir.split(`${path.sep}.next`)[0];
 
+if (process.env.NODE_ENV)
+  console.log(`\r\n\r\nBlog root directory: ${rootDir}\r\n\r\n`);
+
 const blogDirectory = path.join(rootDir, "pages", "blog");
 
 export namespace Blog {

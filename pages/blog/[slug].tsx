@@ -5,7 +5,7 @@ import SEO from "../../components/seo";
 import ReactMarkdown from "react-markdown";
 import { Blog } from "../../lib/blog";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { light } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 const components = {
   img({ node, src, ...props }) {
@@ -21,11 +21,9 @@ const components = {
     if (matchedLanguage === "js") matchedLanguage = "javascript";
     if (matchedLanguage === "ts") matchedLanguage = "typescript";
 
-    console.log(matchedLanguage);
-
     return !inline && match ? (
       <SyntaxHighlighter
-        style={light}
+        style={nord}
         showLineNumbers={true}
         language={matchedLanguage}
         PreTag="div"
