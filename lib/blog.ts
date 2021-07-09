@@ -12,7 +12,7 @@ if (!dirname || dirname === "/") {
 }
 rootDir = rootDir.split(`${path.sep}.next`)[0];
 
-const blogDirectory = path.join(roorDir, "pages", "blog");
+const blogDirectory = path.join(rootDir, "pages", "blog");
 
 export namespace Blog {
   export async function geBySlug(slug: string) {
