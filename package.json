@@ -18,12 +18,19 @@
     "lint": "prettier --check pages components __tests__"
   },
   "dependencies": {
+    "@types/glob": "^7.1.4",
+    "bootstrap": "^5.0.2",
     "github-api": "^3.4.0",
+    "glob": "^7.1.7",
+    "gray-matter": "^4.0.3",
     "next": "^11.0.1",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^17.0.2",
     "react-fontawesome": "^1.7.1",
+    "react-markdown": "^6.0.2",
+    "react-syntax-highlighter": "^15.4.3",
+    "sass": "^1.35.2",
     "scss-to-json": "^2.0.0"
   },
   "devDependencies": {

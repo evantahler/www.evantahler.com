@@ -1,16 +1,14 @@
-import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
 import Head from "next/head";
-import Header from "../header";
+import { Container, Row, Col } from "react-bootstrap";
+import Header from "../components/header";
+import "../scss/site.scss";
 
-function PageTemplate({ title, children }) {
+export default function SITE(props) {
   const year = new Date().getFullYear();
 
   return (
     <>
       <Head>
-        <title>{title}</title>
-
         <link
           rel="apple-touch-icon"
           sizes="57x57"
@@ -82,11 +80,7 @@ function PageTemplate({ title, children }) {
         />
 
         <meta name="viewport" content="width=device-width" />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="/static/css/bootstrap.min.css"
-        />
+
         <link
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
           rel="stylesheet"
@@ -103,7 +97,7 @@ function PageTemplate({ title, children }) {
             <br />
             <br />
             <br />
-            {children}
+            <props.Component {...props} />
           </Col>
         </Row>
 
@@ -130,5 +124,3 @@ function PageTemplate({ title, children }) {
     </>
   );
 }
-
-export default PageTemplate;

@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Row, Col, Card } from "react-bootstrap";
-import Page from "../components/templates/page";
+import Page from "../components/layouts/page";
 import JumboImage from "../components/jumboImage";
 import talks from "./../data/talks.json";
 

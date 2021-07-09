@@ -1,9 +1,9 @@
-import { Alert, Badge, Row, Col } from "react-bootstrap";
+import { Alert, Row, Col } from "react-bootstrap";
 import BigGlyf from "./BigGlyf";
 
 export default function ContactCards() {
   return (
-    <Alert variant="dark">
+    <Alert>
       <Row>
         <Col md={4} style={{ textAlign: "center" }}>
           <a target="_new" href="https://twitter.com/evantahler">
