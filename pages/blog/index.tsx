@@ -86,13 +86,15 @@ export default function BlogIndex({ pageProps }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const postData = [];
   const postSlugs = await Blog.getAll();
   for (const slug of postSlugs) {
     const { meta } = await Blog.geBySlug(slug);
     postData.push({ slug, ...meta });
   }
+
+  console.log({ postData });
 
   return { props: { postData } };
 }

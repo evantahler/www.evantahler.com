@@ -3,19 +3,7 @@ import path from "path";
 import fs from "fs";
 import glob from "glob";
 
-const dirname = __dirname;
-let rootDir: string;
-if (!dirname || dirname === "/") {
-  rootDir = path.resolve(path.join(process.cwd()));
-} else {
-  rootDir = path.resolve(path.join(__dirname, ".."));
-}
-rootDir = rootDir.split(`${path.sep}.next`)[0];
-
-if (process.env.NODE_ENV)
-  console.log(`\r\n\r\nBlog root directory: ${rootDir}\r\n\r\n`);
-
-const blogDirectory = path.join(rootDir, "pages", "blog");
+const blogDirectory = path.join(process.cwd(), "pages", "blog");
 
 export namespace Blog {
   export async function geBySlug(slug: string) {
