@@ -1,12 +1,11 @@
 import { Fragment } from "react";
 import { Row, Col, Badge, Card } from "react-bootstrap";
+import Link from "next/link";
 import SEO from "../../components/seo";
 import ReactMarkdown from "react-markdown";
 import { Blog } from "../../lib/blog";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
-
-import Image from "next/image";
+import { light } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 const components = {
   img({ node, src, ...props }) {
@@ -18,10 +17,17 @@ const components = {
   },
   code({ node, inline, className, children, ...props }) {
     const match = /language-(\w+)/.exec(className || "");
+    let matchedLanguage = match ? match[1] : undefined;
+    if (matchedLanguage === "js") matchedLanguage = "javascript";
+    if (matchedLanguage === "ts") matchedLanguage = "typescript";
+
+    console.log(matchedLanguage);
+
     return !inline && match ? (
       <SyntaxHighlighter
-        style={dark}
-        language={match[1]}
+        style={light}
+        showLineNumbers={true}
+        language={matchedLanguage}
         PreTag="div"
         children={String(children).replace(/\n$/, "")}
         {...props}
@@ -39,31 +45,46 @@ export default function BlogPage({
 }: {
   pageProps: {
     slug: string;
-    meta: { title: string; date: string; tags: string[] };
+    meta: { title: string; date: string; tags: string[]; image: string };
     markdown: string;
   };
 }) {
   return (
     <>
-      <SEO title={pageProps.meta.title} path={`/blog/${pageProps.slug}`} />
+      <SEO
+        title={pageProps.meta.title}
+        path={`/blog/${pageProps.slug}`}
+        image={pageProps.meta.image}
+      />
 
       <Row>
         <Col md={12}>
           <h1>{pageProps.meta.title}</h1>
           <p>
-            <em>{new Date(pageProps.meta.date).toLocaleDateString()}</em>
+            <em>
+              <small>
+                Posted @ {new Date(pageProps.meta.date).toLocaleDateString()}
+              </small>
+            </em>
 
-            {pageProps.meta.tags
-              ? pageProps.meta.tags.sort().map((tag, idx) => {
-                  return (
-                    <Fragment key={`tag-${idx}`}>
-                      &nbsp; <Badge variant="info">{tag}</Badge>
-                    </Fragment>
-                  );
-                })
-              : ""}
+            {pageProps.meta.tags ? (
+              <>
+                <br />
+                <small>
+                  Tagged:{" "}
+                  {pageProps.meta.tags.sort().map((tag, idx) => {
+                    return (
+                      <Fragment key={`tag-${idx}`}>
+                        &nbsp; <Badge variant="info">{tag}</Badge>
+                      </Fragment>
+                    );
+                  })}
+                </small>
+              </>
+            ) : (
+              ""
+            )}
           </p>
-
           <hr />
           <ReactMarkdown
             // @ts-ignore
@@ -71,6 +92,10 @@ export default function BlogPage({
           >
             {pageProps.markdown}
           </ReactMarkdown>
+          <hr />
+          <Link href="/blog">
+            <a>🚀 Back to Evan's Blog</a>
+          </Link>
         </Col>
       </Row>
     </>
