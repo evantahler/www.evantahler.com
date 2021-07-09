@@ -22,6 +22,6 @@ describe("Introcudtion Section", () => {
       render(<IndexPage />, container);
     });
     const header = container.querySelector("h1");
-    expect(header.textContent).toBe("Evan Tahler");
+    expect(header.textContent).toBe("Hi, I'm Evan Tahler");
   });
 });
