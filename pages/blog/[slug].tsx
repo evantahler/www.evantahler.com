@@ -1,4 +1,6 @@
-import { Row, Col, Badge } from "react-bootstrap";
+import { Fragment } from "react";
+import { Row, Col, Badge, Card } from "react-bootstrap";
+import SEO from "../../components/seo";
 import ReactMarkdown from "react-markdown";
 import { Blog } from "../../lib/blog";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -7,7 +9,13 @@ import { dark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import Image from "next/image";
 
 const components = {
-  Image,
+  img({ node, src, ...props }) {
+    return (
+      <Card>
+        <Card.Img variant="top" src={src} {...props}></Card.Img>
+      </Card>
+    );
+  },
   code({ node, inline, className, children, ...props }) {
     const match = /language-(\w+)/.exec(className || "");
     return !inline && match ? (
@@ -37,21 +45,25 @@ export default function BlogPage({
 }) {
   return (
     <>
+      <SEO title={pageProps.meta.title} path={`/blog/${pageProps.slug}`} />
+
       <Row>
         <Col md={12}>
           <h1>{pageProps.meta.title}</h1>
-          <em>
-            {new Date(pageProps.meta.date).toLocaleDateString()}{" "}
+          <p>
+            <em>{new Date(pageProps.meta.date).toLocaleDateString()}</em>
+
             {pageProps.meta.tags
-              ? pageProps.meta.tags.map((tag, idx) => {
+              ? pageProps.meta.tags.sort().map((tag, idx) => {
                   return (
-                    <Badge variant="success" key={`tag-${idx}`}>
-                      {tag}
-                    </Badge>
+                    <Fragment key={`tag-${idx}`}>
+                      &nbsp; <Badge variant="info">{tag}</Badge>
+                    </Fragment>
                   );
                 })
               : ""}
-          </em>
+          </p>
+
           <hr />
           <ReactMarkdown
             // @ts-ignore
