@@ -3,7 +3,16 @@ import path from "path";
 import fs from "fs";
 import glob from "glob";
 
-const blogDirectory = path.join(process.cwd(), "pages", "blog");
+const dirname = __dirname;
+let rootDir: string;
+if (!dirname || dirname === "/") {
+  rootDir = path.resolve(path.join(process.cwd()));
+} else {
+  rootDir = path.resolve(path.join(__dirname, ".."));
+}
+rootDir = rootDir.split(`${path.sep}.next`)[0];
+
+const blogDirectory = path.join(roorDir, "pages", "blog");
 
 export namespace Blog {
   export async function geBySlug(slug: string) {
