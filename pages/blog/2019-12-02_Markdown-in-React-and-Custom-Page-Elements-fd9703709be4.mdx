@@ -91,29 +91,30 @@ export default class extends Component<Props> {
 
 We just pass that component into our example above:
 
+```js
 import Code from "./../../components/code";
-
 export default class ToutorialPage extends Component<Props, State> {
-static async getInitialProps(ctx) {
-const name = ctx.query.name;
-const markdown = await require(\`./../../tutorials/${name}.md\`);
-return {
-markdown: markdown.default,
-name
-};
+  static async getInitialProps(ctx) {
+    const name = ctx.query.name;
+    const markdown = await require(`./../../tutorials/${name}.md`);
+    return {
+      markdown: markdown.default,
+      name,
+    };
+  }
+  render() {
+    return (
+      <ReactMarkdown
+        source={this.props.markdown}
+        escapeHtml={false}
+        renderers={{
+          code: Code, // <-- HERE
+        }}
+      />
+    );
+  }
 }
-
-render () {
-return (
-
-<ReactMarkdown
-  source={this.props.markdown}
-  escapeHtml={false}
-  renderers={{
-    code: Code, // <-- HERE
-  }}
-/>
-) } }
+```
 
 Adding navigation was a bit tricker. We accomplished this by creating a custom renderer for Headers that also built up a list of all the section headers into the page’s `state` with this new `parseHeading` method:
 
