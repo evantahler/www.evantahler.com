@@ -12,6 +12,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "test": "jest",
     "pretest": "npm run lint",
@@ -24,6 +25,7 @@
     "glob": "^7.1.7",
     "gray-matter": "^4.0.3",
     "next": "^11.0.1",
+    "next-sitemap": "^1.6.133",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^17.0.2",
