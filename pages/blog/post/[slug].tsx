@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 import { Row, Col, Badge, Card } from "react-bootstrap";
 import Link from "next/link";
-import SEO from "../../components/seo";
+import SEO from "../../../components/seo";
 import ReactMarkdown from "react-markdown";
-import { Blog } from "../../lib/blog";
+import { Blog } from "../../../lib/blog";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
@@ -73,7 +73,12 @@ export default function BlogPage({
                   {pageProps.meta.tags.sort().map((tag, idx) => {
                     return (
                       <Fragment key={`tag-${idx}`}>
-                        &nbsp; <Badge variant="info">{tag}</Badge>
+                        <Link href={`/blog/tag/${tag}`}>
+                          <a>
+                            <Badge variant="info">{tag}</Badge>
+                          </a>
+                        </Link>
+                        &nbsp;
                       </Fragment>
                     );
                   })}

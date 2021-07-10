@@ -46,7 +46,7 @@ export default function BlogIndex({ pageProps }) {
                     </Col> */}
                     <Col>
                       <h4>
-                        <Link href={`/blog/${post.slug}`}>
+                        <Link href={`/blog/post/${post.slug}`}>
                           <a style={{ color: "black" }}>{post.title}</a>
                         </Link>
                       </h4>
@@ -64,7 +64,12 @@ export default function BlogIndex({ pageProps }) {
                               {post.tags.sort().map((tag, idx) => {
                                 return (
                                   <Fragment key={`tag-${idx}`}>
-                                    <Badge variant="info">{tag}</Badge>&nbsp;
+                                    <Link href={`/blog/tag/${tag}`}>
+                                      <a>
+                                        <Badge variant="info">{tag}</Badge>
+                                      </a>
+                                    </Link>
+                                    &nbsp;
                                   </Fragment>
                                 );
                               })}
@@ -86,15 +91,21 @@ export default function BlogIndex({ pageProps }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({ params }) {
   const postData = [];
   const postSlugs = await Blog.getAll();
   for (const slug of postSlugs) {
     const { meta } = await Blog.geBySlug(slug);
-    postData.push({ slug, ...meta });
-  }
 
-  console.log({ postData });
+    let match = false;
+    if (params.tag) {
+      if (meta.tags.includes(params.tag)) match = true;
+    } else {
+      match = true;
+    }
+
+    if (match) postData.push({ slug, ...meta });
+  }
 
   return { props: { postData } };
 }
