@@ -1,0 +1,73 @@
+---
+title: "Actionhero Community: Now on Slack!"
+description: This week the Actionhero Community moved from Gitter to Slack.
+date: "2016-05-16T04:06:56.640Z"
+tags: []
+# slug: /@evantahler/actionhero-community-now-on-slack-5394f7635619
+---
+
+This week the Actionhero Community moved from [Gitter](https://gitter.im) to [Slack](https://slack.com/).
+
+![](/images/medium-export/1__myDepyzyDisjRxKGEbj6tA.png)
+
+The move was voted on by the community, and Slack won 4:1. Both tools are free for open source projects, both have web, mobile, and desktop clients, and offer deep integration with the various programming tools we use (GitHub, Travis-ci, etc). For me personally, I had a hard time choosing one over the other.
+
+I’ve been in contact with the Gitter team for some time, and they have been wonderful to work with (and I \*think\* they might use parts of Actionhero to power Gitter). I wanted to share our reasons for leaving on our first day off of their platform:
+
+> re: [https://twitter.com/gitchat/status/728686013900558340](https://twitter.com/gitchat/status/728686013900558340)
+
+> Hello Mike-
+
+> You asked me to reach out and explain why the Actionhero community is moving from Gitter to Slack.
+
+> Personally, it was a toss-up. I’m a been a happy member of a number of Slack channels/orgs for work, and I’ve also enjoyed my time with Gitter (since 2014!). I’ve had a number of conversations with your team, and you’ve all been very nice and helpful… and made a wonderful (free!) product.
+
+> A few folks have been asking to move to Slack for some time, and if you check the last few days of our chat [\*in\* Gitter](https://gitter.im/evantahler/actionhero), I’ve pressed them to explain their reasons. Without any clear feature-differentiation, I think it really came down to "I already need to use Slack for work, I like it, and I don’t want to use more apps". A few folks wanted to have sub-channels (perhaps about a PR or topic), but I don’t know if out community is big enough to use it. However, we put it to a vote, and Slack won… so we are switching.
+
+> The Socket.io team has a [good paradigm](http://rauchg.com/slackin/) for how to simplify the Slack signup flow for an open source project (which does requite you host a running login service) but they make it simple via Heroku.
+
+> All of this said, I believe i’ve offered in the past to help with Gitter if I can, as I think you rely on many of the same technologies as Actionhero… and that offer still stands.
+
+After using Slack for the Actionhero community for a week, I’ve now found some \*real\* reasons why the platform is working better for the team. I wanted to share them here for other open-source projects which might be considering a similar thing.
+
+#### Channels
+
+- Channels for Bots: integrations can live \*in\* a channel, rather than in the main room. This is nice for cleaning up clutter, but still allowing anyone to view the status of the latest build.
+- Easy-to-crate feature channels to move conversations out of the main chat, but you can still link/reference specific messages back to the main room
+
+#### Integrations
+
+Slack simply has more integrations already. Want to add a bot that lets you give kudos to your team? Done. Easy. Want a bot to remind you to do something next week? It exist.
+
+![](/images/medium-export/1__BKTSuf4weUBzI9kbAVi3mw.png)
+
+Yes, of course you can connect actionhero to slack as well.
+
+#### Open Source Signup
+
+One of the first hurdles was handling signup and registration for the team. This is an open source project, so we want to allow anyone to join without waiting for an administrator to have to approve anything.
+
+Luckily, the [socket.io](http://socket.io) team already handled this for us via [Slackin](http://rauchg.com/slackin/). Slackin is a little app you can run for free on Heroku that creates a simple sign-up page for you team. It take 2 configuration options and can be up-and-running in under 5 minutes.
+
+![](/images/medium-export/1__4OtTLNR66ejWmlnUPIKe9A.png)
+
+Slackin also provides Gitter-like chat-badges for your team:
+
+![](/images/medium-export/1__v9SZ7TrbRP9jnZlwh1LSxQ.png)
+
+#### IRC and Jabber
+
+Slack has bridges for both [IRC and Jabber](https://get.slack.help/hc/en-us/articles/201727913-Connecting-to-Slack-over-IRC-and-XMPP). Prefer to use those tools and still interact with the team on Slack? You can!
+
+Only a small amount of the Actionhero team wanted this feature, and I think the utility of these tools is dying off, but it’s nice to know that they are there. _Yes, having a wholly open-source stack for your chat is nice, but the "it-just-works" nature of both Slack and Gitter outweighs those concerns for me at this time (for an already open-source project)._
+
+#### Most Importantly: More Chatting
+
+In the week since we’ve moved to Slack, the number of chat messages has doubled. This is by far the most important metric. **The team is talking more.** I bet that this is a combination of 2 things:
+
+- Folks already have Slack open at work, and they can add the Actionhero channel easily
+- Slack’s notifications are stickier.
+
+While I was skeptical at first, the community was correct: **Utility really does increase by using a tool folks already have.**
+
+There are a few posts talking about how S[lack doesn’t work for large open-source _societies_](https://medium.freecodecamp.com/so-yeah-we-tried-slack-and-we-deeply-regretted-it-391bcc714c81#.kbxojwyny)_,_ but for now, at Actionhero’s current scale, I think we have found our home.

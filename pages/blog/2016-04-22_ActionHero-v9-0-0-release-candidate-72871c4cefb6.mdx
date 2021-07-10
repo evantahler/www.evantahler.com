@@ -1,0 +1,195 @@
+---
+title: ActionHero v9.0.0 release candidate
+description: V9.0.0 of ActionHero went live on 2014–06–24
+date: "2016-04-22T23:24:11.221Z"
+tags: []
+# slug: /@evantahler/actionhero-v9-0-0-release-candidate-72871c4cefb6
+---
+
+#### V9.0.0 of ActionHero went live on 2014–06–24
+
+![](/images/medium-export/1__JenwKu6ssjKvGKTHmpbh1g.png)
+
+[ActionHero](http://actionherojs.com) is very close to the v9.0.0 release! I’m particularly proud of some of the mature features we have added, including a real REPL and RPC tools. Check out the impressive list of changes below.
+
+If you have any comments on the release, please [note them on the mailing list](https://groups.google.com/forum/#!topic/actionhero-js/-abze7uC944). Thanks!
+
+This release focuses on performance, the chat system, and developer tools. We have been listening to your thoughts in the mailing list and on GitHub, and hopefully this release clears up a lot of the confusion and pain points you have identified!
+
+### Chat Re-Write
+
+In v9.0.0, the chat system has been gutted and re-written to provide your API with finer controls about chat rooms. Most importantly, you can now control which rooms connections are members of _directly_. Connections can continue opt to join and leave rooms on their own (assuming the authenticationPattern is met).
+
+#### No more "listening" to rooms; Clients can be in more than one room at a time
+
+- Clients can no longer "listen" or "silence" to rooms. You are either in a room or not.. but now you can be present in more than one room!
+- This is a change to the socket and websocket servers, the base connection object, and the client-facing JS library.
+- say now require a room name, IE: say myRoom Hello World over telnet and the socket server, or client.say(room, message, callback) in the websocket client
+- There are updates to the browser-facing actionHeroClient.js (and .min) to reflect these changes
+- The Client APIs for joining and leaving rooms is simplified simply to roomAdd room and roomLeave room
+
+#### When you set the authentication rules for a room, all clients already in that room will be re-checked and kicked out if needed
+
+- New methods for server-side control of rooms:
+- api.chatRoom.add(room, callback)
+- api.chatRoom.destroy(room, callback)
+- now connections will be notified of a room closing and be removed
+- api.chatRoom.exists(room, callback)
+- api.chatRoom.setAuthenticationPattern(room, key, value, callback)
+- as noted above, connections already in the room will be re-checked
+- api.chatRoom.roomStatus(room, callback)
+- api.chatRoom.authorize(connection, room, callback)
+- test if a connection _would_ be allowed to enter a room
+- api.chatRoom.reAuthenticate(connectionId, callback)
+- check all a connection’s rooms, and remove any that aren’t currently authorized
+- api.chatRoom.addMember(connectionId, room, callback)
+- you can add a member by ID to your room
+- api.chatRoom.removeMember(connectionId, room, callback)
+- you can remove a member by ID to your room
+
+### Primus
+
+In this release, we have removed our dependency on [faye](http://faye.jcoglan.com/) in favor of [Primus](https://github.com/primus/primus). We now use Primus in the websocket transport, and have moved all backend cluster-cluster communication to raw redis Pub/Sub.
+
+The Primus project allows you to choose from many webscoket backends, including ws, engine.io, socket.io, and more. A number of new options have been added to /config/servers/websocket.js to manage this. Check out the [Primus](https://github.com/primus/primus) project for more information.
+
+#### WARNING
+
+actionhero will no longer attempt to manage non-sticky client connections. This means if you have a multi-server actionhero deployment and you use long-polling in your websocket transport, you will need to ensure that your load balancer can enforce sticky connections, meaning every request from the client will hit the same actionhero node.
+
+Implementation Notes
+
+- There should be no functional changes to the Browser-facing actionheroClient.js, meaning the methods should all behave the same. However, there have been significant changes under the hood.
+- The Faye initializer has been removed.
+- in new actionhero projects, we will include the [ws](https://github.com/einaros/ws) package as the backend for Primius (so we can generate a working project), but you do not need to keep this package.
+- actionhero generate will no longer create the client-facing actionheroClient.js on generation. Rather, the server will re-generate these files on boot each time. This is done so you can make changes in /config/servers/webscoket.js and have them included into the client JS. 3 new config options help mange the creation of these files:
+
+_// you can pass a FQDN here, or function to be called / window object to be inspected_
+clientUrl**:** 'window.location.origin',
+_// Directory to render client-side JS._
+_// Path should start with "/" and will be built starting from api.config..general.paths.public_
+clientJsPath**:** 'javascript/',
+
+_// the name of the client-side JS file to render. Both \`.js\` and \`.min.js\` versions will be created_
+_// do not include the file exension_
+_// set to \`null\` to not render the client-side JS on boot_
+clientJsName**:** 'actionheroClient',
+
+### RPC
+
+To enable the new chat API above, a key feature was the ability to add connections to a room using "serverA"’a API, even though the connection in question might not be connected to "serverB". This required the creation of a robust Remote Procedure Call (RPC) to allow actionhero servers to communicate with each other.
+
+You can call an RPC to be called on all nodes you may have in your cluster or just a node which holds a specific connection. You can call RPC methods with the new api.redis.doCluster method. If you provide the optional callback, you will get the first response back (or a timeout error). RPC calls are invoked with api.redis.doCluster(method, args, connectionId, callback).
+
+For example, if you wanted all nodes to log a message, you would do: api.redis.doCluster(‘api.log’, \["hello from " + api.id\]);
+
+If you wanted the node which holds connection abc123 to change their authorized status (perhaps because your room authentication relies on this), you would do:
+
+api.connections.apply('abc123', 'set', \['auth', **true**\], **function**(err){
+_// do stuff_
+});
+
+Two new options have been added to the config/redis.js config file to support this:
+
+_// Which channel to use on redis pub/sub for RPC communication_
+channel**:** 'actionhero',
+_// How long to wait for an RPC call before considering it a failure_
+rpcTimeout**:** 5000,
+
+#### WARNING
+
+RPC calls are authenticated against api.config.serverToken and communication happens over redis Pub/Sub. BE CAREFUL, as you can call _any_ method within the API namespace on an actionhero server, including shutdown() and read _any_ data on that node.
+
+### Connections
+
+The new api.connections.apply(connectionId, method, args, callback) has been introduced. This allows any node in the cluster to modify a property of a connection, even one that isn’t located locally on this specific node. This uses the RPC tooling described above under the hood.
+
+### Web Server Updates
+
+- actionhero’s web server can now accept the PATCH HTTP verb (thanks [@omichowdhury](https://github.com/omichowdhury)). This verb can also now be used in routes.
+- actionhero’s web server will now allow you to access the raw form variables (un sanitized by the actionProcessor). connection.rawConnection.params.body and connection.rawConnection.params.files are available within middleware and actions (Thanks [@omichowdhury](https://github.com/omichowdhury))
+- adding a callback param will only convert the response to JSONp (application/javascript) if the header would have still been x/json
+- if the header isn’t application/json or application/javascript, the server will no longer attempt to JSON.stringify the connection.response.
+- This means you can manually create XML, Plain Text, etc responses as long as you also change the mime (IE: connection.rawConnection.responseHeaders.push(\[‘Content-Type’, ‘text/plain’\]);) (thanks [@enginespot](https://github.com/enginespot))
+- internally traded connectionHasHeader() for extractHeader() which will return the most recent header of a given name
+
+### Middleware Priorities
+
+Thanks to [@innerdvations](https://github.com/innerdvations), you can now choose how to order the execution of your middleware (preProcessor and postProcessor, and connection callbacks). You should no longer push to those arrays (although your application won’t error). You should now use api.actions.addPreProcessor(function, priority) and api.actions.addPostProcessor(function, priority) for actions and api.connections.addCreateCallback(function, priority) and api.connections.addDestroyCallback(function, priority) for connections.
+
+The priority in all the above is optional, and if not provided, the new api.config.general.defaultProcessorPriority will be used (defaults to 100).
+
+### Room Middleware
+
+Per a discussion on the [mailing list](https://groups.google.com/forum/#!topic/actionhero-js), we have removed any automatic messaging actionhero might do for the chatrooms in favor of another type of middleware, chat middleware! This middleware allows you to control the messages and actions taken when clients join or leave a chat room.
+
+This should not be used for authentication.
+
+As we do not want to block the ability for a connection to join a room (we already have authentication tools in place), Chat Middleware does not have a callback and is executed "in parallel" to the connection actually joining the room. This middleware can be used for announcing members joining and leaving to other members in the chat room or logging stats.
+
+Use api.chatRoom.addJoinCallback(function(connection, room)) to add a Join Callback, and use api.chatRoom.addLeaveCallback(function(connection, room) to handle connections leaving a room.
+
+You can optionally provide a priority to control the order of operations in the middleware.
+
+You can announce to everyone else in the room when a connection joins and leaves:
+
+api.chatRoom.addJoinCallback(**function**(connection, room){
+api.chatRoom.broadcast(connection, room, 'I have entered the room');
+});
+
+api.chatRoom.addLeaveCallback(**function**(connection, room){
+api.chatRoom.broadcast(connection, room, 'I have left the room');
+});
+
+### REPL
+
+actionhero now has a REPL! This means you can ‘connect’ to a running instance of actionhero and manually call all the methods on the api namespace. This combined with the new RPC tools make this a powerful debugging and development tool. Running grunt console will load up a version of action hero in your terminal where you have access to the api object. This version of the server will boot, initialize, and start, but will skip booting any servers.
+
+The REPL will:
+
+- source NODE_ENV properly to load the config
+- will connect to redis, and load any user-defined initializers
+- will load any plugins
+- will **not** boot any servers
+
+If you are familiar with rails, this is very similar to rails console
+
+### Variable Error Message
+
+Many of you have asked for the ability to change the string error messages actionhero uses. Perhaps english isn’t your user’s language, or you want so say something custom. Either way, there’s a new config file just for this: config/errors.js. Each error message is represented by a synchronous function which should return a string. Some functions are passed variables (like the connection) so you can customize your message.
+
+### Performance
+
+Over the past few months, a [great conversation](https://github.com/evantahler/actionhero/issues/366) has been happening on GitHub about actionhero speed & performance. This conversation has lead to a few small tweaks inside actionhero which have made a big difference. Most importantly, somewhere between v7.0.0. and v8.0.2 we changed the async-ness of the actionProcessor and cache system to rely on setImmediate rather than process.nextTick. This change made the seder less susceptible to crashing under heavy load, but cost us significantly in speed. This change was too costly and has since been reverted.
+
+Thank you to everyone who contributed to the conversation!
+
+The change to Priums not only allows for more flexibility in the websocket server, but in preliminary tests, preforms much better than faye.
+
+### Breaking Changes
+
+A list of things to watch out for when upgrading to v9.0.0 form v8.x.x:
+
+- actionhero now requires node > v0.10.0
+- The browser-facing JS (actionHeroClient) has been updated. You are required to use the new JS in v9.0.0 projects
+- Actionhero now requires a load balancer with sticky connections to use websockets + long polling. Actionhero will no longer support websocket long polling + the node cluster module. "real" websockets + the node cluste rmodule will continue to work.
+- The Redis config file /config/redis.js has new options. These new options are required for the RPC system.
+- We have removed /config/faye.js
+- For the updates to middleware order processing, a new config variable has been added to /config/api.js, defaultProcessorPriority : 100,
+- For the new error strings, thew new /config/errors.js is required.
+- A number of new options have been added to /config/servers/websocket.js to manage this. Check out the [Primus](https://github.com/primus/primus) project for more information.
+
+### Misc
+
+- api.utils.hashMerge/ api.utils.isPlainObject have been updated to check provided hashes (or nested hashes) for a special key, \_toExpand. If this key is false, this object will not be expanded on merge, and copied over literally.
+- the actionProcessor will now also append connection.actionStatus if a connection processes an action
+- actionStatus can be an error string, like ‘missing_params’, null, true, or false
+- a status of true mean the action ran, but there still may be a connection.error
+- this status is mostly used for setting HTTP error codes in the web server
+- Many new tests added for chat and RPC
+- Test cleanup overall for servers
+- Various small bug fixes and improvements
+- Various dependent packs updated to their latest versions
+- This includes updating [node-resque](https://github.com/taskrabbit/node-resque) to v0.8.0, which allows errors to be caught and suppressed via plugin
+
+_Originally published at 06 Jun 2014_

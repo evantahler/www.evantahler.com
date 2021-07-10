@@ -1,0 +1,26 @@
+---
+title: StatusBot
+description: This is cross-posted from tech.taskrabbit.com
+date: "2016-04-22T23:28:09.787Z"
+tags: []
+# slug: /@evantahler/statusbot-bf8fbc32b3b9
+---
+
+With the [New TaskRabbit](http://blog.taskrabbit.com/2014/07/10/the-new-taskrabbit-is-here-with-new-ios-android-apps-for-clients-and-1m-insurance-policy-on-every-task/), we rolled out [status.taskrabbit.com](http://status.taskrabbit.com) to help notify our users & partners when something goes wrong with [www.taskrabbit.com](https://www.taskrabbit.com) We selected [statuspage.io](http://statuspage.io) to power this status page because they have a simple API, and they handle logs, subscriptions, and notifications for us.
+
+![](/images/medium-export/0__DrCJJqCWSpAOEpNu.png)
+
+To send data to statuspage.io, we built [**StatusBot** (github)](https://github.com/taskrabbit/statusbot) to poll our public pages and APIs, and then pass along that information to the public status page.
+
+[**taskrabbit/statusbot**
+\_statusbot - Monitor your uptime automagically with statuspage.io_github.com](https://github.com/taskrabbit/statusbot "https://github.com/taskrabbit/statusbot")[](https://github.com/taskrabbit/statusbot)
+
+We already had a complex health check which we use internally to check on the status of the app/marketplace, so there wasn’t much extra development within our core ruby/node apps to support this. The change we implemented was to split our health check up into separate endpoints, each of which tested a single subsystem. For example, we have one unique health check to monitor our Resque queue length, and another one to monitor our elasticsearch cluster’s health. With each health check, we monitor 3 things: connectivity, response time, and HTTP status code.
+
+For us, we also realized that each METRIC we check also rolls up to a COMPONENT. These are terms that statuspage.io uses. A COMPONENT is a top level consumer-facing element (like "Website" or "API"). COMPONENTs have status like "up" or "down", and can have incidents, like downtime or a scheduled outage. METRICs on the other hand are measured, like an API’s response time. For us, the METRICs of "API Health" ("Resque Length", "ElasticSeach Health", etc) all roll up to the single COMPONENT "API". We built StatusBot with this in mind.
+
+StatusBot lets you configure thresholds for each check, meaning that I can expect the Resque check to respond quickly (under 50ms) while a more complex check (checking that every posted job has been seen by a rabbit within 1 hour) which can take up to 10 seconds. This is the check.threshold option. I can also flag a check as having no impact, meaning that if the service goes down (IE: this blog is down), we should note it and fix it, but it doesn’t really count towards our downtime.
+
+Start monitoring your own sites with [**StatusBot** (github)](https://github.com/taskrabbit/statusbot)
+
+_Originally published at 27 Aug 2014_

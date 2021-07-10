@@ -1,0 +1,41 @@
+---
+title: ActionHero V15.0.0 and Release Cadence
+description: >-
+  A quick note to say that ActionHero has reached version 15. You can read the
+  full release notes here.
+date: "2016-08-07T00:29:56.849Z"
+tags: []
+# slug: /@evantahler/actionhero-v15-0-0-and-release-cadence-ed22cfacc8b6
+---
+
+### ActionHero V15.0.0
+
+A quick note to say that [ActionHero](http://www.actionherojs.com) has reached version 15. [You can read the full release notes here.](https://github.com/evantahler/actionhero/releases/tag/v15.0.0)
+
+We now have a robust task middleware system (including middleware that can modify task/resque enqueuing) and more sensible binary commands.
+
+![](/images/medium-export/1__ferA1ehHF40hn5EDKPGiXw.png)
+
+I’m \*very happy\* to say that the majority of the work on this release has been done by community members, specifically GitHub users [l0oky](https://github.com/l0oky) and [gcoonrod](https://github.com/gcoonrod).
+
+### ActionHero Upgrade Guide
+
+During this release we talked a lot about the release cadence of ActionHero.
+
+Now that we have a fair number of enterprises using ActionHero, we need to be more mindful about handling the upgrade process, and making it as painless as possible. We’ve been folowing [Semantic Versioning](http://semver.org) for a while now (since before v9.0.0), ensuring that any breaking changes result in a new major version increase. However… when there is that breaking version change, **how** do you upgrade your project? To that end, w[e’ve launched a new section of the AcitonHero documentation which includes release guides for each major verion.](http://www.actionherojs.com/docs/#upgrading-actionhero)
+
+![](/images/medium-export/1__0QCxQAd2jc1P8__yHWNWIUQ.png)
+
+### ActionHero Release Cadence
+
+We’ve discussed wether or not we should release major versions in many small bathes (leading to more, but smaller, breaking change releases) or if we should group collections of breaking changes into one release (creating bigger releases less often).
+
+Operating under the assumption that work will continue at the same rate, and we’ll be \*creating\* the same number of breaking changes, we’ve opted to stick with "smaller breaking releases more often". The main reason for the decision was that folks don’t want to have to wait for a new feature to land in the master branch and be released. ActionHero’s release strategies are now defined:
+
+- Follow semver (any breaking change means a major version change)
+- No more than one major release per month.
+- Do not slow down progress. Release Often (even if it breaks things).
+
+Yes, #2 and #3 contradict on purpose! Finding the right balance is a job for the community. I do expect this cadence to slow down as the product continues to mature, until we release ~1 breaking release every 6 months. I expect us to reach that point in about a year.
+
+One thing the AcitonHero community needs is a Backporter. Since we have agreed to release often, if there is a bugfix to the master branch, it is very likley that it won’t be easily translatable to an older branch. We are actively looking for a maintainer to own a major version that they are actively using.This will allow us to have a sort of "LTS" model for some older releases. [Please join us on our Slack channel if this interests you](http://slack.actionherojs.com).

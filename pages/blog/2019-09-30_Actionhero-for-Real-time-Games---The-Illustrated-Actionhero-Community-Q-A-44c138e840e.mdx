@@ -1,0 +1,56 @@
+---
+title: Actionhero for Real-time Games — The Illustrated Actionhero Community Q&A
+description: Introducing to the Actionhero Illustrated Community Q&A!
+date: "2019-09-30T17:30:35.077Z"
+tags: []
+# slug: >-
+#  /@evantahler/actionhero-for-real-time-games-the-illustrated-actionhero-community-q-a-44c138e840e
+---
+
+### Introducing to the Actionhero Illustrated Community Q&A!
+
+![](/images/medium-export/1__fpDBDrYAMXpsSd7Ooykw6A.png)
+
+Welcome to the first edition of the `Actionhero Illustrated Community Q&A`!
+
+The`Actionhero Illustrated Community Q&A` is a new project whose goal is to capture some of the best questions and answers from the Actionhero Slack group and share them with the world. For those of you who don't know, Actionhero is a [Node.js](https://medium.com/u/96cd9a1fb56) server framework focused on mutli-transport reusability, real-time chat and gaming, background jobs, etc. Actionhero includes many of the components mature digital products need out of the box so you don't have to reinvent them yourself. You can learn more about Actionhero at [www.actionherojs.com](http://www.actionherojs.com) or Why [Actionhero is the Node.js server for when your project grows up](https://blog.evantahler.com/why-choose-actionhero-9a4b5caf4e62).
+
+Actionhero has a vibrant slack community, **_which is free for anyone to join at_** [**_slack.actionherojs.com_**](https://slack.actionherojs.com/).
+
+![](/images/medium-export/1__HHq4A__bmqHmIcdK4zWkBgA.png)
+
+It is a great place to ask questions and learn from other Actionhero developers, and we have a wide range of active members who are just getting started, and those that have been with the project for years. That said, Slack is not a great repository for knowledge… it can be hard to search, and even harder to know which information is stale. Also… very few people every draw illustrations or wireframes! I’m of the opinion that even a bad drawing can go a long way to explaining a technical concept. I’m a terrible illustrator, but I do know how to use Omnigraffle and tools like it! My challenge is to use the simplest tools to annotate these conversations.
+
+Every week for the month of October, I’ll be posting another article in this series which is lifted directly from our Slack community. I’m making the bet that interesting or popular conversations in Slack represent the larger community of Actionhero developers. Enjoy!
+
+### Actionhero for Real-time Games
+
+#### September 30th, 2019
+
+[Source Conversation in Slack](https://actionherojs.slack.com/archives/C04EVSUSD/p1569850773078800)
+
+Today’s conversation is the one that sparked this whole series!
+
+Adrian Lukas Stein ([@AdrianLStein](https://twitter.com/AdrianLStein) on Twitter), new to the Actionhero Community, asks:
+
+> Hey guys, I hope this is the right channel for this :sweat_smile: I’ve just stumbled upon actionherojs and I’m a bit confused whether it is possible to create a game with it that has real-time movement with multiple players. I’ve read the documentation and found the Actions I know from Nakama for example and of course the chat. I’m just building a prototype right now for like 50 players. My question is: What is the best way to transmit the realtime data, through the actions or would a repurposing of the chat give a better result performance-wise?
+
+Chad Robinson ([@codeandbiscuits](https://twitter.com/codeandbiscuits) on Twitter), a core-contributor to Actionhero gave a great and nuanced response:
+
+> I would personally try to leverage chat (or write a similar bespoke layer in the same vein). Mostly because if you actually want real-time updates you don’t want to be making REST calls, you almost certainly want WebSockets so the clients are all maintaining active connections to the server(s), and the server(s) can send messages to them any time, whether the client requests a response or not. (To broadcast your updates.)
+
+![](/images/medium-export/1__6t6nYRSZIwZ__EjbUDLp7zw.png)
+
+> ActionHero’s chat mechanism isn’t really doing much that’s special — it’s most "special" characteristic is simply that it exists and you don’t have to build the same thing. A lot of sample chat apps and tutorials you’ll find on the Internet are built around a single server. They make no arrangements for scalability. ActionHero ships out of the box leveraging Redis pub/sub to broadcast messages across all nodes in your cluster. During development you don’t notice this — it just works, and that’s great. But when you go to scale you’ll be buying yourself a pizza for choosing this path because it will also "just work" at a stressful moment when everyone else is scratching their head on how to scale their apps
+
+> Behind the scenes, all the "chat" service is doing is subscribing to a Redis pub/sub topic. When you send a message, it gets published to that topic, and listeners get a copy. Chat also provides some "room join" mechanics so you can break these messages out into groups of interested people. So for example in your classic minecraft/HALO type scenario where you had 2–4 people playing a world together, you might make a "room" for them and join them to it. Anything sent to that room gets broadcast to the others — position updates, interactions with the world, etc.
+
+![](/images/medium-export/1__i8s__PNZA81__ELzISwEoCJQ.png)
+
+> One thing to keep in mind is that JS is very slow by comparison to the latencies expected by a lot of games. It’ll work great for turn-based games or ones where interactions can be a little slow (puzzle solvers). But you’re going to hit barriers if you try to make an FPS with this. It’s not AH’s fault, it’s just the nature of all the work going on doing things like encoding and decoding JSON, context switching while resolving Promises/async calls, etc.
+
+> And finally, AH’s "endpoints" are modular. If you \[are\] tired of JS decoding and Websocket overhead you could active the TCP raw protocol server, or add a protobuf one. Very few frameworks allow you to do this so it’s a big differentiator.
+
+Chad has build a number of [high-throughput applications](https://www.medialantern.com/) with Actionhero. He’s done a great job of explaining the high-level architecture of how you might use Actionhero to create a real-time game, and also explained some of the limitations of the framework — a balanced response.
+
+If you are building a realtime game, perhaps [Actionhero](http://www.actionherojs.com) is a good choice for your backend!

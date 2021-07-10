@@ -1,0 +1,261 @@
+---
+title: Ansible Static Dynamic Inventory
+description: This entry is cross-posted from tech.taskrabbit.com
+date: "2016-04-22T23:39:01.227Z"
+tags: []
+# slug: /@evantahler/ansible-static-dynamic-inventory-808cab0a3678
+---
+
+![](/images/medium-export/1__MpJklbc7MeGNCgX3TvL1HQ.png)
+
+At [TaskRabbit](https://www.taskrabbit.com) we use [Ansible](http://www.ansible.com) to configure and manage our servers. Ansible is a great tool which allows you write easy-to-use playbooks to configure your servers, deploy your applications, and more.
+
+### The problem
+
+Normally, you run ansible commands from your laptop as you need them. This is great when provisioning or deploying, but annoying that it would be hard to automate. Ansible has a product called [Ansible Tower](http://www.ansible.com/tower) which allows you to run those same commands via a web-UI, schedule them, and respond to web hooks. Tower is a nifty piece of software that does a lot of things right, however we were having trouble keeping out inventories (lists of servers) up-to-date between the lists in our ansible git repository and the the Tower server itself.
+
+The main issue is a change in philosophy. Ansible (the CLI tool) expects that your inventories live local to the project in MAKEFILE-like files located in sensible places like ./inventories/production and ./inventories/staging. Ansible Tower expects that your inventory is dynamic, and always obtainable from a remote source like Amazon EC2’s API, or from a VMware Cluster. While we do use these services to host our servers, not all servers that are present should be ansible’d, and more importantly, not all variables that ansible needs will be obtainable from those sources.
+
+In the Ansible project repo, you can keep both the groups and lists of servers, along with variables like this:
+
+###########
+\## HOSTS ##
+###########
+
+mysql-master.myapp.com
+mysql-slave1.myapp.com
+mysql-slave2.myapp.com
+
+redis.myapp.com
+
+web1.myapp.com
+web2.myapp.com
+web3.myapp.com
+
+resque1.myapp.com
+resque2.myapp.com
+
+############
+\## GROUPS ##
+############
+
+\[production\]
+mysql-master.myapp.com
+mysql-slave1.myapp.com
+mysql-slave2.myapp.com
+redis.myapp.com
+web1.myapp.com
+web2.myapp.com
+web3.myapp.com
+resque1.myapp.com
+resque2.myapp.com
+
+\[production:vars\]
+host_memory=8GB
+host_disk=20GB
+ansible_ssh_user=root
+
+\## DB ##
+
+\[mysql\]
+mysql-master.myapp.com
+mysql-slave1.myapp.com
+mysql-slave2.myapp.com
+
+\[mysql:master\]
+mysql-master.myapp.com
+
+\[mysql:vars\]
+host_memory=32GB
+host_disk=5120GB
+
+\[redis\]
+redis.myapp.com
+
+\[app\]
+web1.myapp.com
+web2.myapp.com
+web3.myapp.com
+resque1.myapp.com
+resque2.myapp.com
+
+\[app:unicorn\]
+web1.myapp.com
+web2.myapp.com
+web3.myapp.com
+
+\[app:resque\]
+resque1.myapp.com
+resque2.myapp.com
+
+This type of layout allows you to define things in a simple way: — hosts belong to groups — groups can have variables — you can override default variables with later group definitions down the file.
+
+To demonstrate this, you can see how all servers start with 8GB of RAM, but the mysql group later overrides this to 32GB. You also get the added bonus of having your entire infrastructure defined in one place.
+
+Our workflow appends this file when we add and remove servers. This means that with a simple git pull you can be sure that any ansible command you run will be run on the correct collection of servers. We wanted Tower to source the same file developers would be using locally, and not reading in (potentially divergent information) via APIs.
+
+Ansible Tower has a feature called "[Dynamic Inventory](http://docs.ansible.com/intro_dynamic_inventory.html)" which allows you to define your inventory via some other method, as long as it presents a standardized JSON output. Tower can reference these things as what they call an "Inventory Script". Using these tools, the question became: "How can we source a file as if it were a changing API?"
+
+The answer had a few parts (in ruby):
+
+### 1\. Find the inventory file
+
+Tower does not keep the git repo of your ansible project(s) in a single place. It versions them and moves them around as you update it. To that end, finding the most current version of your ./inventories/produciton file is non trivial:
+
+**class** **InventoryFinder**
+
+**def** **find**(inventory*file)
+*\# On Production server*
+**if** File**.**exists? '/var/lib/awx/projects/'
+folder **\=** Dir**.**glob('/var/lib/awx/projects/\*')**.**max { **|**a,b**|** File**.**ctime(a) **<=>** File**.**ctime(b) }
+**return** folder **+** '/inventories/' **+** inventory_file
+*\# Assume we are within the proper project\_
+**else**
+**return** File**.**dirname(\_\_FILE\_\_) **+** '/../inventories/' **+** inventory_file
+**end**
+**end**
+
+**end**
+
+### 2\. Parse the Inventory
+
+You can define groups and variables in a few legal ways within an inventory file. You can do the \[group:vars\] method in the example above, or you can do it in-line as you define the server for the first time. Keeping all this in mind, here’s our parser:
+
+**class** **InventoryParser**
+
+**def** **initialize**(inventory_path)
+@inventory_path **\=** inventory_path
+@data **\=** {
+"\_meta" **\=>** {
+"hostvars" **\=>** {}
+}
+}
+**end**
+
+**def** **inventory_path**
+@inventory_path
+**end**
+
+**def** **data**
+@data
+**end**
+
+**def** **ignored_variables**
+**\[**
+'ansible_ssh_user'
+**\]**
+**end**
+
+**def** **file_lines**
+File**.**read( inventory_path )**.**split("\\n")
+**end**
+
+**def** **parse**
+current_section **\=** **nil**
+
+    file\_lines**.**each **do** **|**line**|**
+      parts **\=** line**.**split(' ')
+      **next** **if** parts**.**length **\==** 0
+      **next** **if** parts**.**first**\[**0**\]** **\==** "#"
+      **next** **if** parts**.**first**\[**0**\]** **\==** "/"
+      **if** parts**.**first**\[**0**\]** **\==** '\['
+        current\_section **\=** parts**.**first**.**gsub('\[','')**.**gsub('\]','')
+        **if** data**\[**current\_section**\].**nil? **&&** **!**current\_section**.**include?(':vars')
+          data**\[**current\_section**\]** **\=** **\[\]**
+        **end**
+        **next**
+      **end**
+
+      _\# varaible block_
+      **if** **!**current\_section**.**nil? **&&** current\_section**.**include?(':vars')
+        parts **\=** line**.**split('=')
+        key   **\=** parts**\[**0**\]**
+        value **\=** parts**\[**1**\]**
+        col   **\=** current\_section**.**split(':')
+        col**.**pop
+        group **\=** col**.**join(':')
+        fill\_hosts\_with\_group\_var(group, key, value)
+      _\# host block (could still have in-line variables)_
+      **else**
+        hostname **\=** parts**.**shift
+        ensure\_host\_variables(hostname)
+        d **\=** {}
+
+        **while** parts**.**length **\>** 0
+          part **\=** parts**.**shift
+          words **\=** part**.**split('=')
+          d**\[**words**.**first**\]** **\=** words**.**last **unless** ignored\_variables**.**include? words**.**first
+        **end**
+
+        data**\[**current\_section**\].**push(hostname) **if** current\_section
+        d**.**each **do** **|**k,v**|**
+          data**\[**"\_meta"**\]\[**"hostvars"**\]\[**hostname**\]\[**k**\]** **\=** v
+        **end**
+
+      **end**
+    **end**
+
+    **return** data
+
+**end**
+
+**def** **ensure_host_variables**(hostname)
+**if** data**\[**"\_meta"**\]\[**"hostvars"**\]\[**hostname**\].**nil?
+data**\[**"\_meta"**\]\[**"hostvars"**\]\[**hostname**\]** **\=** {}
+**end**
+**end**
+
+**def** **fill_hosts_with_group_var**(group, key, value)
+**return** **if** ignored_variables**.**include? key
+
+    **if** value**.**include?("'") **||** value**.**include?('"')
+      value **\=** eval(value)
+    **end**
+
+    data**\[**group**\].**each **do** **|**hostname**|**
+      ensure\_host\_variables(hostname)
+      data**\[**"\_meta"**\]\[**"hostvars"**\]\[**hostname**\]\[**key**\]** **\=** value
+    **end**
+
+**end**
+
+**end**
+
+You will also note that we choose to ignore certain variables, via ignored_variables, that we want defined somewhere else within ansible tower (for example SSH options).
+
+As a note, one feature of ansible’s inventory DSL that is not supported here is the notion of [children](http://docs.ansible.com/intro_inventory.html)
+
+### 3\. Running it
+
+Once those classes are defined, you can create a single file (per environment) like so:
+
+_#!/usr/bin/env ruby_
+
+require 'json'
+
+**class** **InventoryFinder**
+_#..._
+**end**
+
+**class** **InventoryParser**
+_#..._
+**end**
+
+path **\=** InventoryFinder**.**new**.**find('production')
+data **\=** InventoryParser**.**new(path)**.**parse
+
+puts JSON**.**pretty_generate( data )
+
+You can load this code into the dynamic inventory and it will be ready to run!
+
+### 4\. Keeping it in sync
+
+The final step is to ensure that any time a job is run from Tower, both the project repository and inventory are always updated. There are a few hooks you need to enable to do so:
+
+First, on the setting for the project, you can enable a git pull before each project run. Be sure to enable Update on Launch under SCM options.
+
+Then, the same option, Update on Launch can be enabled under the inventory source. When you define your inventory, you need to source is a "custom script", and from there, you can choose the inventory reader defined above.
+
+With this place, we are able to have our cake and eat it too: — one file which contains all of our configuration — allow developers to keep an up-to-date inventory source locally within the git ansible project — Ansible Tower can source that file, and ensure that it is up-to-date before we run any job
+
+_Originally published at 12 Mar 2015_

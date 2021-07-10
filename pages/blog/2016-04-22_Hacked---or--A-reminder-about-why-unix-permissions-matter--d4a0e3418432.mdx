@@ -1,0 +1,58 @@
+---
+title: "Hacked! (or: A reminder about why unix permissions matter)"
+description: >-
+  Note: I have included links to some of the malicious PHP code which attacked
+  me in this blog post. I had a hard time deciding whether this…
+date: "2016-04-22T22:15:33.525Z"
+tags: []
+# slug: >-
+#  /@evantahler/hacked-or-a-reminder-about-why-unix-permissions-matter-d4a0e3418432
+---
+
+![](/images/medium-export/1__Uub7lw9wYczHU7v__vP8WaA.jpeg)
+
+**Note:** _I have included links to some of the malicious PHP code which attacked me in this blog post. I had a hard time deciding whether this was ethical or not. Seeing as us "good guys" need to know what to look for (and be aware of the crazy shit hackers are capable of) and realizing that the bad guys already had all this code, I don’t think I’m doing any additional damage. If you disagree, please let me know._
+
+I want this blog to be as insightful as possible to other nerds, so I’m going to explain how I made **a n00b mistake** which ended up costing me an entire day to fix… and will hopefully be a reminder to you all out there in the internet to not do the same. This is also a great excuse to deconstruct the hack I fell prey to and to understand the elaborate ways these things work. To any of you who have visited this blog in the past few weeks and ended up redirected to a shady foreign porn site, this would be why :/
+
+First the basics: This is a [WordPress](http://blog.evantahler.com/wordpress.org) blog (newest version, all pluggins and themes up-to-date) hosted by the fine folks at [DreamHost](http://dreamhost.com/). I’ve been a DreamHost customer for over 5 years now, and for commodity file and small-site PHP hosting, they are the best. Today I’m thankful for their speedy customer support. I’ve got a shared account, which means I share a server with n other customers. There are no long-running processes allowed (other than Ruby Passenger processes) which means that everyone on this sever is doing "basic" web hosting with the occasional cron-job. That’s what I’m doing too.
+
+Yesterday I thought that while visiting my site I was quickly redirected to some other site. I assumed it was user error and forgot about it. Then it happened again today, so I decided to investigate, as the website I was taken to was one I had never seen before featuring porn in another language.
+
+![](/images/medium-export/1__TwyKZggmPZ6nLi30ImDNPg.jpeg)
+
+The first thing I checked was the database, looking for JS and iFrame tags in the comments, but there was nothing there. Then I looked though the posts and other wordpress tables looking for anything out of place, but still, nothing. Then I wondered if someone was able to break my caching scheme, so I turned off all the cache pluggins I had. Nothing. Finally, I decided to take a peak at the actual PHP files which run this blog and… bingo! There, at the top of EVERY PHP page, was a mysterious base-64 encoded string.
+
+<?php eval(base64\_decode(" { A REALLY LONG BASE 64 STRING WAS HERE } ")); ?>
+
+For those of you curious as to what the base64 encoded string revealed, I’ve created a [GitHub gist for it](https://gist.github.com/1891398) here (with some formatting to make it legible).
+
+The only 3 remote URLs in the entire script are: http://sweepstakesandcontestsdo.com/, http://www.lilypophilypop.com/, http://www.lolypopholypop.com/ (these links are not clickable on purpose… don’t visit them). The lolly sites return a list of other URLs, the ones which users of the site are eventually taken to via the malicious JS. The main site, "sweepstakes", has no content, but I assume that is because I’m not being redirected from a previously compromised site. The script was even fancy enough to cache its list of bad URLs locally to reduce load time… how nice! Here is the troubling part about all of this: The blog database is fine, so the attacker likely gained access to the filesystem directly. I quickly updated my account password and notified Dreamhsot, but I was unwilling to believe that I let my password slip to anyone… and I was also unwilling to believe that someone was malicious enough to target this low traffic blog and to go though the trouble to brute-force their way into my account. With a small ssh failed-attempt-lockout limit, that would have taken a very long time. As final proof that the attackers did gain file-system access, I’m sad to say that even non-wordpress pages were ruined. My photo gallery for instance (evantahler.com/gallery), which has no upload or dynamic features, also has the base64 bad string in it.
+
+So… how did this happen?
+
+It was about this time that I got a message from Dreamhost support letting me know that they had run an automated check on my site looking for malicious code (essentially searching for more wacky base-64 encoded php strings appearing at high frequency and having a recent modification time) and they found more instances of the hack in other mini-sites and sub-domains I have. Uh Oh.
+
+I started looking randomly though my directories when I noticed that a directory which should only have video files in it had a a PHP file in it, "r.php". This file had some different base-64 code in it, but it did something different. This script was double-encoded, first in base-64, and then char-split and needed to be processed back into letters before exec’d. [Here is the "decoded" result](https://gist.github.com/1895530). This script creates a secret upload page which takes the uploaded file and then runs it. Note that there are special helpers to both execute a SQL script and a php script. There are also methods to create more files of this same type of fancy base-64 encoding.
+
+Now this script alone won’t do anything bad itself, but does basically allow anyone to execute any script they want as the webserver-user (me). Along with this "r.php" file, there were 2 other files one of which was [essentially the same as this backdoor when decoded and deflated (stackOverflow)](http://stackoverflow.com/questions/3328235/how-does-this-giant-regex-work). Yep. I was 100% Pwned. Now that there was a public way to execute arbitrary code and a nice graphical FTP program, an attacker would be able to upload whatever they wanted, and do whatever they wanted. [There were even new .htaccess](https://gist.github.com/1895629) files which took all web-crawlers to more foreign porn sites and hijacked 404 pages. Yes, it really killed my SEO.
+
+Ok, so how did this all start?
+
+Remember our friend "r.php" from before? Well, it looks like I wasn’t the owner of that file! A different unix user was the owner of that file while I remained the owner of every other file and directory there. So how did he gain access? That video directory was chmod’d to 0777, meaning that everyone who had an account on that server could read/write/exec anything in that directory. Oops.
+
+Now we have enough of a story to build a timeline: Here’s the order of events as I see them:
+
+- I had with a world-writable directory in one of my accounts
+- Another Dreamhost customer’s account was compromised and was executing a script which went looking for any other accessible files/folders on the server (brute-force) and found my account
+- Once the script found my account, it copied the back-door upload script
+- From there, other files could be uploaded/run as my user, and this then spread to all my files, modifying PHP files and creating new .htaccess files
+- From my account, the script probably went off in search of other open directories again, and the cycle continues
+
+All of this was possible because of that one open directory.
+
+The moral of the story (tldr;): It wasn’t WordPress’ fault, it wasn’t Dreamhost’s fault. It probably wasn’t even the other Dreamhost customer’s fault (I’ll bet his account was compromised just like mine was). It was my fault for being a n00b and having a 0777 folder.
+
+### Never chmod 0777 anything, especially on a shared server.
+
+_Originally published at 24 Feb 2012_

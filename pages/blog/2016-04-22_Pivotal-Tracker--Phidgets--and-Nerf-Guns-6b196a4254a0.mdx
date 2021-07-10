@@ -1,0 +1,46 @@
+---
+title: "Pivotal Tracker, Phidgets, and Nerf Guns"
+description: "Update:"
+date: "2016-04-22T22:15:04.607Z"
+tags: []
+# slug: /@evantahler/pivotal-tracker-phidgets-and-nerf-guns-6b196a4254a0
+---
+
+![](/images/medium-export/1__j7dGWlXBg__zVQtw0tHlE2A.jpeg)
+
+#### Update:
+
+It seems that the good folks on Hacker News also like the internet and nerf guns (who knew!?). [There is a growing collection of other folk’s hacks regarding testing, project management, and foam weaponry](http://news.ycombinator.com/item?id=3594587) \*\*
+
+[In previous posts](http://blog.evantahler.com/on-nodejs-and-phidgets), I have talked about how to use [node.js](http://nodejs.org/) to talk to a phidget board. I have even talked about [how to run node.js ON a phidget board](http://blog.evantahler.com/node-js-running-on-a-phidgets-sbc2-board). Now you may be wondering what kind of projects you might do with a small embedded computer that has a solid http I/O stack.
+
+Here is a "suggestion".
+
+At [ModCloth](http://modcloth.com) we used [pivotal tracker](http://www.pivotaltracker.com), an awesome agile project management tool from the folks over at [Pivotal Labs](http://pivotallabs.com/). I have fallen in love with the tool for a number of reasons, but the most important reason for this article is how they really "get" the modern web-development workflow, and the tool fits nicely. They have tons of third-party integrations (Jira, GitHub, ect) and a great API.
+
+As a Product Manager with a remote team, I was always thinking about ways for our team to keep in touch better. While I was working on the phidget library, I thought I might use it and the tracker API to ring a small gong (or something similar) whenever a story was accepted as a proxy for me being able to quickly yell "thanks" (a story is a "small unit of work" for the uninitiated, like an item on your to-do list). I never found a gong, but I did find a [motorized nerf gun](http://www.amazon.com/Nerf-N-Strike-Vulcan-EBF-25-Blaster/dp/B0013U95U2)… and you can imagine where this is going :D Unfortunately, I didn’t get this project done in time before I left ModCloth, but I’m sure that I’ll find a use for it in the future!
+
+The first step was to hack the gun so that I could control it "digitally" without needing to squeeze the trigger. As it turns out, children’s toys are REALLY well made these days, and it took about an hour to pry everything apart. I forgot to take detailed photos, but what I ended up doing was soldering 2 new contact wires to the bridge on the on/off switch, and the motor itself. This was done in series with the trigger’s gate so it still worked and would complete the same circuit. I drilled a small hole in the base of the handle for the new wires to come out
+
+![](/images/medium-export/0__yE4FPa__KrztRYOYt.jpeg)
+
+The gun used the trigger to transfer the current rather than be a relay for the motor, and this meant that my new cables would be carrying a significant amount of amperage from its 6 "D" Batteries. I couldn’t just complete the circuit with the phidget board (it would fry the computer, or at least be grounded out). Luckily, I had [a 10-amp relay board](http://www.phidgets.com/products.php?product_id=3051) which worked with the phidget board.
+
+Now with everything wired up, I needed a way to talk to the pivotal tracker API. [Wizcorp](https://github.com/Wizcorp/node-pivotal) had made a basic polling node.js wrapper the Tracker V3 API which did what I needed. Thanks WizCorp!
+
+The application logic is simple:
+
+- Connect to the Phidget board
+- Authenticate with Pivotal Tacker
+- Poll your project every so often and look for story state-changes
+- "fire" if a story you own was rejected.
+
+You can also use a similar mechanism for story acceptance. The next steps in this project are obviously to pour your engineers a drink automatically when a story is accepted :D
+
+Here is the application (written for node v0.6.x). This code is pretty terrible (as I limited myself to 4 hours for this project, including the construction), and lacks any failure / error handling, but hopefully it is easy enough to understand.
+
+### And here is a [video of everything working](http://www.youtube.com/watch?v=d4KIeTTp3qA)
+
+Enjoy!
+
+_Originally published at 15 Feb 2012_

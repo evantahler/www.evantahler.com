@@ -7,6 +7,7 @@ import Link from "next/link";
 interface PostData {
   slug: string;
   title: string;
+  description?: string;
   date: string;
   tags: string[];
   image: string;
@@ -19,21 +20,25 @@ export default function BlogIndex({ pageProps }) {
     <>
       <SEO title="Evan's Blog" path="/blog" />
 
-      <h1>Evan's Blog</h1>
+      <h1>
+        <Link href="/blog">
+          <a style={{ textDecoration: "none", color: "black" }}>Evan's Blog</a>
+        </Link>
+      </h1>
       <hr />
 
-      <CardDeck>
-        {postData
-          .sort((a, b) => {
-            return new Date(b.date).getTime() - new Date(a.date).getTime();
-          })
-          .map((post, idx) => {
-            return (
-              <Card key={`post-${idx}`}>
-                <Card.Img variant="top" src={post.image} />
-                <Card.Body>
-                  <Row>
-                    {/* <Col md={2}>
+      {postData
+        .sort((a, b) => {
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        })
+        .map((post, idx) => {
+          return (
+            <Card key={`post-${idx}`}>
+              {/* <Card.Img variant="top" src={post.image} /> */}
+              <Card.Body>
+                <Row>
+                  {post.image ? (
+                    <Col md={3}>
                       <Link href={`/blog/${post.slug}`}>
                         <a>
                           <Image
@@ -43,50 +48,51 @@ export default function BlogIndex({ pageProps }) {
                           />
                         </a>
                       </Link>
-                    </Col> */}
-                    <Col>
-                      <h4>
-                        <Link href={`/blog/post/${post.slug}`}>
-                          <a style={{ color: "black" }}>{post.title}</a>
-                        </Link>
-                      </h4>
-
-                      <em>
-                        <small>
-                          {new Date(post.date).toLocaleDateString()}
-                        </small>
-                      </em>
-
-                      <p>
-                        {post.tags ? (
-                          <>
-                            <small>
-                              {post.tags.sort().map((tag, idx) => {
-                                return (
-                                  <Fragment key={`tag-${idx}`}>
-                                    <Link href={`/blog/tag/${tag}`}>
-                                      <a>
-                                        <Badge variant="info">{tag}</Badge>
-                                      </a>
-                                    </Link>
-                                    &nbsp;
-                                  </Fragment>
-                                );
-                              })}
-                            </small>{" "}
-                            <br />
-                          </>
-                        ) : (
-                          ""
-                        )}
-                      </p>
                     </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            );
-          })}
-      </CardDeck>
+                  ) : null}
+
+                  <Col>
+                    <h4>
+                      <Link href={`/blog/post/${post.slug}`}>
+                        <a style={{ color: "black" }}>{post.title}</a>
+                      </Link>
+                    </h4>
+
+                    <p>
+                      {post.tags && post.tags.length > 0 ? (
+                        <>
+                          <small>
+                            {post.tags.sort().map((tag, idx) => {
+                              return (
+                                <Fragment key={`tag-${idx}`}>
+                                  <Link href={`/blog/tag/${tag}`}>
+                                    <a>
+                                      <Badge variant="info">{tag}</Badge>
+                                    </a>
+                                  </Link>
+                                  &nbsp;
+                                </Fragment>
+                              );
+                            })}
+                          </small>{" "}
+                          <br />
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </p>
+
+                    {post.description ? <p>{post.description}</p> : null}
+
+                    <em>
+                      <small>{new Date(post.date).toLocaleDateString()}</small>
+                    </em>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          );
+        })}
     </>
   );
 }
@@ -98,7 +104,7 @@ export async function getStaticProps({ params }) {
     const { meta } = await Blog.geBySlug(slug);
 
     let match = false;
-    if (params.tag) {
+    if (params?.tag) {
       if (meta.tags.includes(params.tag)) match = true;
     } else {
       match = true;

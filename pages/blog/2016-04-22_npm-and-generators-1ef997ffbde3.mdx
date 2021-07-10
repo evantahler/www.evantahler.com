@@ -1,0 +1,27 @@
+---
+title: npm and generators
+description: >-
+  Today I learned that npm (the node.js package manager) has support for
+  arbitrary commands and chained commands. I guess I always knew this…
+date: "2016-04-22T22:18:22.984Z"
+tags: []
+# slug: /@evantahler/npm-and-generators-1ef997ffbde3
+---
+
+![](/images/medium-export/1__sa2zvb4ADQo4G__42OfSjfQ.jpeg)
+
+Today I learned that [npm](http://npmjs.com/) (the node.js package manager) has support for arbitrary commands and chained commands. I guess I always knew this (how else can you trigger make && make install after download automatically?), but I finally looked into it. Now that I’m aware of this voodoo, I was able to create a generator for actionHero.
+
+If you are familiar with rails, you are familiar all the scaffolding rails has (including the creation of a new project). actionHero isn’t nearly as complex as a modern rails project, but I really like the notion of a single command that sets up a new project for you. Here’s actionHero’s version:
+
+npm install actionHero;
+npm run-script actionHero generate;
+npm start
+
+This will get you started with some basic actions and a task, as well as launching the server locally for http, https, web sockets, and tcp.
+
+![](/images/medium-export/0__u7yDKjGyDN8bg4gR.jpeg)
+
+Enjoy!
+
+_Originally published at 12 Aug 2012_

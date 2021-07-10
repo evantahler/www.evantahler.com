@@ -1,0 +1,33 @@
+---
+title: Controlling your Magic Painting with your mind
+description: >-
+  Or, how to control your Meural Canvas with the API and connect it to all the
+  things!
+date: "2019-01-08T03:44:49.973Z"
+tags: []
+# slug: /@evantahler/controlling-your-magic-painting-with-your-mind-9f476c7c8225
+---
+
+_Or, how to control your_ [_Meural_](https://www.meural.com/) _Canvas with the API and connect it to all the things!_
+
+For years, I have been threatening to build a "Hogwarts Style" live painting for my apartment. I’ve been following the price of [e-ink full color displays](https://www.eink.com/color-technology.html) for years, and we were getting close to the point where spending a few thousand dollars was almost seaming reasonable...
+
+Then, for Christmas, my wife got me a [Meural](https://www.meural.com/). While not e-ink, it uses a nifty collection of ambient light sensors and matte screen coatings to produce a realistic painting effect… and it was under $1,000!
+
+![](/images/medium-export/1__yLVPs76k5HvU5iULe45maw.jpeg)
+![](/images/medium-export/1__w17CZTJDosjEqxLxIjefuw.jpeg)
+
+While they don’t advertise these features boldly on their website, Meural did a number of things that make their products more compelling than the average IoT device:
+
+- **SD Card reader**: Yes, you don’t need to rely on the cloud!
+- **HDMI Video input**: sure, I guess it’s a TV too!
+- **Gesture control:** You can wave at it to change images, control settings, and more.
+- A really well thought-out **API**
+
+Yes… there’s an API! I was given Alpha access to the Meural API, and I have to say that it is really pleasant to work with. Also, unlike most IoT companies, they actually thought about security! It’s HTTPS the whole time and every API call needs an authentication token.
+
+I spent a few hours creating a node project that lets you send photos from Twitter (by listening to tweets for a specific #hashtag) to your canvas.
+
+The example project can be found here: [https://github.com/evantahler/tweet2meural](https://github.com/evantahler/tweet2meural). Note how simple the [Meural class](https://github.com/evantahler/tweet2meural/blob/master/lib/meural.js) is to use.
+
+The Meural API (which is **very** subject to change at this point) can be found here: [https://documenter.getpostman.com/view/1657302/RVnWjKUL](https://documenter.getpostman.com/view/1657302/RVnWjKUL). You will need an account and Meural of course.

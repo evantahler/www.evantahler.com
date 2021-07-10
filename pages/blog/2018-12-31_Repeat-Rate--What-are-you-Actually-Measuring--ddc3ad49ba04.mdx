@@ -1,0 +1,105 @@
+---
+title: "Repeat Rate: What are you Actually Measuring?"
+description: Second-Order Measurements and your Product
+date: "2018-12-31T18:46:35.181Z"
+tags: []
+# slug: /@evantahler/repeat-rate-what-are-you-actually-measuring-ddc3ad49ba04
+---
+
+We manage [Voom](https://www.voom.flights) like many modern consumer-facing digital companies: we use Agile, XP, Pair-Programming, and similar tools to focus and prioritize our work. To do any of those successfully, you need to be aligned on your goal… and you need to be able to measure your success towards it.
+
+**_Repeat Rate_** is a common metric that companies use to better understand their customers’ affinity towards their product. However, I’ve seen this metric defined in ways that incentive unintended behaviors. **_Repeat Rate_** is different than other common ways to measure your business because, by definition, it is the rate of a rate _changing_, a second-order measurement, and just like in mathematics, there are a lot formulas that look the same when you reduce them too far.
+
+Most key business indicators are first-order derivatives, i.e. "thing per time". _Customers Acquired per Week_, or _Conversions per Month_ are common [KPIs](https://en.wikipedia.org/wiki/Performance_indicator). However, since **_Repeat Rate_** is a second-order derivative, we must do more to define and understand it.
+
+In this article, I’m going to share my belief that the term **_Repeat Rate_** is, at best, likely confusing your team, and at worst, probably the wrong way to measure your business.
+
+![](/images/medium-export/1__XYGVsmFM9b0lnRDHJHfOyQ.jpeg)
+
+#### Sample Data
+
+Using Voom as an example, I want to propose 3 alternative ways we might measure **_Repeat Rate_**. For each of these examples, we are going to use the same dataset, so that we can more closely see how your definition choice can dramatically skew your KPI.
+
+_For illustrative purposes, we can simplify things and assume Voom only sells 1 product (a Journey from Downtown to the Airport) and has a fixed price._
+
+**January 2018:**
+
+Customers Acquired (2 total) \* Evan \* Christina
+
+Journeys Purchased this month (10 total by 2 possible customers) \* Evan: 1 \* Christina: 9
+
+**February 2018:**
+
+Customers Acquired (1 total) \* Megan
+
+Journeys Purchased this month(3 total by 3 possible customers) \* Christina: 2 \* Evan: 0 \* Megan: 1
+
+#### Repeat Rate Option 1: Cohort Performance over Time
+
+This is the "traditional" definition of **_Repeat Rate._** In this world view, we are looking at the trailing 2-month period after a customer signs up, and checking if they made a repeat purchase or not.
+
+**January**
+
+- 2 new customers
+- 1 of the customers within the 2-month window made a repeat purchase in that period
+- (1 / 2) = **50%**
+
+**February**
+
+- 1 new customers
+- 0 of the new customers from within the 2-month window made a purchase in that period (so far)
+- (0 / 1) = **0%**
+
+The overall trend is decreasing.
+
+#### **Repeat Rate Option 2: Repeating Conversions over Time**
+
+In this world view, we look at how many conversions happened each period, and then which percentage of them were the customer’s first purchase or a repeat purchase.
+
+**January**
+
+- 2 first-time purchases & 8 repeat purchases
+- 10 total purchases
+- (8 / 10) = **80%**
+
+**February**
+
+- 1 first-time purchases & 2 repeat purchases
+- 3 total purchases
+- (1 / 3) = **33%**
+
+The overall trend is decreasing.
+
+#### Repeat Rate Option 3: Repeating Customers over Time
+
+In this world view, we look at how many unique customers made a purchase in each period, and then what percentage of them were making a first or repeat purchase. In the event where a customer both made their first and subsequent purchases in the same period, we will count them as _both_ a new and repeating customer.\*
+
+**January**
+
+- 2 first-time purchasers and 1 repeating purchaser
+- 3 total customers making a purchase\*
+- (1 / 3) = **33%**
+
+**February**
+
+- 1 first-time purchasers and 1 repeating purchaser
+- 2 total customers making a purchase\*
+- (1 / 2) = **50%**
+
+The overall trend is increasing.
+
+#### Analysis
+
+![](/images/medium-export/1__q63k__ikuN8__6ob1hrVc3Yw.png)
+
+As you can see, using the same data, we’ve got 3 distinct ways to calculate **_Repeat Rate_**, each of which produces different results! What’s more troubling is that 2 of our methods produce decreasing trends, while one produces an increasing trend.
+
+But which one is right for you?
+
+**Repeat Rate Option 1: Cohort Performance over Time** _(aka "Repeat Rate")_**:** This would be a measure of the effectiveness of your ability to acquire the proper type of customer who is immediately ready to purchase your product again.
+
+**Repeat Rate Option 2: Repeating Conversions over Time:** This would be a measure of the total sales of your business, and how many of them go to repeat customers vs. new customers.
+
+**Repeat Rate Option 3: Repeating Customers over Time:** This would be a measure of your customers, and how many of them go on to make that "n+" conversion.
+
+Unless you are explicitly measuring a change in your Marketing/PR/Top-of-funnel approach, I think that option one, the traditional measure way of calculating **_Repeat Rate_**, is likely not what you want. Of course, whether you choose to measure **_Repeating Customers per Month_** or **_Repeating Conversions per Month_** is up to you… but don’t just call it Repeat Rate!

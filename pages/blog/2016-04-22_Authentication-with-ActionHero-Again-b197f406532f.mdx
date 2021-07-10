@@ -1,0 +1,57 @@
+---
+title: Authentication with ActionHero Again
+description: >-
+  Update @ 2014–05–11: As of ActionHero v8.0.8, connection.id is no-longer
+  static for all web requests, in favor of…
+date: "2016-04-22T22:50:06.612Z"
+tags: []
+# slug: /@evantahler/authentication-with-actionhero-again-b197f406532f
+---
+
+_Update @ 2014–05–11: As of ActionHero v8.0.8, connection.id is no-longer static for all web requests, in favor of connection.rawConnection.fingerprint. This post has been updated_
+
+### Intro
+
+I had previously written about [authenticating with ActionHero](http://blog.evantahler.com/blog/authentication-with-actionHero.html), but that post is out of date as of actionHero v6.0.0. There have been some breaking API changes in actionHero which changed how connections work.
+
+Also, that first post was an overly complex example requiring a mysql database and ORM. As most folks are looking for an archetypical example of how to authenticate, I thought that it would be best to make it as simple as possible.
+
+### Notes
+
+- We use actionHero’s [cache](https://github.com/evantahler/actionHero/wiki/Cache) methods which probably should not be used in production for this purpose. You can substitute the database of your choice within your own application.
+- Note that only 2 actions are needed, one to create the user and one to log in.
+- For HTTP clients, actionHero drops a session cookie which sets the connection.rawConnection.fingerprint. More information can be found [here](https://npmjs.org/package/browser_fingerprint). Logging-in will bind the session to the id of the http client, which is set in a cookie.
+- We create some common session methods to save and load a session in the cache for the connection which can be located and modified by actions.
+- note that when calling the actionCounter, the session.actionCounter is increased and stored. This is just so we can test that evrything it working.
+
+### Setup
+
+- Create a new actionHero project as described on [www.actionHerojs.com](http://www.actionHerojs.com)
+- create 3 new files
+- ./node_modules/.bin/actionHero generateAction — name user
+- ./node_modules/.bin/actionHero generateAction — name authenticatedAction
+- ./node_modules/.bin/actionHero generateInitializer — name session
+
+### initializers/session.js
+
+### actions/user.js
+
+### actions/authenticatedAction.js
+
+### Run it!
+
+[http://localhost:8080/api/userAdd?email=evan@evantahler.com&password=password&firstName=Evan&lastName=tahler](http://localhost:8080/api/userAdd?email=evan@evantahler.com&password=password&firstName=Evan&lastName=tahler)
+
+[http://localhost:8080/api/logIn?email=evan@evantahler.com&password=password](http://localhost:8080/api/logIn?email=evan@evantahler.com&password=password)
+
+[http://localhost:8080/api/authenticatedAction](http://localhost:8080/api/authenticatedAction)
+
+All the error cases work as expected (password miss-match, trying to visit authenticatedAction before logging in, etc.)
+
+### What this example doesn’t do
+
+- edit and delete users
+- check that a user still exists in api.session.checkAuth
+- uses a real ORM/database
+
+_Originally published at 10 Jun 2013_

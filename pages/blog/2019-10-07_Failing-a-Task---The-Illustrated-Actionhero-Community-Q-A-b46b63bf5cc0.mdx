@@ -1,0 +1,122 @@
+---
+title: Failing a Task — The Illustrated Actionhero Community Q&A
+description: >-
+  Welcome to the second installment of The Illustrated Actionhero Community Q&A!
+  Every week in October I’ll be publishing a conversation…
+date: "2019-10-07T15:28:44.426Z"
+tags: []
+# slug: >-
+#  /@evantahler/failing-a-task-the-illustrated-actionhero-community-q-a-b46b63bf5cc0
+---
+
+Welcome to the second installment of The Illustrated [Actionhero](https://www.actionherojs.com) Community Q&A! Every week in October I’ll be publishing a conversation from the [Actionhero Slack community](http://slack.actionherojs.com) that highlights both a feature of the Actionhero Node.JS framework and the robustness of the community’s responses… and adding some diagrams to help explain the concept.
+
+You can see last week’s article, Actionhero for Real-time Games, [here](https://blog.evantahler.com/actionhero-for-real-time-games-the-illustrated-actionhero-community-q-a-44c138e840e), or [Why Actionhero is the Node.js server for when your project grows up](https://blog.evantahler.com/why-choose-actionhero-9a4b5caf4e62).
+
+### Failing a Task
+
+October 7th, 2019
+
+[Source conversation in Slack](https://actionherojs.slack.com/archives/C04EVSUSD/p1568673475021200)
+
+Daniele asks:
+
+> Scenario: I have a hero task whose \`run()\` method contains a call to a function returning a promise. If the returned promise gets rejected, I need the task to fail and to be sent to the failed queue. On the docs I saw that throwing an error accomplishes this. My problem is: how to throw an error from a catch statement? I mean: I tried something like:
+
+asyncFun()
+.then(...)
+.catch(err => {
+throw new Error('operation failed')
+})
+
+> but this is going to catch the exception. How can I properly make the task fail given a rejected promise? Thanks
+
+First, let’s talk about Tasks.
+
+One of the features of Actionhero is that is include a number of features out-of-the box for making your application that go beyond "just running your HTTP API". Tasks are Actionhero’s mechanism for running background jobs. Background jobs are an excellent pattern when you:
+
+- Run a calculation on recurring schedule, like calculating high scores
+- Defer communicating with third party services (like sending emails or hitting APIs) in a way that can be slow and retried on failure
+- Move some slower work to another process to keep your API responses quick.
+
+Actionhero’s Task System is built on the [node-resque](https://github.com/taskrabbit/node-resque) package to be interoperable with similar job queues in Ruby and Python. You can learn more about tasks at [https://docs.actionherojs.com/tutorial-tasks.html](https://docs.actionherojs.com/tutorial-tasks.html)
+
+A task is defined like this
+
+// file: tasks/sayHello.js
+const {Task, api} = require('actionhero')
+
+module.exports = class SayHello extends Task {
+constructor () {
+super()
+this.name = 'say-hello'
+this.description = 'I say Hello on the command line'
+this.frequency = 0 // not a periodic task
+}
+
+async run ({ params }) {
+api.log(\`Hello ${params.name}\`)
+}
+}
+
+And invoked anywhere else in your codebase like this
+
+await api.tasks.enqueue('say-hello', {name: 'Sally'}, 'default')
+
+Enqueuing your task will add it to a queue to eventually be worked by any of the Actionhero servers working those queues:
+
+![](/images/medium-export/1__KMPhTzPQSR1js3sK__FZebw.png)
+
+Now back to Daniele’s Question. When a Task "Fails", it’s logged, and it is also moved to a special list in Redis called the "Failed Queue". Actionhero and Resque keep the task, it’s arguments, and the exception thrown so you can choose to retry it or delete it. There are plugins you can install to retry a Task a few times if you want, or auto-delete it… but that’s up to you.
+
+The [ah-resque-ui](https://github.com/actionhero/ah-resque-ui) plugin does a good job of visualizing this. You can see the exception, the arguments to the job, and when it was run.
+
+![](/images/medium-export/1____Rq1h6E4uvVpkC0H3033LQ.png)
+
+The community suggested:
+
+> (I think that there are) 2 options:
+
+> 1\. don’t catch
+
+> 2\. use async/await asyncFunc() (and again, don’t try/catch) if you want to modify the error returned in some way.
+
+> In your catch block you can format a new error string and throw it again. Fore example, you might have a task that communicates with a third-party API, and you want to make the error message more clear:
+
+// file: tasks/sendEmail.js
+const {Task, api} = require('actionhero')
+
+module.exports = class SayHello extends Task {
+constructor () {
+super()
+this.name = 'send-email'
+this.description = 'I send an email'
+this.frequency = 0 // not a periodic task
+}
+
+async run ({ params }) {
+try {
+await api.email.send(params)
+} catch (error) {
+const betterError = new Error(\`could not send email: ${error.message}\`)
+betterError.stack = error.stack
+throw betterError
+}
+}
+}
+
+Elaborating more on option #2:
+
+> You can imagine all tasks as already being wrapped in a big try/catch. So what is eventually thrown will be caught and bubbled out to the failed queue in resque. Actions are the same way actually: that’s how we can send a 500 response to the client and not just take down the server
+
+Finally, Daniele asked if the return value of the \`run\` method matters:
+
+> nope. whatever you return will be logged, but that’s about it there are some plugins/middleware that might care about the return value, but by default it doesn’t matter. I usually like to return a string to be logged… like if I had a nightly task to delete old database records, I might log how many rows were deleted or something…
+
+And Devxer added:
+
+> It’s work mentioning that the task runner used for testing will return the results of the task, so if you plan to write tests for your tasks you can use the return function to test what might otherwise be "side-effect" results.
+
+As your application grows, you will invariably need a framework to process data in the background. Actionhero ships with a scalable Task system you can use from day one.
+
+Give it a try!

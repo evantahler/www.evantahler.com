@@ -1,0 +1,34 @@
+---
+title: Announcing ActionHero.js
+description: >-
+  I am working on a nodeJS framework! It’s out in beta RIGHT NOW. I would love
+  some feedback.
+date: "2016-04-22T18:41:28.596Z"
+tags: []
+# slug: /@evantahler/announcing-actionhero-js-84fa8393679e
+---
+
+![](/images/medium-export/1__0MnhZhYoNstrGV5HWjyv7w.png)
+
+I am working on a nodeJS framework! It’s out in beta RIGHT NOW. [I would love some feedback](https://github.com/evantahler/actionHero).
+
+[**evantahler/actionhero**
+\_actionhero.js is a multi-transport nodejs API Server with integrated cluster capabilities and delayed tasks_github.com](https://github.com/evantahler/actionHero "https://github.com/evantahler/actionHero")[](https://github.com/evantahler/actionHero)
+
+Here’s a slice from the readme:
+
+Who is an actionHero?
+
+actionHero is a minimalist transactional API framework written in javaScript for the node.js server. It was inspired by the DAVE PHP framework. The goals of actionHero are to create an easy-to-use package to get started making combination http and socket APIs RIGHT NOW.
+
+The actionHero API aims to simplify and abstract may of the common tasks that these types of APIs require. actionHero does the work for you, and he's not CRUD, and he's never taking a REST. I was tired of bloated frameworks that were designed to run as monolithic applications which include M's, V's, and C's together in a single running application. This tethering of view to business logic doesn't make much sense in modern web development when your presentation layer can just as easily be a mobile application or a website. There are also many scaling issues when you expect your single application to be able to handle all these separate types of consumers.
+
+The actionHero API defines a single access point and accepts GET and POST input. You define "Actions" which handle input and response, such as "userAdd" or "geoLocate". The actionHero API is NOT "RESTful", in that it does not use the normal http verbs (Get, Put, etc) and uses a single path/endpoint. This was chosen to make it as simple as possible for devices/users to access the functions, including low-level embedded devices which may have trouble with all the HTTP verbs. To see how simple it is to handle basic actions this package comes with a few basic Actions included. Check them out in api/actions/.
+
+You can get it and try it out RIGT NOW via github or [npm](http://search.npmjs.org/#/actionHero)
+
+Discuss the project on [Hacker News](http://news.ycombinator.com/item?id=3390456)
+
+Please use gitHub to leave me any comments about this project (including requests for more database types!)
+
+_Originally published at 23 Dec 2011_

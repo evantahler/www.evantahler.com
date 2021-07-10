@@ -1,0 +1,28 @@
+---
+title: Node Spider (writing a real time messaging relay in nodeJS)
+description: Sometimes nodeJS amazes me.
+date: "2016-04-22T18:22:03.066Z"
+tags: []
+# slug: >-
+#  /@evantahler/node-spider-writing-a-real-time-messaging-relay-in-nodejs-2bddd6cbae00
+---
+
+![](/images/medium-export/1__rso6t9yfQIcm9iMis4yiVw.jpeg)
+
+Sometimes [nodeJS](http://nodejs.org/) amazes me.
+
+At [Evil Genius Designs](http://evilgeniusdesigns.com) we spent a lot of time coming up with a way to keep our application servers in sync, in real-time.
+
+One of the core pieces of software we built (in PHP mind you) was a system that dealt with SMS and Voice phone calls to play games with. SMS messages are transactional in the traditional sense. You can treat them like a web request coming in, store them to a database, and process them at some frequency. You can think of an SMS-based game as being just like processing tweets or emails. At some frequency you poll the database or API and ask "what’s new since the last time I asked?" and then process the results. SMS as a protocol is slow, and so games based around SMS have to assume there will be 5–10 second latency between the player sending the message from their phone and the game receiving the input. Because of this, the SMS backend can be scaled just like a normal web application (read/write replicas of a DB, multiple nodes to handle requests, shared session storage, etc).
+
+However, phone calls interactions need to be fast. For a game to feel right, I need to be able to press the number key on my phone and within 100–300 ms see my input reflected on the screen. We also knew that our system had to scale to handle 100K+ callers at once, and that wasn’t going to happen on a single server. We needed true synchronous message passing between our nodes which bypassed the database as a common datastore. We needed a game (which was connected to node 1) to be passed the phone input from Player 1 (connected to node 2) which signaled a message to be played back to Player 2 (connected to node 3).
+
+To handle this, we invented what we called the Spider. The job of the Spider was take message from node A and pass it to all other nodes it new about, and do this FAST. The Spider was the only application we had to write in a language other than PHP. We chose C++ because we thought we needed threading (one per connected nodes) and we needed robust port management. What seemed like a relatively simple routing task took over a month. There were timing issues, thread locking issues, and all hell broke loose if the spider lost the connection to PHP socket-server application which was handling the actual user connections on each node. Eventually we got it working, and as far as I know, the Spider is still keeping everyone in sync today.
+
+So what does this have to do with nodeJS? Well, I found myself in a very similar situation recently. I have a framework ([PHP version](https://github.com/evantahler/PHP-DAVE-API), [nodeJS version](https://github.com/evantahler/nodeDaveAPI)) which I am using as the backend to a game. I want the API for the game to support both traditional HTTP-based connections and persistent socket clients. Just like before, the HTTP actions can be handled in the normal web way with the application stack asking the DB for information and passing it back, but the socket connections demand more real-time information as it comes from either the other users or the game itself. I was going to need multiple nodes. I need to keep them in sync.
+
+So I thought I would give building the spider in nodeJS a try. Only 4 hours later, I not only had recreated all the functionality of the original Spider, but I also added support for fancy logging, "chat rooms", and a keep-alive manager. Win. [Here it is, in all its open-source glory for you to use and enjoy](https://github.com/evantahler/nodeSpider).
+
+**tldr**; Real time communication in node is easy. You can use node to keep many other apps in sync. [Here’s a demo project for you to play with and extend](https://github.com/evantahler/nodeSpider)
+
+_Originally published at 01 Dec 2011_

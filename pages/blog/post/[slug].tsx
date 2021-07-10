@@ -15,6 +15,16 @@ const components = {
       </Card>
     );
   },
+  p: (props) => {
+    return props.children[0]?.type?.name === "img" ? (
+      <>
+        <div {...props} />
+        <br />
+      </>
+    ) : (
+      <p {...props} />
+    );
+  },
   code({ node, inline, className, children, ...props }) {
     const match = /language-(\w+)/.exec(className || "");
     let matchedLanguage = match ? match[1] : undefined;
@@ -58,6 +68,7 @@ export default function BlogPage({
       <Row>
         <Col md={12}>
           <h1>{pageProps.meta.title}</h1>
+
           <p>
             <em>
               <small>
@@ -88,14 +99,20 @@ export default function BlogPage({
               ""
             )}
           </p>
+
           <hr />
-          <ReactMarkdown
-            // @ts-ignore
-            components={components}
-          >
-            {pageProps.markdown}
-          </ReactMarkdown>
+
+          <div id="markdown">
+            <ReactMarkdown
+              // @ts-ignore
+              components={components}
+            >
+              {pageProps.markdown}
+            </ReactMarkdown>
+          </div>
+
           <hr />
+
           <Link href="/blog">
             <a>🚀 Back to Evan's Blog</a>
           </Link>

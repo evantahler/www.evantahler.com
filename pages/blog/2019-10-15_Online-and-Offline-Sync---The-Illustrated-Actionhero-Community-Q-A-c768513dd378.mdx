@@ -1,0 +1,66 @@
+---
+title: Online and Offline Sync — The Illustrated Actionhero Community Q&A
+description: Welcome to the third installment of The Illustrated Actionhero Community Q&A!
+date: "2019-10-15T16:57:43.330Z"
+tags: []
+# slug: >-
+#  /@evantahler/online-and-offline-sync-the-illustrated-actionhero-community-q-a-c768513dd378
+---
+
+Welcome to the third installment of The Illustrated [Actionhero](https://www.actionherojs.com/) Community Q&A!
+
+Every week in October I’ll be publishing a conversation from the [Actionhero Slack community](http://slack.actionherojs.com/) that highlights both a feature of the Actionhero Node.JS framework and the robustness of the community’s responses… and adding some diagrams to help explain the concept.
+
+Previous articles in the series are:
+
+1.  [Why Actionhero is the Node.js server for when your project grows u](https://blog.evantahler.com/why-choose-actionhero-9a4b5caf4e62)p
+2.  [Actionhero for Real-time Games](https://blog.evantahler.com/actionhero-for-real-time-games-the-illustrated-actionhero-community-q-a-44c138e840e)
+3.  [Failing a Task](https://blog.evantahler.com/failing-a-task-the-illustrated-actionhero-community-q-a-b46b63bf5cc0)
+
+### Online and Offline Sync
+
+October 14th, 2019
+
+[Source conversation in Slack](https://actionherojs.slack.com/archives/C04EVSUSD/p1568327323188400)
+
+Community member NRK asked:
+
+> Hey everyone, I could use some high-level pointers. I’ve been looking at AH for a game where I need to keep track of user’s amount of money, which changes based on different stuff even when they’re offline. I’ve been looking at AH tasks for this and then just pushing the new state to connected users periodically. I’d like to do these cycles (both updating and pushing) as often as possible, ideally less than a second apart. Am I on the right track?
+
+Core-contributor Chad Responds:
+
+> _@nrk It’s a little hard to say for sure with only this 100,000-foot view but many of us here in this channel have dealt with online/offline sync use cases and can help out if you run into trouble. ActionHero is already sounding like a good base for you because with it you’ll get two things most other platforms don’t provide:_
+
+> 1. Redis-backed cross-cluster RPC and pub/sub. Most other frameworks require you to build this yourself, but AH includes it by default. It provides simple APIs for sending messages "to find the user if they’re connected anywhere on the cluster" and doing other things like that.
+
+> 2. Multi-protocol server support. So you get REST/Web like anything else. But you also get WebSockets out of the box — nothing to add. Just turn it on and the same actions run on either one. But you ALSO get a very easy way to add custom protocol servers. A raw TCP socket is also included but others have done protobuf and other protocols recently and had good success with that.
+
+> _So just napkin-drawing here, you might envision an architecture where your clients connect via raw TCP or WebSocket to a node in your cluster, and execute actions there. As their actions generate consequences, you can broadcast messages to the cluster to "find" those users and update them live if they’re connected. You can also use the tasks layer to do background/async work whether users are online or offline (batch, scheduled, triggered by other users, etc.) and not have to know if the users is there. If they are, they get a live update. If they aren’t, you arrange for them to start with an initial status message when they next connect._
+
+> _AH includes some other meta concepts that make certain features easy to add, such as chat room mechanics. That can be used for what it’s named for (making chat rooms) but also for other things that work the same way even if they’re named differently (like monitoring a currency or stock symbol — each stock could be a "room" and the system could broadcast price updates to that "room"to any users monitoring it)._
+
+> _Thanks for taking the time to type this up and help out. Sounds perfect! I’ll definitely give it a go then. Love the docs and tutorial with examples so far!_
+
+The architecture described by Chad could be drawn like this:
+
+![](/images/medium-export/1__G93TtL608iyLjBzns6aWyA.png)
+
+And, as a reminder, "Chat Rooms" can do far more than just send text messages back-and-forth!
+
+![](/images/medium-export/1__6t6nYRSZIwZ__EjbUDLp7zw.png)
+
+> The diagram in [Production Notes](https://docs.actionherojs.com/tutorial-production-notes.html) is under-appreciated, in my opinion. It’s really what separates ActionHero as a framework from other more simpler ones like Express/Sails/etc. Express is just a framework. It does what it does and you can write software it it. The smarts are good, but they only do what they do at face value.
+
+![](/images/medium-export/1__IxKe__qGKhWivj2W2CvNYYA.png)
+
+> ActionHero is a framework that enables an architecture (shown above). Any but the simplest apps eventually need to scale, and when they do you have to figure out how multi-server work is going to happen. The moment you do you see how weak things like Express are because you have to write so much code yourself just to get a message from user A on node A over to node B where their recipient is. When you go read "tutorials" like [this article](https://www.manifold.co/blog/building-a-chat-room-in-30-minutes-using-redis-socket-io-and-express-9e8e5a578675), and realize how much code they just wrote to do what AH did out of the box.
+
+To wrap it up, Chad writes:
+
+> It’s common in many AH setups for admins to want to separate "front-end" from "batch" services. For instance you might have an action `create:account` that sends an email to the user. Sending the email might take a bit of time and involve some retrying with your mailgun / sparkpost setup. So `createAccount()` can make the user in the DB and return the session, then call `enqueueTask('welcomeEmail', {params})` to send the welcome email. And you could configure a "worker" server to do that.
+
+> This is all optional. You could just run everything on a single box, or maybe just two main nodes for DR Actions, Tasks, the whole shebang The point is if you WANT to have "front-end nodes vs. batch processing nodes" you can. Some orgs really want this, because their front-end nodes get DDoS’d a lot (or they get a lot of traffic). Back-end (worker) nodes aren’t typically visible to the Internet so they aren’t affected by attacks. Workload requirements may also vary. For instance, batch processing might need a ton of memory and disk (uploading videos from a video chat site to Youtube for archival) while front-end nodes may be more CPU intensive handling tons of user calls in parallel. So maybe you want your task workers to be beefy memory-heavy systems with big disks, and your front-end nodes to have tiny disks and lots more CPU.
+
+> This is what I alluded to above: Actionhero is a framework that enables an architecture. You get the code, but you also get the ability to operationalize your app and scale it as you grow.
+
+Chad has build a number of [high-throughput applications](https://www.medialantern.com/) with Actionhero. He’s done a great job of explaining the high-level architecture of how you might use & scale Actionhero to manage complex backend state, and how to architect your applications.

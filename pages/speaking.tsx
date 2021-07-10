@@ -14,7 +14,7 @@ function SpeakingPage() {
       <h1>Speaking</h1>
       <hr />
 
-      <JumboImage src="/static/images/speaking.jpg" />
+      <JumboImage src="/images/speaking.jpg" />
 
       <p>
         I've given a number of technical talks, focusing on Node.js, Ruby, and

@@ -1,0 +1,24 @@
+---
+title: On NodeJS and Phidgets
+description: >-
+  For those of you who don’t know what Phidgets are, they are small robotic
+  prototyping boards which can handle (binary) input and output…
+date: "2016-04-22T19:06:45.131Z"
+tags: []
+# slug: /@evantahler/on-nodejs-and-phidgets-282a765aea7b
+---
+
+![](/images/medium-export/1__HxL8cV__wrobhi5strUoFuQ.jpeg)
+
+For those of you who don’t know what [Phidgets](http://phidgets.com) are, they are small robotic prototyping boards which can handle (binary) input and output, along with a collection of analog sensors for temperature, rfid, light, etc. I’ve been using them since [graduate school](http://etc.cmu.edu/) and they are really fun to work with. A "Normal" Phidget requires a computer, as it is a USB device. There are drivers for most operating systems now, and the most common method of interaction is via C++ of Java extensions on the local machine that hosts the USB port.
+
+Recently, they have also included a web-service (sockets) which can be used to talk to the Phidget board. This method of connection has a much higher latency than direct C++ bindings, but I find that for most of the use cases I have, it works just fine (push a button, sense something at some frequency, etc). So I thought to myself: Why not connect Phidgets to NodeJS?
+
+#### Here is the result \[\[ [**github**](https://github.com/evantahler/nodePhidgets) \]\] & \[\[ [npm](http://search.npmjs.org/#/phidgets) \]\]
+
+[**evantahler/nodePhidgets**
+\_nodePhidgets - a libraray for nodeJS to talk to a phidget interface kit_github.com](https://github.com/evantahler/nodePhidgets "https://github.com/evantahler/nodePhidgets")[](https://github.com/evantahler/nodePhidgets)
+
+This package will expose a data object to your application which can be used to periodically poll state of the inputs, and events will fire which you can choose to listen for phidgets.on("data"). There are methods which handle connecting and changing the state of the outputs as well. Enjoy!
+
+_Originally published at 14 Jan 2012_

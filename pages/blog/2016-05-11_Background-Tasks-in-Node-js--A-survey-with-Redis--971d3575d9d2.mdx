@@ -1,0 +1,37 @@
+---
+title: "Background Tasks in Node.js: A survey with Redis."
+description: >-
+  Today I gave a talk at RedisConf in San Francisco entitled: Background Tasks
+  in Node.js: A survey with Redis.
+date: "2016-05-11T01:07:44.308Z"
+tags: []
+# slug: /@evantahler/background-tasks-in-node-js-a-survey-with-redis-971d3575d9d2
+---
+
+Today I gave a talk at [RedisConf](http://redisconference.com/) in San Francisco entitled: **_Background Tasks in Node.js: A survey with Redis._**
+
+This was a talk I have wanted to give for a long time. As a DevOps engineer, there are a lot of ways to do everything, and when it comes to background processing, there are many ways to consume that job/worker/event/message.
+
+![](/images/medium-export/1__o4crV68ZzYEiJ__l9zgqmXQ.png)
+
+This talk went though my personal evolution with background jobs, starting by doing them in-web-thread (PHP) and moving all the way up to event-bus systems. What was good and bad with each implementation, where and why did was it worth adding complexity, etc. These strategies discussed are:
+
+- Foreground (in-line)
+- Parallel (thread-ish)
+- Local Messages (fork-ish)
+- Remote Messages (\*MQ-ish)
+- Remote Queue (redis + Resque)
+- Immutable Event Bus (Kafka-ish)
+
+Learn about many of the possible background task strategies you can use in your app… and how they are better when you use node.js and redis!
+
+My favorite part of the presentation was building [Kafka](http://kafka.apache.org/)\-in-[redis](http://redis.io/). This included using lua to make an atomic "ReadAndIncr" method to move the shared pointer when reading. You can see the LUA below, and how to use it in the codebase for the project.
+
+Supporting Code here:
+
+[**evantahler/background_jobs_node**
+\_background_jobs_node - Supporting code for the presentation_github.com](https://github.com/evantahler/background_jobs_node "https://github.com/evantahler/background_jobs_node")[](https://github.com/evantahler/background_jobs_node)
+
+Thanks!
+
+![](/images/medium-export/1__YGoedPSrUzy2qvbqnTLSdw.png)

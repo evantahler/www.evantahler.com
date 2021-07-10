@@ -1,0 +1,29 @@
+---
+title: Delete old git branches already merged into master
+description: This entry is cross-posted from tech.taskrabbit.com
+date: "2016-04-22T22:20:33.946Z"
+tags: []
+# slug: /@evantahler/delete-old-git-branches-already-merged-into-master-7af33fc6245d
+---
+
+![](/images/medium-export/1__HArdB4tMciWUivKfh4XWxg.jpeg)
+
+It was time to clean up some old git branches at TaskRabbit today. It turned out that we had hundreds of branches that were "old", and could be removed. What do I mean by "old"? As with many things, coming up with the proper definition is 1/2 the battle. At the end of the day, "old" meant "**I have been merged into master, and contain no un-merged code**" (where master is your integration branch).
+
+When phrased this way, there are some systematic and simple ways to due some git pruning. Here’s a simple rake task:
+
+The trick here is git fetch -r -merged command which does exactly what we want: tell me about the remote branches which have all been merged into my current branch, master. We simply collect those branches, and delete them locally (if they exist) and on origin.
+
+The logic goes like this
+
+1.  Ensure I am in the master branch
+2.  git fetch -prune (clean up my local branch list according to remote’s list)
+3.  git fetch -r -merged (show me the branches which have been merged into the integration branch)
+4.  loop through those branches and delete them locally and remotely
+
+Two other points of note:
+
+1.  It’s very likely that you will have some staging, test, and production branches which are either equivalent to or slightly behind your integration branch. You probably want to explicitly ignore those
+2.  If you have more than one remote branch setup (perhaps heroku for deployment or tddium for testing), you want to be sure to ignore any branch which isn’t from "origin"
+
+_Originally published at 20 Dec 2012_

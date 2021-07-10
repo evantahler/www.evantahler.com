@@ -1,0 +1,111 @@
+---
+title: The Voom Software Engineering Interview Process
+description: >-
+  Building an inclusive and efficient interview process for a pair-programming
+  team
+date: "2019-03-21T00:03:45.682Z"
+tags: []
+# slug: /@evantahler/the-voom-software-engineering-interview-process-a93eab6518ed
+---
+
+![](/images/medium-export/1__9HNP1gUTyhHlUcbJBNYpgg.jpeg)
+
+### Introduction
+
+Over the past year, we have been working on creating an interview process for our engineering team with these 4 goals in mind:
+
+- Efficiency
+- Focus on what the job will be like
+- Test only relevant skills
+- Be inclusive
+
+Airbus’ [new UAM (Urban Air Mobility) division](https://www.airbus.com/newsroom/stories/urban-air-mobility-the-sky-is-yours.html) has given us an incredible amount of leeway to craft a process that best meets our needs and helps us to find the best talent available. You will note that our goals are bi-directional: they help both the candidate and the company. We are trying not to fall into common software engineering interview traps, and have come up with a rather unique process we are excited to share.
+
+Inspired by interview processes we feel that have worked well ([Pivotal Labs](https://pivotal.io/labs), [TaskRabbit](https://www.taskrabbit.com/), [Ministry of Velocity](https://www.ministryofvelocity.com/), and others) and aligned with our [Key Values](https://www.keyvalues.com/voom), here are the steps for the Voom Software Engineering Interview.
+
+![](/images/medium-export/1__4a__pBxd6n9jO3Fg9l____VqQ.jpeg)
+
+### Interview Steps
+
+Below are the actual emails we send to candidates along the way, followed by our philosophical rationale of why we do it.
+
+#### Interview Step 1: Hiring Manager Meet & Greet
+
+> Hello!
+
+> The goal of this first one-hour interview is to meet you, and share the company and role to you in detail. We will be explaining how we work, what our short term and long term goals are, and what you can expect on an average day. We’ll be asking you questions about your past roles, what you liked, and what you are looking to get out of your next position. We will also lightly touch on your technical skills, but this is not a technical interview.
+
+> We can meet either in person at our office in Downtown Seattle, or via video call…
+
+This first meeting is very social, often conducted in a coffee or doughnut shop. This helps the conversation be more… like a real conversation! Communication is important to us and engineers at Voom interact with other people often!
+
+This first meeting is conducted by 2 people: the hiring manager and another member of the engineering team. Not only does this help to remove any single person’s bias, it also helps smooth out the power dynamics of the interview _(Inspired by_ [_this post from Marco Rogers_](https://firstround.com/review/my-lessons-from-interviewing-400-engineers-over-three-startups/)_)_. This is easier to do this in person than over video call, but we are flexible.
+
+We focus a lot on how we work as a team. While we meet many people who love to pair program, it’s not for everyone. It’s important that we share expectations on both _how_ you will work and _what_ you will work on.
+
+If things go well, the lead interviewer will let you know on the spot and explain what the next steps are in the interview process.
+
+#### Interview Step 2: Pair-Programming "Clean Room" exercise
+
+> Congratulations and thank you for continuing with the Voom interview process!
+
+> The goal of this interview one-hour is for a senior member of the team to get a sense of your technical abilities and experience. We will focus specifically on the tools we use (Ruby & Javascript) in a structured "clean room" pairing exercise. It will also focus on the engineering process at Voom: pair-programming & test-driven development.
+
+Now we start to get technical:
+
+- "Clean room" means you will be starting from scratch, not using an existing codebase.
+- The "classic" example of this exercise comes from Pivotal Labs: "Let’s pair to re-create the Java Array Class without using the standard library". _We do something different of course, but the spirit is similar._
+- A correct answer starts with a discussion about what the most important parts of "Array" are, and then uses TDD (test-driven development) to make failing tests pass. For example you might first write a unit test that fails for a "push" method, then make it work. Then, you can write a failing test for a "length" query method, then make it work… and you can then finally write an integration test that checks that "push" increased the response value of "length".
+- We don’t focus on your knowledge of the proper method invocations in the language, but on your understanding of the concepts being used.
+- We are purposely vague about which language the exercise will use, as both are important.
+- The real focus here is modeling a complex domain and having a conversation, not getting it "right".
+
+While this is not a demo of our codebase, it does showcase _how_ we like to work. We pair 100% of the time and we write a lot of tests. If you have fun and excel in this interview, it’s a good hint that you might like working with us.
+
+Here are the questions we ask our interviewer after this interview:
+
+1.  How knowledgeable was the interviewee about technologies used during pairing? (1–5, explain)
+2.  How comfortable was the interviewee with exploring the codebase and understanding the design? (1–5, explain)
+3.  How comfortable was the interviewee with writing code? (1–5, explain)
+4.  Did the interviewee write tests and consider the design before writing implementation; alternatively, did the interviewee attempt to understand the scope of impact of their changes before writing code? (1–5, explain)
+5.  Would you be overjoyed to pair with the interviewee tomorrow? (Yes/No)
+
+If the interviewer does not want to move forward after the interview, the process is stopped here.
+
+#### Interview Step 3: Half Day of Pairing
+
+> Welcome to the final step of the Voom interview process!
+
+> This 3-hour interview allows you to actually see what a day-in-the-life at Voom would be like. You’ll have access to our code and backlog. We believe in our work and in our process… let us show it to you! In exchange, this gives us the opportunity to see what it would be like to pair with you. We will be focusing on your comfort with TDD and pair programming, and how well you can use your existing knowledge of Rails & React to be productive in a new codebase.
+
+> Our day starts at 9:30 with Stand Up, so please arrive at ~9:15 so we can get everything set up. You will pair until 12:30. Before you arrive, please sign our NDA …
+
+This is the main event. A 1/2 day of pairing; a mini-apprenticeship. Would you buy a car without a test drive? Why would you accept a job without one?
+
+- You not only get to see out codebase, but also our processes: do we _really_ follow good agile practices? Are our stories really reasonable and small? What are the Product Managers and Designers like?
+- Often times, the work done in the interview gets committed. Good pairing enforces quality, even with total strangers!
+- We do cherry-pick stories to find one that can be quickly completed and won’t involve too much domain knowledge, but an important principle is that the story for the interview really must be providing value to the company… just like any other day.
+
+We use the same interview feedback questions as in Step 2. Those are the attributes we value in a new team member.
+
+![](/images/medium-export/1__lSwPi__0WBlfERWrly6VpRw.jpeg)
+
+### What can we do better?
+
+In the spirit of transparency, here are some things we are working on to improve our process:
+
+- **Increasing top-of-funnel diversity**. Lots has been written about how the tech world is overwhelmed by white men (I’m one of them), and how this is bad. Diversity matters to Voom, _specially_ since we are building a product for an international audience. While ~50% of the entire product team identifies as female or an underrepresented ethnicity (for the USA), the engineering team is only 15% female. Opening up our senior positions to remote team members has helped, and we will be exploring this more this year. Unfortunately, we are unable to provide visas or immigration support at this time, so our remote opportunities are still limited to US citizens. To date, we’ve engaged 2 diversity-specific recruiting firms, with poor results, so we’ve stopped working with them.
+- **Getting more members of the team involved**. We want as many members of the team to meet each candidate as possible (and vice-versa)To date, only about 30% of our team has been involved in the interview process. Not only does this introduce potential bias, but it also introduces bottlenecks! When we were smaller, we ended the 1/2 day pairing interview with a team lunch the candidate was invited to, but now that we are bigger, we haven’t found the time. We are working to re-introduce opportunities for candidates to meet more of the team as the final phase of the interview.
+- **Providing Critical Feedback**: While our HR policies prohibit us from sharing why we reject candidates, we feel a responsibility to the programming community to provide feedback to anyone who asks for it. We are actively working to revise this policy so that we can not only share feedback to interviewees, but also provide guidance on how they can improve for future interviews.
+
+![](/images/medium-export/1__k0fZ____UZvex4lOGIiWaSvQ.jpeg)
+
+### Meta
+
+You will note that in none of our interview steps do we require homework. Why ask you to do "example" work when we can see what it looks like when you are working on a real story? You will also note that in none of the interviews do we require white-boarding. Voom isn’t creating a new database, and like most small to mid-sized companies, scale is not our problem… growth is. We care more about your ability to quickly and safely implement a new feature or bring in a new library than your knowledge of how a B-Tree works. If you need it, Google it.
+
+We have a bias to hiring quickly. We can do this because we pair 100% of the time. Many great things have been written about the [benefits of Pair Programming](https://tuple.app/pair-programming-guide/the-case-for-pair-programming) ([we have too](https://blog.voom.flights/pair-programming-at-voom-how-our-code-takes-flight-423a05d63718)), but there are hiring benefits as well: it’s easier to accept the _risk_ of a new employee when you can be sure that they will be consistently mentored. There’s no normal workday scenario in which a new employee will be working alone and merge in dangerous code if they are always working as a pair. You can also be sure that your workplace culture will be maintained and your rituals observed: pairing includes a built-in guide to how standup works, when to go home, and where the best nearby sandwich shops are.
+
+On-boarding is simpler too: just have a seat at one of the [pre-configured pairing stations](https://blog.voom.flights/our-team-workstation-at-voom-continuous-improvement-a1cf35ec1a43) and get to work! With the lower operational cost of a new employee, that helps us to take more risks on new employees: our hiring can become "_who do we want to take a chance on_" vs "_who can we already trust_". It helps remove bias from the hiring process and lets us tap into a more diverse pool of potential candidates.
+
+If you think Voom has an interesting hiring process, why not try it out? [We have open engineering roles in our Seattle office](https://www.voom.flights/careers), and some roles are remote-friendly!

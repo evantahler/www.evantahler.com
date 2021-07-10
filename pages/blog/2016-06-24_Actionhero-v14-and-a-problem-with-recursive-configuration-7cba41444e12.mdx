@@ -1,0 +1,146 @@
+---
+title: Actionhero v14 and a problem with recursive configuration
+description: Actionhero is now at version 14.0.1!
+date: "2016-06-24T20:55:23.636Z"
+tags: []
+# slug: >-
+#  /@evantahler/actionhero-v14-and-a-problem-with-recursive-configuration-7cba41444e12
+---
+
+Actionhero is now at version 14.0.1!
+
+![](/images/medium-export/1__xINPKaOBDM40qfeSgBXyVQ.png)
+
+The V14.0.0 release includes a new way to save and reuse formatters and validators for your actions, and also gives you greater control of your Redis connections. The V14.0.1 release fixes a bad initialization of the above…
+
+You can see the whole changelog here: [https://github.com/evantahler/actionhero/releases/tag/v14.0.0](https://github.com/evantahler/actionhero/releases/tag/v14.0.0)
+
+### Named Validators & Formatters
+
+Allows for action validators and formatters to use both named methods and direction functions.
+
+exports.cacheTest = {
+name: 'cacheTest',
+description: 'I will test the internal cache functions of the API',
+outputExample: {},
+
+inputs: {
+key: {
+required: true,
+formatter: \[
+function(s){ return String(s); },
+'api.formatter.uniqueKeyName' // <----------- HERE
+},
+value: {
+required: true,
+formatter: function(s){ return String(s); },
+validator: function(s){
+if(s.length < 3){ return '\`value\` should be at least 3 letters long'; }
+else{ return true; }
+}
+},
+},
+
+run: function(api, data, next){
+// ...
+}
+
+};
+
+And then you would define an initializer with your formatter:
+
+'use strict';
+
+module.exports = {
+initialize: function(api, next){
+api.formatter = {
+uniqueKeyName: function(key){
+return key + '-' + this.connection.id;
+}
+};
+
+    next();
+
+},
+};
+
+### Redis Client
+
+There are **so many** ways to configure redis these days… handling the config options for all of them (sentinel? cluster?) is a pain… so lets just let the users configure things directly. It will be so much simpler!
+
+### This will be a breaking change
+
+- in config/redis.js, you now define the 3 redis connections you need explicitly rather than passing config options around:
+
+var host = process.env.REDIS_HOST || '127.0.0.1';
+var port = process.env.REDIS_PORT || 6379;
+var database = process.env.REDIS_DB || 0;
+
+exports\['default'\] = {
+redis: function(api){
+var Redis = require('ioredis');
+
+    return {
+      '\_toExpand': false,
+      // create the redis clients
+      client:     Redis.createClient(port, host),
+      subscriber: Redis.createClient(port, host),
+      tasks:      Redis.createClient(port, host),
+    };
+
+}
+};
+
+- move api.config.redis.channel to api.config.general.channel
+- move api.config.redis. rpcTimeout to api.config.general. rpcTimeout
+- throughout the code, use api.config.redis.client rather than api.redis.client
+
+Quickly after releasing version 14.0.0 we realized that there was a problem with the new way we handled the redis config.
+
+Actionhero loads its configuration [recursively](https://github.com/evantahler/actionhero/blob/master/initializers/config.js#L165-L174). We do this so that you can reference config directives from one file inside another. If you attempt to reference something that isn’t yet defined, we’ll skip over the file in question, load the rest of the config and try again. Under the hood, that means that any individual file is potentially required and exported many times. This is fine when you are building up a hash object, but terrible if you are creating a new connection to redis at each run. A new actionhero project ended up creating 27 connections to redis.
+
+The good news is that now the redis configuration is now in user-space. It was a simple change to check if the redis connections exist already, and if they do, disconnect the old ones. This isn’t yet an ideal solution (as booting up will connect and disconnect a number of times), but it’s an improvement.
+
+var host = process.env.REDIS_HOST || '127.0.0.1';
+var port = process.env.REDIS_PORT || 6379;
+var database = process.env.REDIS_DB || 0;
+var password = process.env.REDIS_PASS || null;
+
+exports\['default'\] = {
+redis: function(api){
+var Redis;
+var client;
+var subscriber;
+var tasks;
+
+    // cleanup if we are rebooting or looing in config load
+    if(api.config.redis){
+      if(api.config.redis.client){     api.config.redis.client.quit();     }
+      if(api.config.redis.subscriber){ api.config.redis.subscriber.quit(); }
+      if(api.config.redis.tasks){      api.config.redis.tasks.quit();      }
+    }
+
+    if(process.env.FAKEREDIS === 'false' || process.env.REDIS\_HOST !== undefined){
+      Redis = require('ioredis');
+      client     = new Redis({ port: port, host: host, password: password, db: database });
+      subscriber = new Redis({ port: port, host: host, password: password, db: database });
+      tasks      = new Redis({ port: port, host: host, password: password, db: database });
+    }else{
+      Redis = require('fakeredis');
+      client     = Redis.createClient(port, host, {fast: true});
+      subscriber = Redis.createClient(port, host, {fast: true});
+      tasks      = Redis.createClient(port, host, {fast: true});
+    }
+
+    return {
+      '\_toExpand': false,
+      // create the redis clients
+      client:     client,
+      subscriber: subscriber,
+      tasks:      tasks,
+    };
+
+}
+};
+
+I’ll keep working on this…

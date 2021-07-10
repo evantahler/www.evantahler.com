@@ -1,0 +1,65 @@
+---
+title: "ownCloud + DreamHost: Your own Unlimited DropBox for 13$/mo"
+description: Intro
+date: "2016-04-22T22:23:31.394Z"
+tags: []
+# slug: >-
+#  /@evantahler/owncloud-dreamhost-your-own-unlimited-dropbox-for-13-mo-2fd53cdf2f77
+---
+
+![](/images/medium-export/1__DL3CdUDzttWP5FxDvsO9hg.png)
+
+### Intro
+
+I have a lot of photos and MP3s. I want to keep my collections in-sync on all my computers and devices.
+
+I **don’t** want to use specialized service for each type of media (flikr for photos, iTunes Cloud for music, etc), and more importantly, often these services require that your media become published. I have no problem with publishing SOME of my media, often to social networks, but I don’t want _all_ of it to be published.
+
+Tools like Google Drive or DropBox are what I want, but I don’t want to pay that much for them. [I once tried to write a little dameon that kept things in sync over SFTP](https://github.com/evantahler/synchzor), but I didn’t get to far with it.
+
+[Today I tried out the open-source version of ownCloud](http://owncloud.org/), and I was blown away. It was exactly what I wanted.
+
+### OwnCloud
+
+#### Features that mattered to me:
+
+- DropBox-like daemons you can run on Mac and PC to keep things in sync
+- The ability to choose multiple folders to keep in sync, and which remote folder to sync with. Almost more importantly, this means that you can keep folders on the server, upload to them, and then remove your local copies. This is a great option for archiving things away.
+- Access to all of your files via the web. You can do this through the OwnCloud http site, and I was happy to learn that you can just S/FTP into your server and look at the repo directly. You can optionally turn on server-side encryption, but I chose to leave it off for this purpose. I trust my SSH keys :D
+- Public sharing links. Right click on a file, get a crazy-hash url for folks to look at it.
+- iOs app ($0.99). Again, this app acts just like dropbox, in that you can browse your repo, and download files you might want to your phone, and upload images and videos.
+- Multiple users. While the user support isn’t perfect yet (groups are a little buggy), the notion that I can have family folders and personal folders is pretty awesome. I can have shared folders with some people (perhaps a shared music collection) and still have private folders for myself.
+
+#### Features that are cool, but that I don’t need (yet)
+
+- web MP3 player
+- calDav server
+- cardDav server
+
+The calDAV/cardDAV servers are interesting because you can use them as endpoints to not only host your own calendar and contact lis AND you can keep it in sync with all of your devices. Currently, this is a service I am happy to leave in Google’s hands, but its nice to know that it is there if I need it. I have the feeling that many of OwnCloud’s developers care strongly about owning their own data (rather than Google or Facebook) almost as much as the ability to store tons of files in the sky :D
+
+### Setup
+
+OwnCloud only needs PHP 5 and a database to run. Simple!
+
+Database options are either mySQL or sqLITE right now, but again kudos to the team for picking the most widely available tools. With such simple requirements, I chose to host my instance on a shared [DreamHost](http://dreamhost.com/) account. This costs $10/mo for all the bandwidth and storage you might need (they say ‘unlimited’). It was easy enough to setup and install: just download the latest TAR, unzip into your site’s public folder, and the website walks you though the rest.
+
+The only "coding" I needed to do was to increase my PHP upload file size (which dream host defaults to 7mb on DreamHost). These days, doing this is quite simple. just make a /~/.php/5.3/phprc and add any settings you want to override the default php.ini with. I literally only needed to add:
+
+upload_max_filesize = 100M post_max_size = 100M
+
+Then, restart your php workers, and they will re-spawn and take on the new settings.
+
+Optionally, you can have DreamHost ‘https’ your site for another $3/mo. Given that I will be transmitting about 1/2 the contents of my hard drive to the server, this seemed like a good idea. You should do it too.
+
+### Closing Thoughts
+
+As I write this, I am in the process of uploading about 5GB of photos to my new ownCloud server. I am simultaneously looking at the uploads on my phone and having another computer stay in sync and download them as soon as they are available. This works exactly like I wanted.
+
+In comparison to DropBox, paying $10/mo is about the same price as their 100GB plan. Right now, I have less than 100GB I want to sync, but I don’t think that will always be the case. I also was already paying DreamHost $10/mo for hosting some "real" websites, so that was already a sunk cost for me (you can host any number of websites on your plan), so only the $3/mo for https was new for this project.
+
+I also really like the feature that I can leave files on the server and not need them on any device as an archive. This is something I don’t think you can do with DropBox.
+
+Sure the UI needs some work, and the desktop app crashed a few times on me, but for a free product, ownCloud is wonderful. I can’t wait to see what they come up with next.
+
+_Originally published at 07 Jan 2013_

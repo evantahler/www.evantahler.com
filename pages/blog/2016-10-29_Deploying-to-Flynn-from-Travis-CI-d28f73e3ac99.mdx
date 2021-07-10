@@ -1,0 +1,77 @@
+---
+title: Deploying to Flynn from Travis.CI
+description: >-
+  In my previous post, I shared some tips on creating a production Flynn
+  cluster. If you don’t know, Flynn is a an open-source self-hosted…
+date: "2016-10-29T17:56:27.607Z"
+tags: []
+# slug: /@evantahler/deploying-to-flynn-from-travis-ci-d28f73e3ac99
+---
+
+In [my previous post](https://blog.evantahler.com/productionizing-flynn-and-hosting-your-root-domain-s-fc849638e206#.e1f6yjk7i), I shared some tips on creating a production Flynn cluster. If you don’t know, [Flynn](https://flynn.io) is a an open-source self-hosted Heroku replacement (PASS).
+
+In this article, I’ll share some tips on how to set up continuous integration using [Travis.CI](https://travis-ci.org/) and you Flynn server. This project assumes you already have your project’s test suite running automatically on Travis.CI.
+
+![](/images/medium-export/1__yZ45b6I1QGRBwWtQqNqBiA.png)
+
+To understand how this process works, you will need to understand Flynn’s git security model. When you install the Flynn client on your development machine and connect to your cluster, Flynn stores a cluster key in a file ( `~/.flynnrc` ) which is used to authenticate to the server. All Flynn users on your cluster share this key. Flynn also has a helper which stores this key in your OSX Keychain (or equivalent system-level keystore) so that when you git push, the credentials will be used.
+
+![](/images/medium-export/1__xTWBVG3tTd7VgXSFakEM7g.png)
+
+However, you don’t _need_ to use this system-level keystore if you **configure your git remote to include the username and password** directly. There is a secure way to do this on Travis! You also **do not need** the Flynn CLI tool.
+
+First, you’ll need the Travis ruby gem installed:
+
+gem install travis
+
+Then, you’ll be using the gem to encrypt your Flynn cluster Key (which you can find in `~/.flynnrc`. Travis lets you store encrypted data within your project’s `.travis.yml` configuration file. This allows you to share your project with no worry that anyone other than the Travis severs can deploy to your cluster.
+
+travis encrypt FLYNN_KEY=XXXXXXX
+
+Now take that encrypted output and add it to your project’s `.travis.yml` under the `secure` directive.
+
+Next, we’ll use the Travis’ `after-success` lifecycle event to tell Travis to push our now-tested branch to the server:
+
+after_success:
+
+- git pull
+- git remote add flynn [https://user:$FLYNN_KEY@git.site.com/myapp.git](https://user:$FLYNN_KEY@git.messagebot.io/www.git)
+- git push flynn master
+
+A complete file for a [Node.js](https://medium.com/u/96cd9a1fb56) project would look like:
+
+sudo: false
+language: node_js
+node_js:
+
+- "6"
+
+env:
+
+- secure: "YYYYYYYYYYYYYYY="
+
+after_success:
+
+- git pull
+- git remote add flynn [https://user:$FLYNN_KEY@git.server.com/myapp.git](https://user:$FLYNN_KEY@git.messagebot.io/www.git) || true
+- git push flynn master
+
+script: npm run test
+
+And that’s it! Travis will now deploy to Flynn in a secure way after every green build.
+
+### Advanced Topics:
+
+**Deploying only after all steps in a build matrix have complete**
+
+With Travis, it is possible to run your test suite a few times with separate configurations. Perhaps you want to run a test once with MySQL and once with Postgres… you can! Travis calls this feature the [Build Matrix](https://docs.travis-ci.com/user/customizing-the-build). You can configure separate collections of environment variables to control your test behavior.
+
+However, there is no built-in way for Travis to expose what would amount to an `after-build-matrix-success` directive in the configuration `.travis.yml`. Luckily, someone has solved this problem for us: `[travis-after-all](https://github.com/alrra/travis-after-all)`. T[ravis-after-all](https://github.com/alrra/travis-after-all) is a cool little [Node.js](https://medium.com/u/96cd9a1fb56) package which polls Travis’ internal APIs to tell when all parts of your build matrix have complete, and then run your deploy script once-and-only-once. Modify your deployment scripts in the ways described by the project’s Readme, and you should be good to go!
+
+**Custom Branches = Custom Deployments**
+
+You may only want to deploy to your Flynn cluster when certain branches are tested. Perhaps `master` should be deployed to `staging.site.com` and `production` should be deployed to `www.site.com`. When testing on Travis, you have a few [environment variables](https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables) exposed to you, such as: `TRAVIS_BRANCH` which you can use to make decisions about how to deploy.
+
+The example I described above would look like:
+
+(why yes, you _can_ write bash directly in your `.travis.yml` file!)

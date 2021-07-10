@@ -1,0 +1,30 @@
+---
+title: switchboard.chat
+description: "Today I want to announce the beta of a new website I built, switchboard.chat"
+date: "2016-04-22T23:57:04.761Z"
+tags: []
+# slug: /@evantahler/switchboard-chat-d1aa51478dc6
+---
+
+_…yes, \*.chat is a TLD now._
+
+![](/images/medium-export/1__k7TOA8rMJW3wFmqxLyJsCw.png)
+
+From the Switchboard.Chat README:
+
+> _Evan made this for his wife Christina, a preschool administrator who was looking for a better way for teachers to communicate unplanned absences and to contact substitute teachers. She dreamed for there to be a way to reach and be reached by teachers (even those without smartphones) that did not necessitate using her personal cell phone. She also wanted a way for other school administrators to be able to view and sometimes help facilitate the notification processes. Subscribing to the mantra of "happy wife happy life", Evan created switchboard.chat to make this dream a reality._
+
+> _There are many industries that still rely on SMS communications between employees, and are doing so with a shared (or personal) phones. This tool aims to make it easier for the managers of those teams to work with the tool they already use (SMS) but gain some control, centralization, and logging. Switchboard.chat aims to provide a cheap, sharable alternative to purchasing employee phones._
+
+Here are some screen shots from the application:
+
+![](/images/medium-export/0__NMkBcpHYcHJgXzcD.png)
+![](/images/medium-export/0__j16fU__SE1WFSITa9.png)
+
+In a nutshell, switchboard.chat is an attempt to bring group SMS messages into the modern world.
+
+We’ve got / commands which you might be familiar with from tools like Slack or Hipchat (or video games before that). It was built with Angular 2, Bootstrap, Stripe, Twilio, and of course, [actionhero](http://www.actionherojs.com). I’m especially proud of the offline notification tools, so you don’t need to monitor the tool all the time, and will get notified when your team gets a messages. This (and the recurring billing system) make use of actionhero’s internal task system, which make this kind of thing a breeze. The site updates automatically with new messages (websockets) and being angular, is a pretty slick single-page app with a pretty neat collection of reusable components.
+
+**If you are part of a team that still relies on SMS for communication, give** [**switchboard.chat**](http://switchboard.chat) **a shot!**
+
+_Originally published at 09 Jan 2016_

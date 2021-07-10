@@ -1,0 +1,140 @@
+---
+title: node.js running on a Phidgets SBC2 board!
+description: >-
+  After almost 15 hours or compile-try-fail-repeat, I’ve figured out the formula
+  for compiling nodeJS on a Phidget SBC2 board!
+date: "2016-04-22T19:16:24.785Z"
+tags: []
+# slug: /@evantahler/node-js-running-on-a-phidgets-sbc2-board-5b188a6123af
+---
+
+![](/images/medium-export/1__nsVkXw9p4jX04PKNRCsUdA.jpeg)
+
+After almost 15 hours or compile-try-fail-repeat, I’ve figured out the formula for compiling [nodeJS](http://nodejs.org/) on a [Phidget SBC2 board](http://www.phidgets.com/products.php?category=0&product_id=1072_0)!
+
+This combination of Node and Phidgets creates what is, in my opinion, the best sensor prototyping platform for under $250. This makes use of [my previously mentioned NPM package for connecting node.js to phidgets](http://blog.evantahler.com/on-nodejs-and-phidgets).
+
+This was possible only with the help of the friendly people at Phidget, Github, and numerous sites stumbled upon via Google. Get Hacking!!!
+
+I made a small nodeJS [app which reads in the temperature of my house every minute and Tweets it](https://twitter.com/#!/phidgetnode)… Because I can.
+
+- One of the harder steps of this process was cross-compiling V8. I’ve saved off my v8 compiled for Phidget SBC2 (armv4tl compatible) for you to skip a few steps in the process (and so you don’t need to also install Debian somewhere) (no longer works :( )
+- Detailed steps of this process are copied below, [but also here on a GitHub gist](https://gist.github.com/1574158)
+- A lot of people helped me out, specifically [these](https://github.com/joyent/node/issues/2131) [folks](http://code.google.com/p/v8/wiki/CrossCompilingForARM) I [am](http://forum.qnap.com/viewtopic.php?p=242405) [linking](https://github.com/joyent/node/issues/2131#issuecomment-3499634) [here](https://github.com/bnoordhuis).
+
+Node is awesome, Phidgets are awesome. Syngergy. _All I wanted to do was tweet the temperature of my house automatically…_
+
+### What you will need:
+
+- A computer (or a virtual machine) running a full version of the Debian operating system
+- I used Debian 6.0.3, 64bit
+- A 1GB (or more) USB memory stick
+- The [phidgetsbc2](http://www.phidgets.com/products.php?category=0&productid=10720) doesn’t have enough ram to compile node, so we will be using this memory stick as swap space… which is likely to destroy the memory stick
+- Internet connectivity for both your Debian computer and the Phidget board
+
+### Cross-Compile V8 Locally
+
+The v8 stack simply won’t compile on the fidget board. I think that it has to do with floating point precision, but I can’t be sure. Either way, we are going to compile an ARM binary on our "big" Debian computer and copy it over:
+
+#### **Get codesourcery**
+
+SSH to your Debian machine, and su root
+
+sudo mkdir /opt/codesourcery
+cd /opt/codesourcery
+wget http://www.codesourcery.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+tar -xvf arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2z2
+
+#### Get Node and build it for the Phidget board
+
+wget http://nodejs.org/dist/v0.6.7/node-v0.6.7.tar.gz
+tar -xvf node-v0.6.7.tar.gz
+cd node-v0.6.7/deps/v8
+export TOOL_PREFIX=/opt/codesourcery/arm-2009q1/bin/arm-none-linux-gnueabi
+export CXX=$TOOL\_PREFIX-g++
+export AR=$TOOL_PREFIX-ar
+export RANLIB=$TOOL\_PREFIX-ranlib
+export CC=$TOOL_PREFIX-gcc
+export LD=$TOOL_PREFIX-ld
+export CCFLAGS="-march=armv4 -mno-thumb-interwork"
+OR&gt;&gt; export CCFLAGS="-march=armv4 -mno-thumb-interwork -mtune=xscale -mno-thumb -mfloat-abi=soft -mfpu=maverick"
+export ARM_TARGET_LIB=/opt/codesourcery/arm-2009q1/arm-none-linux-gnueabi/libc
+
+scons armeabi=soft wordsize=32 snapshot=off arch=arm library=shared mode=release
+scons armeabi=soft wordsize=32 snapshot=off arch=arm library=shared mode=release sample=shell
+
+#### **Copy the entire v8 directory to the memory stick**
+
+I was running Debian in a virtual machine on my OSX machine, so I rSync’ed it
+
+rsync -avz root@{remote_host_ip}:/root/node-v0.6.7/deps/v8 /Volumes/{memory_stick}/node
+
+### Update the Phidget Board
+
+#### **New Firmware**
+
+- [http://www.phidgets.com/drivers.php](http://www.phidgets.com/drivers.php) (USB Key needed)
+- Copy to the USB stick and follow the instructions in the web console
+
+#### **Config (via web interface)**
+
+- turn on ssh { [http://phidgetsbc.local./cgi-bin/network-settings.sh](http://phidgetsbc.local./cgi-bin/network-settings.sh) }
+- Install C++ Develeper Headers { [http://phidgetsbc.local./cgi-bin/system-packages.sh](http://phidgetsbc.local./cgi-bin/system-packages.sh) }
+- Include full Debian Package Repository { [http://phidgetsbc.local./cgi-bin/system-packages.sh](http://phidgetsbc.local./cgi-bin/system-packages.sh) }
+
+#### **Local Configuration (via SSH) on the Phidget board**
+
+ssh root@phidgetsbc.local
+apt-get update
+apt-get -u upgrade
+apt-get install gcc wget python openssl make scons libssl-dev libax25 libfile-copy-recursive-perl openbsd-inetd tcpd update-inetd python-software-properties pkg-config htop git subversion
+
+### Copy over and configure V8
+
+Plug in the USB drive. I kept the now-compiled V8 source in /node/v8 on the memory stick
+
+export PATH=$PATH:/opt/bin
+echo "/opt/lib" &gt;&gt; /etc/ld.so.conf
+ldconfig
+mkdir /opt/share/v8
+cp -a /media/{usb_stick_usb_path}/node/v8 /opt/share/.
+echo "/opt/share/v8" &gt;&gt; /etc/ld.so.conf
+ldconfig
+
+### Add more RAM
+
+This is likely to destroy the memory stick after a lot of use (USB hates random I/O). Create a swap file and configure it (will take ~10 min)
+
+dd if=/dev/zero of=/media/usb0/swapfile bs=1M count=256
+mkswap /media/usb0/swapfile
+swapon /media/usb0/swapfile
+
+### Node.js
+
+export JOBS=1
+export CC='gcc -march=armv4 -mfloat-abi=soft'
+export CCFLAGS='-march=armv4 -mfloat-abi=soft'
+export CXX='g++ -march=armv4 -mfloat-abi=soft'
+export GCC='-march=armv4 -mfloat-abi=soft'
+wget http://nodejs.org/dist/v0.6.7/node-v0.6.7.tar.gz
+tar -xvf node-v0.6.7.tar.gz
+rm node-v0.6.7.tar.gz
+cd node-v0.6.7
+./configure --shared-v8 --shared-v8-libpath=/opt/share/v8 --shared-v8-includes=/opt/share/v8/include --without-snapshot ## If the configuration isn't all green, something is wrong
+make
+make install
+
+Note: For me, a few times various parts of the 35 steps make preforms will crash with a segmentation fault. I guess this has to do with ram? Make will resume where you left off last, so just run it again
+
+### NPM
+
+curl [http://npmjs.org/install.sh](http://npmjs.org/install.sh) | sh
+
+### Contributors to this guide:
+
+- [https://github.com/joyent/node/issues/2131](https://github.com/joyent/node/issues/2131)
+- [http://code.google.com/p/v8/wiki/CrossCompilingForARM](http://code.google.com/p/v8/wiki/CrossCompilingForARM)
+- [http://forum.qnap.com/viewtopic.php?p=242405](http://forum.qnap.com/viewtopic.php?p=242405)
+- [https://github.com/joyent/node/issues/2131#issuecomment-3499634](https://github.com/joyent/node/issues/2131#issuecomment-3499634)
+
+_Originally published at 16 Jan 2012_

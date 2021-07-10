@@ -1,0 +1,44 @@
+---
+title: "nodeChecker update: now with SSH and Sockets!"
+description: >-
+  The nodeCheker project which I spoke about a few months ago got an update
+  today. Now you can execute arbitrary SSH commands to other…
+date: "2016-04-22T22:13:35.551Z"
+tags: []
+# slug: /@evantahler/nodechecker-update-now-with-ssh-and-sockets-fe034be1b9a3
+---
+
+![](/images/medium-export/1__wRHkZEzat__8rR47SSAMKeA.jpeg)
+
+The [nodeCheker](https://github.com/evantahler/nodeChecker) project which I [spoke about a few months ago](http://blog.evantahler.com/nodechecker-big-board-dashboarding) got an update today. Now you can execute arbitrary SSH commands to other servers (like checking load, disk space, etc). You can then parse the returned strings via regex to extract a graph-able quantity. For example. here is my script to monitor the used disk space on the [ActionHero demo server](http://actionhero.evantahler.com/):
+
+{
+"name":"disk_space_on_actionHero_demo_server",
+"type":"ssh",
+"frequencyInSeconds":10,
+"entriesToKeep":100,
+"params":{
+"hostname": "actionhero.evantahler.com",
+"user": "userNameHere",
+"command": "df",
+"sshKey": "/path/to/your/file.pem",
+"regex": "\\/dev\\/xvda1\\\\s\*\\\\d\*\\\\s\*\\\\d\*\\\\s\*\\\\d\*\\\\s\*(...)%"
+}
+}
+
+which parses a response like:
+
+Filesystem 1K-blocks Used Available Use% Mounted on
+/dev/xvda1 8256952 1407440 6765640 18% /
+tmpfs 305624 0 305624 0% /dev/shm
+
+and would return **18** as the quantity I was looking for.
+
+The goal of this project is to create a simple tool for ops-types to monitor their applications, and SSH checking was a oft-requested feature. Huzzah!
+
+I’ve also updated the project to push messages to connected SSH users by room. You can be in the "all" room to get all the check results, or a room named by the name of the [checkout the project to learn more](https://github.com/evantahler/nodeChecker).
+
+[**evantahler/nodeChecker**
+\_nodeChecker - a node JS application to monitor stuff, show you graphs about it, and let you know when things break_github.com](https://github.com/evantahler/nodeChecker "https://github.com/evantahler/nodeChecker")[](https://github.com/evantahler/nodeChecker)
+
+_Originally published at 30 Jan 2012_

@@ -1,0 +1,52 @@
+---
+title: ActionHero v4.2.2
+description: >-
+  This was a busy week for actionHero! We are now up to version 4.2.2. Note that
+  this release again changed some of the internal API’s.
+date: "2016-04-22T22:24:52.836Z"
+tags: []
+# slug: /@evantahler/actionhero-v4-2-2-869f7d4b341d
+---
+
+This was a busy week for actionHero! We are now up to version 4.2.2. Note that this release again changed some of the internal API’s. As always, [you can check out the details here](https://github.com/evantahler/actionHero/wiki/API-Methods).
+
+This week also saw pull requests from 2 new contributors, [https://github.com/macrauder](https://github.com/macrauder) and [https://github.com/jacobbubu](https://github.com/jacobbubu). It’s a very strange feeling knowing that (at least) these 2 folks care enough about this project to read into the guts and make fixes. I’m **very happy** they are using actionHero and making it better, but it’s strange that I have no idea what they are using it for, and more so that I know nothing about them. I’ve had popular open source projects before, but I rarely every received any pull requests.
+
+I probably should ask them about it :D
+
+### v4.2.0
+
+This release is another API-changing release which addresses a number of performance issues. Most notably to developers, most internal methods no longer require the api object to be passed back. This was creating a number of cicurlar references (which are bad). This release also changes the way that actions are processed (to be closer to how tasks work, with a dedicated ‘processor’ object).
+
+There is also a check on boot for tasks which remain in the delayed state but have no reference in the delayed queue. It’s possible for a task to end up in this state if the server was shutdown at the moment that task was being inspected.
+
+From versions.md:
+
+- circular refrences are bad… remove all functions that require api to be passed in (mainly the API object)
+- change initializer names to remove (init)
+- object-ize connections, append connection-type prototypes in the server setups
+- remove connection classes from utils
+- remove global ‘requires’ from the API object, put them in the intilizers that need them
+- remove the notion of ‘public’ from connection objects
+- server shutdown needs to clear its connections from the chatrooms
+- delayed tasks which are older than 1 min should be checked against the various queues to be sure exist
+- fix http message request so that all pending messages are returned
+- general project orginization
+
+### v4.2.1
+
+This release adds the ability to set the action.blockedConnectionTypes attribute on an action. This allows you to create actions only for "web" or "socket" clients. The default will remain that actions are available for all client types.
+
+Thanks to [https://github.com/jacobbubu](https://github.com/jacobbubu) for the pull request and suggestion
+
+From versions.md:
+
+Allowing support to limit the connection.type for which an action if valid for. Define the array of action.blockedConnectionTypes = \[‘socket’, ‘webSocket’\] for example to not allow access from TCP or webSocket clients. Not defining the array will allow all client types in.
+
+### v4.2.2
+
+This version is a bug fix to resolve a problem that was introduced in version 2.2.0 regarding form parsing for web clients.
+
+Thanks to [https://github.com/macrauder](https://github.com/macrauder) for narrowing down the problem and submitting a pull request for it.
+
+_Originally published at 13 Jan 2013_

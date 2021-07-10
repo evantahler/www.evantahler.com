@@ -1,0 +1,31 @@
+---
+title: Actionhero + Standard.js
+description: >-
+  I don’t want to talk about ESLint ever again. I don’t ever want to talk about
+  "code style" ever again. I want to write code, and I want the…
+date: "2016-12-14T01:06:40.974Z"
+tags: []
+# slug: /@evantahler/actionhero-standard-js-1be0e6b0f1d4
+---
+
+_I don’t want to talk about ESLint ever again. I don’t ever want to talk about "code style" ever again. I want to write code, and I want the machine to ensure my "style" is correct. I don’t have time for this… I’ve got an app to write!_
+
+![](/images/medium-export/1__QEsaQMJW6Ysa9HYNlV9XiA.png)
+
+[StandardJS](http://standardjs.com/) is a ridiculously opinionated collection of "very good" javascript (and JSX) code style rules. There is no configuration and you can’t change the rules. You are either all in or entirely out. **This is perfect**. I want a set of best practices to follow, set by industry "experts", which are automatically applied for me.
+
+[ActionHero](http://www.actionherojs.com) has been using a custom collection of `.eslint` rules for a long time now… but they were very _bespoke_. Github user [@synthmeat](https://github.com/evantahler/actionhero/commits/cf69eb692811cf66d94348d7026c916a7d2c8293/.eslintrc) did the hard work of creating our `.eslintrc` configuration back in the dark days of May 2016, and before that, we had `.jshint`. Having a linter is great, and it **really did** did help us catch bugs and have a consistent style.
+
+However, our consistent style was only based on one thing… my weird opinions. Synthmeat created a style guide to match what ActionHero already had. Over time, those opinions drifted further and further away from any known "best practices" and our `.eslint` file become more and more esoteric. This wasn’t great for on-boarding new users and growing the community.
+
+We recently refactored [ActionHero](http://www.actionherojs.com)’s internal code to use more ES6 features (arrow functions, \`let\` vs \`const\`, etc), and it was the perfect time for a refactor.
+
+**Awesome Standard.JS feature #1**: `standard — fix` This command actually modifies your JS files automatically and coerces them into a compliant format. I had budgeted 10 hours for this refactor… this brought it down to 2. You probably shouldn’t let a pice of code magically change your source without a good test suite to ensure that things still work… which we have!
+
+**Awesome Standard.JS feature #2**: `standard`. The standard package comes with a binary which tests your code. You don’t need to worry about including `eslint` (it is included automatically), `.eslint` files (they handle it), or anything else. This one binary just works. It works so well, you can set it as the `npm pretest` command and automatically enforce code quality as part of your test suite.
+
+**Awesome Standard.JS feature #3**: Integrations. There are wonderful plugins for [Sublime](https://packagecontrol.io/packages/SublimeLinter-contrib-standard), [Atom](https://atom.io/packages/linter-js-standard), [VSCode](https://github.com/shinnn/vscode-standard), [VIM](https://github.com/maxogden/standard-format), and [more](http://standardjs.com/index.html#text-editor-plugins) which make testing your code inline a breeze.
+
+![](/images/medium-export/1__Zagfg25g7Z3qYV074TBqqw.gif)
+
+Thank you StandardJS!

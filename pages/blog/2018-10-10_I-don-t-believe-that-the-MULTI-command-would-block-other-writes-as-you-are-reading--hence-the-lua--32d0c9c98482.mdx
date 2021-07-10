@@ -1,0 +1,16 @@
+---
+title: >-
+  I don’t believe that the MULTI command would block other writes as you are
+  reading… hence the lua…
+description: >-
+  All the code in this talk is "for example". There are lots of error cases, etc
+  that aren’t handled. If you are considering Redis as an…
+date: "2018-10-10T17:30:32.326Z"
+tags: []
+# slug: >-
+#  /@evantahler/i-dont-believe-that-the-multi-command-would-block-other-writes-as-you-are-reading-hence-the-lua-32d0c9c98482
+---
+
+I don’t believe that the MULTI command would block other writes as you are reading… hence the lua script which would block other commands from changing the data mid-operation… but I’m not sure how Multi works in current versions of Redis (I haven’t taken a deep look since v2).
+
+All the code in this talk is "for example". There are lots of error cases, etc that aren’t handled. If you are considering Redis as an alternative to Kafka, I would suggest you consider Persistance and Throuput. Do you need \*every\* write persisted to disk? Do you need to scale your reads past what one (even fast node) can handle?

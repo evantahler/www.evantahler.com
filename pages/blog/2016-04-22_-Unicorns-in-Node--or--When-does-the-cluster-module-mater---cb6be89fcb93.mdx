@@ -1,0 +1,137 @@
+---
+title: Unicorns in Node or When does the cluster module mater?
+description: >-
+  At work the other day, an engineer most familiar with Ruby asked "What is the
+  equivalent to Unicorn in Node?". Unicorn is a great…
+date: "2012-02-01"
+tags: ["node.js", "ruby", "devops"]
+# slug: >-
+#  /@evantahler/unicorns-in-node-or-when-does-the-cluster-module-mater-cb6be89fcb93
+---
+
+At [work](http://www.taskrabbit.com) the other day, an engineer most familiar with Ruby asked "What is the equivalent to [Unicorn](http://unicorn.bogomips.org/) in Node?". Unicorn is a great single-threaded server for ruby apps (Sinatra, Rails, etc) which implements a parent-child cluster of workers to share requests. However, as node can handle more than one request in parallel, the metaphor gets a little strange.
+
+This question becomes important when deploying a production app, it’s most cost-effective to use 100% of your resources. That means in both Node and Unicorn, you want a "child" for each CPU you have, assuming you don’t run our RAM. However, you might want even more if your application spends significant time waiting for another server (perhaps a DB). For example, say you have a website which spends 1/2 of its time doing "CPU-bound tasks" (like rendering HTML) and the other 1/2 of its time fetching information from the database. If you have a 4-core server, you would want ~8 workers to take maximum advantage of the processors you have (1). In Ruby/Rails, this would mean that at most you could handle 8 simultaneous requests, but what about node?
+
+Once again, the question gets a little strange. We know that our ruby app is single-threaded and single request-ed. This means that no matter which ORM or framework we use, only one request can be happening at a time (2). In an equivalent application, Node will still take 1/2 the time per request to process those HTML templates, but we have the opportunity to _stack_ requests when the CPU is idle waiting for the database. We can have any number of requests "pending" while waiting for the database (3). This, theoretically, can greatly increase your application’s throughput.
+
+Unicorn, when running, handles a request like this: port -> master -> child. The request is always revived on the same port or socket, and the master process routes the request to a child. The master process can spawn or kill children, reboot them, and otherwise manage them. We can make something like this easily in node with the [cluster module](http://nodejs.org/api/cluster.html), however there are only _some types of applications_, mainly those that are CPU bound (or using an external service that is CPU bound) which would benefit from a cluster in practice.
+
+Take the simple example webserver from the nodejs.org website:
+
+```js
+var http = require("http");
+
+http
+  .createServer(function (req, res) {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Hello World\n");
+  })
+  .listen(1337, "127.0.0.1");
+
+console.log("Server running at http://127.0.0.1:1337/");
+```
+
+This server isn’t doing much, and can probably handle thousands of connections at a time.
+
+Lets "simulate" a slower request that takes 1 second:
+
+```js
+var http = require("http");
+
+var handleRequest = function (req, res) {
+  setTimeout(function () {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Hello World\n");
+  }, 1000);
+};
+
+http
+  .createServer(function (req, res) {
+    handleRequest(req, res);
+  })
+  .listen(1337, "127.0.0.1");
+
+console.log("Server running at http://127.0.0.1:1337/");
+```
+
+Now, even though a client will see the response after 1 second, the server still isn’t doing much. Requests are collected and stored, so more RAM will be used, but there isn’t any real computation happening. I’ll bet this server can still handle thousands of simultaneous requests. You can test this out. Make 10 requests with curl and time them (time curl localhost:1337) as fast as you can, and you will notice that all of them only take 1 second to complete.
+
+What we need to do now is to simulate a "blocking" sleep, which means that we need to engage the CPU the node process is using and block it. Keep in mind this is a terrible idea and should never be done in real life:
+
+```js
+var http = require("http");
+
+var handleRequest = function (req, res) {
+  var startTime = new Date().getTime();
+  var sleepDuration = 1000;
+  while (startTime + sleepDuration > new Date().getTime()) {}
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Hello World\n");
+};
+
+http
+  .createServer(function (req, res) {
+    handleRequest(req, res);
+  })
+  .listen(1337, "127.0.0.1");
+
+console.log("Server running at http://127.0.0.1:1337/");
+```
+
+Note how we use a loop which doesn’t exit until enough time has passed to "block" the CPU. Now we know for a fact that our application will only handle one request per second (and use a whole CPU core to do it). If you now make 10 requests with curl and time them you will notice that the requests stack and take longer. The first request will take 1 second as before, but if you start the requests all at the same time, the second request will take 2 seconds, the third request 3, etc… Now we have an application which will benefit from cluster! If we can launch 10 parallel instance of this server at once, we can go back to handling 10 requests in 1 second (4).
+
+```js
+var http = require("http");
+var cluster = require("cluster");
+var desiredWorkers = 10;
+
+var log = function (message) {
+  console.log("[" + process.pid + "] " + message);
+};
+
+var handleRequest = function (req, res) {
+  var startTime = new Date().getTime();
+  var sleepDuration = 1000;
+  while (startTime + sleepDuration > new Date().getTime()) {}
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Hello World\n");
+  log("sent message in " + (new Date().getTime() - startTime) + " ms");
+};
+
+var masterSetup = function () {
+  for (var i = 0; i < desiredWorkers; i++) {
+    cluster.fork();
+  }
+  log("cluster booted!");
+};
+
+var childSetup = function () {
+  http
+    .createServer(function (req, res) {
+      handleRequest(req, res);
+    })
+    .listen(1337, "127.0.0.1");
+
+  log("Server running at http://127.0.0.1:1337/");
+};
+
+if (cluster.isMaster) {
+  masterSetup();
+} else {
+  childSetup();
+}
+```
+
+Note how we added a logger which shows the pid of the process saying the message, and we can show that there are now 11 distinct processes running, 10 children and a parent.
+
+As a bonus, you can look at how to instrument a cluster implementation like this signals, so you can tell the master process to add or remove children, reboot them, etc by looking at the [actionhero cluster module](https://github.com/evantahler/actionhero/blob/master/bin/methods/startCluster.js)
+
+There are always limits to how many requests an application can handle at time, even with the simplest example here. However, the benefits of parallelism increase substantially with CPU-bound workloads.
+
+Footnotes:
+
+1.  In reality you probably want 7 workers on an 4-core system, to leave some flex space
+2.  Sinatra and Rails follow this, EventMachine is the exception in Ruby frameworks
+3.  It’s very possible to overload a database with too many simultaneous requests, like any server. This is why most database adapters (and some ORMs) operate a connection pool which will limit the number of requests it will make at a time. Subsequent requests are queued in-app.
+4.  This really only works if you have a computer with 10+ CPUs, but you get the idea.

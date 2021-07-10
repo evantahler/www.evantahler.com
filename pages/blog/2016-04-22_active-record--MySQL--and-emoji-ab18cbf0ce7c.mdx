@@ -1,0 +1,93 @@
+---
+title: "active_record, MySQL, and emoji"
+description: cross-posted from tech.taskrabbit.com
+date: "2016-04-22T23:08:20.659Z"
+tags: []
+# slug: /@evantahler/active-record-mysql-and-emoji-ab18cbf0ce7c
+---
+
+More and more, people are adopting [emoji](http://en.wikipedia.org/wiki/Emoji) in their online communications. At [TaskRabbit](https://www.taskrabbit.com), we noticed that our users are starting to use emoji all over the place, from task descriptions to reviews.
+
+There are some problems when supporting the emoji character set wit our stack, which includes Rails 4.0 and MySQL. The main problem is that MySQL’s utf8 encoding does not actually support multi-byte strings, which emoji relies on. In MySQL 5.5, the utf8mb4 encoding was introduced which allows for Multi-Byte (mb) strings… and therefore emoji would work! The [MySQL gem](https://github.com/brianmario/mysql2) introduced support for utf8mb4 about a year ago, but only recently did active_record (and rails) add support for this in rails 4.1.
+
+Initially, we decided to ignore all emoji characters, literally stripping them out of strings with our [demogi](https://github.com/taskrabbit/demoji) gem (Thanks [Pablo](http://tech.taskrabbit.com/blog/2014/02/14/emojis)!). However, with our [new product launch in the UK](http://www.taskrabbit.co.uk), we thought it was time to actually address the problem. Here is what we learned:
+
+### Migrating MySQL from utf8 to utf8mb4
+
+The good news is that the upgrade path from utf8 to utf8mb4 is easy. As we are _adding_ bytes, the migration is really just a definition change at the table-level. Nothing has to change with your existing data. This is a non-blocking and non-downtime migration. If you are using normal rails migrations, all of your column types for VARCHAR columns will be based on the table’s encoding. Changing the table will change the column type. The bad news is that any text-type (or blob-type) columns will need to be explicitly changed.
+
+Check out the migration steps:
+
+1.  change the DB’s encoding entirely, so new tables will be created in utf8mb4
+2.  alter all existing tables
+3.  explicitly update text-type columns
+
+**class** **Utf8mb4** **<** ActiveRecord**::**Migration
+
+UTF8*PAIRS **\=** {
+'users' **\=>** 'notes',
+'comments' **\=>** 'message'
+*\# ...\_
+}
+
+**def** **self.up**
+execute "ALTER DATABASE \`#{ActiveRecord**::**Base**.**connection**.**current_database}\` CHARACTER SET utf8mb4;"
+
+    ActiveRecord**::**Base**.**connection**.**tables**.**each **do** **|**table**|**
+      execute "ALTER TABLE \`#{table}\` CHARACTER SET = utf8mb4;"
+    **end**
+
+    UTF8\_PAIRS**.**each **do** **|**table, col**|**
+      execute "ALTER TABLE \`#{table}\` CHANGE \`#{col}\` \`#{col}\` TEXT  CHARACTER SET utf8mb4  NULL;"
+    **end**
+
+**end**
+
+**def** **self.down**
+execute "ALTER DATABASE \`#{ActiveRecord**::**Base**.**connection**.**current_database}\` CHARACTER SET utf8;"
+
+    ActiveRecord**::**Base**.**connection**.**tables**.**each **do** **|**table**|**
+      execute "ALTER TABLE \`#{table}\` CHARACTER SET = utf8;"
+    **end**
+
+    UTF8\_PAIRS**.**each **do** **|**table, col**|**
+      execute "ALTER TABLE \`#{table}\` CHANGE \`#{col}\` \`#{col}\` TEXT  CHARACTER SET utf8  NULL;"
+    **end**
+
+**end**
+**end**
+
+### database.yml
+
+The only change here is to change the encoding:
+
+development:
+adapter: mysql2
+encoding: utf8mb4 _\# <---_
+database: my_db_name
+username: root
+password: my_password
+host: 127.0.0.1
+port: 3306
+
+### Index Lengths
+
+The last step here is to worry about index lengths, as mentioned above. If you are on rails 4.1, you have nothing to worry about! The rest of us have a few options:
+
+1.  [monkeypatch activerecord](https://github.com/rails/rails/issues/9855#issuecomment-28874587)
+2.  [change the index length within MySQL](http://dev.mysql.com/doc/refman/5.6/en/innodb-parameters.html#sysvar_innodb_large_prefix)
+3.  set the length to 191 within all index migrations
+
+We chose #2 due to the simplicity of the solution. Check the links above for a detailed discussion of the problem.
+
+**module** ActiveRecord
+**module** ConnectionAdapters
+**class** **AbstractMysqlAdapter**
+NATIVE_DATABASE_TYPES**\[**:string**\]** **\=** { :name **\=>** "varchar", :limit **\=>** 191 }
+**end**
+**end**
+**end**
+
+And now you can emoji to your ❤’s content!
+
+_Originally published at 24 Apr 2014_

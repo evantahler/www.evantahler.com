@@ -1,0 +1,25 @@
+---
+title: "ActionHero: Actions vs Tasks"
+description: >-
+  I recently got a note from an actionHero user asking about the difference
+  between tasks and actions within the framework. Here’s a bit of a…
+date: "2016-04-22T22:16:35.709Z"
+tags: []
+# slug: /@evantahler/actionhero-actions-vs-tasks-127d92d5873d
+---
+
+![](/images/medium-export/1__MOFEPTlPprbExqciQ8W6JA.jpeg)
+
+I recently got a note from an actionHero user asking about the difference between tasks and actions within the framework. Here’s a bit of a clarification:
+
+Think of an **action** as something happens in-line within the execution of a request. This would be something like "load this image and send it to the user" or "update this database entry". Normal website stuff.
+
+A **task** is something that is meant to be executed later by another process. This would be something like "send an email" or "update the cache". Think of this like a _delayed_ _job or rescue job_ if you are coming from the Rails word.
+
+The way that actionHero handles **actions** is that any member of the cluster (any running node.js process) will respond to the request locally; just like a normal web server serving up a web page. **Tasks** however are enqueued then drained from the queue one by one. Each actionCluster member will run one task at a time, and then go on to the next one.
+
+When you define a **task**, you will say whether it can run on **"any"** member of the cluster or **"all"** members of the cluster (and if they should be periodically done at some frequency). For example, [this task](https://github.com/evantahler/actionHero/blob/master/tasks/saveCacheToDisk.js) is to be run by every member of the actionCluster, and it will save the local cache object to disc every hour to a file. We want every cluster member to do this to help recover from a crash. But say you are building a system which will send an email to new users who sign up. Rather than having the "signup conformation" page wait until the email is sent, you might consider enqueuing a task "send email". You only want the user to receive 1 email, so "any" member of the action cluster can process this task (rather than "all"). You don’t care which one sends it, just as long as it gets done.
+
+Currently, only the master (first) process in the actionCluster will process "any" actions, but in the near future he will be able to re-delegate those tasks back out to other members of the cluster so that more peers can help drain the queue. I’m also working on an enhancement which run tasks in another thread/fork to help better utilize multi-core servers.
+
+_Originally published at 11 Apr 2012_

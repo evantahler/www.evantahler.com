@@ -1,0 +1,99 @@
+---
+title: PhoneGap and Push Notifications
+description: Intro
+date: "2016-04-22T22:16:41.450Z"
+tags: []
+# slug: /@evantahler/phonegap-and-push-notifications-75d88f42b0fa
+---
+
+![](/images/medium-export/1__yizkpDcoH__Bpah8nUy__0PA.jpeg)
+
+### Intro
+
+#### Disclaimer: this article only applies to iOs… sorry Android and Blackberry folks.
+
+I have been developing a game which will be played on mobile phones. I chose to create the game using [PhoneGap](http://phonegap.com) ( or [Cordova](http://incubator.apache.org/callback/), its open-sourced cousin) rather than making a native application. If you don’t know, the quick pitch for PhoneGap is that you can make an html-5 application AND have access to the "hardware" (filesystem, contacts, camera, ect) via javaScript. There were are few reasons I made this choice:
+
+- I wanted to run the application on as many devices as possible, and rather than writing both Android and iOs code, I can write the app once
+- I can also have a mobile version of my app (with limited features) for free
+- I really didn’t have time to become an iOs expert for this project
+- My game doesn’t need a 3D engine nor is it "fast twitch"
+
+Now there are known limitations with PhoneGap (as there are with any framework), but the biggest ones for me included "being slower" than native apps and no built-in push support. I had started developing my game in the browser anyway (as it is where I can prototype the fastest), and I was able to run the game OK in the iPhone’s safari browser, so I made the leap that it would probably run OK in PhoneGap as well. My only hurdle to conquer was push notifications.
+
+### Starting at the Server
+
+I’m a "back end" guy. You might have guessed that from my work on [actionHero](http://actionherojs.com/) (which I am OF COURSE using to power my game), but I always prefer to develop my game in an [API-FIRST method](http://api-first.com/) so that I know the system works, and then I can asynchronously build/iterate my front end to handle those actions. That meant deciding how I was going to send my Push notifications. I took a long hard look at [Urban Airship](http://urbanairship.com/), not only because they throw a great SXSW party, but because a lot of [companies I respect](http://www.taskrabbit.com/) tust them with their push messages. However, I was feeling cheap and wanted to see how hard building my own would be :D
+
+The answer (in node.js) is really simple! [Argon has built a wonderful package](https://github.com/argon/node-apn) you can use to send push messages. Because I already had a [task-queue system](http://blog.evantahler.com/actions-vs-tasks) ready to go in actionHero, it was a simple matter to build a task which would look in the database for pending message and shoot them out using the APN package. Any other action or process could simply drop in the message into the queue along with the userID and some metadata, and the message would be sent off in a short while. Conceptually, this seemed like all I would need.
+
+Lets pause for a minute and talk about what needs to happen for your iPhone to receive a push message. First, you need to install the app. When you install an app which has registered itself to receive push messages, you then need to allow it (via pop up on the first run or from the notification preferences) to receive these messages. Once your app is configured, you need to get your device’s unique ID to your server so you can send messages to the device. The unique ID is NOT the device id from [device.uuid](http://docs.phonegap.com/en/1.5.0/phonegap_device_device.md.html#device.uuid) in PhoneGap, but rather a serial number which is hardware-bound to your device. This took me a while to sort out.
+
+When your server wants to send a message, it needs to first authenticate using certificates generated via the Apple provisioning portal, and then send the message to the device ID. I actually had a hard time with my security keys ([which you mange here](https://developer.apple.com/ios/manage/bundles/index.action)). Every app you develop needs to have a unique key which will be used for distribution in the app store and for messaging, iCloud, etc. When you create a new appID you create a new certificate. You generate a random private key and a CSR (certificate signing request) on your local machine, upload it, and then Apple gives you back a public certificate. Your application name MUST match the certificate’s app name (and what you typed into the app ID generation page). This is how apple knows which app to send a push notification "about" because logging into the push server also requires that same key and cert file. Hopefully this explanation will save you a few headaches. [Here’s a great guide on the push notification ecosystem I found useful](http://www.raywenderlich.com/3443/apple-push-notification-services-tutorial-part-12).
+
+Now, the default formats which these certificates are in is hard for node.js to read, but you can convert them. Follow these steps (taken from the APN package)
+
+$ openssl x509 -in cert.cer -inform DER -outform PEM -out cert.pem
+$ openssl pkcs12 -in key.p12 -out key.pem -nodes
+
+Now you can pass these new files in as options.key and options.cert.
+
+### Getting the Device Key: a PhoneGap Extension
+
+Ok! We now have our keys and know how to connect to the Apple push server… now how do we get the device ID?
+
+It turns out that in PhoneGap 1.5, there is not a way to get it. BUT, the magic of phone gap is that it’s primary job is to pass data and events from the "iOs" layer of your app to the "Javascript" layer of your app and back again. That means that if you can get this data in iOs, you can pass it up the stack! [I have to give Dave Hiren credit for these next steps, as he has a really good write up on his blog.](http://davehiren.blogspot.com/2012/03/get-device-token-for-apple-push.html)
+
+Here’s the deal: We are going to create an iOs method to get our token. We need to make **/PushToken/PushToken.h** and **/PushToken/PushToken.m**
+
+We also need to update our main **AppDelagte.h** to be aware of our new ‘token’ variable
+
+These 2 methods handle the succes and failure cases of registering for to catch push messages. As a note, the iPhone simulator cannot receive push messages, and will always run the failure case. You will need to test this out on an actual phone or iPad.
+
+Finally a new method to pass our object up to the JS layer (aslo in **AppDelate.m**). This should be defined towards the end of the file)
+
+### Javascript
+
+The neat thing about push notifications is that the last line we added is all you ned to register the app to receive them. This will automagically inform the OS to add the app to the notifications list, accept messages when the app is not running,and obey the settings in the notifications settings. You can see we enabled all types of messages (badge, sound, and alert).
+
+What all the code above did was allow JS to access the "getToken" iOS method. Cordova/PhoneGap has some methods to access these types of things, so here is my JS wrapper to map the device token:
+
+You also need to tell the **cordova.plst** to enable the plugin by adding
+
+<key>PushToken</key>
+<string>PushToken</string>
+
+Now our variable token is now available to us as device.token in javascript! We just made a PhoneGap extension.
+
+I chose to grab and upload the device token upon login and keep a table of which userID is associated with each token. I have both an iPad and an iPhone, and I want to get notifications on both. This means that when I send a message to an account, I need to expect that each account may have more than one device. It is also best to expect that a device may change hands, and so I also need to check re-assign existing device tokens to accounts on log in as well.
+
+### What about in-app messages?
+
+When testing my app, getting messages when the app was closed or not running worked as I expected by firing off the default sound effect and showing the message on the top of the screen. However, when I was in the app, I never got any alerts! That is because the application itself it supposed to handle incoming messages when active… something that PhoneGap doesn’t do out of the box. Using what I learned above, I realsed that I could also create another method to keep and store the most recent message’s information. The steps are similar to before in that you need to:
+
+new file: **/LastPushMessage/LastPushMessage.h**
+
+New File: **/LastPushMessage/LastPushMessage.m**
+
+Add our new variable to **AppDelegte.h**
+
+@property (retain, nonatomic) NSString\* LastPushMessageMessage;
+
+Instantiate that same variable within **AppDelegate.m**
+
+You will note I really only care about the "human readable" string, here but this can be extended.
+
+Just like before, I now have access to the iOs "getLastPushMessage" method. Now, you will not see events thrown by incoming messages, so I made a method to poll for new messages every minute which will alert the user:
+
+You also need to tell the cordova.plst to enable the plugin by adding
+
+<key>LastPushMessage</key>
+<string>LastPushMessage</string>
+
+to the pluggins section,
+
+Note that you need to escape the content of the message, as it will be HTML encoded. You also don’t have to poll continuously for new messages, and can call app.getLastPushMessage whenever you want, but you might miss some. Also remember, your app will only ever see messages related to itself. Other app’s messages will be handled in the normal "pop up" way when they aren’t in focus.
+
+Done!
+
+_Originally published at 11 Apr 2012_

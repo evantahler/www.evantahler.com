@@ -11,7 +11,10 @@ export default function Footer() {
       >
         <Container>
           <Row>
-            <Col md={12} style={{ textAlign: "left" }}>
+            <Col md={6}>
+              <img src="/images/dog.png" style={{ width: 75 }} />
+            </Col>
+            <Col md={6} style={{ textAlign: "right" }}>
               <p>
                 <small className="text-muted">
                   Copyright, Evan Tahler {year} <br />

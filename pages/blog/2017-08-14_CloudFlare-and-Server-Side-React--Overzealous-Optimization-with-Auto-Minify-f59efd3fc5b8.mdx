@@ -1,0 +1,39 @@
+---
+title: "CloudFlare and Server-Side React: Overzealous Optimization with Auto-Minify"
+description: >-
+  I spent a few hours today sorting out why a new React + Next.JS site was
+  working great locally, but when deployed to production I was…
+date: "2017-08-14T01:05:13.352Z"
+tags: []
+# slug: >-
+#  /@evantahler/cloudflare-and-server-side-react-overzealous-optimization-with-auto-minify-f59efd3fc5b8
+---
+
+I spent a few hours today sorting out why a new [React](https://facebook.github.io/react/) + [Next.JS](https://github.com/zeit/next.js/) site was working great locally, but when deployed to production I was seeing this new type of scary fatal React error:
+
+![](/images/medium-export/1__a__JQaj2nymx62m1RjVuGFA.png)
+
+I won’t bore you with all the red-herring rabbit-holes I went down, but eventually I found myself comparing 2 versions of the site deployed as 2 separate Heroku apps. Because I was lazy, only one of them was using with the CloudFlare CDN, as the real production site would be… and Bingo! The non-CDN’d site was working just fine, but the one served behind CloudFlare was having trouble.
+
+So what was going on? For those of you with great eyesight, I invite you to compare the source code of both versions of the site:
+
+![](/images/medium-export/1__PNvvfSoSUoOlbTdGHBONFA.png)
+![](/images/medium-export/1__j__gR6H2NwUq__sw__MliPDww.png)
+
+Can’t Spot the difference? I’ll zoom and enhance:
+
+![](/images/medium-export/1__LBHJ7j__tobd2q9XhcPNDiQ.png)
+
+[It turns out](https://stackoverflow.com/questions/38923805/what-is-react-empty) that the way React handles components whose render method return a `null` are drawn as commented-out placeholders like the above. This way, if the state of that component changes and has something to render, we know where in the document it belongs. If that comment is suddenly missing… 💥!
+
+If you have a vanilla render-only-in-the-browser app, you probably would never find yourself looking at the source of your initial page, as it will be very empty. However, Next.JS provides both server-side and client side rendering for each page. This means that your initial request to the server will return a `hydrated` version of the page. This is better for SEO, page speed, etc.
+
+The trouble happens when you pipe your site though CLoudFlare, and have their auto-minified options on:
+
+![](/images/medium-export/1__lHdd3IlVkdmyQgq1zTT07A.png)
+
+These options are normally great… unless the comments in your HTML have semantic value! Which they do here.
+
+The solution is simple: **_just turn off auto-minify_**. You can probably trust your webpack/babel pipeline to produce efficient HTML, so this extra check is likely not necessary.
+
+But… this raises a question: Is it _OK_ that React uses comments in this way? Should, perhaps React be using DIVs which are hidden and empty instead? To me, commented code should always be safe to remove… and it looks like CloudFlare thinks so too.

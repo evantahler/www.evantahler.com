@@ -1,0 +1,39 @@
+---
+title: ActionHero.js is now at version 1
+description: HUZZAH!
+date: "2016-04-22T22:15:47.322Z"
+tags: []
+# slug: /@evantahler/actionhero-js-is-now-at-version-1-e6cecb5748fe
+---
+
+![](/images/medium-export/1__KhGHUH__VYLotH6PAJZDg5Q.jpeg)
+
+### HUZZAH!
+
+[ActionHero.js](http://actionherojs.com), the API framework for both HTTP and raw TCP clients is now at version 1!
+
+This release took over a month to push out, and focused on adding a full test suite so that we can all be sure that everything works as it should. This release also refactored the hell out of the network task system. Now any peer in the cluster can submit a task to be run on the master peer. I wasn’t however able to accomplish my "philosophical" goal of having every node acting in an equal capacity to run tasks and to be a failover point for an enqueued task. That will (hopefully) be in the next version.
+
+Anyway, I am finally satisfied with the stability of the server and the interface. Enjoy!
+
+Here is the full change log:
+
+- initializers
+- you can add your own initializers to a folder called initializers in your project’s root. They will be loaded at boot and accessible like this:
+- actionHero.myNewInitFunction(api, function(){ next(); });
+- This is a cleanup and bug-fix release
+- After some refactoring, actionHero is now at v 1.0
+- The last message sent by a socket client can now be read by inspecting connection.lastLine
+- Better error handling if the socket / web port are in use
+- Cleanup of the example HTML pages
+- HTTP requests will now return serverInformation.currentTime
+- The original server (the one with no configData.actionCluster.startingPeer will be the only server to run ‘any’ tasks)
+- Other servers will NOT assume the role of running "any" tasks, but they will keep them in memory until the master server comes back upon a crash.
+- Using the node-mime module
+
+#### Head over to \[\[ [http://actionherojs.com/](http://actionherojs.com/) \]\] to check it out or download it from [github](https://github.com/evantahler/actionHero/) or [NPM](http://search.npmjs.org/#/actionHero)
+
+[**evantahler/actionhero**
+\_actionhero.js is a multi-transport nodejs API Server with integrated cluster capabilities and delayed tasks_github.com](https://github.com/evantahler/actionHero/ "https://github.com/evantahler/actionHero/")[](https://github.com/evantahler/actionHero/)
+
+_Originally published at 18 Mar 2012_

@@ -20,11 +20,7 @@ function IndexPage() {
         <Card.Body>
           <Row>
             <Col md={3} style={{ textAlign: "center" }}>
-              <Image
-                width={203}
-                height={376}
-                src="/static/images/bitmoji.png"
-              />
+              <Image width={203} height={376} src="/images/bitmoji.png" />
             </Col>
 
             <Col md={9}>

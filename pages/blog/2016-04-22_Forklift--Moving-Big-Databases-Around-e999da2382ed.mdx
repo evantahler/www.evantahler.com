@@ -1,0 +1,159 @@
+---
+title: "Forklift: Moving Big Databases Around"
+description: This entry is cross-posted from tech.taskrabbit.com
+date: "2016-04-22T22:45:50.164Z"
+tags: []
+# slug: /@evantahler/forklift-moving-big-databases-around-e999da2382ed
+---
+
+![](/images/medium-export/0__T3e9y__efvaQCz99b.jpg)
+
+### What?
+
+[Forklift](https://github.com/taskrabbit/forklift) is a ruby gem that can help you collect, augment, and save copies of your mySQL databases. This is often called an ["ETL" tool](http://en.wikipedia.org/wiki/Extract,_transform,_load) as the steps in this process mirror the actions of "Extracting the data," "Transforming the data," and finally "Loading the data" into its final place.
+
+With Forklift, you create a **Plan** which describes how to manipulate your data. The process for this involves (at least) three databases:
+
+- Live Set
+- Working Database
+- Final Database
+
+The "Live Set" is first loaded into the "Working Set" to create a copy of your production data we can manipulate without fear of breaking replication. Then, any transformations/manipulations are run on the data in the working set. This might include normalizing or cleaning up data which was great for production but hard for analysts to use. Finally, when all of your transformations are complete, that data is loaded into the final database.
+
+Forklift is appropriate to use by itself or integrated within a larger project. Forklift aims to be as fast as can be by using native mySQL copy commands and eschewing all ORMs and other RAM hogs.
+
+### Features
+
+- Can extract data from both local and remote databases
+- Can perform integrity checks on your source data to determine if this run of Forklift should be executed
+- Can run each Extract either each run or at a frequency
+- Can run each Transform either each run or at a frequency
+- Data kept in the woking database after each run to be used on subsequent transformations
+- Only ETL’d tables will be copied into the final database, leaving other tables untouched
+- Emails sent on errors
+
+### What does TaskRabbit use this for?
+
+At TaskRabbit, the website you see at [www.taskrabbit.com](https://www.taskrabbit.com) is actually made up of many [smaller rails applications](http://en.wikipedia.org/wiki/Service-oriented_architecture). When analyzing our site, we need to collect all of this data into one place so we can easily join across it.
+
+We replicate all of our databases into one server in our office, and then use Forklift to extract the data we want into a common place. This gives us the option to both look at live data and to have a more accessible transformed set which we create on a rolling basis. Our "Forklift Loop" also git-pulls to check for any new transformations before each run.
+
+### Example Annotated Plan
+
+In Forklift, you build a plan. You can add any action to the plan in any order before you run it. You can have 0 or many actions of each type.
+
+### Workflow
+
+### Transformations
+
+Forklift allows you to create both Ruby transformations and SQL transformations
+
+#### Ruby Transformations
+
+- SQL Transformations are kept in a file ending in .rb
+- Ruby Transformations should define a class which matches the name of the file (IE: class MyTransformation would be in a file called my_transformation.rb
+- logger.log(message) is the best way to log but logger.debug is also available
+- database is a string containing the name of the working database
+- connection is an instance of Forklift::Connection and connection.connection is a raw mysql2 connection
+- Classes need to define a transform(connection, database, logger) IE:
+
+### SQL Transformations
+
+- SQL Transformations are kept in a file ending in .sql
+- You can have many SQL statements per file
+- SQL will be executed linearly as it is written in the file
+
+SQL Transformations can be used to [generate new tables like this](http://stackoverflow.com/questions/1201874/calendar-table-for-data-warehouse) as well
+
+### Defaults
+
+The defaults for a new Forklift::Plan are:
+
+1 {
+2 :project_root **\=>** Dir**.**pwd,
+3 :lock_with_pid? **\=>** **true**,
+4
+5 :final_database **\=>** {},
+6 :local_database **\=>** {},
+7 :forklift_data_table **\=>** '\_forklift',
+8
+9 :verbose? **\=>** **true**,
+10
+11 :do_checks? **\=>** **true**,
+12 :do_extract? **\=>** **true**,
+13 :do_transform? **\=>** **true**,
+14 :do_load? **\=>** **true**,
+15 :do_email? **\=>** **false**,
+16 :do_dump? **\=>** **false**,
+17 }
+
+### Methods
+
+#### Test
+
+1 forklift**.**check*local_source({
+2 :name **\=>** STRING, *\# A name for the test*
+3 :database **\=>** STRING, *\# The Database to test*
+4 :query **\=>** STRING, *\# The Query to Run. Needs to return only 1 row with 1 value*
+5 :expected **\=>** STRING *\# The response to compare against*
+6 })
+7
+8 forklift**.**check_remote_source({
+9 :connection_name **\=>** STRING, *\# The name of the remote*connection*
+10 :name **\=>** STRING, _\# A name for the test_
+11 :database **\=>** STRING, _\# The Database to test_
+12 :query **\=>** STRING, _\# The Query to Run. Needs to return only 1 row with 1 value_
+13 :expected **\=>** STRING _\# The response to compare against_
+14 })
+
+#### Extract
+
+1 forklift**.**import*local_database({
+2 :database **\=>** STRING, *\# The Database to Extract*
+3 :prefix **\=>** BOOLEAN, *\# Should we prefix the names of all tables in this database when imported wight the database?_
+4 :frequency **\=>** INTEGER (seconds), _\# How often should we import this database?_
+5 :skip **\=>** ARRAY OR STRINGS _\# A list of tables to ignore and not import*
+6 :only **\=>** ARRAY OR STRINGS *\# A list of tables to ignore and not import (use :only or :skip, not both)_
+7 })
+8
+9 forklift**.**import_remote_database({
+10 :connection_name **\=>** STRING, _\# The name of the remote*connection*
+11 :database **\=>** STRING, _\# The Database to Extract_
+12 :prefix **\=>** BOOLEAN, _\# Should we prefix the names of all tables in this database when imported wight the database?_
+13 :frequency **\=>** INTEGER (seconds), _\# How often should we import this database?_
+14 :skip **\=>** ARRAY OR STRINGS _\# A list of tables to ignore and not import_
+15 :only **\=>** ARRAY OR STRINGS _\# A list of tables to ignore and not import (use :only or :skip, not both)_
+16 })
+
+#### Transform
+
+1 forklift**.**transform*sql({
+2 :file **\=>** STRING, *\# The transformation file to run*
+3 :frequency **\=>** INTEGER (seconds), *\# How often should we run this transformation?_
+4 })
+5
+6 forklift**.**transform_ruby({
+7 :file **\=>** STRING, _\# The transformation file to run*
+8 :frequency **\=>** INTEGER (seconds), *\# How often should we run this transformation?\_
+9 })
+
+### Debug
+
+You can launch forklift in "debug mode" with — debug (we check ARGV\[" — debug"\] and ARGV\["-debug"\]). In debug mode the following will happen: — verbose = true — no SQL will be run (extract, load) — no transforms will be run — no email will be sent — no mySQL dumps will be created
+
+### Options & Notes
+
+- email_options is a hash consumed by the [Pony mail gem](https://github.com/benprew/pony)
+- Forklift’s logger is [Lumberjack](https://github.com/bdurand/lumberjack) with a wrapper to also echo the log lines to stdout and save them to an array to be accessed later by the email system.
+- The connections hash will be passed directly to a [mysql2](https://github.com/brianmario/mysql2) connection. Follow the link to see all the available options.
+
+### Limitations
+
+- mySQL only (the [mysql2](https://github.com/brianmario/mysql2) gem specifically)
+
+### [Forklift is available now. Enjoy!](https://github.com/taskrabbit/forklift)
+
+[**taskrabbit/forklift**
+\_forklift - Forklift: Moving big databases around. A ruby ETL tool.\_github.com](https://github.com/taskrabbit/forklift "https://github.com/taskrabbit/forklift")[](https://github.com/taskrabbit/forklift)
+
+_Originally published at 12 Apr 2013_

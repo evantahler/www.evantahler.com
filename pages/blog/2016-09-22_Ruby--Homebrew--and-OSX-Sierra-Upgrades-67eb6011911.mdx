@@ -1,0 +1,23 @@
+---
+title: "Ruby, Homebrew, and OSX Sierra Upgrades"
+description: Say you are a developer and you recently updated to OSX Sierra…
+date: "2016-09-22T22:25:08.328Z"
+tags: []
+# slug: /@evantahler/ruby-homebrew-and-osx-sierra-upgrades-67eb6011911
+---
+
+Say you are a developer and you recently updated to OSX Sierra…
+
+![](/images/medium-export/1__nG5K39SYOMiqX9SHwn__3lg.jpeg)
+
+You may encounter an error like this when doing anything with ruby, even booting up _IRB_:
+
+undefined method \`default_gems_use_full_paths?'
+
+If you are a [HomeBrew](http://brew.sh/) user, this will cause everything to break :(
+
+After much googling, this error is the result of you having installed a newer version of ruby-gems (or a patch) against your **_system_** version of ruby. There is an easy fix!
+
+Remove any installs of ruby-gems or any ruby-gems patches against the system version of ruby; ie: remove/rename everything in \`/Library/Ruby/Gems/2.0.0\` and try again.
+
+You shouldn’t have any other gems in there (other than perhaps a runner like _rake_), so you shouldn’t have any gems to re-install. You _should_ be using a ruby version manager like [rbenv](https://github.com/rbenv/rbenv) to manage all of your gems anyway :D

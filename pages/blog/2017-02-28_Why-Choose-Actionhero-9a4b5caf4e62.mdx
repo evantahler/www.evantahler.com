@@ -1,0 +1,39 @@
+---
+title: Why Choose Actionhero
+description: "or: Actionhero is the Node.js server for when your project grows up"
+date: "2017-02-28T00:50:03.405Z"
+tags: []
+# slug: /@evantahler/why-choose-actionhero-9a4b5caf4e62
+---
+
+_or: Actionhero is the Node.js server for when your project grows up_
+
+![](/images/medium-export/1__FWU1OZyieAZc____WqiNXGrQ.png)
+
+It’s been over 5 years since I started on [Actionhero](https://www.actionherojs.com/), a [Node.js](https://medium.com/u/96cd9a1fb56) server, and I’m very proud of how far we’ve come. We’ve got over 1,500 stars on [GitHub](https://github.com/evantahler/actionhero) and an active [Slack community](https://slack.actionherojs.com/). We are used by [many large companies](https://www.actionherojs.com) in production, and are often cited by many publications as one of the [better](https://firebearstudio.com/blog/top-node-js-rest-api-frameworks.html) Node.JS frameworks. We are even approved by the US Department of Veteran’s Affairs [for use in critical health-care systems](https://www.va.gov/TRM/ToolPage.asp?tid=9029&tab=2).
+
+Until now, I’ve taken a very soft stance on "why" Actionhero might be better than any other server framework/tool for your project, as every project is different. Maybe all of your project’s goals really would be met using only Express, and all you need is a JSON-speaking REST API server. That said, every project I’ve worked on always needed… _more_.
+
+Along with the other Actionhero core-contributors, I’ve decided to publish this list of why you might choose to use Actionhero in a mature, enterprise environment.
+
+#### Actionhero understands that modern applications speak more than HTTP.
+
+Of course Actionhero features a robust RESTful router and HTTP server. But that is not enough any more is it? You probably also want websocket support, right? You also want to share session across HTTP and WS connections, and you want to be able to reuse your code across both. The Actions in ActionHero are agnostic of the communications protocol your clients are speaking, and you can reuse them. Support for all of this is included, right out-of-the-box.
+
+#### Actionhero can coordinate with its peers when deployed.
+
+Actionhero is "Cluster Aware". This means that ActionHero is built from the ground-up to run in parallel across multiple machines at once. Nodes can speak to each other both passively (via a shared cache and job-queues; included) and actively with direct RPC communication.
+
+#### **Actionhero knows that background tasks are always required.**
+
+Sending your client a "welcome" email doesn’t belong in your web thread. Neither does processing anything else in the background. Actionhero treats background jobs as first class citizens, and any part of your API can enqueue them. Actionhero runs job workers in the proper [Node.js](https://medium.com/u/96cd9a1fb56) way: event-based and many at a time.
+
+#### **Actionhero provides all the help you need, then gets out of the way.**
+
+Actionhero proposes a standard project layout, including testing and initializers. Actionhero has a REPL and generators to get you up-and-running quickly. Actionhero supports localization and test-driven development. After that… you can do anything you want!
+
+#### Mature Operations for a Mature business.
+
+Actionhero supports 0-downtime deployments, process signaling, and more. You can be sure that your DevOps team will find running Actionhero pleasant and clear.
+
+Do you have other reasons you love Actionhero? Let us know below!

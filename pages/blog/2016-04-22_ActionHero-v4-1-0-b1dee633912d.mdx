@@ -1,0 +1,92 @@
+---
+title: ActionHero v4.1.0
+description: >-
+  A quick post to say that a new version of actionHero is out tonight: v4.1.0
+  This update contains some breaking changes to the Tasks and…
+date: "2016-04-22T22:20:52.079Z"
+tags: []
+# slug: /@evantahler/actionhero-v4-1-0-b1dee633912d
+---
+
+![](/images/medium-export/1__E2OG6YATcmZ__0IfziI3m2g.jpeg)
+
+A quick post to say that a new version of [actionHero](http://actionherojs.com) is out tonight: v4.1.0 **This update contains some breaking changes to the Tasks and Sats APIs, but the fixes are minor**
+
+The goal of this update was to seriously overhaul the task system, finally write those nagging tests, and come up with a better way to debug problems as they arise.
+
+### Tasks
+
+The task system is now prototypical, which allows both tasks and workers to be created as needed, and more importantly, destroyed when complete. The old method of using api.tasks.enqueue() often had a memory-leaking side effect. Now, with task = new api.task(), you can task.enqueue() or task.run() and allow normal action garbage collection to take care of it.
+
+This approach is also nice when using actionCluster and redis, as task objects can have their guts JSON’d to redis and rebuilt as they are accessed.
+
+Philosophically, all tasks also now have their attributes kept in a data hash, and pointers to their new unique IDs in there various global delayed local and processing queues. This means that even if a worker was to crash mid-task-move, the data about that task is always kept in the data hash for recovery AND we can make use of the atomic pushand pop operations queues/arrays have to ensure a task is really only worked off once.
+
+Oh, and because of this new prototypical task system, [I can finally test it :D](https://github.com/evantahler/actionHero/blob/master/test/core_tasks.js)
+
+When getting into the guts of the task system, It was clear that there were 4 possible types of task that needed to be supported:
+
+#### **run once / one server**
+
+- the normal way of doing something delayed, IE: send an email to user X in the background
+- these can also have a manually set runAt time, IE: send that email in 10 minutes
+
+#### **run once / all servers**
+
+- like the above, but run on **all** servers. An example might be a task to clear out static cache files on all of your web-servers or to reboot them
+- like the above, these can also be delayed, IE: clear the cache in 5 minutes
+
+#### **run periodically / one server**
+
+- periodic tasks are those with a frequency set above 0 in action hero. They will ignore any special runAt’s set, and will be enqueued again once they are done.
+- An good example here would be system maintenance again, or tasks which then inspect another data source. For example, at [TaskRabbit](http://taskrabbit.com) we have tasks that run all the time to check if there are any rabbits to notify about a task they might be qualified to complete. Often times there are not, but we check every-so-often to be sure.
+
+#### **run periodically / all servers**
+
+- the most demanding of all tasks :D
+
+### Stats
+
+When diving into the myriad of task types, It also became clear that analyzing such a system can be done on two levels: locally and globally. I might care how many tasks have been run overall in the whole system, but I also might care only about tasks on server (or cluster worker #2). This lead to the realization that when keeping stats, they need to be done at both of those levels. Now, the API actions for api.stats.increment will increment both a global and local count, and api.stats.get require to provide which count you want, the global or local one. You can also now set a stats value directly with api.stats.set, but this will only modify the local value.
+
+An example of the new api.stats.getAll method (showing off both local and global data):
+
+stats: {
+global: {
+tasks:tasksRun: 1006,
+actions:processedActions: 1323,
+webServer:numberOfWebRequests: 814,
+fileServer:filesSent: 104,
+chatRooom:roomMembers:defaultRoom: 602,
+chatRooom:messagesSent: 1221,
+webSockets:numberOfRequests: 6,
+webSockets:numberOfActiveWebClients: 1,
+cache:cachedObjects: 10,
+cache:totalCachedObjects: 10,
+chatRooom:roomMembers:undefined: 6
+},
+local: {
+redis:numberOfPeers: 1,
+tasks:tasksRun: 1006,
+actions:processedActions: 1324,
+webServer:numberOfWebRequests: 815,
+fileServer:filesSent: 104,
+chatRooom:roomMembers:defaultRoom: 602,
+chatRooom:messagesSent: 1221,
+webSockets:numberOfRequests: 6,
+webSockets:numberOfActiveWebClients: 1,
+cache:cachedObjects: 10,
+cache:totalCachedObjects: 10,
+chatRooom:roomMembers:undefined: 6
+}
+}
+
+note that lots of new metrics have been added :D
+
+### API
+
+[Also of note is the new API page on the wiki](https://github.com/evantahler/actionHero/wiki/API-Methods). This should be a handy one-stop shop for all the actionHero methods you should need to develop your app.
+
+Enjoy!
+
+_Originally published at 06 Jan 2013_

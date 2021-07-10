@@ -1,0 +1,89 @@
+---
+title: "Jekyll, Markdown, and More"
+description: "Jekyll: Where have you been all my life?!"
+date: "2016-04-22T22:20:44.775Z"
+tags: []
+# slug: /@evantahler/jekyll-markdown-and-more-f12a3cebc865
+---
+
+![](/images/medium-export/1__fK7ebyH3YbJsrcRvBR3pIQ.jpeg)
+
+### Jekyll: Where have you been all my life?!
+
+[Pablo](http://davemode.com/) turned my on to [Jekyll](http://jekyllrb.com/), a static-ste generator written in ruby. I have been hearing about Jekyll for a year now, but I had never really had given it a shot until today. I had been using Wordpress for my blogging needs at [work](http://taskrabbit.com) and for my personal blog, I had tried tumblr and SquareSpace, and I would rate them all as _adequate_. I had spent a long time tuning my Wordpress installations to where I wanted them to be, and was pretty content to keep toiling away at it.
+
+I’m going to give Jekyll the highest complement I can give to a piece of software: **After trying it for a few hours, I threw out wordpress entirely and started over. In ~10 hours I had a completely new blog and it is superior in almost every way.**
+
+Hey, you are reading this on my new Jekyll blog; Look at that!
+
+### The Good:
+
+#### Static Sites & Templates
+
+I’ve been, lets call it _raging_ about the need to revert to static sites for a while now.
+
+- Static sites enforce good [API-first](http://api-first.com) design patterns
+- Static sites free up huge chunks of ram from your servers when you don’t need to render views and partials, saving money and time
+- Static sites can be 100% CDN’d, making your users happy
+
+However, while you can have sites which render partials and templates client-side, this usually causes some wacky user experiences, and requires modern-esque browser. Pre-compiling static HTML pages is a great option, which allows all the fancy new tempting tools to be used, and adds no server load. Jekyll doesn’t have _all_ the options rails folks would be used to, but it has a healthy collection. You can have nested templates, partials, etc.
+
+#### Hosting
+
+It’s static HTML, so you can host it anywhere! You can render your site locally (automatically even), and rsync your directory. Done.
+
+[GitHub](http://github.com) has free static site hosting, and is even Jekyll aware (they made it), and will compile your site _for_ you. Just git push. Right now, I’m hosting this on Github. However, you can’t run custom plugins, and I might go back to DreamHost if I have that need. Settings up a post-commit git workflow is not hard, seeing as there are only 2 commands needed:
+
+#### Markdown
+
+I’m in love with markdown. To me, it strikes the magic balance between being an expressive textile language and bing code-aware. Typing code into Wordpress was a HUGE PAIN. There are quite a few options to render code on your pages, but entering always had problems. Markdown was made for code display. This post was written in markdown.
+
+If you are composing markdown on OSX, I recommend the [MOU](http://mouapp.com/) editor. It’s free.
+
+#### No Database Required
+
+I’m an Ops Guy, and so I’m not scared of hosting any DBs, but having fewer moving parts is always a positive, and it allows more flexible hosting options.
+
+#### It’s the web, stupid
+
+With Jekyll, you are writing Markdown and HTML. There’s no need for a complex module or plugin system. You want to add Google analytics to your site? Make an \_include with the JS pasted in. Want to use Twitter Bootstrap? Make a CSS and JS folder, and paste the code in. Simple.
+
+#### Git
+
+You don’t have to keep your Jekyll site in Git, but you should. My revisions are my git history. I can edit things on Github on the web. Hell, I can pull-request articles into my blog if I ever want to. Git is good.
+
+#### Local Development is Easy and Encouraged
+
+You _can_ run wordpress locally, but who does? You can develop Tumblr themes offline, but I don’t know many people who do. With Jekyll, you are encourged to expermint locally with an auto-refreshing server and quick compile times.
+
+### The Bad
+
+#### Importing
+
+There are [built in ways to migrate from Wordpress](https://github.com/mojombo/jekyll/wiki/blog-migrations), however, not a single post of mine was transformed properly. Categories became Tags, code samples caused the parser to exit early, and images weren’t exported. I spent about 5 hours cleaning up and manually converting my old posts to markdown, and I’m sure there are still errors (posts with Objective-C seemed to break the most often).
+
+I also lost all my comments. I could have exported them, but Jekyll is a static site, and by definition, commenting doesn’t make sense. However, I still **want** comments on my blog, so I opted to use [Disqus](http://disqus.com/), and we will see how it goes.
+
+#### Loss of comments & code
+
+**I lost all of my blog’s previous comments**. I realized too late that I could have switched to the disquss Wordpress plugin had it import my existing comments, and then put in my Jekyll blog. Oh well. Sorry community I had built :/
+
+#### Hard to debug
+
+I had a few "pull my hair out (assuming I still had hair)" moments with Jekyl:
+
+- You can’t have : in you YML payload without escaping
+- If you have other character sets than UTF8, bad things will happen
+- on OSX, the default HDD is case-insensitive. Changing postName to post name confuses Jekyll
+- Different OS’s render dates in ruby differently (GitHub vs OSX)
+- If you have un-parsable files, you probably won’t get a warning and the old version of the file will be left in your \_site folder, conniving you that everything is working OK.
+
+Jekyll needs some better docs :/
+
+#### Widgets
+
+"Widgets" (if you are coming from Wordpress) need to be built entirely in JS. I built a ["featured image" widget](https://github.com/evantahler/evantahler.github.com/blob/master/_layouts/post.html#L42-L68) for my posts, [a "category" page](https://github.com/evantahler/evantahler.github.com/blob/master/categories.html), and [some other features](https://github.com/evantahler/evantahler.github.com/blob/master/_includes/pagination.html) to flesh out my blog. I am MUCH happier writing these in JS than PHP, but most of these are very visible "hacks", which usually involve dumping data from Jekyll to JS, and then handling the logic. Such is life
+
+**Overall, Jekyll is awesome. The end.**
+
+_Originally published at 23 Dec 2012_

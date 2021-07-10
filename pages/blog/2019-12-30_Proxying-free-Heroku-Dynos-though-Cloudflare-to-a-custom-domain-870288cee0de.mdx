@@ -1,0 +1,37 @@
+---
+title: Proxying free Heroku Dynos though Cloudflare to a custom domain
+description: >-
+  The Actionhero project runs a number of websites for the
+  community — documentation, sample apps, etc. We often rely on Heroku’s free…
+date: "2019-12-30T16:59:31.387Z"
+tags: [heroku, cloudflare, devops, javascript, react]
+image: /images/medium-export/1__uL59CYZ1RV31uze3vgG2wQ.png
+# slug: >-
+#  /@evantahler/proxying-free-heroku-dynos-though-cloudflare-to-a-custom-domain-870288cee0de
+---
+
+The [Actionhero project](https://www.actionherojs.com/) runs a number of websites for the community — documentation, sample apps, etc. We often rely on Heroku’s free hosting to run these applications. Heroku makes it very easy to deploy your apps in a [12-factor](https://12factor.net/) way, attach databases, and deploy with a simple `git push`. It’s a great, free option to deploy your applications.
+
+The [Actionhero project](https://www.actionherojs.com/) uses Cloudflare as our DNS provider, as they provide a simple interface to enforce HTTPS, add caching, and a whole other host of features… and it’s also free!
+
+![](/images/medium-export/1__VGUvH5BMZsoC0N8yR3Hn1g.png)
+
+One of the Cloudflare features we have enabled is `full` HTTPS encryption across the whole domain, meaning that traffic remains HTTPS’d between you and the Cloudflare proxy (which provides caching), and remains HTTPS’d from Cloudflare to our servers at Heroku.
+
+![](/images/medium-export/1__0hz4MdwWncQQzSOwBrK5LQ.png)
+
+Heroku doesn’t provide HTTPS certificates for free dynos/apps like the ones we are using, except on their own domain, `*.herokuapp.com`. By default your app will be visible on a domain like `my-app.herokuapp.com`. However, you can opt to add custom domain to your app, like `my-cool-app.com` but… you can’t add HTTPS on the free Heroku tier. Your custom CNAME won’t support it.
+
+![](/images/medium-export/1__ox5GvhIjeCKMAACAzSmj7Q.png)
+
+If you point your CNAME to this new custom Heroku DNS target, Cloudflare will keep directing the client to HTTPS, which Heroku won’t like… and you’ll end up with a "Too many redirects" error.
+
+![](/images/medium-export/1__uL59CYZ1RV31uze3vgG2wQ.png)
+
+The way to solve this is to use the original CNAME target Heroku gave you even though it’s no longer listed in the interface. Point the CNAME in Cloudflare at `*.herokuapp.com` even though Heroku will tell you to use a new DNS target in the interface, and you will have encrypted traffic flowing in no time!
+
+CNAME chat.actionherojs.com chat-actionhero.herokuapp.com
+
+As an interesting notes, older Heroku apps keep showing the original `*.herokuapp.com` CNAME target in the dashboard, and not a new custom one, even with a custom URL added. This behavior confirms that the above is a good path to get things working!
+
+![](/images/medium-export/1__PIUvryf2i6AbGHyFuDZM3g.png)

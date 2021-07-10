@@ -1,0 +1,386 @@
+---
+title: Authentication with ActionHero
+description: "!! This post is out of date! For an up-to-date version, click here"
+date: "2016-04-22T22:30:48.407Z"
+tags: []
+# slug: /@evantahler/authentication-with-actionhero-be9ced55d59b
+---
+
+It seems that [ActionHero](http://actionherojs.com) has been picking up some popularity lately, and I’ve been getting a few questions about creating an authentication system with actionHero. Here’s a short post with some examples on how to get this done.
+
+### What do we need?
+
+There is **not** an authentication or user system which ships with actionHero. There’s not even an ORM. There are many great ORMs out there, and actionHero doesn’t have an opinion on which one you should use. However, for a user system, you do need _some_ sort of persistence. For this example, we’ll be using:
+
+- a mysql database
+- the [sequelize](http://www.sequelizejs.com/) ORM to help us with migrating the database and models
+- actionHero’s built-in cache to handle user sessions
+
+By no means is this a "full" production-ready authentication system, but this should serve as an example to get you started.
+
+### Setting up the project
+
+There are a few new folders we need to make to keep our project sane. Here’s my folder structure (with non-standard actionHero directories **bolded**):
+
+**\\**
+**|** **\-** actions
+**|** **\-** initializers
+**|** **\-** log
+**|** **\-** pids
+**|** **\-** **\*\***migrations**\*\***
+**|** **\-** **\*\***models**\*\***
+**|** **\-** node_modules
+**|** **\-** **public**
+**|** **\-** tasks
+
+### Setting up the database
+
+First, we need to set up the database. Sequelize has 2 methods of manipulating tables: model sync and migrations. We’ll be using migrations so we can incrementally update our schema if we need to.
+
+Let’s create a migration to make our users table:
+
+#### **migrations/addUserTable.js**
+
+_// Note! The real name of your migration must be in the sequelize's timestamp format, and look something more like \`20130326205332-addUserTable.json\`_
+_// It would be best to use the \`sequelize\` binary to build your migration file._
+
+module.exports **\=** {
+up**:** **function**(migration, DataTypes) {
+migration.createTable(
+'Users',
+{
+id**:** { type**:** DataTypes.INTEGER, primaryKey**:** **true**, autoIncrement**:** **true** },
+createdAt**:** { type**:** DataTypes.DATE, },
+updatedAt**:** { type**:** DataTypes.DATE, },
+email**:** {
+type**:** DataTypes.STRING,
+defaultValue**:** **null**,
+allowNull**:** **false**,
+unique**:** **true**
+},
+passwordHash**:** {
+type**:** DataTypes.TEXT,
+defaultValue**:** **null**,
+allowNull**:** **true**
+},
+passwordSalt**:** {
+type**:** DataTypes.TEXT,
+defaultValue**:** **null**,
+allowNull**:** **true**
+},
+firstName**:** {
+type**:** DataTypes.TEXT,
+defaultValue**:** **null**,
+allowNull**:** **true**
+},
+lastName**:** {
+type**:** DataTypes.TEXT,
+defaultValue**:** **null**,
+allowNull**:** **true**
+},
+}
+)
+},
+down**:** **function**(migration) {
+migration.dropTable('Users')
+}
+}
+
+and a sequelize model which will use this new table. Note that the model doesn’t need to be informed about the ID and timestamps because we are using the defaults from sequelize
+
+#### **models/user.js**
+
+module.exports **\=** **function**(sequelize, DataTypes) {
+**return** sequelize.define('User', {
+email**:** {
+type**:** DataTypes.STRING,
+unique**:** **true**,
+validate**:** {
+isEmail**:** **true**
+}
+},
+passwordHash**:** { type**:** DataTypes.TEXT },
+passwordSalt**:** { type**:** DataTypes.TEXT },
+firstName**:** { type**:** DataTypes.TEXT },
+lastName**:** { type**:** DataTypes.TEXT },
+});
+}
+
+Now we need an initializer to run everything. Check out mysql.js which will connect to the database and run any migrations we have pending.
+
+#### **initilizers/mysql.js**
+
+**var** fs **\=** require('fs');
+exports.mysql **\=** **function**(api, next){
+
+api.SequelizeBase **\=** require("sequelize");
+api.sequelize **\=** **new** api.SequelizeBase( api.configData.mySQL.database, api.configData.mySQL.username, api.configData.mySQL.password, {
+host**:** api.configData.mySQL.host,
+port**:** api.configData.mySQL.port,
+dialect**:** 'mysql'
+});
+
+api.models **\=** {};
+
+**var** files **\=** fs.readdirSync("models")
+**var** models **\=** \[\]
+**for**(**var** i **in** files){
+models.push(files\[i\].split(".")\[0\])
+}
+models.forEach(**function**(model){
+api.models\[model\] **\=** api.sequelize.**import**(\_\_dirname **+** "./../models/"**+**model**+**".js");
+});
+
+**var** initDB **\=** **function**(next){
+**var** migrator **\=** api.sequelize.getMigrator({path**:** process.cwd() **+** "/migrations"}, **true**)
+migrator.migrate().success(**function**(){
+api.sequelize.sync().success(**function**(){
+api.log("migrations complete", "notice");
+next();
+});
+}).error(**function**(err){
+console.log("error migrating DB: ");
+**throw** err;
+process.exit();
+});
+}
+
+initDB(next);
+}
+
+Note this example expects we would have added the following to config.js:
+
+configData.mySQL **\=** {
+database**:** 'actionHero',
+username**:** 'root',
+password**:** **null**,
+host**:** '127.0.0.1',
+port**:** 3306,
+}
+
+Booting the server should now create your users table.
+
+### Sessions
+
+Now that we have a users table, how should we handle sessions? We want to create a session store that works not just for http(s) clients, but also for persistent websocket and tcp clients. We can use actionHero’s built-in store (which will be redis-backed in most cases) to help us out. Here’s an other initializer:
+
+#### **initializers/sessions.js**
+
+exports.sessions **\=** **function**(api, next){
+
+api.session **\=** {
+prefix**:** "\_\_session",
+duration**:** api.configData.general.sessionDuration,
+};
+
+api.session.save **\=** **function**(connection, next){
+**var** key **\=** api.session.prefix **+** "-" **+** connection.id;
+**var** value **\=** connection.session;
+api.cache.save(key, value, api.session.duration, **function**(){
+api.cache.load(key, **function**(savedVal){
+**if**(**typeof** next **\==** "function"){ next(); };
+});
+});
+}
+
+api.session.load **\=** **function**(connection, next){
+**var** key **\=** api.session.prefix **+** "-" **+** connection.id;
+api.cache.load(key, **function**(error, value, expireTimestamp, createdAt, readAt){
+connection.session **\=** value;
+next(value, expireTimestamp, createdAt, readAt);
+});
+}
+
+api.session.**delete** **\=** **function**(connection, next){
+**var** key **\=** api.session.prefix **+** "-" **+** connection.id;
+api.cache.destroy(key, **function**(error){
+connection.session **\=** **null**;
+next(error);
+});
+}
+
+api.session.checkAuth **\=** **function**(connection, noAuthCallback, happyAuthCallback){
+api.session.load(connection, **function**(value, expireTimestamp, createdAt, readAt){
+**if**(connection.session **\===** **null**){
+connection.session **\=** {};
+}**else**{
+**var** now **\=** **new** Date().getTime();
+**if**(connection.session.loggedIn **!=** **true**){
+connection.error **\=** "You need to be authorized for this action";
+noAuthCallback(connection, **true**);
+}**else**{
+_// check to ensure the user is still ok in the DB_
+api.models.user.find({
+where**:** { id**:** connection.session.userId },
+}).success(**function**(user){
+**if**(user **\==** **null**){
+connection.error **\=** "This user has been deleted";
+api.session.**delete**(connection, **function**(){
+noAuthCallback(connection, **true**);
+});
+}**else**{
+connection.auth **\=** "true";
+happyAuthCallback(**null**, user);
+}
+});
+}
+}
+});
+}
+
+next();
+}
+
+There’s another config setting in use here: configData.general.sessionDuration = (1000 \* 60 \* 60 \* 4), // 4 hours. Note the api.sessions.checkAuth method. Here’s what we will using to validate actions are being called by logged in and valid users. Because sessions and connections might exist for a long while, we need to re-check the user against both the session store and the database each action.
+
+### Creating a user.
+
+Here’s our first action: creating a user. This action doesn’t require any authentication because we need to allow new people to sign up.
+
+#### **actions/userAdd.js**
+
+**var** crypto **\=** require('crypto');
+
+**var** action **\=** {};
+
+_/////////////////////////////////////////////////////////////////////_
+_// metadata_
+action.name **\=** "userAdd";
+action.description **\=** "I will create a new user (non-authenticated action)";
+action.inputs **\=** {
+"required" **:** \["email", "password", "firstName", "lastName"\],
+"optional" **:** \[\]
+};
+action.outputExample **\=** {}
+
+_/////////////////////////////////////////////////////////////////////_
+_// functional_
+action.run **\=** **function**(api, connection, next){
+**if**(connection.params.password.length **<** 6){
+connection.error **\=** "password must be longer than 6 chars";
+next(connection, **true**)
+}**else**{
+**var** passwordSalt **\=** api.utils.randomString(64);
+**var** passwordHash **\=** crypto.createHash('sha256').update(passwordSalt **+** connection.params.password).digest("hex");
+api.models.user.build({
+email**:** connection.params.email,
+passwordHash**:** passwordHash,
+passwordSalt**:** passwordSalt,
+firstName**:** connection.params.firstName,
+lastName**:** connection.params.lastName,
+}).save().success(**function**(user) {
+next(connection, **true**);
+}).failure(**function**(error){
+connection.error **\=** error.message;
+next(connection, **true**);
+});
+}
+}
+
+_/////////////////////////////////////////////////////////////////////_
+_// exports_
+exports.action **\=** action;
+
+Of note here is that each user gets a random salt, and we use SHA256 for our hash storage or the password (never actually store a users’ password!). You can use any hash function you like.
+
+### Logging in.
+
+Now that we have a user, we can log him in. The goal of logging in, is to create a session for the user with auth = true. actionHero will already take care of laying cookies down for http(s) clients, and other clients will have a persistent and unique session.id which we can use as the session key.
+
+#### **actions/login.js**
+
+**var** crypto **\=** require('crypto');
+
+**var** action **\=** {};
+
+_/////////////////////////////////////////////////////////////////////_
+_// metadata_
+action.name **\=** "login";
+action.description **\=** "I will log a user in";
+action.inputs **\=** {
+"required" **:** \["email", "password"\],
+"optional" **:** \[\]
+};
+action.outputExample **\=** {}
+
+_/////////////////////////////////////////////////////////////////////_
+_// functional_
+action.run **\=** **function**(api, connection, next){
+api.models.user.find({
+where**:** { email**:** connection.params.email },
+}).success(**function**(user){
+**if**(user **\===** **null**){
+connection.error **\=** "user not found";
+next(connection, **true**);
+}**else**{
+**var** passwordHash **\=** crypto.createHash('sha256').update(user.passwordSalt **+** connection.params.password).digest("hex");
+**if**(user.passwordHash **!=** passwordHash){
+connection.error **\=** "passwords don't match";
+next(connection, **true**);
+}**else**{
+connection.session **\=** {
+userId**:** user.id,
+loggedIn**:** **true**,
+};
+connection.auth **\=** "true";
+**if**(connection.\_original_connection **!=** **null**){
+connection.\_original_connection.auth **\=** "true";
+}
+connection.response.userId **\=** user.id;
+connection.response\[api.configData.commonWeb.fingerprintOptions.cookieKey\] **\=** connection.id;
+api.session.save(connection, **function**(){
+next(connection, **true**);
+});
+}
+}
+}).error(**function**(error){
+connection.error **\=** error;
+next(connection, **true**);
+});
+}
+
+_/////////////////////////////////////////////////////////////////////_
+_// exports_
+exports.action **\=** action;
+
+### An authenticated action
+
+OK! We now have a logged in user, what we can we let him do!? Using our one helper method from before (api.session.checkAuth), we can allow this logged-in user to change some of his saved data in the database:
+
+#### **actions/userEdit.js**
+
+**var** action **\=** {};
+
+_/////////////////////////////////////////////////////////////////////_
+_// metadata_
+action.name **\=** "userEdit";
+action.description **\=** "I edit a user";
+action.inputs **\=** {
+"required" **:** \["userId"\],
+"optional" **:** \["firstName", "lastName", "email"\]
+};
+action.outputExample **\=** {}
+
+_/////////////////////////////////////////////////////////////////////_
+_// functional_
+action.run **\=** **function**(api, connection, next){
+api.session.checkAuth(connection, next, **function**(err, dbUser){
+**var** newData **\=** {};
+**if**(connection.params.email **!=** **null**){ newData.email **\=** connection.params.email; }
+**if**(connection.params.firstName **!=** **null**){ newData.firstName **\=** connection.params.firstName; }
+**if**(connection.params.lastName **!=** **null**){ newData.lastName **\=** connection.params.lastName; }
+dbUser.updateAttributes(newData).success(**function**(){
+next(connection, **true**);
+});
+});
+}
+
+_/////////////////////////////////////////////////////////////////////_
+_// exports_
+exports.action **\=** action;
+
+### Fin
+
+This may seem like a lot, but in only 6 short files, we created everything we need from scratch for a working authentication system! Now you can extend this to your needs!
+
+_Originally published at 18 Feb 2013_

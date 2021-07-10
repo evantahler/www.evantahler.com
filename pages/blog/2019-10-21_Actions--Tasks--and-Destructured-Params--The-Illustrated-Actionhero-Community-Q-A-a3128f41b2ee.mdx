@@ -1,0 +1,106 @@
+---
+title: >-
+  Actions, Tasks, and Destructured Params- The Illustrated Actionhero Community
+  Q&A
+description: Welcome to the fourth installment of The Illustrated Actionhero Community Q&A!
+date: "2019-10-21T16:23:42.121Z"
+tags: []
+# slug: >-
+#  /@evantahler/actions-tasks-and-destructured-params-the-illustrated-actionhero-community-q-a-a3128f41b2ee
+---
+
+Welcome to the fourth installment of The Illustrated [Actionhero](https://www.actionherojs.com/) Community Q&A!
+
+Every week in October I’ll be publishing a conversation from the [Actionhero Slack community](http://slack.actionherojs.com/) that highlights both a feature of the Actionhero Node.JS framework and the robustness of the community’s responses… and adding some diagrams to help explain the concept.
+
+Previous articles in the series are:
+
+1.  [Why Actionhero is the Node.js server for when your project grows u](https://blog.evantahler.com/why-choose-actionhero-9a4b5caf4e62)p
+2.  [Actionhero for Real-time Games](https://blog.evantahler.com/actionhero-for-real-time-games-the-illustrated-actionhero-community-q-a-44c138e840e)
+3.  [Failing a Task](https://blog.evantahler.com/failing-a-task-the-illustrated-actionhero-community-q-a-b46b63bf5cc0)
+4.  [Online and Offline Sync](https://blog.evantahler.com/online-and-offline-sync-the-illustrated-actionhero-community-q-a-c768513dd378)
+
+### Online and Offline Sync
+
+October 21st, 2019
+
+[Source conversation in Slack](https://actionherojs.slack.com/archives/C04EVSUSD/p1566736126151100)
+
+Actionhero community member Nick asks:
+
+> I’ve noticed when running the latest AH, if I destructure the data param in an action run function to `{params, response, connection}`, when I write the output to response my endpoint returns nothing, unless I do an `Object.assign()`. Is this expected behavior?
+
+After some back and forth with other members of the community
+
+> …honestly I’ve seen this behavior for some time, since the move to async and ES6… I believe around AH 17
+
+First… what is destructuring?
+
+> Destructuring is a programming shorthand to simply variable assignment by "breaking" the structure of complex objects or arrays.
+
+For example, these are valid examples of destructing:
+
+![](/images/medium-export/1__phVzjPGTY__ky66bFEsDnEw.png)
+
+In both cases, we’ve set the variables `firstName` and `lastName` without having to reach "into" the complex array or object. To learn more about all the cool things destructuring can do, I recommend [this excellent article by the team at Mozilla](https://hacks.mozilla.org/2015/05/es6-in-depth-destructuring/).
+
+Lets take a look at the Action in question:
+
+const {Action, api} = require('actionhero')
+
+module.exports = class ListAvailableLessonDays extends Action {
+constructor () {
+super()
+this.name = 'ListAvailableLessonDays'
+this.description = 'Description'
+this.inputs = {
+gradeNumber: { required: true }
+}
+}
+
+async run ({params, response}) {
+const { gradeNumber } = params;
+const { LessonService } = api.services;
+const { getAvailableLessonDays } = LessonService;
+const lessons = await getAvailableLessonDays(gradeNumber);
+response = lessons; // <-- problem!
+}
+}
+
+Nick is building a tool to help teachers manage their curriculums. A requestor provides a `gradeNumber` and the API then returns a list of saved lessons. They are destrucuring the input object `data` to his run method into `params` and `response`.
+
+We can see the data passed into an an Action’s run method:
+
+![](/images/medium-export/1__R8PFi8FBcnld8uXKCwBzVQ.png)
+
+Since Actonhero can handle connections from many different types of connections (http, websocket, direct TCP socket, etc), we need a generic way to represent the request to an action. Inside Actionhero, we have multiple types of servers responsible for handling each type of connection, and building a generic `connection` object, and figuring out what the request `parameters` (or `params` for short) are. The server is also responsible for sending the `response` of your action back to the client. To make a simple API for all of this, your actions `run` method is passed one big `data` object with everything you might need.
+
+data = {
+connection: connection,
+action: 'randomNumber',
+toProcess: true,
+toRender: true,
+messageId: 123,
+params: { action: 'randomNumber', apiVersion: 1 },
+actionStartTime: 123, response: {},
+}
+
+To learn more about how actions work, the [Action Tutorial](https://docs.actionherojs.com/tutorial-actions.html) has a lot of great information.
+
+Nick continues his investigation:
+
+> This code returns an empty response If I leave it as data, and then do `data.response = lessons`, it returns the array as expected or if I do an `Object.assign(response, lessons)`, it will return the data but with the array converted to an object, for obvious reasons
+
+Said another way…
+
+![](/images/medium-export/1__WjivaLxe__ZdJ6RMcgRxVYw.png)
+
+… why?
+
+Community member Chad saves the day:
+
+> This is standard ES6 behavior, a common gotcha. When you destructure you take a reference to the property in question. It is a pointer to it. If you say `response = lessons` you overwrite the POINTER, not the VALUE OF IT.
+
+> You are "repointing" your local var response to point to a local value lessons, not altering the pointer within the original data object. You could safely set `response.someValue`. But not overwrite the entire response itself.
+
+So, if you are adding properties to `response`, (like `response.message)`, you can use a restructured response, but if you are overwriting the entire response object, you should not destructure the inputs to your Action’s`run` method.

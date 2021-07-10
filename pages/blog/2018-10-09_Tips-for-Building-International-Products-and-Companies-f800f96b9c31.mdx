@@ -1,0 +1,101 @@
+---
+title: Tips for Building International Products and Companies
+description: >-
+  Voom is an Airbus subsidiary working to make booking a helicopter as easy as
+  booking a car… while we build out the infrastructure for the…
+date: "2018-10-09T01:07:17.646Z"
+tags: []
+# slug: >-
+#  /@evantahler/tips-for-building-international-products-and-companies-f800f96b9c31
+---
+
+![](/images/medium-export/1__kPialmqAJFyZG3FCt1JC__A.jpeg)
+
+[Voom](https://www.voom.flights) is an Airbus subsidiary working to make booking a helicopter as easy as booking a car… while we build out the infrastructure for the [next wave](https://www.airbus.com/newsroom/press-releases/en/2018/02/vahana--the-self-piloted--evtol-aircraft-from-a--by-airbus--succ.html) of [vehicles](http://www.airbus.com/newsroom/press-releases/en/2017/10/cityairbus-demonstrator-passes-major-propulsion-testing-mileston.html) which will fly over our cities. Voom is live in both São Paulo and Mexico City, with more cities coming online soon.
+
+As a product and engineering team based in the US, we have been focused on building a product for international markets from day one. We’ve spent a lot of time thinking about the best way to build, what Voom CEO [Uma Subramanian](https://medium.com/u/67c0bd91af95), calls a "born-global" business. Here are are few of the principals we’ve adopted along the way.
+
+![](/images/medium-export/1__TCItymB9p5RGrh6SCGL7tQ.png)
+
+#### Hire Locals and Empower them
+
+![](/images/medium-export/1__06TUsveOdPpB__OiS1EyLKw.jpeg)
+
+This point cannot be repeated often enough: _Hire a team in-market and structure your company in such a way that each team is empowered to act locally._
+
+"Empower" to Voom means creating a structure in which each country is responsible for their own success, and then equipping them with a budget and team that can make that happen. There is so much regional knowledge required to build a B2C business — from knowing the local language, traditions, and customs as well as the local policies and regulations, to being aware of weather conditions in real time to recognizing that the country effectively shuts down during their country’s World Cup games ⚽️.
+
+Rather than enumerate all the reasons for structuring your company this way (proper brand voice, local knowledge of culture, events, and restrictions, proper time zone and holiday support, regulatory know-how, linguistic help…), I thought it might be powerful to share some anecdotes about things our US-based Product Team would have certainly gotten _wrong_ if we didn’t work closely with our Brazilian and Mexican colleagues:
+
+- Did you know there is no word in Portuguese for "commute"? Imagine if Voom’s marketing focused on having an easier time getting to work…
+- In Brazil, sharing your tax ID (CPF Number) is nothing like sharing a US Social Security Number. It’s common, and it’s odd if you _don’t_ ask for it.
+- The word "Rider" (what we call Voom customers) translates literally to "cowboy" in Brazil.
+- You can’t charge baggage fees in Mexico. It’s against the law!
+- Brazilian Valentines Day, "[Dia dos Namorados](https://www.thesun.co.uk/fabulous/6510262/dia-dos-namorados-2018-brazils-lovers-day-celebrated/)", is celebrated in June, not February. Offering romantic scenic flights in February would have been quite odd.
+- When sending a text message to Mexico from outside the country, there’s an extra "1" you need to dial.
+
+… and there are countless more.
+
+Another thing that proved to be important is to have a consistent local voice when it comes to translation. For us, that is our local Marketing Manager. We want to be sure that similar nuance and idioms are used throughout our product and marketing. To make this process simple, we are investing in tools that allow the product team to share a translation to-do list, the English versions, and screen shots of where each phrase will appear in the products.
+
+#### Don’t lock Country to Language or Currency
+
+Imagine you are a Mexican traveler, at home in Mexico City, planning a trip to São Paulo for work. What language should you see on the Voom website… Portuguese or Spanish? What currency should you see prices in? What timezone should your boarding time options be displayed in?
+
+Initially, when we launched Voom, we made the choice that we should focus the Rider’s experience on "Voom’s closest active region to where they currently are." However, we learned that over 1/3 of Voom’s customers are international travelers so that quickly proved to be the wrong approach. Our Mexican traveler would have seen helipads in her city, rather than in São Paulo, and her flight times would be in the wrong timezone!
+
+![](/images/medium-export/1__t8WarXboKiVGmOrTsa0fdw.png)
+![](/images/medium-export/1__tJhdHEGzQrrvTrFRNn2Z__A.png)
+![](/images/medium-export/1__9kfOtic0EBtld0n5L8yEEw.png)
+
+**Below are the the product principals we use now to address the aforementioned issue:**
+
+- The language of the customer **experience is set based on the user’s device preference** (operating system language and browser ) regardless of the country we think they are in or traveling to.
+- Our customers are international travelers. We don’t know enough information to guess where they want to go, **so we should ask them explicitly.**
+- Once a Rider selects a region for their flight, everything (other than language) should be **oriented to the region**: including time zones, prices, and currency.
+
+#### Political Correctness is Regional
+
+![](/images/medium-export/1__ZyCXgINjVPTrxiBj6oUWeQ.jpeg)
+
+When you fly on a helicopter, many countries have regulations requiring that we capture some information about you, in addition to checking your photo ID at the gate. These include weight, age, and gender.
+
+In the United States, when collecting gender, offering a third non-binary option (or better yet, a [free-text](https://www.hrc.org/resources/collecting-transgender-inclusive-gender-data-in-workplace-and-other-surveys) field) is best practice. We conducted research to see how our customers in Brazil and Mexico would react, and the result was surprising to me — someone based on the US west-coast.
+
+Even for those Latin American people who may identify with a non-binary gender in private, many would not choose such an option on any public form. We were even told that offering the option may be offensive to some of our customers and have a negative impact on our business.
+
+With that in mind, but still wanting to offer an inclusive third option, we chose "prefer not to state," and worked with our legal team to ensure that this would be an acceptable option.
+
+Again, be sure that your local teams can weigh in on your product choices.
+
+#### Moving Money is Hard, and has Product implications
+
+![](/images/medium-export/1__PTaEY__0nSRVYrS4ZwjuPHQ.jpeg)
+
+Some countries, like the US, Canada, and Mexico have a fairly easy flow of currency between the two (with taxes…), and you can run your international business with a single bank account and related payment vendors.
+
+However, there are other countries with strict currency controls, which make it incredibly hard to move money in or out of the country. These countries include Brazil and China.
+
+Voom uses [Stripe](https://stripe.com/) to process credit cards in our regions. However, because of the currency controls present in some of the countries in which we operate, we couldn’t use a simple Stripe configuration. We needed a bank account, accounting, and Stripe account in every country Voom operates in.
+
+There are implications for this in our product:
+
+- If you were to save a credit card on your Voom account in Brazil, you would need to save it again when you fly in Mexico. It wouldn’t be saved to your "Voom Account" in general, since it is authorized with a separate merchant account in each country.
+- If we create a coupon or promotion, it has to be valid in only one country and currency.
+- If you are flying with Voom credit or a Company Account, which countries can you fly in and in which country do we apply tax to? The answer depends on which country you are based in.
+
+When building your international product, the legal and tax landscape is more complex than you might initially guess so be sure to leave the time to build the nuanced tools you will need!
+
+#### Establish a "Corporate" Timezone and Language, and ensure that everyone knows how to use it
+
+![](/images/medium-export/1__aVzJTznRRfP1lM7AXe9yLw.jpeg)
+
+When your company looks at metrics and establishes KPIs, when does the month start and end? When your company drafts internal policy documents (like an Employee Handbook), which language do you use?
+
+This questions may seem trivial now, but as you hire more employees in more countries, you’ll need to be sure that the everyone can communicate. You will need each employee to have a baseline competency in your company’s chosen language. This is a hiring requirement.
+
+When setting up reporting tools, you will either need to lock in a reporting time at the beginning (for example, Google Analytics requires this), or you will need to be sure that your tools allow flexible time zone reporting (we use [Looker](https://looker.com/) at Voom and this is something the tool does well).
+
+We chose [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time) for our reporting timezone and English as our internal language. Coincidentally, English is also the "official" internal language of Airbus at-large.
+
+We are always learning about the best ways to build a small international company. [If this type of work is interesting to you, we are hiring](https://www.voom.flights/careers)!

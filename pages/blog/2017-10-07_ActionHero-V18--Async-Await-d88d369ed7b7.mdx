@@ -1,0 +1,63 @@
+---
+title: "ActionHero V18: Async/Await"
+description: Today we’ve released ActionHero v18.0.0!
+date: "2017-10-07T21:24:46.480Z"
+tags: []
+# slug: /@evantahler/actionhero-v18-async-await-d88d369ed7b7
+---
+
+Today we’ve released [ActionHero v18.0.0!](https://github.com/actionhero/actionhero/releases/tag/v18.0.0)
+
+![](/images/medium-export/1__CLNbk1x5u__aC__tfhY5lR__w.png)
+
+[Version 18.0.0 of ActionHero](https://github.com/actionhero/actionhero/releases/tag/v18.0.0) marks the conclusion of months of work by the community to upgrade every part of ActionHero to use `async/await` Javascript Syntax. This will not only make developing with ActionHero easier, but also less error-prone, easier to read, and more stable. We can write less code to get more done, have simpler error handling, and more! With the newer versions of node, we also get access to real `class` methods, which make extending and sharing code much easier.
+
+If you are not familiar with `async/await` in javascript, there are a number of [excellent guides](https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9) out there, but this is my favorite:
+
+There are no more callbacks and no more promise chains. You use `try/catch` to deal with errors. You can use normal `for` and `while` loops to work on async methods. The world is so much more pleasant! Code is more readable, and bugs are far easier to find and test.
+
+![](/images/medium-export/1__5FB5y2ZoQkn3TDrvz98zFg.jpeg)
+
+For example, here’s how an action testing `api.cache` changed from ActionHero v17 to v18:
+
+This is going to be so much better!
+
+### Community Support and Breaking Changes
+
+_Because this release had so many breaking changes, we needed to handle this release differently than we have in the past._
+
+The ActionHero Core Team had to make a hard decision with this release. This marks the first version we’ve released that **_does not_** **work with all active LTS versions of node.JS**. Until now, this had been our policy. However, We felt the gains in legibility, productivity, and debugging were so important that leaving ‘legacy’ users behind was the correct tradeoff.
+
+However, to continue to support ActionHero users on v17, we will break with our other policy of only supporting the "master" branch. We’ve cut a `v17` branch, and will continue to accept patches and updates to it until March of 2018. We will also port any security fixes from master back to v17. [Greg](https://github.com/gcoonrod) has also offered to create inline documentation for v17 as well (more on this later).
+
+We know that upgrading to v18 (and perhaps a new version of Node.js) will be the most difficult ActionHero migration to date, but I assure you it will be worth it!
+
+I’ve also discussed these thoughts on the first [Always bet on Node podcast](https://twitter.com/dshaw/status/909565638443708417) with [Dan Shaw](https://medium.com/u/7c861ae496fa) and [Mikeal](https://medium.com/u/70d203660866).
+
+### What’s New
+
+The [**full Release Notes**](https://github.com/actionhero/actionhero/releases/tag/v18.0.0) for ActionHero v18 can be found on GitHub, and as usual, we’ve published our [**Upgrade Guide from the previous version**](https://docs.actionherojs.com/tutorial-upgrade-path.html).
+
+The new features I’m most proud of are:
+
+**Full Support for** `**async/await**` **programming in ActionHero.**
+
+Really. This is a big deal. Our test suite saved hundreds of lines of code. There is no more ‘callback hell’, and in general, everything is so much easier to understand. We don’t need any more [flow control](https://github.com/caolan/async) tools.
+
+We’ve also significantly increased our test coverage to include [plugins](https://docs.actionherojs.com/tutorial-plugins.html) and the [CLI commands](https://docs.actionherojs.com/tutorial-cli.html)… parts of ActionHero which, in the old callback style, were \*very\* hard to test.
+
+**Full documentation of all public classes and APIs.**
+
+I had not heard of [JSdoc](http://usejsdoc.org/) before this upgrade… But, just like when I learned about [standard.js](https://blog.evantahler.com/actionhero-standard-js-1be0e6b0f1d4), I now can’t imagine creating publicly-consumable projects without it. JSdoc allows you to comment your code (automatically in many cases) such that you can generate human-readable documentation from your source files. This means that as you write a new method or class, you can use the handy plugin for your code editor to [automagically generate documentation](https://atom.io/packages/jsdoc).
+
+We’ve set up ActionHero to automatically build **our new documentation site**, [**docs.actionherojs.com**](https://docs.actionherojs.com/) at the conclusion of every successful test run. This ensures that our documentation will aways be up-to-date now!
+
+A bonus feature of this work is that now you will always have the ability to generate the documentation for your local version of ActionHero. `cd ./node_modules/actionhero && npm run docs`. In the coming weeks, we’ll add support for multiple versions of ActionHero the documentation website, but having an offline version will ensure that you can get work done with ActionHero.
+
+**Requiring the** `**api**` **object.**
+
+We were able to simplify much of the ActionHero developer experience by stopping our convention of passing the `api` object into every `run`, `start`, and `stop` method. We’ve taken advantage of Node.js’ module require cache to simply allow you to `const {api} = require('actionhero')` wherever you need it. This now allows you to have access to the ActionHero api in **any file** in your project, not just actions and tasks.
+
+Try out ActionHero v18 today!
+
+`npm install actionhero && npx actionhero generate`

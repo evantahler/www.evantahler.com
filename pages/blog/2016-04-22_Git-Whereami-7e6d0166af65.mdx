@@ -1,0 +1,63 @@
+---
+title: Git Whereami
+description: >-
+  I’ve been traveling a lot for work, and I thought it might be cool to somehow
+  signal where I was physically when checking in code. I knew…
+date: "2016-04-22T23:47:24.913Z"
+tags: []
+# slug: /@evantahler/git-whereami-7e6d0166af65
+---
+
+I’ve been traveling a lot for work, and I thought it might be cool to somehow signal where I was **physically** when checking in code. I knew my Mac has a Geolocation framework, but I couldn’t figure out a way to access it via the command line.
+
+Then I found the wonderful [WherAmI](https://github.com/robmathers/WhereAmI) project! It’s a simple wrapper around the [CoreLocation](http://en.wikipedia.org/wiki/IOS_SDK#Core_Location) framework that spits out your lat/lng.
+
+From there, it’s a [simple task](https://github.com/evantahler/git-whereami) to pass that up to the Google Geocoding API to get a street address!
+
+Here’s the readme from [evantahler/git-whereami](https://github.com/evantahler/git-whereami)
+
+[**evantahler/git-whereami**
+\_git-whereami - Append your location to all of our git commits!\_github.com](https://github.com/evantahler/git-whereami "https://github.com/evantahler/git-whereami")[](https://github.com/evantahler/git-whereami)
+
+_Append your location to all of our git commits!_
+
+Do you travel a lot? Would you team be interested to know where your code is coming from? Then this is for you!
+
+#### Install whereami
+
+Head on over to [https://github.com/robmathers/WhereAmI](https://github.com/robmathers/WhereAmI) and download the whereami excecutable. Place it in your home folder, like ~/whereami
+
+#### Setup whereami
+
+In whichever git repository you want to use this on, copy the prepare-commit-msg into ~/PROJECT/.git/hooks.
+
+**That’s it!**
+
+Now, whenever you make a git commit, we will use whereami to source your lat/lng, and then ask Google’s geocoder what your address is, resulting in:
+
+\# Please enter the commit message for your changes. Lines starting
+\# with '#' will be ignored, and an empty message aborts the commit.
+\# On branch master
+\# Your branch is ahead of 'origin/master' by 4 commits.
+\# (use "git push" to publish your local commits)
+
+#
+
+\# Changes to be committed:
+\# new file: newfile
+
+#
+
+This commit coded at:
+\---------------------
+63 Hanbury Street London E1 5JP UK
+51.520182, -0.070440
+@ Fri Apr 17 15:57:03 BST 2015
+
+Feel free to tweak the template as you wish!
+
+#### Notes:
+
+- OSX Only!
+
+_Originally published at 17 Apr 2015_

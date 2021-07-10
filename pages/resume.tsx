@@ -15,7 +15,7 @@ function ResumePage() {
       <h1>Resume</h1>
       <hr />
 
-      <JumboImage src="/static/images/resume-2.jpg" />
+      <JumboImage src="/images/resume-2.jpg" />
 
       <p>
         Evan Tahler is the CTO and co-founder of{" "}
@@ -67,7 +67,7 @@ function ResumePage() {
 
       <br />
 
-      <Button href="/static/evan-tahler-resume.pdf" variant="info" size="sm">
+      <Button href="/evan-tahler-resume.pdf" variant="info" size="sm">
         Download Full Resume
       </Button>
 
@@ -80,7 +80,7 @@ function ResumePage() {
             <Image
               height={logoSize}
               width={logoSize}
-              src="/static/images/logos/grouparoo.png"
+              src="/images/logos/grouparoo.png"
             />
           </a>
         </Col>
@@ -90,7 +90,7 @@ function ResumePage() {
             <Image
               height={logoSize}
               width={logoSize}
-              src="/static/images/logos/actionhero.png"
+              src="/images/logos/actionhero.png"
             />
           </a>
         </Col>
@@ -100,7 +100,7 @@ function ResumePage() {
             <Image
               height={logoSize}
               width={logoSize}
-              src="/static/images/logos/taskrabbit.png"
+              src="/images/logos/taskrabbit.png"
             />
           </a>
         </Col>
@@ -110,7 +110,7 @@ function ResumePage() {
             <Image
               height={logoSize}
               width={logoSize * 1.3}
-              src="/static/images/logos/airbus.png"
+              src="/images/logos/airbus.png"
             />
           </a>
         </Col>
@@ -120,7 +120,7 @@ function ResumePage() {
             <Image
               height={logoSize}
               width={logoSize}
-              src="/static/images/logos/modcloth.jpg"
+              src="/images/logos/modcloth.jpg"
             />
           </a>
         </Col>
@@ -130,7 +130,7 @@ function ResumePage() {
             <Image
               height={logoSize}
               width={logoSize}
-              src="/static/images/logos/disney.png"
+              src="/images/logos/disney.png"
             />
           </a>
         </Col>

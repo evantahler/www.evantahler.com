@@ -1,0 +1,43 @@
+---
+title: Testing actionHero with blitz.io
+description: >-
+  I recently had a chance to try out blitz.io (or click my affiliate link thing
+  and get me some free tests), a new load-testing tool from…
+date: "2016-04-22T22:16:09.914Z"
+tags: []
+# slug: /@evantahler/testing-actionhero-with-blitz-io-24d705eec3f4
+---
+
+I recently had a chance to try out [blitz.io](http://blitz.io) (or click my [affiliate link](http://blitz.io/bhjPRfzrPxLMztQTzBZDFiR) thing and get me some free tests), a new load-testing tool from MuDynamics. They offer a product that is somewhere between Apache Bench and [Browser Mob](https://browsermob.com). [Apache Bench](http://httpd.apache.org/docs/2.0/programs/ab.html) has been around forever and is a command line tool to hit a page with many simultaneous requests and logs how long each request takes (and counts errors). Browser Mob runs a collection of cloud servers all over the world which actually render your site (using a full browser), capture screen shots, run JS, and look for errors. Both of these tools are awesome, but are useful in very different circumstances.
+
+When testing an API like [actionHero](http://actionherojs.com), I want to test more than just loading a url, but I don’t need the complexity (and cost) of Browser Mob’s full rendering powers. blitz.io is just what I need: ability to add (GET) variables, testing from multiple physical locations (I’m pretty sure they are EC2 based), and good support\*.
+
+Anyway, [demo.actionherojs.com](http://blog.evantahler.com/blog/demo.actionherojs.com) has been running for some time now on a micro EC2 instance, and I am curious to how it performs. I know that node.js is MADE to handle many http requests at once, but I wanted to know how much load the actionHero framework was adding to the server. blitz.io lets you test up to 250 simultaneous connections for free… and here are the results:
+
+The sub 10ms response time is why I think the blitz.io test servers are also in Amazon’s cloud. Even at 250 users, the server is working great! The test I was running (action=cacheTest) saves and recovers a key-value pair from actionHero’s internal cache. I ran the test a few times and I chose to show the most promising one here, but some of the other tests did show a few ( less than 10) dropped connections. I’m looking into it, but I suspect the problem has more to do with haProxy than actionHero.
+
+I don’t think that I really learned anything here about actionHero’s performance profile, except that it’s not terrible! If I didn’t have a linear "hit rate” or if the response time grew drastically as the number of connections increased, I would know that I have a problem. Specifically with node.js apps, the problem would be indicative of the fact that as some point the act of processing the request takes longer than the request itself. This would then add up as more and more requests were waiting in the queue.
+
+Looking good!
+
+### Update!
+
+The blitz.io team just gave me a credit (due to this blog post) to increase my simultaneous user limit to 500. I ran the test again with some changed parameters
+
+- 500 users
+- Ramp up over 20 seconds rather than 60
+- use a randomly-generated UUID as the key and value for the cache save to ensure unique-ness
+
+![](/images/medium-export/0__QSBznimk9H52rcbb.jpeg)
+
+Still looking good, actionHero!
+
+This time when I ran the test, I decided to tail the actionHero log to see what was going on. All the requests were truly unique, but they all did appear to be coming from the same IP address (although it did change between each "rush”):
+
+2012-03-30 21:00:52 | action @ 10.72.245.143 | params: {"key":"key_23cc985520c55346d9de7a0e9e300d0f7f07a225","value":"val_23cc985520c55346d9de7a0e9e300d0f7f07a225","action":"cacheTest","limit":100,"offset":0}
+
+2012-03-30 21:00:52 | > web request from 10.72.245.143 | responded in : 4ms
+
+\*Good Support: They have an authentication process similar to Google Analytics where you need to have a specific (and random) URL return a pre-determined value to prove you own the domain. They have a fixed path you need to use which would have required me making a new action to respond to. I didn’t want to take down the demo server, so I asked them if I could authenticate by using a /public/ or /file/ path. They hooked my up in under 2 hours!
+
+_Originally published at 30 Mar 2012_

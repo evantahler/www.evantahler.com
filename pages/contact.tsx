@@ -14,7 +14,7 @@ function ContactPage() {
       <h1>Contact</h1>
       <hr />
 
-      <JumboImage src="/static/images/contact.jpg" />
+      <JumboImage src="/images/contact.jpg" />
 
       <strong>
         <p>Let's chat!</p>

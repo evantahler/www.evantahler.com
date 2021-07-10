@@ -1,0 +1,187 @@
+---
+title: >-
+  Production Node Applications with Docker — 3 DevOps Tips for Shutting Down
+  Properly
+description: >-
+  Recently, I’ve been noticing that a high number of folks using Node Resque
+  have been reporting similar problems relating to the topics of…
+date: "2020-02-18T04:11:19.262Z"
+tags:
+  [
+    actionhero,
+    code,
+    javascript,
+    node.js,
+    resque,
+    docker,
+    kubernetes,
+    heroku,
+    devops,
+  ]
+image: /images/medium-export/1__lOqD__NHM7gQY9Ax9TF4wZg.jpeg
+featured: true
+canonical: null
+# slug: >-
+#  /@evantahler/production-node-applications-with-docker-3-devops-tips-for-shutting-down-properly-ed54f09f0a7f
+---
+
+![](/images/medium-export/1__lOqD__NHM7gQY9Ax9TF4wZg.jpeg)
+
+Recently, I’ve been noticing that a high number of folks using [Node Resque](https://github.com/actionhero/node-resque) have been reporting similar problems relating to the topics of shutting down your node application and property handling uncaught exceptions and unix signals. These problems are exacerbated with deployments involving Docker or a platform like [Heroku](https://heroku.com/), which uses Docker under-the-hood. However, if you keep these tips in mind, it’s easy to have your app work exactly like you want it too… even when things are going wrong!
+
+I’ve added a Docker-specific example to Node Rescue which you can check out here [https://github.com/actionhero/node-resque/tree/master/examples/docker](https://github.com/actionhero/node-resque/tree/master/examples/docker), and this blog post will dive deeper into the 3 areas the the example focuses on. Node Resque is a background-job processing framework for Node & Typescript which stores jobs in Redis. It support delayed and recurring jobs, plugins, and more. Node Rescue is a core component of the [Actionhero](https://www.actionherojs.com) framework.
+
+### 1\. Ensure Your Application Receives Signals, AKA Don’t use a Process Manager
+
+You shouldn’t be using NPM, YARN, PM2 or any other tool to "run" your application inside of your Docker images. You should be calling only the node executable and the file you want to run. This is important so that the signals Docker wants to pass to your application actually get to your app!
+
+There are lots of [Unix signals](https://www.tutorialspoint.com/unix/unix-signals-traps.htm) that all mean different things, but in a nutshell it’s a way for the Operating System (OS) to tell your application to do something, usually implying that it should change its lifecycle state (stop, reboot, etc). For web servers, the most common signals will be `SIGTERM` (terminate) , `SIGKILL`(kill, aka: "_no really stop right now I don’t care what you are working on_") and `SIGURSR2`(reboot).
+
+Docker, assuming your base OS is a \*NIX operating system like Ubuntu, Red Hat, Debian, Alpine, etc, uses these signals too. For example, when you tell a running Docker instance to stop `docker stop`, it will send `SIGETERM` to your application, wait some amount of time for it to shut down, and then do a hard stop with `SIGKILL`. That’s the same thing that would happen with docker kill — it sends `SIGKILL` too. What are the differences between stop and kill? That depends on how you write your application! We’ll cover that more in section #2.
+
+So how to you start your node application directly? Assuming you can run your application on your development machine with `node ./dist/server.js`, your docker file might look like this:
+
+```docker
+FROM alpine:latest
+WORKDIR /app
+RUN apk add —update nodejs nodejs-npm
+COPY . .
+RUN npm install
+CMD ["node", "/dist/server.js"]
+EXPOSE 8080
+```
+
+And, be sure you don’t copy your local `node_modules` with a `.dockerignore` file:
+
+```bash
+node_modules
+\*.log
+```
+
+We are using the `CMD` directive, not `ENTRYPOINT` because we don’t want Docker to use a subshell. `ENTRYPOINT` and `CMD` without 2+ arguments works by calling `/bin/sh -c` and then your command… which can trap the signals it gets itself and not pass them on to your application. If you used a process runner like `npm start`, the same thing could happen.
+
+You can learn more about docker signals & node here [https://hynek.me/articles/docker-signals/](https://hynek.me/articles/docker-signals/)
+
+### 2\. Gracefully Shut Down your Applications by Listening for Signals
+
+Ok, so we are sure we will get the signals from the OS and Docker… how do we handle them? Node makes it really easy to listen for these signals in your app via:
+
+```js
+process.on("SIGTERM", () => {
+  console.log(`[ SIGNAL ] - SIGTERM`);
+});
+```
+
+This will prevent Node.JS from stopping your application outright, and will give you an event so you can do something about it.
+
+… but what should you do? If you application is a web server, you might:
+
+1. Stop accepting new HTTP requests
+2. Toggle all health checks (ie: `GET /status`) to return \`false\` so the load balancer will stop sending traffic to this instance
+3. Wait to finish any existing HTTP requests in progress.
+4. And finally… exit the process when all of that is complete.
+
+If your application uses Node Resque, you should call `await worker.end()`, `await scheduler.end()` etc. This will tell the rest of the cluster that this worker is:
+
+1. About to go away
+2. Lets it finish the job it was working on
+3. Remove the record of this instance from Redis
+   If you don’t do this, the cluster will think your worker should be there and (for a while anyway) the worker will still be displayed as a possible candidate for working jobs.
+
+In [Actionhero](https://www.actionherojs.com) we manage this at the application level `await actionhero.process.stop()` and allow all of the sub-systems (initializers) to gracefully shut down — servers, task workers, cache, chat rooms, etc. It’s important to hand off work to other members in the cluster and/or let connected clients know what to do.
+
+A robust collection of process events for your node app might look like:
+
+```js
+async function shutdown() {
+  // the shutdown code for your application
+  await app.end();
+  console.log(`processes gracefully stopped`);
+}
+
+function awaitHardStop() {
+  const timeout = process.env.SHUTDOWN_TIMEOUT
+    ? parseInt(process.env.SHUTDOWN_TIMEOUT)
+    : 1000 * 30;
+
+  return setTimeout(() => {
+    console.error(
+      `Process did not terminate within ${timeout}ms. Stopping now!`
+    );
+    process.nextTick(process.exit(1));
+  }, timeout);
+}
+
+// handle errors & rejections
+process.on("uncaughtException", (error) => {
+  console.error(error.stack);
+  process.nextTick(process.exit(1));
+});
+
+process.on("unhandledRejection", (rejection) => {
+  console.error(rejection.stack);
+  process.nextTick(process.exit(1));
+});
+
+// handle signals
+process.on("SIGINT", async () => {
+  console.log(`[ SIGNAL ] - SIGINT`);
+  let timer = awaitHardStop();
+  await shutdown();
+  clearTimeout(timer);
+});
+
+process.on("SIGTERM", async () => {
+  console.log(`[ SIGNAL ] - SIGTERM`);
+  let timer = awaitHardStop();
+  await shutdown();
+  clearTimeout(timer);
+});
+
+process.on("SIGUSR2", async () => {
+  console.log(`[ SIGNAL ] - SIGUSR2`);
+  let timer = awaitHardStop();
+  await shutdown();
+  clearTimeout(timer);
+});
+```
+
+Let's walk though this:
+
+1. We create a method to call when we should shutdown our application, `shutdown`, which contains our application-specific shutdown logic.
+2. We create a "hard stop" fallback method that will kill the process if the shutdown behavior doesn’t complete fast enough, `awaitHardStop`. This is to help with situations where an exception might happen during your shutdown behavior, a background task is taking too long, a timer doesn’t resolve, you can’t close your database connection… there are lots of things that could go wrong. We also use an Environment Variable to customize how long we wait `process.env.SHUTDOWN_TIMEOUT` which you can configure via Docker. If the app doesn’t exist in in this time, we forcibly exit the program with \`1\`, indicating a crash or error,
+3. We listen for signals, and (1) start the "hard stop timer", and then (2) call `await shutdown().`
+4. If we successfully shutdown we stop timer, and exit the process with \`0\`, indicating an exit with no problems.
+
+**Note**:
+
+We can listen for any unix signal we want, but we should never listen for `SIGKILL`. If we try to catch it with a process listener, and we don’t immediately exit the application, we’ve broken our promise to the operating system that `SIGKILL` will immediately end any process… and bad things could happen.
+
+### 3. Log Everything
+
+Finally, log the heck out of signaling behavior in your application. It’s innately hard to debug this type of thing, as you are telling your app to stop… but you haven’t yet stopped. Even after `docker stop`, logs are still generated and stored…. And you might need them!
+
+In the Node Rescue examples, we log all the stop events and when the application finally exists:
+
+```bash
+docker logs -f {your image ID}
+
+… (snip)
+
+scheduler polling
+scheduler working timestamp 1581912881
+scheduler enqueuing job 1581912881 >> {"class":"subtract","queue":"math","args":\[2,1\]}
+scheduler polling
+\[ SIGNAL \] - SIGTERM
+scheduler ended
+worker ended
+processes gracefully stopped
+```
+
+So, if you:
+
+1. Ensure Your Application Receives Signals, AKA Don’t use a Process Manager
+2. Gracefully Shut Down your Applications by Listening for Signals
+3. Log Everything
+
+You should have no problem creating robust node applications that are deployed via Docker, and are a pleasure to monitor and debug.

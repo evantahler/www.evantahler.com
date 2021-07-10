@@ -1,0 +1,19 @@
+---
+title: Running node.JS ON a Phidget Board
+description: >-
+  My last post was about creating a generic npm package to talk to a phidget
+  board. This post is about compiling nodeJS to run -on- a phidget…
+date: "2016-04-22T19:10:28.147Z"
+tags: []
+# slug: /@evantahler/running-nodejs-on-phidgets-ec623ee96dc7
+---
+
+![](/images/medium-export/1__QYAVA14BeJgLpD7ajTlCWQ.png)
+
+My last post was about creating a generic npm package to talk to a phidget board. This post is about compiling nodeJS to run -on- a phidget board.
+
+There is a special class of Phidget boards which are actually small ARM microcomputers. Rather than the "normal" method of connecting to phidgets via USB, these boards embrace the network and offer local storage, network I/O and USB ports. They run a slimmed down version of Debian called EmDebian.
+
+I’m currently obsessed with getting Node to run on this little computer. Having a first-class web programing stack on an embedded device with sensors is my dream prototyping environment. There are a lot of hardware limitations to doing so (the least of which is only having 50MB of ram), but I am getting close! I’ve entered the dark world of cross-compiling, and I would love any help you might be able to offer.
+
+_Originally published at 14 Jan 2012_

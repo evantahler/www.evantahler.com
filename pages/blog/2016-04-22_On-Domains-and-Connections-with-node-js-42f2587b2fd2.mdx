@@ -1,0 +1,28 @@
+---
+title: On Domains and Connections with node.js
+description: Solved!
+date: "2016-04-22T22:20:15.413Z"
+tags: []
+# slug: /@evantahler/on-domains-and-connections-with-node-js-42f2587b2fd2
+---
+
+![](/images/medium-export/1__7MU7Ftjk6tpnGoDdNGLkfw.jpeg)
+
+### Solved!
+
+The reason for this question was to ensure that in actionHero exceptions thrown after a call to the api.cache methods would still be caught by the domain they should have been in. [Here is the commit](https://github.com/evantahler/actionHero/commit/c5ebfc0e819cc0ed18e3ebb86c09f32b35406d73) which force-binds callbacks from the redis client back to the domain they should have been in. This is needed due to the fact that connection-pooled clients (which were created before the domain) will always revert back to their original scope.
+
+### The Question:
+
+I’ve been having trouble lately with domains in node.js, in that I have found a few occasions where what is ‘in scope’ confuses me. Here’s a collection of tests to illustrate my I set up the test to have a domain which I will run each test in, and I expect all of the tests to throw an error and to be caught by the domain’s on(‘error’) event. I chose to use a redis client here (because it’s common), but I do not think that this is a problem with the awesome redis package, and I’ve observed similar behavior with the mysql / seq All of the tests work except #4, which throws an out-of-domain exception and causes the script to crash
+
+- Test #0 is a simple throw in the scope of running domian. Everything works great.
+- Test #1 is a very convoluted throw in the scope of the domain involving timeouts, process.nextTick, and event emitters (I was trying to break things). Node preforms like a boss, and the eventual throw is caught.
+- Test #2 defines the emitter outside of the domain, but invokes the event from within it. Still the error is caught.
+- Test #3 creates the redis client within the scope of the domain. The error is caught and all is well
+- Test #4 creates the redis client OUTSIDE of the domain’s scope, but within a containing function. This error is caught by the domain
+- Test #5 fails, and the redis client here is created before the tests begin to run.
+
+In all of these cases, I would have hoped for the domain to catch the exceptions. I also would have also expected tests #4 and #5 to behave the same way regardless of whether or n Can anyone help me to explain why test 5 fails? domain can have their exceptions caught by it. [Cross-Posted on GitHub](https://gist.github.com/4274698)
+
+_Originally published at 13 Dec 2012_

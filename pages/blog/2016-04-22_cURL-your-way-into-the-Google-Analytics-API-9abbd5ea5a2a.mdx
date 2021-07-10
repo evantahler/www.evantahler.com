@@ -1,0 +1,60 @@
+---
+title: cURL your way into the Google Analytics API
+description: >-
+  Whenever I am about to start integrating with a new API, I like to walk though
+  the steps with cURL. For those of you who have been living…
+date: "2016-04-22T22:16:21.554Z"
+tags: []
+# slug: /@evantahler/curl-your-way-into-the-google-analytics-api-9abbd5ea5a2a
+---
+
+![](/images/medium-export/1__5h6hxUUaZjLmz5qpH6uPpA.png)
+
+Whenever I am about to start integrating with a new API, I like to walk though the steps with cURL. For those of you who have been living under a rock, [cURL is a great command-line tool](http://curl.haxx.se/docs/manpage.html) which can emulate almost every type of action you can make in a browser for testing (GET, POST, PUT, Cookies, Headers, etc). It makes a great prototyping tool for APIs.
+
+I was adding Google Analytics support to [nodeChecker](https://github.com/evantahler/nodeChecker) and I was having a hard time understanding their authorization APIs. It appeared that there were 2 options, both oAuth2 and a more programatic approach with an API key. I never got the API key method to work unfortunately, but I was able to access my data without needing to configure/register an application with Google either. I was sad that I couldn’t find any other blogs/guides talking about cURL and the Google Analytics API…
+
+Without further delay, here is my **guide to cURL-ing your way into the Google Analytics API**.
+
+### 1) Authenticate
+
+curl [https://www.google.com/accounts/ClientLogin](https://www.google.com/accounts/ClientLogin) --data-urlencode Email=<EMAIL ADDRESS> --data-urlencode Passwd=<PASSWORD> -d service=analytics
+
+— data-urlencode takes your variables and endodes them as if they were part of a form POSTED to the url. The existance of that flag also turns your request into a POST request.
+
+This will return one response with 3 keys:
+
+SID=AAAAAA \\r\\n LSID=BBBBBB \\r\\n Auth=CCCCCC
+
+The "Auth" key is the one we need. Think of this like your session cookie for Google Analytics
+
+### 2) Determine your "account id"
+
+Subsequent requests to Google Analytics will require you to know your account id for your tracking profile. It is not what you think it is (the UTM-\*) number. To retrive a list of all of your accounts, you can do this:
+
+curl -H "Authorization: GoogleLogin auth=<AUTH KEY>" https://www.googleapis.com/analytics/v3/management/accounts/~all/webproperties"
+
+You will now have a list of your URLs and account keys. The -H flag is us setting a custom authorization header with our "cookie" we retrieved above.
+
+These IDs won’t change, so you should only need to look this up the first time. Alternatively, you can use [Google’s API playground](http://code.google.com/apis/explorer/#_s=analytics&_v=v3&_m=management.webproperties.list&accountId=~all) to see all of your accounts. Yes, you have to say "~all" in the accountID field.
+
+### 3) Get Data
+
+Getting data can be thought of as an OLAP lookup. You provide a metric (like visits) and a dimension to slice it up by (per day). You can ask for many metrics and dimensions at once, but I’m only going to show you how to do a single request.
+
+curl -H "Authorization: GoogleLogin auth=<AUTH KEY>" [https://www.googleapis.com/analytics/v3/data/ga/?ids=ga:<ACCOUNT](https://www.googleapis.com/analytics/v3/data/ga/?ids=ga:%3CACCOUNT) ID>&metrics=ga:visits&dimensions=ga:date&start-date=2011-01-01&end-date=2012-02-01"
+
+Now that you know the basics, you can use [the API doc](http://code.google.com/apis/analytics/docs/gdata/v3/reference.html) to understand the rest of the parameters.
+
+Enjoy!
+
+Some important Google Analytics caveats to always keep in mind:
+
+- There is a collection delay. Google promises less than a "24 hour" lag between data collection and display on the site (and I’m assuming this applies to the API as well), but I have seen it as bad at 3 days if your site is particular popular
+- Sessions Expire. You will need to re-authenticate every 24 hours. Or you can be "safe" like I am, and re-authenticate with every request. Non-blocking programming FTW!
+
+Well I feel silly now… After posting this, I finally found Google’s own documentation on the topic here: [http://code.google.com/apis/gdata/articles/using_cURL.html](http://code.google.com/apis/gdata/articles/using_cURL.html)
+
+If only there was some sort of way to "search" on the "internet" for relevant information…
+
+_Originally published at 04 Apr 2012_

@@ -15,7 +15,7 @@ export namespace Blog {
     return { slug: realSlug, meta: data, markdown };
   }
 
-  export async function getAll(offset = 0, limit = 10) {
+  export async function getAll(offset = 0, limit = Infinity) {
     const files = (glob.sync(path.join(blogDirectory, "**/*.mdx")) as string[])
       .map((p) => p.replace(`${blogDirectory}/`, ""))
       .map((p) => p.replace(/\.mdx/, ""));

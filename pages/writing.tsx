@@ -42,7 +42,7 @@ function WritingPage() {
       <h1>Writing</h1>
       <hr />
 
-      <JumboImage src="/static/images/writing.jpg" />
+      <JumboImage src="/images/writing.jpg" />
 
       <p>
         I blog at Medium under the name{" "}

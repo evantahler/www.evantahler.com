@@ -1,0 +1,150 @@
+---
+title: "nodeSpider updated: Now based on ActionHero"
+description: >-
+  A quick update about the nodeSpider project (my first public node.js
+  project!): It is now based on ActionHero.
+date: "2016-04-22T22:14:44.181Z"
+tags: []
+# slug: /@evantahler/nodespider-updated-now-based-on-actionhero-967d02041ec7
+---
+
+![](/images/medium-export/1__n__p2AQEh65jifa73Si__btQ.jpeg)
+
+A quick update about the nodeSpider project (my first public node.js project!): It is now based on [ActionHero](http://actionherojs.com).
+
+I [announced the nodeSpider](http://blog.evantahler.com/node-spider-writing-a-real-time-messaging-relay-in-nodejs) project here, and it was what first "sold" me on node.js as a framework. Without going into all of the details of the project, I can simply say that what used to be a very hard sync problem in C++ is now easy to do in node. Since I completed [version 1 of the project](https://github.com/evantahler/nodeSpider/tree/04c1b1fff932bd5bcff8dc78e0d0fa9d32f259fb), I have gone on to create actionHero which used many of the ideas from nodeSpider. Now the project has come full-circle and now implements actionHero directly.
+
+This is a significant update, as the syntax of the outputs has been updated to match actionHero, and hopefully this makes the responses more intelligible :D this project will now benefit from the normal bug-fix pipeline of actionHero.
+
+Here’s a new conversation between 2 peers (and the server log it generated) as an example of the updated syntax:
+
+### Client 1
+
+\> telnet localhost 5555
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^\]'.
+{"welcome":"Welcome to the Node Spider communication server.","room":"defaultRoom","context":"api","messageCount":0}
+say hello from client 1
+{"context":"response","status":"OK","messageCount":1}
+{"message":"hi! from client 2","from":"ccc158b6b5ab19cff3eca71a876f83fc","context":"user","messageCount":2}
+roomView
+{"context":"response","status":"OK","room":"defaultRoom","roomStatus":{"members":\[{"id":"18c3ab44cb093ba3a400aab48fafcdbe"},{"id":"ccc158b6b5ab19cff3eca71a876f83fc"}\],"membersCount":2},"messageCount":3}
+roomView
+{"context":"response","status":"OK","room":"defaultRoom","roomStatus":{"members":\[{"id":"18c3ab44cb093ba3a400aab48fafcdbe"}\],"membersCount":1},"messageCount":4}
+roomChange secretRoom
+{"context":"response","status":"OK","room":"secretRoom","messageCount":5}
+{"message":"still talking in secret room","from":"ccc158b6b5ab19cff3eca71a876f83fc","context":"user","messageCount":6}
+{"context":"api","status":"keep-alive","serverTime":"2012-02-13T01:18:07.185Z","messageCount":7}
+quit
+{"status":"Bye!","messageCount":8}
+Connection closed by foreign host.
+
+### Client 2
+
+\> telnet localhost 5555
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^\]'.
+{"welcome":"Welcome to the Node Spider communication server.","room":"defaultRoom","context":"api","messageCount":0}
+{"message":"hello from client 1","from":"18c3ab44cb093ba3a400aab48fafcdbe","context":"user","messageCount":1}
+hi! from client 2
+{"context":"response","messageCount":2}
+roomChange secretRoom
+{"context":"response","status":"OK","room":"secretRoom","messageCount":3}
+talking in secret room
+{"context":"response","messageCount":4}
+still talking in secret room
+{"context":"response","messageCount":5}
+{"context":"api","status":"keep-alive","serverTime":"2012-02-13T01:18:07.185Z","messageCount":6}
+quit
+{"status":"Bye!","messageCount":7}
+Connection closed by foreign host.
+
+### Server Log:
+
+_npm start_
+
+\> spider@2.0.0 start /Users/evantahler/PROJECTS/nodeSpider
+\> node ./spider.js
+
+2012-02-12 17:17:07 | no ./tasks.js file in project, loading defaults tasks from /Users/evantahler/PROJECTS/nodeSpider/node_modules/actionHero/tasks.js
+2012-02-12 17:17:07 | periodic (internal cron) interval set to process evey 60000ms
+2012-02-12 17:17:07 | data cache from backup file.
+2012-02-12 17:17:07 | \*\*\* Server Started @ 2012-02-12 17:17:07 @ web port 8080 &amp; socket port 5555 \*\*\*
+2012-02-12 17:17:07 | Boot Sucessful!
+2012-02-12 17:17:08 | socket connection 127.0.0.1 | connected
+2012-02-12 17:17:09 | socket connection 127.0.0.1 | connected
+2012-02-12 17:17:13 | > socket request from 127.0.0.1 | say hello from client 1
+2012-02-12 17:17:19 | > socket request from 127.0.0.1 | hi! from client 2
+2012-02-12 17:17:19 | action @ 127.0.0.1 | params: {"action":"hi!"}
+2012-02-12 17:17:24 | > socket request from 127.0.0.1 | roomView
+2012-02-12 17:17:32 | > socket request from 127.0.0.1 | roomChange secretRoom
+2012-02-12 17:17:35 | > socket request from 127.0.0.1 | roomView
+2012-02-12 17:17:44 | > socket request from 127.0.0.1 | talking in secret room
+2012-02-12 17:17:44 | action @ 127.0.0.1 | params: {"action":"talking"}
+2012-02-12 17:17:50 | > socket request from 127.0.0.1 | roomChange secretRoom
+2012-02-12 17:17:56 | > socket request from 127.0.0.1 | still talking in secret room
+2012-02-12 17:17:56 | action @ 127.0.0.1 | params: {"action":"still"}
+2012-02-12 17:18:07 | \* periodic cron tasks starting now \*
+2012-02-12 17:18:07 | starging task: Clean cache object
+2012-02-12 17:18:07 | starging task: Clean Log Files
+2012-02-12 17:18:07 | starging task: caclculateStats
+2012-02-12 17:18:07 | starging task: saveCacheToDisk
+2012-02-12 17:18:07 | starging task: pingSocketClients
+2012-02-12 17:18:07 | completed task: Clean cache object
+2012-02-12 17:18:07 | completed task: Clean Log Files
+2012-02-12 17:18:07 | completed task: saveCacheToDisk
+2012-02-12 17:18:07 | >> pingSocketClients | sent keepAlive to 2 socket clients
+2012-02-12 17:18:07 | completed task: pingSocketClients
+2012-02-12 17:18:07 | completed task: caclculateStats
+2012-02-12 17:18:07 | \* periodic cron tasks comple. see you again in 60000ms \*
+2012-02-12 17:18:11 | > socket request from 127.0.0.1 | requesting disconnect
+2012-02-12 17:18:11 | > socket connection 127.0.0.1 disconnected
+2012-02-12 17:18:12 | > socket request from 127.0.0.1 | requesting disconnect
+2012-02-12 17:18:12 | > socket connection 127.0.0.1 disconnected
+
+To implement nodeSpider from actionHero, the only significant pice of code replacing the buil-in api.processAction() method with one that would assume an "unknown" action was a "say" command and should do that instead of throwing an error. Conveniently, there is already a method to update/add api methods as part of the actionHero initializer.
+
+Here’s how I did it:
+
+var actionHero = require("actionHero").actionHero;
+
+var params = {};
+params.initFunction = function(api, next){
+
+// update process action to make all sent strings a "say" by default
+api.processAction = function(api, connection, next){
+if(api.configData.logRequests){api.log("action @ " + connection.remoteIP + " | params: " + JSON.stringify(connection.params));}
+
+    if (connection.error === false){
+      connection.action = connection.params\["action"\];
+      if(api.actions\[connection.action\] != undefined){
+        api.utils.requiredParamChecker(api, connection, api.actions\[connection.action\].inputs.required);
+        if(connection.error == false){
+          process.nextTick(function() { api.actions\[connection.action\].run(api, connection, next); });
+        }else{
+          process.nextTick(function() { next(connection, true);  });
+        }
+      }else{
+        if(connection.action == "" || connection.action == null){connection.action = "say";}
+        api.socketServer.socketRoomBroadcast(api, connection, connection.lastLine);
+        process.nextTick(function() { next(connection, true);  });
+      }
+    }else{
+      process.nextTick(function() { next(connection, true); });
+    }
+
+}
+
+next();
+}
+
+actionHero.start(params, function(api){
+api.webServer.webApp.close(); // turn off the webserver
+api.log("Boot Sucessful!");
+});
+
+[https://github.com/evantahler/nodeSpider](https://github.com/evantahler/nodeSpider)
+
+_Originally published at 13 Feb 2012_
