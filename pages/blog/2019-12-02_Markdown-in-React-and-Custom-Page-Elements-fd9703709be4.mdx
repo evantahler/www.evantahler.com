@@ -4,7 +4,8 @@ description: >-
   I recently moved the Actionhero tutorials from the Actionhero Docs site
   docs.actionherojs.com to the main Actionhero website…
 date: "2019-12-02T00:54:12.808Z"
-tags: []
+tags: [react, actionhero, javascript]
+image: /images/medium-export/1__iW7bsn__oLc__LD9HWaD__xbw.jpeg
 # slug: /@evantahler/markdown-in-react-and-custom-page-elements-fd9703709be4
 ---
 
@@ -34,21 +35,27 @@ A few tips:
 - We use Next.js. The way that Next.js handles hydration of pages from the server to the client wants to pass DATA and not HTML. This means that if were to render the markdown content on the server when doing a hot-reload of the page (i.e. navigation form another page to this page), the markdown HTML would not properly render. That’s why we parse the markdown at the `componentDidMount` stage of the lifecycle. This may have adverse effects on the SEO of those pages.
 - You can load the markdown file into your app as a Prop derived via `getInitialProps`! This means that the markdown content will be passed down from the server on initial page load.
 
+```js
 export default class ToutorialPage extends Component<Props, State> {
-static async getInitialProps(ctx) {
-const name = ctx.query.name;
-const markdown = await require(\`./../../tutorials/${name}.md\`);
-return {
-markdown: markdown.default,
-name
-};
+  static async getInitialProps(ctx) {
+    const name = ctx.query.name;
+    const markdown = await require(`./../../tutorials/${name}.md`);
+    return {
+      markdown: markdown.default,
+      name,
+    };
+  }
+  render() {
+    return (
+      <ReactMarkdown
+        source={this.props.markdown}
+        escapeHtml={false}
+        renderers={{}}
+      />
+    );
+  }
 }
-
-render () {
-return (
-
-<ReactMarkdown source={this.props.markdown} escapeHtml={false} renderers={{}} />
-) } }
+```
 
 ### Hooking into Rendering to modify State
 
@@ -56,31 +63,31 @@ In the example above you can see that **_react-markdown_** lets us provide speci
 
 Adding code was easy, as we already had a component for rendering code based on [react-syntax-highlighter](https://github.com/conorhastings/react-syntax-highlighter).
 
+```js
 import { Component } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/cjs/styles/hljs";
-
 interface Props {
-language?: string;
-showLineNumbers?: boolean;
-value?: string;
+  language?: string;
+  showLineNumbers?: boolean;
+  value?: string;
 }
-
 export default class extends Component<Props> {
-render() {
-const language = this.props.language || "typescript";
-const showLineNumbers = this.props.showLineNumbers || false;
-
-return (
-
-<SyntaxHighlighter
-  language={language}
-  style={docco}
-  showLineNumbers={showLineNumbers}
->
-  {this.props.value ? this.props.value : this.props.children}
-</SyntaxHighlighter>
-); } }
+  render() {
+    const language = this.props.language || "typescript";
+    const showLineNumbers = this.props.showLineNumbers || false;
+    return (
+      <SyntaxHighlighter
+        language={language}
+        style={docco}
+        showLineNumbers={showLineNumbers}
+      >
+        {this.props.value ? this.props.value : this.props.children}
+      </SyntaxHighlighter>
+    );
+  }
+}
+```
 
 We just pass that component into our example above:
 
@@ -110,35 +117,30 @@ return (
 
 Adding navigation was a bit tricker. We accomplished this by creating a custom renderer for Headers that also built up a list of all the section headers into the page’s `state` with this new `parseHeading` method:
 
-parseHeading({ children }) {
-const { sectionHeadings } = this.state;
-
-return (
-
-<div>
-{children.map(child => {
-const stringValue = child.props.value;
-if (sectionHeadings.indexOf(stringValue) < 0) {
-sectionHeadings.push(stringValue); // <-- Build our list of headings
-this.setState({ sectionHeadings });
+```js
+import Code from "./../../components/code";
+export default class ToutorialPage extends Component<Props, State> {
+  static async getInitialProps(ctx) {
+    const name = ctx.query.name;
+    const markdown = await require(`./../../tutorials/${name}.md`);
+    return {
+      markdown: markdown.default,
+      name,
+    };
+  }
+  render() {
+    return (
+      <ReactMarkdown
+        source={this.props.markdown}
+        escapeHtml={false}
+        renderers={{
+          code: Code, // <-- HERE
+        }}
+      />
+    );
+  }
 }
-
-const style = Theme.typeography.h2;
-
-return (
-
-<div>
-<br />
-<h2 id={stringValue} style={style}>
-<span style={{ fontWeight: 300, fontSize: 36 }}>{child}</span>
-</h2>
-<RedLine />
-</div>
-);
-})}
-</div>
-);
-}
+```
 
 `this.state.sectionHeadings` is built in our render as we parse the headers. We then have this available to the rest of the page to draw our side navigation!
 
