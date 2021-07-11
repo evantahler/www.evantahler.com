@@ -156,7 +156,7 @@ export default function BlogPage({
 }
 
 export async function getStaticProps({ params }) {
-  const { slug, meta, markdown } = await Blog.geBySlug(params.slug);
+  const { slug, meta, markdown } = await Blog.getBySlug(params.slug);
 
   return {
     props: { slug, meta, markdown },
@@ -164,7 +164,8 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const slugs = await Blog.getAll();
+  const posts = await Blog.getAll();
+  const slugs = posts.map((p) => p.slug);
 
   return {
     paths: slugs.map((slug) => {

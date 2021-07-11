@@ -7,6 +7,7 @@ export { getStaticProps } from "../index";
 export async function getStaticPaths() {
   const tags: string[] = [];
   const posts = await Blog.getAll();
+
   for (const post of posts) {
     for (const tag of post.meta.tags) {
       if (!tags.includes(tag)) tags.push(tag);

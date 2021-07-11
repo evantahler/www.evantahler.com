@@ -6,11 +6,14 @@ import Link from "next/link";
 
 interface PostData {
   slug: string;
-  title: string;
-  description?: string;
-  date: string;
-  tags: string[];
-  image: string;
+  markdown: string;
+  meta: {
+    title: string;
+    description?: string;
+    date: string;
+    tags: string[];
+    image: string;
+  };
 }
 
 export default function BlogIndex({ pageProps }) {
@@ -29,7 +32,9 @@ export default function BlogIndex({ pageProps }) {
 
       {postData
         .sort((a, b) => {
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
+          return (
+            new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime()
+          );
         })
         .map((post, idx) => {
           return (
@@ -38,14 +43,14 @@ export default function BlogIndex({ pageProps }) {
                 {/* <Card.Img variant="top" src={post.image} /> */}
                 <Card.Body>
                   <Row>
-                    {post.image ? (
+                    {post.meta.image ? (
                       <Col md={3}>
                         <Link href={`/blog/${post.slug}`}>
                           <a>
                             <Image
                               style={{ maxWidth: "100%" }}
                               rounded
-                              src={post.image}
+                              src={post.meta.image}
                             />
                           </a>
                         </Link>
@@ -55,15 +60,15 @@ export default function BlogIndex({ pageProps }) {
                     <Col>
                       <h4>
                         <Link href={`/blog/post/${post.slug}`}>
-                          <a style={{ color: "black" }}>{post.title}</a>
+                          <a style={{ color: "black" }}>{post.meta.title}</a>
                         </Link>
                       </h4>
 
                       <p>
-                        {post.tags && post.tags.length > 0 ? (
+                        {post.meta.tags && post.meta.tags.length > 0 ? (
                           <>
                             <small>
-                              {post.tags.sort().map((tag, idx) => {
+                              {post.meta.tags.sort().map((tag, idx) => {
                                 return (
                                   <Fragment key={`tag-${idx}`}>
                                     <Link href={`/blog/tag/${tag}`}>
@@ -83,10 +88,12 @@ export default function BlogIndex({ pageProps }) {
                         )}
                       </p>
 
-                      {post.description ? <p>{post.description}</p> : null}
+                      {post.meta.description ? (
+                        <p>{post.meta.description}</p>
+                      ) : null}
 
                       <em>
-                        <small>{new Date(post.date).toDateString()}</small>
+                        <small>{new Date(post.meta.date).toDateString()}</small>
                       </em>
                     </Col>
                   </Row>
@@ -101,20 +108,22 @@ export default function BlogIndex({ pageProps }) {
 }
 
 export async function getStaticProps({ params }) {
+  const page = parseInt(params?.page) || 1;
   const postData = [];
-  const postSlugs = await Blog.getAll();
-  for (const slug of postSlugs) {
-    const { meta } = await Blog.geBySlug(slug);
 
+  const posts = await Blog.getAll();
+  for (const post of posts) {
     let match = false;
     if (params?.tag) {
-      if (meta.tags.includes(params.tag)) match = true;
+      if (post.meta.tags.includes(params.tag)) match = true;
     } else {
       match = true;
     }
 
-    if (match) postData.push({ slug, ...meta });
+    if (match) postData.push(post);
   }
 
-  return { props: { postData } };
+  return {
+    props: { postData: postData.reverse().slice(page - 1, Blog.perPage) },
+  };
 }
