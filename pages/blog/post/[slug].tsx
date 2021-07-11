@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Row, Col, Badge, Card } from "react-bootstrap";
+import { Row, Col, Badge, Card, Button } from "react-bootstrap";
 import Link from "next/link";
 import SEO from "../../../components/seo";
 import ReactMarkdown from "react-markdown";
@@ -75,7 +75,7 @@ export default function BlogPage({
           <p>
             <em>
               <small>
-                Posted @ {new Date(pageProps.meta.date).toLocaleDateString()}
+                Posted {new Date(pageProps.meta.date).toDateString()}
               </small>
             </em>
 
@@ -104,7 +104,11 @@ export default function BlogPage({
           </p>
 
           <hr />
+        </Col>
+      </Row>
 
+      <Row>
+        <Col md={9}>
           <div id="markdown">
             <ReactMarkdown
               // @ts-ignore
@@ -113,7 +117,33 @@ export default function BlogPage({
               {pageProps.markdown}
             </ReactMarkdown>
           </div>
+        </Col>
 
+        <Col>
+          <Card>
+            <Card.Img variant="top" src="/images/misc/wave.png" />
+            <Card.Body>
+              <Card.Title>
+                Hi, I'm{" "}
+                <Link href="/">
+                  <a>Evan</a>
+                </Link>
+              </Card.Title>
+              <Card.Text>
+                I write about Technology, Software, and Startups. I use my
+                Product Management, Software Engineering, and Leadership skills
+                to build teams that create world-class digital products.
+              </Card.Text>
+              <Button variant="outline-primary" href="/contact">
+                Get in touch
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
           <hr />
 
           <Link href="/blog">

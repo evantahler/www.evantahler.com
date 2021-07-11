@@ -5,11 +5,14 @@ description: >-
   equivalent to Unicorn in Node?". Unicorn is a great…
 date: "2012-02-01"
 tags: ["node.js", "ruby", "devops"]
+image: /images/misc/unicorndies.jpg
 # slug: >-
 #  /@evantahler/unicorns-in-node-or-when-does-the-cluster-module-mater-cb6be89fcb93
 ---
 
 At [work](http://www.taskrabbit.com) the other day, an engineer most familiar with Ruby asked "What is the equivalent to [Unicorn](http://unicorn.bogomips.org/) in Node?". Unicorn is a great single-threaded server for ruby apps (Sinatra, Rails, etc) which implements a parent-child cluster of workers to share requests. However, as node can handle more than one request in parallel, the metaphor gets a little strange.
+
+![](/images/misc/unicorndies.jpg)
 
 This question becomes important when deploying a production app, it’s most cost-effective to use 100% of your resources. That means in both Node and Unicorn, you want a "child" for each CPU you have, assuming you don’t run our RAM. However, you might want even more if your application spends significant time waiting for another server (perhaps a DB). For example, say you have a website which spends 1/2 of its time doing "CPU-bound tasks" (like rendering HTML) and the other 1/2 of its time fetching information from the database. If you have a 4-core server, you would want ~8 workers to take maximum advantage of the processors you have (1). In Ruby/Rails, this would mean that at most you could handle 8 simultaneous requests, but what about node?
 
