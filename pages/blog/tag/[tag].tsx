@@ -5,13 +5,10 @@ export default BlogPage;
 export { getStaticProps } from "../index";
 
 export async function getStaticPaths() {
-  const tags: string[] = [];
-  const posts = await Blog.getAll();
-  for (const post of posts) {
-    for (const tag of post.meta.tags) {
-      if (!tags.includes(tag)) tags.push(tag);
-    }
-  }
+  const { posts: allPosts } = await Blog.getAll({ count: 9999 });
+  const tags = [
+    ...new Set(allPosts.map((post) => [...post.meta.tags]).flat(1)),
+  ];
 
   return {
     paths: tags.map((tag) => {

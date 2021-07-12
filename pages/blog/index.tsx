@@ -3,21 +3,19 @@ import SEO from "../../components/seo";
 import { Blog } from "../../lib/blog";
 import { Row, Col, Card, Badge, Image } from "react-bootstrap";
 import Link from "next/link";
-
-interface PostData {
-  slug: string;
-  markdown: string;
-  meta: {
-    title: string;
-    description?: string;
-    date: string;
-    tags: string[];
-    image: string;
-  };
-}
+import { useRouter } from "next/router";
+import { PaginationHelper } from "../../components/paginationHelper";
 
 export default function BlogIndex({ pageProps }) {
-  const postData: PostData[] = pageProps.postData;
+  const {
+    posts,
+    total,
+    page,
+    count,
+  }: { posts: Blog.PostData[]; total: number; page: number; count: number } =
+    pageProps;
+  const router = useRouter();
+  const tag = router.query?.tag?.toString();
 
   return (
     <>
@@ -30,7 +28,7 @@ export default function BlogIndex({ pageProps }) {
       </h1>
       <hr />
 
-      {postData
+      {posts
         .sort((a, b) => {
           return (
             new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime()
@@ -103,27 +101,32 @@ export default function BlogIndex({ pageProps }) {
             </Fragment>
           );
         })}
+
+      <br />
+
+      <PaginationHelper
+        baseUrl={tag && tag !== "" ? `/blog/tag/${tag}` : `/blog/page`}
+        total={total}
+        limit={count}
+        offset={count * (page - 1)}
+      />
     </>
   );
 }
 
 export async function getStaticProps({ params }) {
-  const page = parseInt(params?.page) || 1;
-  const postData = [];
-
-  const posts = await Blog.getAll();
-  for (const post of posts) {
-    let match = false;
-    if (params?.tag) {
-      if (post.meta.tags.includes(params.tag)) match = true;
-    } else {
-      match = true;
-    }
-
-    if (match) postData.push(post);
-  }
+  const { posts, total, page, tag, count } = await Blog.getAll({
+    page: params?.page,
+    tag: params?.tag,
+  });
 
   return {
-    props: { postData: postData.reverse().slice(page - 1, Blog.perPage) },
+    props: {
+      total,
+      page,
+      tag,
+      count,
+      posts,
+    },
   };
 }

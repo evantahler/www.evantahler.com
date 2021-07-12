@@ -56,7 +56,7 @@ export default function BlogPage({
 }: {
   pageProps: {
     slug: string;
-    meta: { title: string; date: string; tags: string[]; image: string };
+    meta: Blog.PostMeta;
     markdown: string;
   };
 }) {
@@ -164,7 +164,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const posts = await Blog.getAll();
+  const { posts } = await Blog.getAll({ count: 9999 });
   const slugs = posts.map((p) => p.slug);
 
   return {
