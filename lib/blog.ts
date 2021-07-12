@@ -72,8 +72,6 @@ export namespace Blog {
     const start = (page - 1) * count;
     const end = page * count;
 
-    console.log({ page, count, start, end });
-
     return {
       posts: posts.slice(start, end),
       total: posts.length,
