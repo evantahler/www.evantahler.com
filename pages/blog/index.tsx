@@ -6,6 +6,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { PaginationHelper } from "../../components/paginationHelper";
 
+function capitalize(tag: string) {
+  const words = tag.split(" ");
+  for (let i = 0; i < words.length; i++) {
+    words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+  }
+  return words.join(" ");
+}
+
 export default function BlogIndex({ pageProps }) {
   const {
     posts,
@@ -19,12 +27,15 @@ export default function BlogIndex({ pageProps }) {
 
   return (
     <>
-      <SEO title={`Evan's Blog${tag ? `: ${tag}` : ""}`} path="/blog" />
+      <SEO
+        title={`Evan's Blog${tag ? `: ${capitalize(tag)}` : ""}`}
+        path="/blog"
+      />
 
       <h1>
         <Link href="/blog">
           <a style={{ textDecoration: "none", color: "black" }}>
-            Evan's Blog{tag ? `: ${tag}` : ""}
+            Evan's Blog{tag ? `: ${capitalize(tag)}` : ""}
           </a>
         </Link>
       </h1>

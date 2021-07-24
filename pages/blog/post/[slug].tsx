@@ -4,6 +4,7 @@ import Link from "next/link";
 import SEO from "../../../components/seo";
 import ReactMarkdown from "react-markdown";
 import { Blog } from "../../../lib/blog";
+import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
@@ -113,6 +114,7 @@ export default function BlogPage({
             <ReactMarkdown
               // @ts-ignore
               components={components}
+              rehypePlugins={[rehypeRaw]}
             >
               {pageProps.markdown}
             </ReactMarkdown>
