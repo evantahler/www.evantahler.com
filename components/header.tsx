@@ -23,7 +23,7 @@ function Sidebar() {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
           <HilightableNavLink href="/resume" text="&nbsp;Resume" />
-          <HilightableNavLink href="/writing" text="&nbsp;Writing" />
+          <HilightableNavLink href="/blog" text="&nbsp;Blog" />
           <HilightableNavLink href="/open-source" text="&nbsp;Open Source" />
           <HilightableNavLink href="/speaking" text="&nbsp;Speaking" />
           <HilightableNavLink href="/contact" text="&nbsp;Contact" />
