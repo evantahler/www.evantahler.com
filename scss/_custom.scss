@@ -1,4 +1,12 @@
-// -- HR --
 hr {
   border: 1px solid $blue;
+}
+
+blockquote {
+  padding-top: 15px;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 5px;
+  border-radius: 10px;
+  background-color: lightgray;
 }

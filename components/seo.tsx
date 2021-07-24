@@ -53,7 +53,7 @@ const SEO = ({
 
   let imageUrl;
   if (image) {
-    imageUrl = !image.startsWith("http") ? `${baseUrl}/images/${image}` : image;
+    imageUrl = !image.startsWith("http") ? `${baseUrl}${image}` : image;
   }
 
   return (

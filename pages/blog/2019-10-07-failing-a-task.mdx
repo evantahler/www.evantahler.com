@@ -1,17 +1,14 @@
 ---
-title: Failing a Task — The Illustrated Actionhero Community Q&A
-description: >-
-  Welcome to the second installment of The Illustrated Actionhero Community Q&A!
-  Every week in October I’ll be publishing a conversation…
+title: Failing a Task —  The Illustrated Actionhero Community Q&A
+description: Welcome to the second installment of The Illustrated Actionhero Community Q&A!
 date: "2019-10-07T15:28:44.426Z"
-tags: []
+tags: ["actionhero", "nodejs", "javascript", "typescript"]
+image: /images/medium-export/1__KMPhTzPQSR1js3sK__FZebw.png
 # slug: >-
 #  /@evantahler/failing-a-task-the-illustrated-actionhero-community-q-a-b46b63bf5cc0
 ---
 
 Welcome to the second installment of The Illustrated [Actionhero](https://www.actionherojs.com) Community Q&A! Every week in October I’ll be publishing a conversation from the [Actionhero Slack community](http://slack.actionherojs.com) that highlights both a feature of the Actionhero Node.JS framework and the robustness of the community’s responses… and adding some diagrams to help explain the concept.
-
-You can see last week’s article, Actionhero for Real-time Games, [here](https://blog.evantahler.com/actionhero-for-real-time-games-the-illustrated-actionhero-community-q-a-44c138e840e), or [Why Actionhero is the Node.js server for when your project grows up](https://blog.evantahler.com/why-choose-actionhero-9a4b5caf4e62).
 
 ### Failing a Task
 
@@ -23,11 +20,13 @@ Daniele asks:
 
 > Scenario: I have a hero task whose \`run()\` method contains a call to a function returning a promise. If the returned promise gets rejected, I need the task to fail and to be sent to the failed queue. On the docs I saw that throwing an error accomplishes this. My problem is: how to throw an error from a catch statement? I mean: I tried something like:
 
+```js
 asyncFun()
 .then(...)
 .catch(err => {
 throw new Error('operation failed')
 })
+```
 
 > but this is going to catch the exception. How can I properly make the task fail given a rejected promise? Thanks
 
@@ -43,6 +42,7 @@ Actionhero’s Task System is built on the [node-resque](https://github.com/task
 
 A task is defined like this
 
+```js
 // file: tasks/sayHello.js
 const {Task, api} = require('actionhero')
 
@@ -58,6 +58,7 @@ async run ({ params }) {
 api.log(\`Hello ${params.name}\`)
 }
 }
+```
 
 And invoked anywhere else in your codebase like this
 
@@ -76,34 +77,34 @@ The [ah-resque-ui](https://github.com/actionhero/ah-resque-ui) plugin does a goo
 The community suggested:
 
 > (I think that there are) 2 options:
+>
+> 1. don’t catch
+> 2. use async/await asyncFunc() (and again, don’t try/catch) if you want to modify the error returned in some way.
+>    In your catch block you can format a new error string and throw it again. Fore example, you might have a task that communicates with a third-party API, and you want to make the error message more clear:
 
-> 1\. don’t catch
-
-> 2\. use async/await asyncFunc() (and again, don’t try/catch) if you want to modify the error returned in some way.
-
-> In your catch block you can format a new error string and throw it again. Fore example, you might have a task that communicates with a third-party API, and you want to make the error message more clear:
-
+```js
 // file: tasks/sendEmail.js
-const {Task, api} = require('actionhero')
+const { Task, api } = require("actionhero");
 
 module.exports = class SayHello extends Task {
-constructor () {
-super()
-this.name = 'send-email'
-this.description = 'I send an email'
-this.frequency = 0 // not a periodic task
-}
+  constructor() {
+    super();
+    this.name = "send-email";
+    this.description = "I send an email";
+    this.frequency = 0; // not a periodic task
+  }
 
-async run ({ params }) {
-try {
-await api.email.send(params)
-} catch (error) {
-const betterError = new Error(\`could not send email: ${error.message}\`)
-betterError.stack = error.stack
-throw betterError
-}
-}
-}
+  async run({ params }) {
+    try {
+      await api.email.send(params);
+    } catch (error) {
+      const betterError = new Error(`could not send email: ${error.message}`);
+      betterError.stack = error.stack;
+      throw betterError;
+    }
+  }
+};
+```
 
 Elaborating more on option #2:
 
