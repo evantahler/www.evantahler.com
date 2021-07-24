@@ -19,13 +19,22 @@ export default function BlogIndex({ pageProps }) {
 
   return (
     <>
-      <SEO title="Evan's Blog" path="/blog" />
+      <SEO title={`Evan's Blog${tag ? `: ${tag}` : ""}`} path="/blog" />
 
       <h1>
         <Link href="/blog">
-          <a style={{ textDecoration: "none", color: "black" }}>Evan's Blog</a>
+          <a style={{ textDecoration: "none", color: "black" }}>
+            Evan's Blog{tag ? `: ${tag}` : ""}
+          </a>
         </Link>
       </h1>
+      {tag ? (
+        <p>
+          <Link href="/blog">
+            <a>See all posts</a>
+          </Link>
+        </p>
+      ) : null}
       <hr />
 
       {posts

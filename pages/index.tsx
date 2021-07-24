@@ -1,17 +1,20 @@
 import { Fragment } from "react";
 import { Row, Col, Badge, Button, Card } from "react-bootstrap";
+import { Blog } from "../lib/blog";
 import ContactCards from "../components/contactCards";
 import SEO from "../components/seo";
 import Image from "next/image";
+import Link from "next/link";
 
-import featuredPosts from "./../data/featuredPosts.json";
 import talks from "./../data/talks.json";
 
 function BoldWords({ text }) {
   return <span style={{ color: "var(--bs-primary)" }}>{text}</span>;
 }
 
-function IndexPage() {
+function IndexPage({ pageProps }) {
+  const { posts }: { posts: Blog.PostData[] } = pageProps;
+
   return (
     <>
       <SEO title="Evan Tahler" path="/" />
@@ -71,40 +74,44 @@ function IndexPage() {
 
           <br />
 
-          {featuredPosts.map((post) => {
+          {posts.map((post) => {
             return (
-              <Fragment key={post.title}>
+              <Fragment key={post.meta.title}>
                 <Card>
                   <Card.Img
                     style={{ maxHeight: 400 }}
                     variant="top"
-                    src={post.thumbnail}
+                    src={post.meta.image}
                   />
                   <Card.Body>
                     <Card.Title>
-                      <a target="_new" href={post.link}>
-                        {post.title}
-                      </a>
+                      <Link href={`/blog/post/${post.slug}`}>
+                        <a>{post.meta.title}</a>
+                      </Link>
                     </Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
-                      {post.date}
+                      {new Date(post.meta.date).toDateString()}
                     </Card.Subtitle>
                     <Card.Text>
-                      {post.description}
+                      {post.meta.description}
                       <br />
                       <br />
-                      <em>
-                        Categories:{" "}
-                        {post.categories.map((category) => (
-                          <Badge
-                            key={`${post.guid}-${category}`}
-                            variant="secondary"
-                          >
-                            {" "}
-                            {category}
-                          </Badge>
+                      <small>
+                        {post.meta.tags.map((tag) => (
+                          <>
+                            <Link href={`/blog/tag/${tag}`}>
+                              <a>
+                                <Badge
+                                  key={`${post.meta.title}|${tag}`}
+                                  variant="info"
+                                >
+                                  {tag}
+                                </Badge>
+                              </a>
+                            </Link>{" "}
+                          </>
                         ))}
-                      </em>
+                      </small>
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -160,3 +167,19 @@ function IndexPage() {
 }
 
 export default IndexPage;
+
+export async function getStaticProps() {
+  const { posts, total, page, tag, count } = await Blog.getAll({
+    featured: true,
+  });
+
+  return {
+    props: {
+      total,
+      page,
+      tag,
+      count,
+      posts,
+    },
+  };
+}

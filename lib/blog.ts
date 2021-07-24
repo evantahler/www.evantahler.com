@@ -12,6 +12,7 @@ export namespace Blog {
     date: string;
     tags: string[];
     image: string;
+    featured?: boolean;
   }
   export interface PostData {
     slug: string;
@@ -37,10 +38,12 @@ export namespace Blog {
     page,
     tag,
     count,
+    featured,
   }: {
     page?: number;
     tag?: string;
     count?: number;
+    featured?: boolean;
   }) {
     if (!count) count = perPage;
     if (!page) page = 1;
@@ -65,6 +68,7 @@ export namespace Blog {
       if (!post.meta.title) continue;
       if (!post.meta.date) continue;
       if (tag && !post.meta.tags.includes(tag)) continue;
+      if (featured && !post.meta.featured) continue;
 
       posts.push(post);
     }
