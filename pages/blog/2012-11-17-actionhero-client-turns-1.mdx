@@ -3,8 +3,9 @@ title: actionhero-client turns 1.0.0
 description: >-
   actionhero-client is a nodeJS package to allow a remote nodeJS app to connect
   to and consume an actionHero API.
-date: "2016-04-22T22:20:01.154Z"
-tags: []
+date: "2012-11-17"
+tags: [actionhero, node.js, javascript]
+image: /images/medium-export/1__NDp0nEkCsIJw8kXYedA2pw.png
 # slug: /@evantahler/actionhero-client-turns-1-0-0-5771e6b529f
 ---
 
@@ -23,9 +24,4 @@ The most intersting part of creating this client was dealing with the notion tha
 
 If I were to request slowAction and then fastAction, it’s likely I would receive the response to fastAction first. actionHero makes use of a request counter (messageCount) for each request so that clients can differentiate responses, and know which call they were related to. I adopted the "holding pen pattern" (I made this term up just now) which stores async callbacks until a relevant response has been returned from the API. This still allows folks to use the common method(data, callback) pattern, but in a very unlinked w Anyway… **npm install actionhero-client** and you are good to go!quests and limit the number of ‘active’ queries (coming in a future version), and to timeout requests which take to long.
 
-#### Anyway… [npm install actionhero-client](https://npmjs.org/package/actionhero_client) and you are good to go!
-
-[**actionhero-client**
-\_actionhero client in JS for other node servers to use This library makes it easy for one nodeJS process to talk to a…\_www.npmjs.com](https://www.npmjs.com/package/actionhero-client "https://www.npmjs.com/package/actionhero-client")[](https://www.npmjs.com/package/actionhero-client)
-
-_Originally published at 17 Nov 2012_
+Anyway… [npm install actionhero-client](https://npmjs.org/package/actionhero_client) and you are good to go!

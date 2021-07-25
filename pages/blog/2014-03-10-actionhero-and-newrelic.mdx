@@ -1,0 +1,64 @@
+---
+title: ActionHero and NewRelic
+description: >-
+  There is now a plugin for ActionHero + New Relic if you ar using actionhero
+  version 10 or later.
+date: "2014-03-10"
+tags: [actionhero, node.js, javascript]
+# slug: /@evantahler/actionhero-and-newrelic-13d6f391f546
+---
+
+_There is now a plugin for ActionHero + New Relic if you ar using actionhero version 10 or later._
+
+[**evantahler/ah-newrelic-plugin**](https://github.com/evantahler/ah-newrelic-plugin)
+
+As [ActionHero](http://www.actionherojs.com) matures, integrating with production monitoring tools becomes a required feature. I recently discussed integrating with [airbrake](http://blog.evantahler.com/blog/airbrake_and_actionhero.html), and now it’s time to talk [newrelic](http://newrelic.com).
+
+For those of you that don’t know, NewRelic is a great tool to monitor the guts of you application in production, including tracing request durations, errors, etc. We use it at [work](http://www.taskrabbit.com). [NewRelic’s JS package](http://newrelic.com/nodejs) was really easy to work with, and all you need is the following initializer:
+
+1. install the newrelic agent by adding `newrelic` to `package.json`
+2. copy over the newrelic config file to the root of your app with `cp node*modules/newrelic/newrelic.js ./newrelic.js`
+
+```js
+newrelic = require("newrelic");
+
+exports.newrelic = function (api, next) {
+  api.newrelic = {};
+
+  api.newrelic.middleware = function (connection, actionTemplate, next) {
+    if (connection.type === "web") {
+      // for now, the node newrelic agent only supports HTTP requests
+      newrelic.setTransactionName(actionTemplate.name);
+    }
+    next(connection, true);
+  };
+
+  api.newrelic.errorReporter = function (type, err, extraMessages, severity) {
+    newrelic.noticeError(err);
+  };
+
+  api.newrelic._start = function (api, next) {
+    // load the newrelic middleware into actionhero
+    api.actions.preProcessors.push(api.newrelic.middleware);
+    // load the newrelic error reporter into actionhero
+    api.exceptionHandlers.reporters.push(api.newrelic.errorReporter);
+    // optional: ignore certain actions
+    // newrelic.setIgnoreTransaction('actionName');
+    next();
+  };
+
+  api.newrelic._stop = function (api, next) {
+    next();
+  };
+
+  next();
+};
+```
+
+I was kicked into action by [this issue on the newrelic JS project](https://github.com/newrelic/node-newrelic/issues/121).
+
+In your newrelic.js config file, there are a number of options you can configure, such as moving the log location, etc.
+
+[Here is the complete list of options](https://docs.newrelic.com/docs/nodejs/customizing-your-nodejs-config-file).
+
+_Originally published at 10 Mar 2014_

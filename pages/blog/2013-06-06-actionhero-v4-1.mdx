@@ -3,8 +3,9 @@ title: ActionHero v4.1.0
 description: >-
   A quick post to say that a new version of actionHero is out tonight: v4.1.0
   This update contains some breaking changes to the Tasks and…
-date: "2016-04-22T22:20:52.079Z"
-tags: []
+date: "2013-06-06"
+tags: [actionhero, node.js, javascript]
+image: /images/medium-export/1__E2OG6YATcmZ__0IfziI3m2g.jpeg
 # slug: /@evantahler/actionhero-v4-1-0-b1dee633912d
 ---
 
@@ -51,35 +52,38 @@ When diving into the myriad of task types, It also became clear that analyzing s
 
 An example of the new api.stats.getAll method (showing off both local and global data):
 
+```raw
 stats: {
-global: {
-tasks:tasksRun: 1006,
-actions:processedActions: 1323,
-webServer:numberOfWebRequests: 814,
-fileServer:filesSent: 104,
-chatRooom:roomMembers:defaultRoom: 602,
-chatRooom:messagesSent: 1221,
-webSockets:numberOfRequests: 6,
-webSockets:numberOfActiveWebClients: 1,
-cache:cachedObjects: 10,
-cache:totalCachedObjects: 10,
-chatRooom:roomMembers:undefined: 6
-},
-local: {
-redis:numberOfPeers: 1,
-tasks:tasksRun: 1006,
-actions:processedActions: 1324,
-webServer:numberOfWebRequests: 815,
-fileServer:filesSent: 104,
-chatRooom:roomMembers:defaultRoom: 602,
-chatRooom:messagesSent: 1221,
-webSockets:numberOfRequests: 6,
-webSockets:numberOfActiveWebClients: 1,
-cache:cachedObjects: 10,
-cache:totalCachedObjects: 10,
-chatRooom:roomMembers:undefined: 6
+        global: {
+            tasks:tasksRun: 1006,
+            actions:processedActions: 1323,
+            webServer:numberOfWebRequests: 814,
+            fileServer:filesSent: 104,
+            chatRooom:roomMembers:defaultRoom: 602,
+            chatRooom:messagesSent: 1221,
+            webSockets:numberOfRequests: 6,
+            webSockets:numberOfActiveWebClients: 1,
+            cache:cachedObjects: 10,
+            cache:totalCachedObjects: 10,
+            chatRooom:roomMembers:undefined: 6
+        },
+        local: {
+            redis:numberOfPeers: 1,
+            tasks:tasksRun: 1006,
+            actions:processedActions: 1324,
+            webServer:numberOfWebRequests: 815,
+            fileServer:filesSent: 104,
+            chatRooom:roomMembers:defaultRoom: 602,
+            chatRooom:messagesSent: 1221,
+            webSockets:numberOfRequests: 6,
+            webSockets:numberOfActiveWebClients: 1,
+            cache:cachedObjects: 10,
+            cache:totalCachedObjects: 10,
+            chatRooom:roomMembers:undefined: 6
+        }
+    }
 }
-}
+```
 
 note that lots of new metrics have been added :D
 
