@@ -2,7 +2,8 @@
 title: ActionHero + Tessel2
 description: I just received my Tessel 2 in the mail.
 date: "2016-04-24T19:33:09.885Z"
-tags: []
+tags: [node.js, actionhero, javascript]
+image: /images/medium-export/1__j5aWtCqFUgXrKSRbG3YuAQ.jpeg
 # slug: /@evantahler/actionhero-tessel2-35ef36291d0b
 ---
 
@@ -18,25 +19,29 @@ After going though the tutorials and getting the [LED lights on the board to bli
 
 First Connect to your Tessel2 and set it up!
 
-\# Install the Tessel command package from NPM
-**npm install -g t2-cli**
+```bash
+# Install the Tessel command package from NPM
+npm install -g t2-cli
 
-\# Find and Rename your Tessel
-**t2 list
-t2 rename TesselBot**
+# Find and Rename your Tessel
+t2 list
+t2 rename TesselBot
 
-\# Connect the Tessel to your WiFi
-**t2 wifi -n <network-name> -p <password>**
+# Connect the Tessel to your WiFi
+t2 wifi -n <network-name> -p <password>
 
-\# Allow your computer to talk to the Tessel
-**t2 provision**
+# Allow your computer to talk to the Tessel
+t2 provision
+```
 
 Create a new ActionHero project just like you would for any use case
 
-**mkdir actionhero
+```bash
+mkdir actionhero
 cd actionhero
 npm install actionhero
-./node_modules/.bin/actionhero generate**
+./node_modules/.bin/actionhero generate
+```
 
 #### Working Directory
 
@@ -44,55 +49,58 @@ The first issue I encountered was around how the Tessel2 execution path. Actionh
 
 When the Tessel runs your code, it runs it from **/root** but your code resides in **/tmp/remote-script**. To solve this, we can create a simple wrapper script for your project. Create an **index.js** at the root of your project, and require ActionHero directly. Then, we can check if the **\_\_dirname** of this file is different than **process.cwd(),** and if it is, we can change it. From there, we can then boot the ActionHero server.
 
-var ActionheroPrototype = require(‘actionhero’).actionheroPrototype;
+```js
+var ActionheroPrototype = require("actionhero").actionheroPrototype;
 var actionhero = new ActionheroPrototype();
-
 process.env.PORT = 80;
-
-console.log(‘Starting up Tessel ActionHero Wrapper’);
-console.log(‘ local path: ‘ + \_\_dirname);
-console.log(‘ working path: ‘ + process.cwd());
-
-if(process.cwd() !== \_\_dirname){
-console.log(‘ changing working path to : ‘ + \_\_dirname);
-process.chdir(\_\_dirname);
+console.log("Starting up Tessel ActionHero Wrapper");
+console.log(" local path: " + __dirname);
+console.log(" working path: " + process.cwd());
+if (process.cwd() !== __dirname) {
+  console.log(" changing working path to : " + __dirname);
+  process.chdir(__dirname);
 }
-
-actionhero.start(function(err, api){
-if(err){
-throw(err);
-}else{
-api.log(‘~ boot shim complete ~’);
-}
+actionhero.start(function (err, api) {
+  if (err) {
+    throw err;
+  } else {
+    api.log("~ boot shim complete ~");
+  }
 });
+```
 
 When this runs, you can see the change in the output:
 
-**\> t2 run — full index.js
-**INFO Looking for your Tessel…
+```bash
+> t2 run — full index.js
+
+INFO Looking for your Tessel…
 INFO Connected to tesselBot.
 INFO Building project.
 INFO Writing project to RAM on tesselBot (19278.336 kB)…
 INFO Deployed.
 INFO Running index.js…
-**Starting up Tessel ActionHero Wrapper
-local path: /tmp/remote-script
-working path: /root
-changing working path to : /tmp/remote-script
-**2016–04–24T18:50:54.228Z — notice: \*\*\* starting actionhero \*\*\*
+Starting up Tessel ActionHero Wrapper
+ local path: /tmp/remote-script
+ working path: /root
+ changing working path to : /tmp/remote-script
+2016–04–24T18:50:54.228Z — notice: *** starting actionhero ***
 2016–04–24T18:50:59.036Z — warning: running with fakeredis
 2016–04–24T18:51:01.108Z — info: actionhero member 10.0.1.40 has joined the cluster
 2016–04–24T18:51:05.405Z — notice: pid: 1491
 2016–04–24T18:51:05.428Z — notice: server ID: 10.0.1.40
-2016–04–24T18:51:11.432Z — notice: Starting server: \`web\` @ 0.0.0.0:8080
+2016–04–24T18:51:11.432Z — notice: Starting server: `web` @ 0.0.0.0:8080
 2016–04–24T18:51:22.957Z — notice: environment: development
-2016–04–24T18:51:23.198Z — notice: \*\*\* Server Started \*\*\*
-**2016–04–24T18:51:23.203Z — info: ~ boot shim complete ~**
+2016–04–24T18:51:23.198Z — notice: *** Server Started ***
+2016–04–24T18:51:23.203Z — info: ~ boot shim complete ~
+```
 
 A nice thing about this boot file is that you actually set some tessel-specific overrides here, that won’t effect your local development when you run the normal **npm start**. For example, I want the web server, when running on the Tessel, to run on port 80 and set the **NODE_ENV**. To to that I added the like
 
+```js
 process.env.PORT = 80;
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = "production";
+```
 
 … which has the effect of overriding the default in the config, just like if I would have launched the server with that ENV flag.
 
@@ -104,11 +112,13 @@ I don’t need web-sockets for my project, so I disable the server… this makes
 
 #### Run it
 
-\# To try out your project while connected to the Tessel2
+```bash
+# To try out your project while connected to the Tessel2
 **t2 run --full index.js**
 
-\# To install your project to the Tessel2 to it runs at boot
+# To install your project to the Tessel2 to it runs at boot
 **t2 push --full index.js**
+```
 
 You can reach your Tessel in a browser via **<tessel_name>.local**
 

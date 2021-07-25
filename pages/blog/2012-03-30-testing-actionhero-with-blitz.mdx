@@ -3,8 +3,9 @@ title: Testing actionHero with blitz.io
 description: >-
   I recently had a chance to try out blitz.io (or click my affiliate link thing
   and get me some free tests), a new load-testing tool from…
-date: "2016-04-22T22:16:09.914Z"
-tags: []
+date: "30 Mar 2012"
+tags: [javascript, node.js, actionhero]
+image: /images/medium-export/0__QSBznimk9H52rcbb.jpeg
 # slug: /@evantahler/testing-actionhero-with-blitz-io-24d705eec3f4
 ---
 
@@ -34,10 +35,10 @@ Still looking good, actionHero!
 
 This time when I ran the test, I decided to tail the actionHero log to see what was going on. All the requests were truly unique, but they all did appear to be coming from the same IP address (although it did change between each "rush”):
 
+```raw
 2012-03-30 21:00:52 | action @ 10.72.245.143 | params: {"key":"key_23cc985520c55346d9de7a0e9e300d0f7f07a225","value":"val_23cc985520c55346d9de7a0e9e300d0f7f07a225","action":"cacheTest","limit":100,"offset":0}
 
 2012-03-30 21:00:52 | > web request from 10.72.245.143 | responded in : 4ms
+```
 
 \*Good Support: They have an authentication process similar to Google Analytics where you need to have a specific (and random) URL return a pre-determined value to prove you own the domain. They have a fixed path you need to use which would have required me making a new action to respond to. I didn’t want to take down the demo server, so I asked them if I could authenticate by using a /public/ or /file/ path. They hooked my up in under 2 hours!
-
-_Originally published at 30 Mar 2012_

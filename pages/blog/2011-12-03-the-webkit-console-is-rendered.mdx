@@ -3,8 +3,9 @@ title: A reminder that the webKit console is also rendered (sometimes)
 description: >-
   I love doing web development in Chrome and Safari, as they have excellent
   built-in develop tools. There is one catch that I need to keep…
-date: "2016-04-22T18:36:04.774Z"
-tags: []
+date: "2011-12-03"
+tags: [chrome, javascript]
+image: /images/medium-export/0__4Z9kHURSwJ720SdZ.jpeg
 # slug: >-
 #  /@evantahler/a-reminder-that-the-webkit-console-is-also-rendered-sometimes-6e74fa356cf3
 ---
@@ -15,33 +16,34 @@ This important note may seem a bit cryptic, but it can best be explained by taki
 
 Imagine you had the following simple page:
 
+```js
 var test_int = 0;
-var test_arr = \[\];
+var test_arr = [];
 var test_obj = {};
 var sleep = 2;
 
-function log_and_incrament(){
-if(test_int &lt; 3){
-test_int = test_int + 1;
-test_arr.push(test_int);
-test_obj\[("counter\_" + test_int)\] = test_int;
+function log_and_increment() {
+  if (test_int < 3) {
+    test_int = test_int + 1;
+    test_arr.push(test_int);
+    test_obj["counter_" + test_int] = test_int;
 
-        console.log("\\r\\n value of test integer: ");
-        console.log(test\_int);
-        console.log("value of test array: ");
-        console.log(test\_arr);
-        console.log("value of test object: ");
-        console.log(test\_obj);
+    console.log("\r\n value of test integer: ");
+    console.log(test_int);
+    console.log("value of test array: ");
+    console.log(test_arr);
+    console.log("value of test object: ");
+    console.log(test_obj);
 
-        setTimeout("log\_and\_incrament", sleep);
-    }
-
+    setTimeout("log_and_increment", sleep);
+  }
 }
 
-window.onload = function() {
-console.log("Starting Tests");
-log_and_incrament();
+window.onload = function () {
+  console.log("Starting Tests");
+  log_and_increment();
 };
+```
 
 You can see that we will be looping through this script 3 times and outputting 3 variables: an integer, an array, and an object.
 
@@ -56,5 +58,3 @@ So what is going on here? If the console can render the variable directly (integ
 - \[1,2,3\]
 
 but they were all \[1,2,3\] I hope this clears up some confusion!
-
-_Originally published at 03 Dec 2011_

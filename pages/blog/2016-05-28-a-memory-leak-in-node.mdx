@@ -1,10 +1,11 @@
 ---
-title: A memory leak in node (ActionHero.js++)
+title: A memory leak in node (ActionHero)
 description: >-
   We recently found & solved a memory leak in ActionHero. If you use ActionHero
-  to serve static assets, you should see a significant memory…
+  to serve static assets, you should see a significant memory reduction!
 date: "2016-05-28T18:04:52.000Z"
-tags: []
+tags: [node.js, actionhero, javascript]
+image: /images/medium-export/1__OwDaBcU2IcB1SXCb7rfIsA.png
 # slug: /@evantahler/a-memory-leak-in-node-actionhero-js-b8d022c4287
 ---
 
@@ -14,9 +15,83 @@ We recently found & solved a memory leak in ActionHero. If you use ActionHero to
 
 This leak was discovered by the [TaskRabbit](https://www.taskrabbit.com) team when one of their micro-services kept restarting every few days. TaskRabbit uses [monit](https://mmonit.com/monit/) to run all of their applications, and when an app uses too much RAM, it will HUP the app (preforming a graceful restart) and notify the team via PagerDuty:
 
+```raw
+# managed by ansible
+
+CHECK PROCESS actionhero-{{ application }}
+
+  WITH PIDFILE /home/{{ deploy_user }}/www/{{ application }}/shared/pids/cluster_pidfile
+
+  START PROGRAM "/bin/bash -c 'source /home/deploy/.profile && cd /home/{{ deploy_user }}/www/{{ application }}/current && HOME=/home/{{ deploy_user }} ./node_modules/.bin/actionhero start cluster --daemon --workers={{ actionhero_workers }}'"
+    as uid {{ deploy_user }}
+    with timeout 30 seconds
+
+  STOP PROGRAM "/bin/bash -c 'kill `cat /home/{{ deploy_user }}/www/{{ application }}/shared/pids/cluster_pidfile`'"
+    as uid {{ deploy_user }}
+
+  if mem is greater than 600 MB for 5 cycles
+    then exec "/bin/bash -c 'kill -s USR2 cat `cat /home/{{ deploy_user }}/www/{{ application }}/shared/pids/cluster_pidfile`'"
+
+  if totalmemory is greater than 800 MB for 10 cycles
+    then exec "/bin/bash -c 'kill -s USR2 cat `cat /home/{{ deploy_user }}/www/{{ application }}/shared/pids/cluster_pidfile`'"
+
+  if mem is greater than 600 MB for 5 cycles
+    then alert
+  else if passed for 3 cycles
+    then alert
+
+  if totalmemory is greater than 800 MB for 10 cycles
+    then alert
+  else if passed for 3 cycles
+    then alert
+
+  if cpu is greater than 25% for 20 cycles
+    then alert
+  else if passed for 3 cycles
+    then alert
+
+  if totalcpu is greater than 90% for 10 cycles
+    then alert
+  else if passed for 3 cycles
+    then alert
+
+  if uptime < 1 minutes for 3 cycles
+    then alert
+  else if passed for 3 cycles
+    then alert
+```
+
 - _Note that in Ansible, the \`{{ }}\` variables are interpolated, and won’t be there in the final file_
 
 So what was happening here? This application had previously never served any static files, and was an API endpoint (which runs [tr.co](http://tr.co/e)). Now, with the introduction of [Universal Links in IOS](https://developer.apple.com/library/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html), we are also serving up the typical apple-app-site-association file. To support multiple environments, we actually use an action to serve this file, and return the proper one:
+
+```js
+exports.action = {
+  name: "apple-app-site-association",
+  description: "I return the wacky payload apple needs",
+
+  run: function (api, data, next) {
+    data.connection.sendFile("apple-app-site-association/" + api.env + ".json");
+    data.toRender = false;
+    next();
+  },
+};
+```
+
+```js
+exports.default = {
+  routes: function (api) {
+    return {
+      all: [
+        {
+          path: "/apple-app-site-association",
+          action: "apple-app-site-association",
+        },
+      ],
+    };
+  },
+};
+```
 
 … and it works fine. However, the only change the application underwent which triggered the memory leak was this action… so there has to be something wrong here.
 
@@ -24,15 +99,61 @@ After scouring the application itself with [node-debugger](http://www.actionhero
 
 After digging around deep in ActionHero’s guts, I narrowed down the problem to the fact that there was an ever-growing number of HTTP connections (an internal object to ActionHero which represents the state of a request) that just never completed. Less than 1% of the connections have this problem, but over time, it would be enough to cause the leak. I decided to see if I could reproduce the problem from scratch, in a simple, 1-file node app… and here is the result:
 
+```js
+var fs = require("fs");
+var http = require("http");
+var file = __dirname + "/index.html";
+var connections = {};
+var idCouner = 0;
+var port = 8080;
+
+var handleRequset = function (request, response) {
+  idCouner++;
+  var id = idCouner;
+  connections[id] = { req: request, res: response };
+
+  response.on("finish", function () {
+    delete connections[id];
+  });
+
+  fs.stat(file, function (error, stats) {
+    if (error) {
+      throw error;
+    }
+    response.writeHead(200, [["Content-Length", stats.size]]);
+
+    var fileStream = fs.createReadStream(file);
+    fileStream.on("open", function () {
+      fileStream.pipe(response);
+    });
+
+    fileStream.on("error", function (error) {
+      console.log(error); // no errors are caught
+    });
+  });
+};
+
+http.createServer(handleRequset).listen(port);
+
+console.log("server running on port " + port);
+setInterval(function () {
+  console.log("connections: " + Object.keys(connections));
+}, 5000);
+```
+
 If you were to run this server, and use the [loadtest](https://www.npmjs.com/package/loadtest) module against the server:
 
+```bash
 npm install loadtest
 
-./node_modules/.bin/loadtest -c 10 — rps 200 [http://localhost:8080](http://localhost:8080)
+./node_modules/.bin/loadtest -c 10 — rps 200 http://localhost:8080
+```
 
 You would get a result that a small amount of connection objects are hanging around and never resolved:
 
-\> node server.js
+```js
+> node server.js
+
 server running on port 8080
 connections:
 connections: 2867
@@ -56,6 +177,7 @@ connections: 2867,12403
 connections: 2867,12403
 connections: 2867,12403,22350
 connections: 2867,12403,22350
+```
 
 … and there’s our leak!
 
@@ -67,12 +189,14 @@ I had been testing for all sorts errors with the file stream… but I was forget
 
 The relevant sections of ActionHero were fixed in [version 13.4.1](https://github.com/evantahler/actionhero/releases/tag/v13.4.1), and now our connection logic for sending files via HTTP looks like:
 
+```js
 // the ‘finish’ event denotes a successful transfer
-connection.rawConnection.res.on(‘finish’, function(){
-connection.destroy();
+connection.rawConnection.res.on("finish", function () {
+  connection.destroy();
 });
 
 // the ‘close’ event denotes a failed transfer, but it is probably the client’s fault
-connection.rawConnection.res.on(‘close’, function(){
-connection.destroy();
+connection.rawConnection.res.on("close", function () {
+  connection.destroy();
 });
+```

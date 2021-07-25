@@ -1,8 +1,9 @@
 ---
 title: StatusBot
 description: This is cross-posted from tech.taskrabbit.com
-date: "2016-04-22T23:28:09.787Z"
-tags: []
+date: "27 Aug 2014"
+tags: [node.js]
+image: /images/medium-export/0__DrCJJqCWSpAOEpNu.png
 # slug: /@evantahler/statusbot-bf8fbc32b3b9
 ---
 
@@ -22,5 +23,3 @@ For us, we also realized that each METRIC we check also rolls up to a COMPONENT.
 StatusBot lets you configure thresholds for each check, meaning that I can expect the Resque check to respond quickly (under 50ms) while a more complex check (checking that every posted job has been seen by a rabbit within 1 hour) which can take up to 10 seconds. This is the check.threshold option. I can also flag a check as having no impact, meaning that if the service goes down (IE: this blog is down), we should note it and fix it, but it doesn’t really count towards our downtime.
 
 Start monitoring your own sites with [**StatusBot** (github)](https://github.com/taskrabbit/statusbot)
-
-_Originally published at 27 Aug 2014_
