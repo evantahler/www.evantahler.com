@@ -19,7 +19,7 @@ afterEach(() => {
 describe("Introcudtion Section", () => {
   it("renders the section", () => {
     act(() => {
-      render(<IndexPage />, container);
+      render(<IndexPage pageProps={{ posts: [] }} />, container);
     });
     const header = container.querySelector("h1");
     expect(header.textContent).toBe("Hi, I'm Evan Tahler");
