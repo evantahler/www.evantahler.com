@@ -1,8 +1,9 @@
 ---
 title: Delete old git branches already merged into master
 description: This entry is cross-posted from tech.taskrabbit.com
-date: "2016-04-22T22:20:33.946Z"
-tags: []
+date: "2012-12-20"
+tags: [git, ruby]
+image: /images/medium-export/1__HArdB4tMciWUivKfh4XWxg.jpeg
 # slug: /@evantahler/delete-old-git-branches-already-merged-into-master-7af33fc6245d
 ---
 
@@ -11,6 +12,42 @@ tags: []
 It was time to clean up some old git branches at TaskRabbit today. It turned out that we had hundreds of branches that were "old", and could be removed. What do I mean by "old"? As with many things, coming up with the proper definition is 1/2 the battle. At the end of the day, "old" meant "**I have been merged into master, and contain no un-merged code**" (where master is your integration branch).
 
 When phrased this way, there are some systematic and simple ways to due some git pruning. Here’s a simple rake task:
+
+```ruby
+namespace :git do
+
+ desc "delete remote branches which have already been merged into master"
+ task :clean_merged_branches do
+   local_branches = `git branch`.split("\n").map{ |line| line.gsub("  ","") }
+   raise "You need to be in master to start this game" unless local_branches.include?('* master')
+   say_and_do("git fetch --prune") #clean up your local and remove deleted branches
+   bad_branches = `git branch -r --merged`.split("\n").map{ |line| line.gsub("  ","") }
+   bad_branches.each do |bad_branch|
+     parts = bad_branch.split("/")
+     remote = parts.shift
+     if remote == "origin"
+       branch = parts.join("/")
+       next if branch =~ /^HEAD.*/
+       next if branch == /^refs\/.*/
+       next if branch == "master"
+       next if branch == /.*staging.*/
+       next if branch == /.*production.*/
+
+       say_and_do("git branch -D #{branch}") if local_branches.include?(branch)
+       say_and_do("git push origin :#{branch}")
+     else
+       puts "skipping #{bad_branch} because it doesn't have a remote of 'origin'"
+     end
+   end
+ end
+end
+
+def say_and_do(stuff, explanation=nil)
+ puts explanation if explanation
+ puts " > #{stuff}"
+ `#{stuff}`
+end
+```
 
 The trick here is git fetch -r -merged command which does exactly what we want: tell me about the remote branches which have all been merged into my current branch, master. We simply collect those branches, and delete them locally (if they exist) and on origin.
 
@@ -25,5 +62,3 @@ Two other points of note:
 
 1.  It’s very likely that you will have some staging, test, and production branches which are either equivalent to or slightly behind your integration branch. You probably want to explicitly ignore those
 2.  If you have more than one remote branch setup (perhaps heroku for deployment or tddium for testing), you want to be sure to ignore any branch which isn’t from "origin"
-
-_Originally published at 20 Dec 2012_
