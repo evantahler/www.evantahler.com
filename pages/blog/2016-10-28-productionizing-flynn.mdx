@@ -2,7 +2,8 @@
 title: Productionizing Flynn and Hosting your Root Domain(s)
 description: Flynn is a an open-source self-hosted Heroku replacement… and it is great.
 date: "2016-10-28T18:55:25.279Z"
-tags: []
+tags: ["gitops", "flynn", "ci"]
+image: /images/medium-export/1__k9__uGIssdqP4JtbdaGeYNQ.png
 # slug: /@evantahler/productionizing-flynn-and-hosting-your-root-domain-s-fc849638e206
 ---
 
@@ -85,54 +86,61 @@ First, purchase a wildcard certificate for your domain \*.site.com. At the time 
 
 1.  Tell Flynn about the new URL we want to use:
 
+```bash
 flynn cluster migrate-domain site.com
+```
 
 This will also update all references to the cluster’s URL in your `~/.flynnrc` the place where Flynn stores information about connecting to the cluster.
 
-2\. Upload your new wildcard certificate to Flynn’s **router** application. All parts of Flynn are Flynn apps… it’s Flynn all the way down! We are using the Environment of the **router** to hold the body of our certificate
+2. Upload your new wildcard certificate to Flynn’s **router** application. All parts of Flynn are Flynn apps… it’s Flynn all the way down! We are using the Environment of the **router** to hold the body of our certificate
 
+```bash
 flynn -a router env set TLSCERT="$(cat cert.pem)" TLSKEY="$(cat key.pem)"
-
-3\. At this point, if you use the Flynn CLI again, you’ll run into a certificate error. Something like this
-
 ```
+
+3. At this point, if you use the Flynn CLI again, you’ll run into a certificate error. Something like this
+
+```bash
 Error writing CA certificate: Get https://dashboard.site.com/ca-cert: pinned: the peer leaf certificate did not match the provided pin
 ```
 
 The reason for this is that if you look in `~/.flynnrc`, you’ll see that your cluster has the following information saved about it:
 
+```raw
 default = "mycluster"
-
-\[\[cluster\]\]
-Name = "mycluster"
-Key = "xxxx"
-TLSPin = "yyyyy"
-ControllerURL = "https://controller.site.com"
-GitURL = "https://git.site.come"
-DockerPushURL = "https://docker.site.com"
+[[cluster]]
+  Name = "mycluster"
+  Key = "xxxx"
+  TLSPin = "yyyyy"
+  ControllerURL = "https://controller.site.com"
+  GitURL = "https://git.site.come"
+  DockerPushURL = "https://docker.site.com"
+```
 
 **TLSPin** was created against the old flynhub.com certificate (or the self signed one). **TLSPin** allows the Flynn client to connect to self-signed servers without errors. Either way, it no longer matches the new certificate you uploaded. To generate the new value of TLSPin, do the following and replace the output in `~/.flynnrc`:
 
+```bash
 openssl x509 -inform PEM -outform DER < cert.pem | openssl dgst -binary -sha256 | openssl base64
+```
 
 Once you update the value of TLSPin, we can continue using the CLI to update our routes with our new certificate.
 
 For the following apps we need to update their routes to use the new security certificate, since they were created by the bootstrap process, before the new cert was uploaded: **controller**, **dashboard**, **gitreceive,** and **docker-receive**. For each app, you will do the following:
 
-\# 1) look at the routes for the app
+```bash
+# 1) look at the routes for the app
+
 flynn -a controller route
-
-ROUTE SERVICE ID STICKY LEADER PATH
-https:controller.site.come controller http/ceacfb7d-e238-462a-aed0-9f4d1c087ea9 false false /
-https:controller.abc.flynnhub.com controller http/d8553b80-f49d-4496-bc76-80492ba81256 false false /
-
-\# See how there are 2 routes? One for your domain, and one for flynnhub.com? Save the Route ID for \*your domain\* to a local shell variable
+ROUTE                               SERVICE     ID                                         STICKY  LEADER  PATH
+https:controller.site.come      controller  http/ceacfb7d-e238-462a-aed0-9f4d1c087ea9  false   false   /
+https:controller.abc.flynnhub.com  controller  http/d8553b80-f49d-4496-bc76-80492ba81256  false   false   /
+# See how there are 2 routes?  One for your domain, and one for flynnhub.com?  Save the Route ID for *your domain* to a local shell variable
 
 #2) export FLYNN_ID=http/ceacfb7d-e238-462a-aed0-9f4d1c087ea9
-
-\# Update the route to include the SSL certificates
+# Update the route to include the SSL certificates
 
 flynn -a controller route update $FLYNN_ID --tls-cert cert.pem --tls-key key.pem
+```
 
 Be sure to do this for all 4 of the default _public_ applications.
 
@@ -149,20 +157,42 @@ To do this, first create the S3 bucket you want to use. It should only be used f
 
 Then, create an AMI user, note its AWS_KEY and AWS_SECRET and give it the following permissions:
 
-```
-{    "Version": "2012-10-17",    "Statement": [        {            "Effect": "Allow",            "Action": [                "s3:DeleteObject",                "s3:GetObject",                "s3:ListBucket",                "s3:PutObject",                "s3:ListMultipartUploadParts",                "s3:AbortMultipartUpload",                "s3:ListBucketMultipartUploads"            ],            "Resource": [                "arn:aws:s3:::YOURFLYNNBUCKET",                "arn:aws:s3:::YOURFLYNNBUCKET/*"            ]        }    ]}
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject",
+        "s3:ListMultipartUploadParts",
+        "s3:AbortMultipartUpload",
+        "s3:ListBucketMultipartUploads"
+      ],
+      "Resource": [
+        "arn:aws:s3:::YOURFLYNNBUCKET",
+        "arn:aws:s3:::YOURFLYNNBUCKET/*"
+      ]
+    }
+  ]
+}
 ```
 
 Now, we’ll tell Flynn to use the S3 bucket and make it the default going forward. Again, all parts of Flynn are Flynn Apps, so we’ll just be updating the environment settings of the **blobstore** application:
 
+```bash
 export AWS_KEY=ABC123
 export AWS_SECRET=abc123
 export AWS_REGION=us-east-1
 export AWS_BUCKET=YOURFLYNNBUCKET
 
-flynn -a blobstore env set BACKEND_S3MAIN="backend=s3 region=AWS_REGION bucket=$AWS\_BUCKET access\_key\_id=$AWS_KEY secret_access_key=$AWS_SECRET
+flynn -a blobstore env set BACKEND_S3MAIN="backend=s3 region=AWS_REGION bucket=$AWS_BUCKET access_key_id=$AWS_KEY secret_access_key=$AWS_SECRET
 
 flynn -a blobstore env set DEFAULT_BACKEND=s3main
+```
 
 ### Apps & Routing
 
@@ -170,28 +200,30 @@ Now that we are set up, we can deploy our applications!
 
 When you create Flynn app, the _name_ you give it is also its default route. So if you want an application to be served at `www.site.com` then name your Flynn app `www` via
 
+```bash
 flynn create --name www
+```
 
 You can also add many routes to your application, and you can always update them.
 
 For your apex domain, you can either add that route (site.com) to an app of your choice, or create a very simple app which redirects all traffic to your `www` app. An example can be found here in this 20 line [Node.js](https://medium.com/u/96cd9a1fb56) server:
 
-[**messagebot/redirector**
-\_redirector - get out of here!\_github.com](https://github.com/messagebot/redirector/blob/master/server.js "https://github.com/messagebot/redirector/blob/master/server.js")[](https://github.com/messagebot/redirector/blob/master/server.js)
+[**messagebot/redirector**](https://github.com/messagebot/redirector/blob/master/server.js)
 
 When you push your first application via git, you’ll probably notice an SSL/HTTPS error. Something like this:
 
-```
+```bash
 remote: Internal server errorfatal: unable to access 'https://git.site.com/project.git/': The requested URL returned error: 500
 ```
 
 This is because there is one more system setting that Flynn modifies: your `~/.gitconfig`. If you look at it you’ll see 2 entries Flynn created: A authentication block and a certificate block:
 
-\[http "[https://git.site.com](https://git.2r7w.flynnhub.com)"\]
-sslCAInfo = /Users/evan/.flynn/ca-certs/flynn-abc123.pem
-
-\[credential "[https://git.site.com](https://git.2r7w.flynnhub.com)"\]
-helper = /usr/local/bin/flynn git-credentials
+```raw
+[http "https://git.site.com"]
+ sslCAInfo = /Users/evan/.flynn/ca-certs/flynn-abc123.pem
+[credential "https://git.site.com"]
+ helper = /usr/local/bin/flynn git-credentials
+```
 
 Flynn does this (just as in the cases of the CLI) so that the self-signed certificate will work. However, we don’t want this any more, so just delete the **sslCAInfo** section, as we are now using a real, legitimate, certificate.
 

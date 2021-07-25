@@ -2,7 +2,8 @@
 title: Actionhero v14 and a problem with recursive configuration
 description: Actionhero is now at version 14.0.1!
 date: "2016-06-24T20:55:23.636Z"
-tags: []
+tags: [actionhero, node.js, javascript]
+image: /images/medium-export/1__xINPKaOBDM40qfeSgBXyVQ.png
 # slug: >-
 #  /@evantahler/actionhero-v14-and-a-problem-with-recursive-configuration-7cba41444e12
 ---
@@ -19,50 +20,50 @@ You can see the whole changelog here: [https://github.com/evantahler/actionhero/
 
 Allows for action validators and formatters to use both named methods and direction functions.
 
+```js
 exports.cacheTest = {
-name: 'cacheTest',
-description: 'I will test the internal cache functions of the API',
-outputExample: {},
-
-inputs: {
-key: {
-required: true,
-formatter: \[
-function(s){ return String(s); },
-'api.formatter.uniqueKeyName' // <----------- HERE
-},
-value: {
-required: true,
-formatter: function(s){ return String(s); },
-validator: function(s){
-if(s.length < 3){ return '\`value\` should be at least 3 letters long'; }
-else{ return true; }
-}
-},
-},
-
-run: function(api, data, next){
-// ...
-}
-
+  name: 'cacheTest',
+  description: 'I will test the internal cache functions of the API',
+  outputExample: {},
+  inputs: {
+    key: {
+      required: true,
+      formatter: [
+         function(s){ return String(s); },
+         'api.formatter.uniqueKeyName' // <----------- HERE
+    },
+    value: {
+      required: true,
+      formatter: function(s){ return String(s); },
+      validator: function(s){
+        if(s.length < 3){ return '`value` should be at least 3 letters long'; }
+        else{ return true; }
+      }
+    },
+  },
+  run: function(api, data, next){
+    // ...
+  }
 };
+```
 
 And then you would define an initializer with your formatter:
 
-'use strict';
+```js
+"use strict";
 
 module.exports = {
-initialize: function(api, next){
-api.formatter = {
-uniqueKeyName: function(key){
-return key + '-' + this.connection.id;
-}
-};
+  initialize: function (api, next) {
+    api.formatter = {
+      uniqueKeyName: function (key) {
+        return key + "-" + this.connection.id;
+      },
+    };
 
     next();
-
-},
+  },
 };
+```
 
 ### Redis Client
 
@@ -72,24 +73,24 @@ There are **so many** ways to configure redis these days… handling the config 
 
 - in config/redis.js, you now define the 3 redis connections you need explicitly rather than passing config options around:
 
-var host = process.env.REDIS_HOST || '127.0.0.1';
+```js
+var host = process.env.REDIS_HOST || "127.0.0.1";
 var port = process.env.REDIS_PORT || 6379;
 var database = process.env.REDIS_DB || 0;
 
-exports\['default'\] = {
-redis: function(api){
-var Redis = require('ioredis');
-
+exports["default"] = {
+  redis: function (api) {
+    var Redis = require("ioredis");
     return {
-      '\_toExpand': false,
+      _toExpand: false,
       // create the redis clients
-      client:     Redis.createClient(port, host),
+      client: Redis.createClient(port, host),
       subscriber: Redis.createClient(port, host),
-      tasks:      Redis.createClient(port, host),
+      tasks: Redis.createClient(port, host),
     };
-
-}
+  },
 };
+```
 
 - move api.config.redis.channel to api.config.general.channel
 - move api.config.redis. rpcTimeout to api.config.general. rpcTimeout
@@ -101,46 +102,71 @@ Actionhero loads its configuration [recursively](https://github.com/evantahler/a
 
 The good news is that now the redis configuration is now in user-space. It was a simple change to check if the redis connections exist already, and if they do, disconnect the old ones. This isn’t yet an ideal solution (as booting up will connect and disconnect a number of times), but it’s an improvement.
 
-var host = process.env.REDIS_HOST || '127.0.0.1';
+```js
+var host = process.env.REDIS_HOST || "127.0.0.1";
 var port = process.env.REDIS_PORT || 6379;
 var database = process.env.REDIS_DB || 0;
 var password = process.env.REDIS_PASS || null;
 
-exports\['default'\] = {
-redis: function(api){
-var Redis;
-var client;
-var subscriber;
-var tasks;
+exports["default"] = {
+  redis: function (api) {
+    var Redis;
+    var client;
+    var subscriber;
+    var tasks;
 
     // cleanup if we are rebooting or looing in config load
-    if(api.config.redis){
-      if(api.config.redis.client){     api.config.redis.client.quit();     }
-      if(api.config.redis.subscriber){ api.config.redis.subscriber.quit(); }
-      if(api.config.redis.tasks){      api.config.redis.tasks.quit();      }
+    if (api.config.redis) {
+      if (api.config.redis.client) {
+        api.config.redis.client.quit();
+      }
+      if (api.config.redis.subscriber) {
+        api.config.redis.subscriber.quit();
+      }
+      if (api.config.redis.tasks) {
+        api.config.redis.tasks.quit();
+      }
     }
 
-    if(process.env.FAKEREDIS === 'false' || process.env.REDIS\_HOST !== undefined){
-      Redis = require('ioredis');
-      client     = new Redis({ port: port, host: host, password: password, db: database });
-      subscriber = new Redis({ port: port, host: host, password: password, db: database });
-      tasks      = new Redis({ port: port, host: host, password: password, db: database });
-    }else{
-      Redis = require('fakeredis');
-      client     = Redis.createClient(port, host, {fast: true});
-      subscriber = Redis.createClient(port, host, {fast: true});
-      tasks      = Redis.createClient(port, host, {fast: true});
+    if (
+      process.env.FAKEREDIS === "false" ||
+      process.env.REDIS_HOST !== undefined
+    ) {
+      Redis = require("ioredis");
+      client = new Redis({
+        port: port,
+        host: host,
+        password: password,
+        db: database,
+      });
+      subscriber = new Redis({
+        port: port,
+        host: host,
+        password: password,
+        db: database,
+      });
+      tasks = new Redis({
+        port: port,
+        host: host,
+        password: password,
+        db: database,
+      });
+    } else {
+      Redis = require("fakeredis");
+      client = Redis.createClient(port, host, { fast: true });
+      subscriber = Redis.createClient(port, host, { fast: true });
+      tasks = Redis.createClient(port, host, { fast: true });
     }
 
     return {
-      '\_toExpand': false,
+      _toExpand: false,
       // create the redis clients
-      client:     client,
+      client: client,
       subscriber: subscriber,
-      tasks:      tasks,
+      tasks: tasks,
     };
-
-}
+  },
 };
+```
 
 I’ll keep working on this…

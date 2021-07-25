@@ -2,7 +2,8 @@
 title: ActionHero’s Resque UI
 description: "Today I released a Resque UI for ActionHero, ah-resque-ui."
 date: "2016-07-07T23:10:37.582Z"
-tags: []
+tags: [actionhero, javascript, "node.js"]
+image: /images/medium-export/1__CCa__6uFsJZQSWBlO4ajz8Q.png
 # slug: /@evantahler/actionheros-resque-ui-6b23b049197c
 ---
 
@@ -14,35 +15,34 @@ This project has been in the works for a \*long time\*. I started the [node-resq
 
 For those of you who don’t know, Resque is a specification for a few data structures, implemented in Redis, which is used to enqueue, store, and work delayed jobs in a software application. Reque was first written by the folks at @github in Ruby, and has since been extended to almost every other language. There are even alternative implementations of the workers (the running code which consume and works these enqueued jobs) in Ruby, most famously [Sidekiq](http://sidekiq.org/). Resque is the backing store for [ActionHero’s](http://www.actionherojs.com/) Task system.
 
-> _If you want to learn more about_ [_"delayed jobs in a software applications", see this post._](https://blog.evantahler.com/background-tasks-in-node-js-a-survey-with-redis-971d3575d9d2)
-
 [**ah-resque-ui**](https://github.com/evantahler/ah-resque-ui) creates a number of actions which interface with ActionHero’s task system, and therefore node-resque under the hood. The front end is written in Angular 1.5. This plugin uses route injection and a proxy middleware so you can protect your actions (as they do allow you to mess with server-side data). This is the first time I’ve used the proxy-middleware pattern, and I quite like it:
 
+```js
 module.exports = {
-load: 99999999,
-initialize: function (api, next) {
-
-var middleware = {
-'ah-resque-ui-proxy-middleware': {
-name: 'ah-resque-ui-proxy-middleware',
-global: false,
-preProcessor: function(data, callback){
-return callback();
-}
-}
-}
-
-if(api.config\['ah-resque-ui'\].middleware){
-var sourceMiddleware = api.actions.middleware\[api.config\['ah-resque-ui'\].middleware\];
-middleware\['ah-resque-ui-proxy-middleware'\].preProcessor = sourceMiddleware.preProcessor;
-middleware\['ah-resque-ui-proxy-middleware'\].postProcessor = sourceMiddleware.postProcessor;
-}
-
-api.actions.addMiddleware(middleware\['ah-resque-ui-proxy-middleware'\]);
-
-next();
-}
+  load: 99999999,
+  initialize: function (api, next) {
+    var middleware = {
+      "ah-resque-ui-proxy-middleware": {
+        name: "ah-resque-ui-proxy-middleware",
+        global: false,
+        preProcessor: function (data, callback) {
+          return callback();
+        },
+      },
+    };
+    if (api.config["ah-resque-ui"].middleware) {
+      var sourceMiddleware =
+        api.actions.middleware[api.config["ah-resque-ui"].middleware];
+      middleware["ah-resque-ui-proxy-middleware"].preProcessor =
+        sourceMiddleware.preProcessor;
+      middleware["ah-resque-ui-proxy-middleware"].postProcessor =
+        sourceMiddleware.postProcessor;
+    }
+    api.actions.addMiddleware(middleware["ah-resque-ui-proxy-middleware"]);
+    next();
+  },
 };
+```
 
 You can download [**ah-resque-ui**](https://github.com/evantahler/ah-resque-ui) from NPM and add it as a plugin to your ActionHero project with a simple:
 
@@ -51,6 +51,16 @@ npm run actionhero -- link --name ah-resque-ui
 
 Enjoy!
 
-![](/images/medium-export/1__tnplgPlkYHfvBqgj0BLwOQ.png)
-![](/images/medium-export/1__ab9ui__sLpggKAgWaSUUV2A.png)
-![](/images/medium-export/1__PgnSoK06R4ld4OtMkZV3iA.png)
+<table>
+  <tr>
+    <td>
+      <img src="/images/medium-export/1__tnplgPlkYHfvBqgj0BLwOQ.png" />
+    </td>
+    <td>
+      <img src="/images/medium-export/1__ab9ui__sLpggKAgWaSUUV2A.png" />
+    </td>
+    <td>
+      <img src="/images/medium-export/1__PgnSoK06R4ld4OtMkZV3iA.png" />
+    </td>
+  </tr>
+</table>

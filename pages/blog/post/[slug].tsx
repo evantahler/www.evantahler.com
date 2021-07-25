@@ -26,9 +26,14 @@ const components = {
       <p {...props} />
     );
   },
-  a: (props) => (
-    <a target={props.href.includes("http") ? "_blank" : undefined} {...props} />
-  ),
+  a: (props) => {
+    return (
+      <a
+        target={props.href.includes("http") ? "_blank" : undefined}
+        {...props}
+      />
+    );
+  },
   code({ node, inline, className, children, ...props }) {
     const match = /language-(\w+)/.exec(className || "");
     let matchedLanguage = match ? match[1] : undefined;

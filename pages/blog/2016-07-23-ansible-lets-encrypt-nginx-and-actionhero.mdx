@@ -1,0 +1,281 @@
+---
+title: "Ansible, LetsEncrypt!, NGINX, and ActionHero"
+description: >-
+  If you don’t already know LetsEncrypt! is an awesome project which aims to
+  bring free HTTPS certificate to every site on the web. HTTPS…
+date: "2016-07-23T17:55:42.761Z"
+tags: [actionhero, "node.js", javascript]
+image: /images/medium-export/1__bKxD__GvU2YDGkBdZNhVXcQ.png
+# slug: /@evantahler/ansible-letsencrypt-nginx-and-actionhero-7be135fc6319
+---
+
+![](/images/medium-export/1__bKxD__GvU2YDGkBdZNhVXcQ.png)
+
+If you don’t already know [LetsEncrypt!](https://letsencrypt.org/) is an awesome project which aims to bring free HTTPS certificate to every site on the web. HTTPS makes everything safer and more secure by protecting your information and browsing history while it is in transit from your computer to the server. Traditionally, getting an HTTPS certificate was a confusing and expensive process. It was also something of a racket, as certificate providers rarely provided a technical _service_ per-se, just a guarantee that they were keeping their certificates safe, and that your website’s certificate, which was based off of theirs, was also safe. HTTPS trust goes something like "I trust DigiCert.com, and DigiCert.com says that _site.com_ is safe… so I guess I trust site.com!"
+
+Anyway, you can read more about how LetsEncrypt! works on their site.
+
+[SwitchBoard.chat](https://switchboard.chat/) is a small web site I’m running (based on [ActionHero](http://www.actionherojs.com/) of course) which allows your team to send and receive SMS messages to a centralize place, share messages and address books, and generally makes working with SMS for your team easier. As SwithBoard.chat is a small service right now, the front-end runs entirely on one server… and is a great candidate for a basic LetsEncrypt! HTTPS certificate.
+
+> _You can read the SwitchBoard.chat launch announcement_ [_here_](https://blog.evantahler.com/switchboard-chat-d1aa51478dc6#.nw7yx1rkl)_._
+
+The fine folks at the EFF have created [CertBot](https://certbot.eff.org/), an easier-to-use wrapper around the LetsEncrypt! command line tools. [Ansible](https://www.ansible.com/) is a tool which helps you configure your servers (and deploy to them) automatically. We can combine both of these to make automatic HTTPS certificate generation a breeze!
+
+> _An aside about LetsEncrypt!: Unlike a normal certificate authority, who grants certificates for 1,2, or 3 years at a time, LetsEncrypt! \*only\* grants 3-month certificates. They do this because they \*want\* to encourage automation and re-generation of certificates. This encourages folks to constantly be proving that they really do own the domain in question, and leads to a safer internet for all of us._
+
+For this setup, we are going to set up our front-end server like this:
+
+![](/images/medium-export/1__p__dgj6h4dx6GNWUm5PPU3w.png)
+
+First, ensure your DNS records are pointing to the server.
+
+We now have a chicken-and-egg problem. We want to run NGINX to serve out site (and validations for LetsEncrypt!) but we don’t have our certs yet, son NGINX won’t boot. So the first time we run this, we need to run a temporary web server, but every subsequent time, we’ll use Nginx.
+
+To generate those certs, here’s what we do:
+
+```yaml
+# tasks/main.yml
+
+- name: install certbot dependencies
+  apt: name={{ item }} state=present
+  with_items:
+    - build-essential
+    - libssl-dev
+    - libffi-dev
+    - python-dev
+    - git
+    - python-pip
+    - python-virtualenv
+    - dialog
+    - libaugeas0
+    - ca-certificates
+- name: install Python cryptography module
+  pip: name=cryptography
+
+- name: download certbot
+  become: yes
+  become_user: "{{ deploy_user }}"
+  get_url: >
+    url=https://dl.eff.org/certbot-auto
+    dest=/home/{{ deploy_user }}/certbot-auto
+- name: chcek if we've generated a cert already
+  stat: path=/etc/letsencrypt/live/switchboard.chat/fullchain.pem
+  register: cert_stats
+
+- name: generate certs (first time)
+  become: yes
+  # become_user: '{{ deploy_user }}'
+  shell: "/home/{{ deploy_user }}/certbot-auto certonly --standalone {{ letsencrypt_domain_flags | join(' ') }} --email {{ letsencrypt_email}} --non-interactive --agree-tos"
+  when: cert_stats.stat.exists == False
+
+- name: generate certs (subsequent time)
+  become: yes
+  # become_user: '{{ deploy_user }}'
+  shell: "/home/{{ deploy_user }}/certbot-auto certonly --webroot -w /home/{{ deploy_user }}/www/switchboard.chat/current/public {{ letsencrypt_domain_flags | join(' ') }} --email {{ letsencrypt_email}} --non-interactive --agree-tos"
+  when: cert_stats.stat.exists == True
+
+- name: hup nginx
+  service: name=nginx state=reloaded
+```
+
+The variables look like
+
+```yaml
+# From group_vars/production
+deploy_user: "me"
+letsencrypt_email: "boss@switchboard.chat"
+letsencrypt_domain_flags:
+  - "-d switchboard.chat"
+  - "-d www.switchboard.chat"
+  - "-d api.switchboard.chat"
+```
+
+Here are the steps broken out:
+
+- Install CertBot & dependancies (for Ubuntu/Debian)
+- Check if we are running the first time (no cert on system yet) or a subsequent time
+- Build our Install script.
+- Reload Nginx
+
+**How does this work?**
+
+If we are running the first time we are telling CertBot to spin up a temporary web server using the \` — standalone\` flag. If we already have a running web server (NGINX) e are telling CertBot to use ActionHero’s public directory to place it’s trust files. What CertBot does is generate some custom files (which look like _/.well_known/{{gibberish}}_) and then tells the LetsEncrypt! server to try and load those generated URLs. If it can, it knows that you own the DNS addresses in question, and it grants you the certificate you asked for! CertBot can also run its own web server for the domain tests, but since we are already running NGINX, we don’t need to!
+
+In our Ansible server provisioning step, we’ll then set up and run our ActionHero project. You should configure it listen only on a local socket, IE:
+
+```js
+// from config/servers/web.conf
+exports.production = {
+  servers: {
+    web: function (api) {
+      return {
+        port: "/home/deploy/www/switchboard.chat/shared/sockets/actionhero.sock",
+        bindIP: null,
+        padding: null,
+        metadataOptions: {
+          serverInformation: false,
+          requesterInformation: false,
+        },
+      };
+    },
+  },
+};
+```
+
+… and then you can configure NGINX to load your ActionHero project as a backend:
+
+Our NGINX.conf (and the Ansible role to manage NGINX) looks like this:
+
+```yaml
+# handlers/main.yml
+
+- name: restart nginx
+  service: name=nginx state=restarted
+
+- name: reload nginx
+  service: name=nginx state=reloaded
+```
+
+```raw
+# templates/production.conf.j2
+
+#user  nobody;
+worker_processes  2;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+  worker_connections 1024; # increase if you have lots of clients
+  accept_mutex on; # "on" if nginx worker_processes > 1
+}
+
+http {
+  include       mime.types;
+  default_type  application/octet-stream;
+  server_tokens off;
+  sendfile        on;
+  keepalive_timeout  65;
+  server_names_hash_bucket_size 64;
+  types_hash_max_size 2048;
+
+  gzip on;
+  gzip_http_version 1.0;
+  gzip_comp_level 9;
+  gzip_proxied any;
+  gzip_types text/plain text/xml text/css text/comma-separated-values text/javascript application/javascript application/x-javascript font/ttf font/otf image/svg+xml application/atom+xml;
+
+  log_format  main  '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for" $request_time';
+
+  server {
+      listen 80;
+      server_name _;
+
+      location /nginx_status {
+          stub_status on;
+          access_log on;
+          allow 127.0.0.1;
+          deny all;
+      }
+
+      location / {
+          rewrite ^(.*) https://www.switchboard.chat$1 permanent;
+      }
+  }
+
+  server {
+      listen       443;
+      server_name switchboard.chat;
+
+      ssl     on;
+      ssl_certificate      /etc/letsencrypt/live/switchboard.chat/fullchain.pem;
+      ssl_certificate_key  /etc/letsencrypt/live/switchboard.chat/privkey.pem;
+      ssl_prefer_server_ciphers On;
+      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+      ssl_session_cache shared:SSL:10m;
+
+      return 301 https://www.switchboard.chat$request_uri;
+  }
+
+  server {
+      proxy_redirect off;
+
+      listen       443 default_server;
+      server_name  _;
+
+      ssl     on;
+      ssl_certificate      /etc/letsencrypt/live/switchboard.chat/fullchain.pem;
+      ssl_certificate_key  /etc/letsencrypt/live/switchboard.chat/privkey.pem;
+      ssl_prefer_server_ciphers On;
+      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+      ssl_session_cache shared:SSL:10m;
+
+      access_log  /var/log/nginx/access.switchboard_chat.log  main;
+      error_log   /var/log/nginx/error.switchboard_chat.log;
+
+      client_max_body_size 10M;
+
+      location /primus {
+          proxy_http_version 1.1;
+          proxy_buffering off;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "Upgrade";
+          proxy_set_header Host $host;
+
+          proxy_pass http://unix:/home/{{ deploy_user }}/www/switchboard.chat/shared/sockets/actionhero.sock;
+      }
+
+      location / {
+          root        /home/{{ deploy_user }}/www/switchboard.chat/current/public/;
+          expires 1m;
+          try_files /$uri/index.html
+                    /$uri.html
+                    /$uri
+                    @app;
+      }
+
+      location @app {
+          proxy_pass http://unix:/home/{{ deploy_user }}/www/switchboard.chat/shared/sockets/actionhero.sock;
+      }
+
+  }
+}
+
+```
+
+```yaml
+# tasks/main.yml
+
+- name: ensure the nginx dir
+  file: path=/etc/nginx state=directory owner=root
+
+- name: ensure the nginx log dir
+  file: path=/var/log/nginx state=directory owner=nobody group=nogroup
+
+- name: ensure the default site is removed
+  file: path=/etc/nginx/sites-{{ item }}/default state=absent
+  with_items:
+    - enabled
+    - available
+  notify:
+    - restart nginx
+
+- name: nginx.conf
+  template: src=production.conf.j2 dest=/etc/nginx/nginx.conf
+  notify:
+    - reload nginx
+
+- name: install nginx
+  apt: pkg=nginx state=present
+  notify:
+    - restart nginx
+
+- meta: flush_handlers
+```
+
+You’ll notice that we are using \`try*files\` to attempt to have NGINX serve static files out of ActionHero’s public directory. While ActionHero \_can* service static assets for you, NGINX is simply better and faster at it. This also allows NGINX to continue serving assets if the ActionHero server is down for some reason, and you can use JavaScript on in your front-end code to render an appropriate error message to your visitors if a health check fails.
+
+NGINX is also sourcing our HTTPS certificates from a strange place… This is where CertBot will place our certs. That directory is actually a collection of Symlinks which CertBot will update as needed as it renews them for us.
+
+Now, every time you run Ansible, you will check if there are updates needed to your HTTPS certificates, and get new versions. **HTTPS Automated.**

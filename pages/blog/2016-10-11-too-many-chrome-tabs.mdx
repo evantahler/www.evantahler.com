@@ -2,7 +2,8 @@
 title: Too many Chrome Tabs = Node.JS Server Crash
 description: "Here’s a fun bug report:"
 date: "2016-10-11T23:48:18.847Z"
-tags: []
+tags: ["node.js"]
+image: /images/medium-export/1__QX3Wun3NN__374jHq__VsngA.png
 # slug: /@evantahler/too-many-chrome-tabs-node-js-server-crash-af46aa9318eb
 ---
 
@@ -21,32 +22,34 @@ To check which workers this host can manage, all workers have the system’s "ho
 
 This means our Node.JS process needs to check on all the running PIDs on my system. Here’s how we **used** to do it (simplified):
 
+```js
 worker.prototype.getPids = function(callback){
-var cmd = 'ps awx';
-var child = exec(cmd, function(error, stdout, stderr){
-var pids = \[\];
-stdout.split('\\n').forEach(function(line){
-line = line.trim();
-if(line.length > 0){
-var pid = parseInt(line.split(' ')\[0\]);
-if(!isNaN(pid)){ pids.push(pid); }
-}
-});
-
+  var cmd = 'ps awx';
+  var child = exec(cmd, function(error, stdout, stderr){
+    var pids = [];
+    stdout.split('\n').forEach(function(line){
+      line = line.trim();
+      if(line.length > 0){
+        var pid = parseInt(line.split(' ')[0]);
+        if(!isNaN(pid)){ pids.push(pid); }
+      }
+    });
     if(!error && stderr){ error = stderr; }
       callback(error, pids);
     });
-
-});
+  });
 };
+```
 
 Check out **ps awx**. We are asking the OS for the whole process list, and then extracting all the PIDs… which does accomplish our goal. To compare, check out how Ruby’s Resque does the same job:
 
+```ruby
 def linux_worker_pids
-\`ps -A -o pid,command | grep -E "\[r\]esque:work|\[r\]esque:\\sStarting|\[r\]esque-\[0-9\]" | grep -v "resque-web"\`.split("\\n").map do |line|
-line.split(' ')\[0\]
+  `ps -A -o pid,command | grep -E "[r]esque:work|[r]esque:\sStarting|[r]esque-[0-9]" | grep -v "resque-web"`.split("\n").map do |line|
+    line.split(' ')[0]
+  end
 end
-end
+```
 
 Ruby has the luxury of _knowing_ that the name of the process running this application will be called "Resque”. However, for the Node.JS version, it might be called "node”, but it also might be called "electron”, or "iojs”. Since we can’t be sure of the process name, this means we need to look at _all_ processes.
 
@@ -54,7 +57,9 @@ When you look at _all_ processes on a system, there might be a lot of them… I 
 
 So now we know the source of the problem, how do we fix it? Since Node.JS’s parsing of the large string returned by the sub-process was the problem, can we off-load this work? We can!
 
+```js
 var cmd = "ps -ef | awk '{print $2}'";
+```
 
 Here, rather than load in _all_ the data from **ps**, we are using AWK to return only the process IDs. AWK is a safe choice, because It is part of the kernel, and thus available on all unix/Linux/OSX distributions. This returns a far shorter string back to Node.JS to parse.
 

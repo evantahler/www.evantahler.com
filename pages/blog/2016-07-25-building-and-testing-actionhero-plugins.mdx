@@ -4,7 +4,8 @@ description: >-
   Over the past few months, I’ve been working on projects which grew to become
   ActionHero Plugins. ActionHero is a Node.js framework for…
 date: "2016-07-25T16:33:41.348Z"
-tags: []
+tags: ["actionhero", "node.js", "javascript"]
+image: /images/medium-export/1__eUn__TuOSlq__8Gx0hPGdK5Q.png
 # slug: /@evantahler/building-and-testing-actionhero-plugins-986e6ea6317f
 ---
 
@@ -35,40 +36,40 @@ Finally, plugins can have config files. When you run **actionhero link** to link
 
 Just because an ActionHero plugin is a collection of normal ActionHero components, that doesn’t mean that is \*all\* it has to be. Take a look [ah-elasticsearch-orm](https://github.com/messagebot/ah-elasticsearch-orm). At the end of the day the plugins main job is to expose **api.elasticsearch** to your project, but to do so, we have a robust \*lib\* directory to build up many parts of what that initializer will do.
 
+```js
 // From ah-elasitcsearch-orm/initializers/ah-elasticsearch-orm.js
 
 module.exports = {
-loadPriority: 100,
-startPriority: 100,
-stopPriority: 999,
+  loadPriority:  100,
+  startPriority: 100,
+  stopPriority:  999,
 
-initialize: function(api, next){
-var client = require(\_\_dirname + '/../lib/client.js')(api);
-var search = require(\_\_dirname + '/../lib/aggregate/search.js')(api);
-var mget = require(\_\_dirname + '/../lib/aggregate/mget.js')(api);
-var count = require(\_\_dirname + '/../lib/aggregate/count.js')(api);
-var scroll = require(\_\_dirname + '/../lib/aggregate/scroll.js')(api);
-
+  initialize: function(api, next){
+    var client = require(__dirname + '/../lib/client.js')(api);
+    var search = require(__dirname + '/../lib/aggregate/search.js')(api);
+    var mget   = require(__dirname + '/../lib/aggregate/mget.js')(api);
+    var count  = require(__dirname + '/../lib/aggregate/count.js')(api);
+    var scroll = require(__dirname + '/../lib/aggregate/scroll.js')(api);
 // ...
+```
 
 Since node makes it easy for us to reference local files (via **\_\_dirname**), we can consider files in this lib to "private" to the plugin, and only what we expose to the api object will be "public".
 
 You note that every sub-file within the lib directory is loaded as part of the **initialize** step of the initializer. This is so the API object will be passed in, and we can then subsequently pass it to our sub-files. The **module.exports** for each file in the library exposes a single loader function with accepts the API object to bring it in scope, for example:
 
+```js
 // from ah-elasitcsearch-orm/lib/client.js
+var elasticsearch = require("elasticsearch");
 
-var elasticsearch = require('elasticsearch');
-
-module.exports = function(api){
-
-return function(){
-return new elasticsearch.Client({
-hosts: api.config.elasticsearch.urls,
-log: api.config.elasticsearch.log,
-});
-}
-
-}
+module.exports = function (api) {
+  return function () {
+    return new elasticsearch.Client({
+      hosts: api.config.elasticsearch.urls,
+      log: api.config.elasticsearch.log,
+    });
+  };
+};
+```
 
 In this was, the elasticsearch package itself is private to this file, we can expose only a constructed client, and still read various configuration details from the normal API object.
 
@@ -78,7 +79,9 @@ There is only one special api method ActionHero exposes for use with plugins, an
 
 Configuring routes is the job of the top-level ActionHero project, but if your plugin defines many actions, it would be a pain to require the developer using your plugin to add all of your actions to the proper routing table. **api.routes.registerRoute** allows you do this programatically. Again, be sure to namespace your routes!
 
-api.routes.registerRoute('get', '/resque/locks', 'resque:locks');
+```js
+api.routes.registerRoute("get", "/resque/locks", "resque:locks");
+```
 
 You can see a good example of this in [ah-resque-ui’s initializer](https://github.com/evantahler/ah-resque-ui/blob/master/initializers/ah-resque-ui.js).
 
@@ -88,25 +91,29 @@ One interesting challenge when building plugins is dealing with middleware. For 
 
 We _can_ assume that they will be using an [action middleware](http://www.actionherojs.com/docs/#action-middleware) to enable the protection they need… and we can proxy that in our plugin!
 
+```js
 // from ah-resque-ui/initializers/ah-resque-ui.js
-
 var middleware = {
-'ah-resque-ui-proxy-middleware': {
-name: 'ah-resque-ui-proxy-middleware',
-global: false,
-preProcessor: function(data, callback){
-return callback();
-}
-}
+  "ah-resque-ui-proxy-middleware": {
+    name: "ah-resque-ui-proxy-middleware",
+    global: false,
+    preProcessor: function (data, callback) {
+      return callback();
+    },
+  },
+};
+
+if (api.config["ah-resque-ui"].middleware) {
+  var sourceMiddleware =
+    api.actions.middleware[api.config["ah-resque-ui"].middleware];
+  middleware["ah-resque-ui-proxy-middleware"].preProcessor =
+    sourceMiddleware.preProcessor;
+  middleware["ah-resque-ui-proxy-middleware"].postProcessor =
+    sourceMiddleware.postProcessor;
 }
 
-    if(api.config\['ah-resque-ui'\].middleware){
-      var sourceMiddleware = api.actions.middleware\[api.config\['ah-resque-ui'\].middleware\];
-      middleware\['ah-resque-ui-proxy-middleware'\].preProcessor  = sourceMiddleware.preProcessor;
-      middleware\['ah-resque-ui-proxy-middleware'\].postProcessor = sourceMiddleware.postProcessor;
-    }
-
-    api.actions.addMiddleware(middleware\['ah-resque-ui-proxy-middleware'\]);
+api.actions.addMiddleware(middleware["ah-resque-ui-proxy-middleware"]);
+```
 
 Here you can see that we build up a new middleware here, but it contains a no-op preProcessor. In the [config file generated for this project](https://github.com/evantahler/ah-resque-ui/blob/master/config/ah-resque-ui.js), we ask for the string name of another middleware (**api.config\[‘ah-resque-ui’\].middleware**), and if it is defined, we then reference it’s already defined pre and posProcessors.
 
@@ -118,7 +125,7 @@ All good software needs tests, and ActionHero plugins are no exception. However�
 
 ![](/images/medium-export/1__MOagL7aq2Ht9e__so4tFe5g.png)
 
-> [**Please look at the specHelper from ah-elasticsearch-orm to see how this is done.**](https://github.com/messagebot/ah-elasticsearch-orm/blob/master/test/specHelper.js)
+> [Please look at the specHelper from ah-elasticsearch-orm to see how this is done.](https://github.com/messagebot/ah-elasticsearch-orm/blob/master/test/specHelper.js)
 
 To Build a testing server:
 
@@ -128,31 +135,33 @@ To Build a testing server:
 
 When using Mocha to run your tests, you can build a specHelper file which knows how to prepare your test suite, and export it. Then, every subsequent test requires the spec helper meaning that the helper methods you just defined are in scope:
 
-var async = require('async');
-var should = require('should');
-var specHelper = require(\_\_dirname + '/specHelper.js').specHelper;
+```js
+var async = require("async");
+var should = require("should");
+var specHelper = require(__dirname + "/specHelper.js").specHelper;
 var api;
-
-describe('ah-elasticsearch-orm', function(){
-describe('framework', function(){
-before(function(){ api = specHelper.api; });
-
-it('server booted and normal actions work', function(done){
-api.specHelper.runAction('status', function(response){
-response.serverInformation.serverName.should.equal('my_actionhero_project');
-done();
+describe("ah-elasticsearch-orm", function () {
+  describe("framework", function () {
+    before(function () {
+      api = specHelper.api;
+    });
+    it("server booted and normal actions work", function (done) {
+      api.specHelper.runAction("status", function (response) {
+        response.serverInformation.serverName.should.equal(
+          "my_actionhero_project"
+        );
+        done();
+      });
+    });
+    it("has loaded cluster info", function (done) {
+      should.exist(api.elasticsearch.info.name);
+      var semverParts = api.elasticsearch.info.version.number.split(".");
+      semverParts[0].should.be.aboveOrEqual(2);
+      done();
+    });
+  });
 });
-});
-
-it('has loaded cluster info', function(done){
-should.exist(api.elasticsearch.info.name);
-var semverParts = api.elasticsearch.info.version.number.split('.');
-semverParts\[0\].should.be.aboveOrEqual(2);
-done();
-});
-
-});
-});
+```
 
 This means you can write simple tests like the above, use ActionHero’s built in specHelper to run tasks and actions inline… and generally have a good testing experience.
 
@@ -161,3 +170,7 @@ As building the temporary project might be slow, you can also add an environment
 Note: You don’t need to require ActionHero as a devDependancy in your **package.json**.
 
 And that is how I build & test ActionHero Plugins!
+
+```
+
+```

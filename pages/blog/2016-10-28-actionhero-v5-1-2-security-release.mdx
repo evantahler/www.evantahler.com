@@ -3,7 +3,8 @@ title: "ActionHero v15.1.2: Security Release"
 description: >-
   Today we released the first-ever security release for ActionHero.
 date: "2016-10-28T00:09:05.982Z"
-tags: []
+tags: ["actionhero", "node.js", "javascript"]
+image: /images/medium-export/1__HQAn3z05N__iwWd__Q__JEFlA.png
 # slug: /@evantahler/actionhero-v15-1-2-security-release-b51d820cae94
 ---
 
@@ -15,30 +16,39 @@ Today we released the [first-ever security release for ActionHero.](https://gith
 
 Previously, the default error responder when a client asked for a static-file which was missing (404) returned the name the of that file
 
-api.config.errors.fileNotFound = function(connection){
-return connection.localize(\['That file is not found (%s)', connection.params.file\]);
-}
+```js
+api.config.errors.fileNotFound = function (connection) {
+  return connection.localize([
+    "That file is not found (%s)",
+    connection.params.file,
+  ]);
+};
+```
 
 This is dangerous because a malicious actor could request a filename with an executable javascript tag and harm the requester. We now will no longer return the file name:
 
-api.config.errors.fileNotFound = function(connection){
-return connection.localize(\['That file is not found'\]);
-}
+```js
+api.config.errors.fileNotFound = function (connection) {
+  return connection.localize(["That file is not found"]);
+};
+```
 
 ### Malicious callback provided when requesting an action via JSONp
 
 When requesting an action via JSONp, it was possible (though unlikely) that the `callback` string you were providing contained malicious javascript which would harm the requester. We will now sanitize the provided `callback` in the following way:
 
-function callbackHtmlEscape(str){
-return str
-.replace(/&/g, '&amp;')
-.replace(/"/g, '&quot;')
-.replace(/'/g, '&#39;')
-.replace(/</g, '&lt;')
-.replace(/>/g, '&gt;')
-.replace(/**\\)**/g, '')
-.replace(/**\\(**/g, '');
+```js
+function callbackHtmlEscape(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\)/g, "")
+    .replace(/\(/g, "");
 }
+```
 
 This fix has been back-ported to:
 
