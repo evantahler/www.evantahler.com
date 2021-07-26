@@ -61,19 +61,17 @@ export default function BlogIndex({ pageProps }) {
                 {/* <Card.Img variant="top" src={post.image} /> */}
                 <Card.Body>
                   <Row>
-                    {post.meta.image ? (
-                      <Col md={3}>
-                        <Link href={`/blog/${post.slug}`}>
-                          <a>
-                            <Image
-                              style={{ maxWidth: "100%" }}
-                              rounded
-                              src={post.meta.image}
-                            />
-                          </a>
-                        </Link>
-                      </Col>
-                    ) : null}
+                    <Col md={3}>
+                      <Link href={`/blog/${post.slug}`}>
+                        <a>
+                          <Image
+                            style={{ maxWidth: "100%" }}
+                            rounded
+                            src={post.meta.image ?? "/images/misc/announce.png"}
+                          />
+                        </a>
+                      </Link>
+                    </Col>
 
                     <Col>
                       <h4>
