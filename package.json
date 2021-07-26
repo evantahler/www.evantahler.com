@@ -15,7 +15,7 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "test": "jest",
-    "pretest": "npm run lint",
+    "pretest": "npm run lint && npm run build",
     "lint": "prettier --check pages components __tests__"
   },
   "dependencies": {

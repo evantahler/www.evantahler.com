@@ -2,9 +2,10 @@
 title: cURL your way into the Google Analytics API
 description: >-
   Whenever I am about to start integrating with a new API, I like to walk though
-  the steps with cURL. For those of you who have been living…
-date: "2016-04-22T22:16:21.554Z"
-tags: []
+  the steps with cURL. For those of you who have been living
+date: "2012-04-04"
+tags: [tools]
+image: /images/medium-export/1__5h6hxUUaZjLmz5qpH6uPpA.png
 # slug: /@evantahler/curl-your-way-into-the-google-analytics-api-9abbd5ea5a2a
 ---
 
@@ -18,13 +19,17 @@ Without further delay, here is my **guide to cURL-ing your way into the Google A
 
 ### 1) Authenticate
 
-curl [https://www.google.com/accounts/ClientLogin](https://www.google.com/accounts/ClientLogin) --data-urlencode Email=<EMAIL ADDRESS> --data-urlencode Passwd=<PASSWORD> -d service=analytics
+```bash
+curl https://www.google.com/accounts/ClientLogin --data-urlencode Email=<EMAIL ADDRESS> --data-urlencode Passwd=<PASSWORD> -d service=analytics
+```
 
 — data-urlencode takes your variables and endodes them as if they were part of a form POSTED to the url. The existance of that flag also turns your request into a POST request.
 
 This will return one response with 3 keys:
 
-SID=AAAAAA \\r\\n LSID=BBBBBB \\r\\n Auth=CCCCCC
+```bash
+SID=AAAAAA \r\n LSID=BBBBBB \r\n Auth=CCCCCC
+```
 
 The "Auth" key is the one we need. Think of this like your session cookie for Google Analytics
 
@@ -32,7 +37,9 @@ The "Auth" key is the one we need. Think of this like your session cookie for Go
 
 Subsequent requests to Google Analytics will require you to know your account id for your tracking profile. It is not what you think it is (the UTM-\*) number. To retrive a list of all of your accounts, you can do this:
 
+```bash
 curl -H "Authorization: GoogleLogin auth=<AUTH KEY>" https://www.googleapis.com/analytics/v3/management/accounts/~all/webproperties"
+```
 
 You will now have a list of your URLs and account keys. The -H flag is us setting a custom authorization header with our "cookie" we retrieved above.
 
@@ -42,7 +49,9 @@ These IDs won’t change, so you should only need to look this up the first time
 
 Getting data can be thought of as an OLAP lookup. You provide a metric (like visits) and a dimension to slice it up by (per day). You can ask for many metrics and dimensions at once, but I’m only going to show you how to do a single request.
 
-curl -H "Authorization: GoogleLogin auth=<AUTH KEY>" [https://www.googleapis.com/analytics/v3/data/ga/?ids=ga:<ACCOUNT](https://www.googleapis.com/analytics/v3/data/ga/?ids=ga:%3CACCOUNT) ID>&metrics=ga:visits&dimensions=ga:date&start-date=2011-01-01&end-date=2012-02-01"
+```bash
+curl -H "Authorization: GoogleLogin auth=<AUTH KEY>" https://www.googleapis.com/analytics/v3/data/ga/?ids=ga:<ACCOUNT ID>&metrics=ga:visits&dimensions=ga:date&start-date=2011-01-01&end-date=2012-02-01"
+```
 
 Now that you know the basics, you can use [the API doc](http://code.google.com/apis/analytics/docs/gdata/v3/reference.html) to understand the rest of the parameters.
 

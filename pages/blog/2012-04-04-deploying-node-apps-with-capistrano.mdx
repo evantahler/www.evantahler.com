@@ -1,8 +1,9 @@
 ---
 title: Deploying node.js applications with Capistrano
 description: I really like Capistrano.
-date: "2016-04-22T22:16:26.930Z"
-tags: []
+date: "2012-04-04"
+tags: [node.js, javascript, gitops]
+image: /images/medium-export/1__GOljYLFswSUI6EC7NCFkLg.jpeg
 # slug: /@evantahler/deploying-node-js-applications-with-capistrano-af675cdaa7c6
 ---
 
@@ -46,6 +47,89 @@ OK, we have Capistrano installed, now we need to set up a few files in our node 
 The one tricky thing with node.js applications is that by default they expect to be run within a console. This means that it can be hard to daemonize them (running head-less), which is what you want on a production web server. However, the fantastic package Forever does exactly this for us. Forever monitors and logs your application, as well as creating handy start and stop wrappers for your project. Ensure that you have forever installed (npm install forever) and that it is listed in your package.json. Forever can be installed globally (so you have handy access to the ‘forever’ command), but I’ll be using it locally to minimize the chance of conflicts.
 
 So now we have Capistrano and Forever installed. We need to create some new deployment tasks in ./config/deploy.rb to tell Capistrano exactly what we want it to do when we deploy. Here is my skeleton deploy.rb:
+
+```ruby
+set :application, "MY_APPLICATION"
+set :repository, "git@github.com:PATH_TO_MY_REPO"
+set :scm, :git
+set :use_sudo, false
+set :keep_releases, 5
+set :deploy_via, :remote_cache
+set :main_js, "MAIN_APP.js"
+
+desc "Setup the Demo Env"
+task :demo do
+  set :branch, 'develop'
+  set :domain, 'MY DEMO SERVER'
+  set :user, 'MY SSH USER'
+  set :applicationdir, "/home/#{user}/deploy/#{application}"
+  set :deploy_to, applicationdir
+  ssh_options[:keys] = ["/path/to/my/ssh.pub"]
+
+  server 'MY DEMO SERVER', :app, :web, :db, :primary => true
+end
+
+desc "Setup the Production Env"
+task :production do
+  set :branch, 'master'
+  set :domain, 'MY PROD SERVER'
+  set :user, 'MY SSH USER'
+  set :applicationdir, "/home/#{user}/deploy/#{application}"
+  set :deploy_to, applicationdir
+
+  server 'MY PROD SERVER', :app, :web, :db, :primary => true
+end
+
+namespace :deploy do
+
+  before 'deploy:start', 'deploy:npm_install'
+  before 'deploy:restart', 'deploy:npm_install'
+  # before 'deploy:default', 'deploy:setup'
+
+  after 'deploy:create_symlink', 'deploy:symlink_node_folders'
+  after 'deploy:setup', 'deploy:node_additional_setup'
+
+  desc "START the servers"
+    task :start, :roles => :app, :except => { :no_release => true } do
+    run "cd #{applicationdir}/current/ && node_modules/.bin/forever start #{main_js}"
+  end
+
+  desc "STOP the servers"
+    task :stop, :roles => :app, :except => { :no_release => true } do
+    run "cd #{applicationdir}/current/ && node_modules/.bin/forever stop #{main_js}"
+  end
+
+  desc "RESTART the servers"
+    task :restart, :roles => :app, :except => { :no_release => true } do
+    run "cd #{applicationdir}/current/ && node_modules/.bin/forever restart #{main_js}"
+  end
+
+  task :symlink_node_folders, :roles => :app, :except => { :no_release => true } do
+    run "ln -s #{applicationdir}/shared/node_modules #{applicationdir}/current/node_modules"
+  end
+
+  task :node_additional_setup, :roles => :app, :except => { :no_release => true } do
+    run "mkdir -p #{applicationdir}/shared/node_modules"
+  end
+
+  task :npm_install, :roles => :app, :except => { :no_release => true } do
+    run "cd #{applicationdir}/current/ && npm install"
+  end
+
+  task :npm_update, :roles => :app, :except => { :no_release => true } do
+    run "cd #{applicationdir}/current/ && npm update"
+  end
+
+end
+
+task :tail do
+  resp = capture "cd #{applicationdir}/current/ && node_modules/.bin/forever logs | grep #{main_js}"
+  log = resp.split(" ").last
+  log.gsub!("\e[35m", "")
+  log.gsub!("\e[39m", "")
+  run "tail -f #{log}"
+en
+```
 
 You can see that we have custom start, stop, and restart commands which [Capistrano’s normal deployment tasks](https://github.com/capistrano/capistrano/wiki/2.x-Default-Deployment-Behaviour) will use. You can also of course call these tasks directly if you want to restart your servers.
 
