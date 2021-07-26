@@ -1,8 +1,9 @@
 ---
 title: Ansible Static Dynamic Inventory
 description: This entry is cross-posted from tech.taskrabbit.com
-date: "2016-04-22T23:39:01.227Z"
-tags: []
+date: "2015-03-12"
+tags: [taskrabbit, gitops]
+image: /images/medium-export/1__MpJklbc7MeGNCgX3TvL1HQ.png
 # slug: /@evantahler/ansible-static-dynamic-inventory-808cab0a3678
 ---
 
@@ -18,8 +19,9 @@ The main issue is a change in philosophy. Ansible (the CLI tool) expects that yo
 
 In the Ansible project repo, you can keep both the groups and lists of servers, along with variables like this:
 
+```bash
 ###########
-\## HOSTS ##
+## HOSTS ##
 ###########
 
 mysql-master.myapp.com
@@ -36,10 +38,10 @@ resque1.myapp.com
 resque2.myapp.com
 
 ############
-\## GROUPS ##
+## GROUPS ##
 ############
 
-\[production\]
+[production]
 mysql-master.myapp.com
 mysql-slave1.myapp.com
 mysql-slave2.myapp.com
@@ -50,43 +52,45 @@ web3.myapp.com
 resque1.myapp.com
 resque2.myapp.com
 
-\[production:vars\]
+[production:vars]
 host_memory=8GB
 host_disk=20GB
 ansible_ssh_user=root
 
-\## DB ##
+## DB ##
 
-\[mysql\]
+[mysql]
 mysql-master.myapp.com
 mysql-slave1.myapp.com
 mysql-slave2.myapp.com
 
-\[mysql:master\]
+[mysql:master]
 mysql-master.myapp.com
 
-\[mysql:vars\]
+[mysql:vars]
 host_memory=32GB
 host_disk=5120GB
 
-\[redis\]
+[redis]
 redis.myapp.com
 
-\[app\]
+[app]
 web1.myapp.com
 web2.myapp.com
 web3.myapp.com
 resque1.myapp.com
 resque2.myapp.com
 
-\[app:unicorn\]
+[app:unicorn]
 web1.myapp.com
 web2.myapp.com
 web3.myapp.com
 
-\[app:resque\]
+[app:resque]
 resque1.myapp.com
 resque2.myapp.com
+
+```
 
 This type of layout allows you to define things in a simple way: — hosts belong to groups — groups can have variables — you can override default variables with later group definitions down the file.
 
@@ -102,124 +106,126 @@ The answer had a few parts (in ruby):
 
 Tower does not keep the git repo of your ansible project(s) in a single place. It versions them and moves them around as you update it. To that end, finding the most current version of your ./inventories/produciton file is non trivial:
 
-**class** **InventoryFinder**
+```ruby
+class InventoryFinder
 
-**def** **find**(inventory*file)
-*\# On Production server*
-**if** File**.**exists? '/var/lib/awx/projects/'
-folder **\=** Dir**.**glob('/var/lib/awx/projects/\*')**.**max { **|**a,b**|** File**.**ctime(a) **<=>** File**.**ctime(b) }
-**return** folder **+** '/inventories/' **+** inventory_file
-*\# Assume we are within the proper project\_
-**else**
-**return** File**.**dirname(\_\_FILE\_\_) **+** '/../inventories/' **+** inventory_file
-**end**
-**end**
+  def find(inventory_file)
+    # On Production server
+    if File.exists? '/var/lib/awx/projects/'
+      folder = Dir.glob('/var/lib/awx/projects/*').max { |a,b| File.ctime(a) <=> File.ctime(b) }
+      return folder + '/inventories/' + inventory_file
+    # Assume we are within the proper project
+    else
+      return File.dirname(__FILE__) + '/../inventories/' + inventory_file
+    end
+  end
 
-**end**
+end
+```
 
 ### 2\. Parse the Inventory
 
 You can define groups and variables in a few legal ways within an inventory file. You can do the \[group:vars\] method in the example above, or you can do it in-line as you define the server for the first time. Keeping all this in mind, here’s our parser:
 
-**class** **InventoryParser**
+```ruby
+class InventoryParser
 
-**def** **initialize**(inventory_path)
-@inventory_path **\=** inventory_path
-@data **\=** {
-"\_meta" **\=>** {
-"hostvars" **\=>** {}
-}
-}
-**end**
+  def initialize(inventory_path)
+    @inventory_path = inventory_path
+    @data = {
+      "_meta" => {
+        "hostvars" => {}
+      }
+    }
+  end
 
-**def** **inventory_path**
-@inventory_path
-**end**
+  def inventory_path
+    @inventory_path
+  end
 
-**def** **data**
-@data
-**end**
+  def data
+    @data
+  end
 
-**def** **ignored_variables**
-**\[**
-'ansible_ssh_user'
-**\]**
-**end**
+  def ignored_variables
+    [
+      'ansible_ssh_user'
+    ]
+  end
 
-**def** **file_lines**
-File**.**read( inventory_path )**.**split("\\n")
-**end**
+  def file_lines
+    File.read( inventory_path ).split("\n")
+  end
 
-**def** **parse**
-current_section **\=** **nil**
+  def parse
+    current_section = nil
 
-    file\_lines**.**each **do** **|**line**|**
-      parts **\=** line**.**split(' ')
-      **next** **if** parts**.**length **\==** 0
-      **next** **if** parts**.**first**\[**0**\]** **\==** "#"
-      **next** **if** parts**.**first**\[**0**\]** **\==** "/"
-      **if** parts**.**first**\[**0**\]** **\==** '\['
-        current\_section **\=** parts**.**first**.**gsub('\[','')**.**gsub('\]','')
-        **if** data**\[**current\_section**\].**nil? **&&** **!**current\_section**.**include?(':vars')
-          data**\[**current\_section**\]** **\=** **\[\]**
-        **end**
-        **next**
-      **end**
+    file_lines.each do |line|
+      parts = line.split(' ')
+      next if parts.length == 0
+      next if parts.first[0] == "#"
+      next if parts.first[0] == "/"
+      if parts.first[0] == '['
+        current_section = parts.first.gsub('[','').gsub(']','')
+        if data[current_section].nil? && !current_section.include?(':vars')
+          data[current_section] = []
+        end
+        next
+      end
 
-      _\# varaible block_
-      **if** **!**current\_section**.**nil? **&&** current\_section**.**include?(':vars')
-        parts **\=** line**.**split('=')
-        key   **\=** parts**\[**0**\]**
-        value **\=** parts**\[**1**\]**
-        col   **\=** current\_section**.**split(':')
-        col**.**pop
-        group **\=** col**.**join(':')
-        fill\_hosts\_with\_group\_var(group, key, value)
-      _\# host block (could still have in-line variables)_
-      **else**
-        hostname **\=** parts**.**shift
-        ensure\_host\_variables(hostname)
-        d **\=** {}
+      # varaible block
+      if !current_section.nil? && current_section.include?(':vars')
+        parts = line.split('=')
+        key   = parts[0]
+        value = parts[1]
+        col   = current_section.split(':')
+        col.pop
+        group = col.join(':')
+        fill_hosts_with_group_var(group, key, value)
+      # host block (could still have in-line variables)
+      else
+        hostname = parts.shift
+        ensure_host_variables(hostname)
+        d = {}
 
-        **while** parts**.**length **\>** 0
-          part **\=** parts**.**shift
-          words **\=** part**.**split('=')
-          d**\[**words**.**first**\]** **\=** words**.**last **unless** ignored\_variables**.**include? words**.**first
-        **end**
+        while parts.length > 0
+          part = parts.shift
+          words = part.split('=')
+          d[words.first] = words.last unless ignored_variables.include? words.first
+        end
 
-        data**\[**current\_section**\].**push(hostname) **if** current\_section
-        d**.**each **do** **|**k,v**|**
-          data**\[**"\_meta"**\]\[**"hostvars"**\]\[**hostname**\]\[**k**\]** **\=** v
-        **end**
+        data[current_section].push(hostname) if current_section
+        d.each do |k,v|
+          data["_meta"]["hostvars"][hostname][k] = v
+        end
 
-      **end**
-    **end**
+      end
+    end
 
-    **return** data
+    return data
+  end
 
-**end**
+  def ensure_host_variables(hostname)
+    if data["_meta"]["hostvars"][hostname].nil?
+      data["_meta"]["hostvars"][hostname] = {}
+    end
+  end
 
-**def** **ensure_host_variables**(hostname)
-**if** data**\[**"\_meta"**\]\[**"hostvars"**\]\[**hostname**\].**nil?
-data**\[**"\_meta"**\]\[**"hostvars"**\]\[**hostname**\]** **\=** {}
-**end**
-**end**
+  def fill_hosts_with_group_var(group, key, value)
+    return if ignored_variables.include? key
 
-**def** **fill_hosts_with_group_var**(group, key, value)
-**return** **if** ignored_variables**.**include? key
+    if value.include?("'") || value.include?('"')
+      value = eval(value)
+    end
 
-    **if** value**.**include?("'") **||** value**.**include?('"')
-      value **\=** eval(value)
-    **end**
+    data[group].each do |hostname|
+      ensure_host_variables(hostname)
+      data["_meta"]["hostvars"][hostname][key] = value
+    end
+  end
 
-    data**\[**group**\].**each **do** **|**hostname**|**
-      ensure\_host\_variables(hostname)
-      data**\[**"\_meta"**\]\[**"hostvars"**\]\[**hostname**\]\[**key**\]** **\=** value
-    **end**
-
-**end**
-
-**end**
+end
+```
 
 You will also note that we choose to ignore certain variables, via ignored_variables, that we want defined somewhere else within ansible tower (for example SSH options).
 
@@ -229,22 +235,24 @@ As a note, one feature of ansible’s inventory DSL that is not supported here i
 
 Once those classes are defined, you can create a single file (per environment) like so:
 
-_#!/usr/bin/env ruby_
+```ruby
+#!/usr/bin/env ruby
 
 require 'json'
 
-**class** **InventoryFinder**
-_#..._
-**end**
+class InventoryFinder
+ #...
+end
 
-**class** **InventoryParser**
-_#..._
-**end**
+class InventoryParser
+ #...
+end
 
-path **\=** InventoryFinder**.**new**.**find('production')
-data **\=** InventoryParser**.**new(path)**.**parse
+path = InventoryFinder.new.find('production')
+data = InventoryParser.new(path).parse
 
-puts JSON**.**pretty_generate( data )
+puts JSON.pretty_generate( data )
+```
 
 You can load this code into the dynamic inventory and it will be ready to run!
 
@@ -257,5 +265,3 @@ First, on the setting for the project, you can enable a git pull before each pro
 Then, the same option, Update on Launch can be enabled under the inventory source. When you define your inventory, you need to source is a "custom script", and from there, you can choose the inventory reader defined above.
 
 With this place, we are able to have our cake and eat it too: — one file which contains all of our configuration — allow developers to keep an up-to-date inventory source locally within the git ansible project — Ansible Tower can source that file, and ensure that it is up-to-date before we run any job
-
-_Originally published at 12 Mar 2015_

@@ -1,8 +1,9 @@
 ---
 title: PhoneGap and Push Notifications
-description: Intro
-date: "2016-04-22T22:16:41.450Z"
-tags: []
+description: Mobile Apps with JS
+date: "2012-04-11"
+tags: [javascript]
+image: /images/medium-export/1__yizkpDcoH__Bpah8nUy__0PA.jpeg
 # slug: /@evantahler/phonegap-and-push-notifications-75d88f42b0fa
 ---
 
@@ -33,8 +34,10 @@ When your server wants to send a message, it needs to first authenticate using c
 
 Now, the default formats which these certificates are in is hard for node.js to read, but you can convert them. Follow these steps (taken from the APN package)
 
+```bash
 $ openssl x509 -in cert.cer -inform DER -outform PEM -out cert.pem
 $ openssl pkcs12 -in key.p12 -out key.pem -nodes
+```
 
 Now you can pass these new files in as options.key and options.cert.
 
@@ -60,8 +63,10 @@ What all the code above did was allow JS to access the "getToken" iOS method. Co
 
 You also need to tell the **cordova.plst** to enable the plugin by adding
 
+```raw
 <key>PushToken</key>
 <string>PushToken</string>
+```
 
 Now our variable token is now available to us as device.token in javascript! We just made a PhoneGap extension.
 
@@ -87,13 +92,15 @@ Just like before, I now have access to the iOs "getLastPushMessage" method. Now,
 
 You also need to tell the cordova.plst to enable the plugin by adding
 
+```raw
 <key>LastPushMessage</key>
 <string>LastPushMessage</string>
+```
 
-to the pluggins section,
+to the plugins section,
 
 Note that you need to escape the content of the message, as it will be HTML encoded. You also don’t have to poll continuously for new messages, and can call app.getLastPushMessage whenever you want, but you might miss some. Also remember, your app will only ever see messages related to itself. Other app’s messages will be handled in the normal "pop up" way when they aren’t in focus.
 
-Done!
+**The code is [here](https://gist.github.com/evantahler/bf5b2430544d37ad5aa0a0d3fdc12974)**
 
-_Originally published at 11 Apr 2012_
+Done!

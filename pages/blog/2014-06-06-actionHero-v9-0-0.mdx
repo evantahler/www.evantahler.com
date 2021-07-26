@@ -1,8 +1,9 @@
 ---
 title: ActionHero v9.0.0 release candidate
 description: V9.0.0 of ActionHero went live on 2014–06–24
-date: "2016-04-22T23:24:11.221Z"
-tags: []
+date: "2014-06-06"
+tags: [actionhero, javascript, node.js]
+image: /images/medium-export/1__JenwKu6ssjKvGKTHmpbh1g.png
 # slug: /@evantahler/actionhero-v9-0-0-release-candidate-72871c4cefb6
 ---
 
@@ -64,16 +65,17 @@ Implementation Notes
 - in new actionhero projects, we will include the [ws](https://github.com/einaros/ws) package as the backend for Primius (so we can generate a working project), but you do not need to keep this package.
 - actionhero generate will no longer create the client-facing actionheroClient.js on generation. Rather, the server will re-generate these files on boot each time. This is done so you can make changes in /config/servers/webscoket.js and have them included into the client JS. 3 new config options help mange the creation of these files:
 
-_// you can pass a FQDN here, or function to be called / window object to be inspected_
-clientUrl**:** 'window.location.origin',
-_// Directory to render client-side JS._
-_// Path should start with "/" and will be built starting from api.config..general.paths.public_
-clientJsPath**:** 'javascript/',
-
-_// the name of the client-side JS file to render. Both \`.js\` and \`.min.js\` versions will be created_
-_// do not include the file exension_
-_// set to \`null\` to not render the client-side JS on boot_
-clientJsName**:** 'actionheroClient',
+```js
+// you can pass a FQDN here, or function to be called / window object to be inspected
+clientUrl:        'window.location.origin',
+// Directory to render client-side JS.
+// Path should start with "/" and will be built starting from api.config..general.paths.public
+clientJsPath:     'javascript/',
+// the name of the client-side JS file to render.  Both `.js` and `.min.js` versions will be created
+// do not include the file exension
+// set to `null` to not render the client-side JS on boot
+clientJsName:     'actionheroClient',
+```
 
 ### RPC
 
@@ -85,16 +87,20 @@ For example, if you wanted all nodes to log a message, you would do: api.redis.d
 
 If you wanted the node which holds connection abc123 to change their authorized status (perhaps because your room authentication relies on this), you would do:
 
-api.connections.apply('abc123', 'set', \['auth', **true**\], **function**(err){
-_// do stuff_
+```js
+api.connections.apply("abc123", "set", ["auth", true], function (err) {
+  // do stuff
 });
+```
 
 Two new options have been added to the config/redis.js config file to support this:
 
-_// Which channel to use on redis pub/sub for RPC communication_
-channel**:** 'actionhero',
-_// How long to wait for an RPC call before considering it a failure_
-rpcTimeout**:** 5000,
+```raw
+// Which channel to use on redis pub/sub for RPC communication
+channel: 'actionhero',
+// How long to wait for an RPC call before considering it a failure
+rpcTimeout: 5000,
+```
 
 #### WARNING
 
@@ -133,13 +139,15 @@ You can optionally provide a priority to control the order of operations in the 
 
 You can announce to everyone else in the room when a connection joins and leaves:
 
-api.chatRoom.addJoinCallback(**function**(connection, room){
-api.chatRoom.broadcast(connection, room, 'I have entered the room');
+```js
+api.chatRoom.addJoinCallback(function (connection, room) {
+  api.chatRoom.broadcast(connection, room, "I have entered the room");
 });
 
-api.chatRoom.addLeaveCallback(**function**(connection, room){
-api.chatRoom.broadcast(connection, room, 'I have left the room');
+api.chatRoom.addLeaveCallback(function (connection, room) {
+  api.chatRoom.broadcast(connection, room, "I have left the room");
 });
+```
 
 ### REPL
 
