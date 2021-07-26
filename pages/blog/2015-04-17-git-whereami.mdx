@@ -3,8 +3,8 @@ title: Git Whereami
 description: >-
   I’ve been traveling a lot for work, and I thought it might be cool to somehow
   signal where I was physically when checking in code. I knew…
-date: "2016-04-22T23:47:24.913Z"
-tags: []
+date: "2015-04-17"
+tags: [meta, gitops]
 # slug: /@evantahler/git-whereami-7e6d0166af65
 ---
 
@@ -16,8 +16,7 @@ From there, it’s a [simple task](https://github.com/evantahler/git-whereami) t
 
 Here’s the readme from [evantahler/git-whereami](https://github.com/evantahler/git-whereami)
 
-[**evantahler/git-whereami**
-\_git-whereami - Append your location to all of our git commits!\_github.com](https://github.com/evantahler/git-whereami "https://github.com/evantahler/git-whereami")[](https://github.com/evantahler/git-whereami)
+[**evantahler/git-whereami**](https://github.com/evantahler/git-whereami)
 
 _Append your location to all of our git commits!_
 
@@ -27,6 +26,28 @@ Do you travel a lot? Would you team be interested to know where your code is com
 
 Head on over to [https://github.com/robmathers/WhereAmI](https://github.com/robmathers/WhereAmI) and download the whereami excecutable. Place it in your home folder, like ~/whereami
 
+```bash
+#!/bin/bash
+# prepare-commit-msg
+
+WHEREAMI="$HOME/whereami"
+
+LAT=`$WHEREAMI | grep Latitude  | awk -F" " '{print $2}' | awk '{print $1}'`
+LNG=`$WHEREAMI | grep Longitude | awk -F" " '{print $2}' | awk '{print $1}'`
+
+URL="http://maps.googleapis.com/maps/api/geocode/json?latlng=$LAT,$LNG&sensor=false"
+ADDRESS=`eval "curl -s \"$URL\" | grep formatted_address | head -n 1 | sed 's/\"//g' | sed 's/,//g'"`
+ADDRESS=`echo $ADDRESS | awk -F' : ' '{print $2}'`
+DATE=`date`
+
+printf "\n"                      >> $1
+printf "This commit coded at:\n" >> $1
+printf "---------------------\n" >> $1
+printf "$ADDRESS\n"              >> $1
+printf "$LAT, $LNG\n"            >> $1
+printf "@ $DATE\n"               >> $1
+```
+
 #### Setup whereami
 
 In whichever git repository you want to use this on, copy the prepare-commit-msg into ~/PROJECT/.git/hooks.
@@ -35,29 +56,26 @@ In whichever git repository you want to use this on, copy the prepare-commit-msg
 
 Now, whenever you make a git commit, we will use whereami to source your lat/lng, and then ask Google’s geocoder what your address is, resulting in:
 
-\# Please enter the commit message for your changes. Lines starting
-\# with '#' will be ignored, and an empty message aborts the commit.
-\# On branch master
-\# Your branch is ahead of 'origin/master' by 4 commits.
-\# (use "git push" to publish your local commits)
-
+```raw
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is ahead of 'origin/master' by 4 commits.
+#   (use "git push" to publish your local commits)
 #
-
-\# Changes to be committed:
-\# new file: newfile
-
+# Changes to be committed:
+#       new file:   newfile
 #
 
 This commit coded at:
-\---------------------
+---------------------
 63 Hanbury Street London E1 5JP UK
 51.520182, -0.070440
 @ Fri Apr 17 15:57:03 BST 2015
+```
 
 Feel free to tweak the template as you wish!
 
 #### Notes:
 
 - OSX Only!
-
-_Originally published at 17 Apr 2015_

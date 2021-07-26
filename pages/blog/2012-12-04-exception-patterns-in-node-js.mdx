@@ -3,8 +3,9 @@ title: Exception Patterns in node.js
 description: >-
   Recently we added support for a ‘developer mode’ to ActionHero which reloads
   parts of your project on the fly as you develop. Doing so…
-date: "2016-04-22T22:19:52.532Z"
-tags: []
+date: "2012-12-04"
+tags: [actionhero, node.js, javascript]
+image: /images/medium-export/0__o0B__oyddYtvd8ZjV.jpeg
 # slug: /@evantahler/exception-patterns-in-node-js-86e428941b8b
 ---
 
@@ -36,29 +37,36 @@ For synchronous functions, the most common pattern when something goes wrong is 
 
 Here’s a simple example:
 
-**var** addSync **\=** **function**(a,b){
-**if**(**!**isNumber(a)){ **throw** **new** Error(a **+** " is not a number"); }
-**if**(**!**isNumber(b)){ **throw** **new** Error(b **+** " is not a number"); }
-**return** parseFloat(a) **+** parseFloat(b);
-}
+```js
+var addSync = function (a, b) {
+  if (!isNumber(a)) {
+    throw new Error(a + " is not a number");
+  }
+  if (!isNumber(b)) {
+    throw new Error(b + " is not a number");
+  }
+  return parseFloat(a) + parseFloat(b);
+};
 
-**function** isNumber(n) {
-**return** **!**isNaN(parseFloat(n)) **&&** isFinite(n);
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
+```
 
 When using this pattern, the callers of your method can be sure that the function worked as intended, or that an error was thrown. Now, you might not want that thrown exception to crash you application so you can use JS’ try/catch functions to wrap a function which you think _might_ thrown an exception. In this manner you can also chose to do whatever you want with the exception object returned, including displaying its stack trace, etc. This programming style enforces that your methods are called ‘correctly’ (as you have defined ‘correct’ to be), and developers must opt-in to treating your metod in a ‘fuzzy’ way by wrapping it with a try/catch block. By the way, javascript’s try{} catch(e) {} methods **only** work with synchronous functions.
 
-**try**{
-addSync(1, "word");
-console.log("YAY");
-}**catch**(err){
-console.log(err.stack);
+```js
+try{
+ addSync(1, "word");
+ console.log("YAY");
+}catch(err){
+ console.log(err.stack);
 }
 
-Error**:** word is not a number
-at addSync (/Users/evantahler/Desktop/test.js:3:28)
-at Object. (/Users/evantahler/Desktop/test.js:11:14)
-...
+Error: word is not a number
+ at addSync (/Users/evantahler/Desktop/test.js:3:28)
+ at Object. (/Users/evantahler/Desktop/test.js:11:14)
+```
 
 Sometimes you don’t have the ability to ensure that your functions return an error rather than throw it. For example, the ‘require’ method will throw an error if the file you are loading has a syntax error. In these situations you have 2 options: either wrap the call in a try/catch, or use node’s ‘process.on(‘uncaughtException’, function(err) { })’ global catch.
 
@@ -70,16 +78,24 @@ There are 2 common async patterns in node: the callback(error, data) pattern and
 
 The most common pattern for async code is to respond to the callback with callback(error, data). This pattern follows a similar ‘promise’ an async function makes, mainly that it will eventually respond to it’s callback with information on its own operation (error) and any results of the operation. What’s nice about the (err, data) pattern is that you can always expect 2 values, and you can’t confuse which is which.
 
-**var** addAsync **\=** **function**(a,b,next){
-**if**(**typeof** next **!=** 'function'){ **return** **new** Error('this is an async function and expects a callback'); }
-**if**(**!**isNumber(a)){ next(**new** Error(a **+** " is not a number"), **null**); }
-**else** **if**(**!**isNumber(b)){ next(**new** Error(b **+** " is not a number"), **null**); }
-**else**{ next(**null**, parseFloat(a) **+** parseFloat(b)); }
-}
+```js
+var addAsync = function (a, b, next) {
+  if (typeof next != "function") {
+    return new Error("this is an async function and expects a callback");
+  }
+  if (!isNumber(a)) {
+    next(new Error(a + " is not a number"), null);
+  } else if (!isNumber(b)) {
+    next(new Error(b + " is not a number"), null);
+  } else {
+    next(null, parseFloat(a) + parseFloat(b));
+  }
+};
 
-**function** isNumber(n) {
-**return** **!**isNaN(parseFloat(n)) **&&** isFinite(n);
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
+```
 
 Happily in javascript, ‘null == true’ responds with false, so you can check the results of any asynchronous function using this pattern with ‘if(err){ } else { }’.
 
@@ -89,70 +105,71 @@ In actions, we are always passing around the ‘connection’ object, and this o
 
 An example of actionHero’s type of callback pattern is:
 
+```js
 var addAsyncWithDataObject = function(object,next){
-if(!isNumber(object.a)){ object.error = new Error(object.a + " is not a number"); }
-else if(!isNumber(object.b)){ object.error = new Error(object.b + " is not a number"); }
-else{ object.result = parseFloat(a) + parseFloat(b); }
-
+ if(!isNumber(object.a)){ object.error = new Error(object.a + ' is not a number'); }
+ else if(!isNumber(object.b)){ object.error = new Error(object.b + ' is not a number'); }
+ else{ object.result = parseFloat(a) + parseFloat(b); }
 if(object.error == null{
-next(object, true);
-}else{
-next(object, false);
-}
-}
+ next(object, true);
+ }else{
+ next(object, false);
+ }
+ }
 
-function isNumber(n) {
-return !isNaN(parseFloat(n)) && isFinite(n);
-}
+ function isNumber(n) {
+ return !isNaN(parseFloat(n)) && isFinite(n);
+ }
+```
 
 This version of the async function would be called like this:
 
+```js
 data = {
-a: 1,
-b: 2
-}
-
-addAsyncWithDataObject(data, function(data, toRender){
-if(!toRender){
-// handle error
-}else{
-// yay
-}
+  a: 1,
+  b: 2,
+};
+addAsyncWithDataObject(data, function (data, toRender) {
+  if (!toRender) {
+    // handle error
+  } else {
+    // yay
+  }
 });
+```
 
 ### Domain Exceptions
 
 In recent node.js versions ( version >= 0.8.0 ), domains have been introduced. Domains are a tool with which you can wrap a section of your code in an asynchronous container. Think of them like a async version of try / catch. An example:
 
+```js
 var domain = require(‘domain’);
 
 var addAsync = function(a,b,callback){
-if(!isNumber(a)) { throw new Error(a + "is not a number"); }
-if(!isNumber(b)) { throw new Error(b + "is not a number"); }
-var response = a + b;
-callback(null, response);
+ if(!isNumber(a)) { throw new Error(a + “is not a number”); }
+ if(!isNumber(b)) { throw new Error(b + “is not a number”); }
+ var response = a + b;
+ callback(null, response);
 }
-
 var isNumber = function(n) {
-return !isNaN(parseFloat(n)) && isFinite(n);
-}
+ return !isNaN(parseFloat(n)) && isFinite(n);
+ }
 
-var containWithDomain = function(a,b,callback){
-var wrapper = domain.create();
-wrapper.on("error", function(err){
-callback(new Error("caught by domain"), null);
-});
-wrapper.run(function(){
-var response = add(a,b, function(err, response){
-callback(err, response);
-});
-});
-}
+ var containWithDomain = function(a,b,callback){
+ var wrapper = domain.create();
+ wrapper.on(“error”, function(err){
+ callback(new Error(“caught by domain”), null);
+ });
+ wrapper.run(function(){
+ var response = add(a,b, function(err, response){
+ callback(err, response);
+ });
+ });
+ }
+```
 
 Here you can see that our addAsync method now throws errors rather than passing them to the callback. Left uncaught, they would normally crash the application. However, if we use containWithDomain() rather than addAsync(), we can actually catch those thrown errors and handle them in a meaningful way. Domains are great when you don’t know exactly what the underlying code is doing, but should be avoided in favor of one of the first 2 patterns whenever possible.
 
 ActionHero users domains to run users’ action and task code within to ensure that one poor action won’t crash the whole app (and how we are able to catch exceptions and render custom error traces as shown in the image above). You can see actionHero’s exception code here.
 
 ### Thanks!
-
-_Originally published at 04 Nov 2012_

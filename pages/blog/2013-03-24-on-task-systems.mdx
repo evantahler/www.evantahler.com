@@ -1,8 +1,9 @@
 ---
 title: On Task Systems
 description: Why Task Systems?
-date: "2016-04-22T22:40:24.289Z"
-tags: []
+date: "2013-03-24"
+tags: [node.js, actionhero, taskrabbit, javascript]
+image: /images/medium-export/1__cvQ1iEN5JVT__bUpcd1tDvg.png
 # slug: /@evantahler/on-task-systems-2756f08a36d6
 ---
 
@@ -28,8 +29,10 @@ For Redis based task systems (like Resque and sidekiq), Redis is a single-thread
 
 For Database-backed queues, it’s still possible to ensure an "atomic" pop, but it’s a little trickier. Lets assume we have table with the following structure:
 
+```raw
 id | created_at | data | run_at | locked_by | locked_at
-\--------------------------------------------------------
+--------------------------------------------------------
+```
 
 This structure is very similar to that created by DelayJobs. Adding a task to a relational database is as simple as a normal insert statement. Most relational Databases have the property that if you do not supply a primary key, one will be uniquely assigned for you, and this ID can be thought of at the place within the task list. Working the queue is a different matter. A worker simply cannot select id from tasks where run_at >= NOW() AND locked_by IS NULL; because this can easily result in a race condition because the acts of select and update (where a worker would claim a task) are not atomic. Putting them within a transaction is also no good, as you can’t read and make decisions on the result (is the result of the select null?).
 
@@ -85,24 +88,28 @@ When building ActionHero’s task system, I took a look at all the types of task
 
 actionHero defines tasks in /tasks:
 
-exports.sayHello **\=** {
-name**:** 'sayHello',
-description**:** 'I say hello',
-scope**:** 'any',
-frequency**:** **null**,
-run**:** **function**(api, params, next){
-api.log("Hello, " **+** params.name);
-next(**null**, **true**);
-}
+```js
+exports.sayHello = {
+  name: "sayHello",
+  description: "I say hello",
+  scope: "any",
+  frequency: null,
+  run: function (api, params, next) {
+    api.log("Hello, " + params.name);
+    next(null, true);
+  },
 };
+```
 
 and you can invoke the task in your code like so:
 
-**var** task **\=** **new** api.task({
-name**:** "sayHello",
-runAt**:** **new** Date().getTime() **+** 30000, _// run 30 seconds from now_
-params**:** {name**:** 'Evan'}, _// any optional params to pass to the task_
-});and then you can either task.enqueue() or tasks.run()
+```js
+var task = new api.task({
+  name: "sayHello",
+  runAt: new Date().getTime() + 30000, // run 30 seconds from now
+  params: { name: "Evan" }, // any optional params to pass to the task
+}); // and then you can either task.enqueue() or tasks.run()
+```
 
 First, note the metadata. scope is the toggle for defining if the tasks is duplicatable or not. "any" means that any worker can work this task atomically. "all" means that the task will be worked by all servers currently running, and duplicated accordingly (I’ll explain how later).
 
@@ -114,35 +121,41 @@ Finally the frequency option. This is used to denote if a task is recurrent, mea
 
 ActionHero uses redis to store its task data. To enable "all" task scopes, this means that every server (not worker) needs a ‘local’ queue of what to work on in addition to the global list. To enable the runAt parameter, there needs to be a ‘holding pen’ for tasks which aren’t ready ro run yet. This leafs us to:
 
-api.tasks.queues **\=** {
-globalQueue**:** 'actionHero:tasks:global',
-delayedQueuePrefix**:** 'actionHero:tasks:delayed',
-localQueue**:** 'actionHero:tasks:' **+** api.id.replace(/:/g,'-'),
-data**:** 'actionHero:tasks:data', _// actually a hash_
-workerStatus**:** 'actionHero:tasks:workerStatus', _// actually a hash_
-enqueuedPeriodicTasks**:** 'actionHero:tasks:enqueuedPeriodicTasks'
-}
+```js
+api.tasks.queues = {
+  globalQueue: "actionHero:tasks:global",
+  delayedQueuePrefix: "actionHero:tasks:delayed",
+  localQueue: "actionHero:tasks:" + api.id.replace(/:/g, "-"),
+  data: "actionHero:tasks:data", // actually a hash
+  workerStatus: "actionHero:tasks:workerStatus", // actually a hash
+  enqueuedPeriodicTasks: "actionHero:tasks:enqueuedPeriodicTasks",
+};
+```
 
 and the worker’s run the following pattern:
 
-api.taskProcessor.prototype.process **\=** **function**(callback){
-**var** self **\=** **this**;
-clearTimeout(self.timer);
-self.processLocalQueue(**function**(){
-self.processGlobalQueue(**function**(){
-self.processDelayedQueue(**function**(){
-self.setWorkerStatus("idle", **function**(){
-**if**(self.running **\==** **true**){
-self.timer **\=** setTimeout(**function**(){
-self.process();
-}, self.cycleTimeMS);
-}
-**if**(**typeof** callback **\==** "function"){ callback(); }
-});
-});
-});
-});
-}
+```js
+api.taskProcessor.prototype.process = function (callback) {
+  var self = this;
+  clearTimeout(self.timer);
+  self.processLocalQueue(function () {
+    self.processGlobalQueue(function () {
+      self.processDelayedQueue(function () {
+        self.setWorkerStatus("idle", function () {
+          if (self.running == true) {
+            self.timer = setTimeout(function () {
+              self.process();
+            }, self.cycleTimeMS);
+          }
+          if (typeof callback == "function") {
+            callback();
+          }
+        });
+      });
+    });
+  });
+};
+```
 
 Interestingly, the only step that actually "preforms" the task is self.processLocalQueue. The rest of the methods move the task’s pointer from queue to another. Remember that the actual job’s data is stored in the data hash. This allows us to do things like check enqueuedPeriodicTasks at boot and ensure that all the periodic tasks I know about (where frequency > 0) are in system somewhere by inspecting the data hash. Even currently processing jobs will be present.
 

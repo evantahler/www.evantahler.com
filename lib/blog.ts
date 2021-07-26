@@ -13,6 +13,7 @@ export namespace Blog {
     tags: string[];
     image: string;
     featured?: boolean;
+    unlisted?: boolean;
   }
   export interface PostData {
     slug: string;
@@ -64,6 +65,8 @@ export namespace Blog {
 
     for (const slug of slugs.reverse()) {
       const post = await getBySlug(slug);
+
+      if (post.meta.unlisted) continue;
       if (!post.meta) continue;
       if (!post.meta.title) continue;
       if (!post.meta.date) continue;

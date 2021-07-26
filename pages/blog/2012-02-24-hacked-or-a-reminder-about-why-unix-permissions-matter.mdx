@@ -3,8 +3,9 @@ title: "Hacked! (or: A reminder about why unix permissions matter)"
 description: >-
   Note: I have included links to some of the malicious PHP code which attacked
   me in this blog post. I had a hard time deciding whether this…
-date: "2016-04-22T22:15:33.525Z"
-tags: []
+date: "2012-02-24"
+tags: [php]
+meta: /images/medium-export/1__Uub7lw9wYczHU7v__vP8WaA.jpeg
 # slug: >-
 #  /@evantahler/hacked-or-a-reminder-about-why-unix-permissions-matter-d4a0e3418432
 ---
@@ -23,7 +24,9 @@ Yesterday I thought that while visiting my site I was quickly redirected to some
 
 The first thing I checked was the database, looking for JS and iFrame tags in the comments, but there was nothing there. Then I looked though the posts and other wordpress tables looking for anything out of place, but still, nothing. Then I wondered if someone was able to break my caching scheme, so I turned off all the cache pluggins I had. Nothing. Finally, I decided to take a peak at the actual PHP files which run this blog and… bingo! There, at the top of EVERY PHP page, was a mysterious base-64 encoded string.
 
+```php
 <?php eval(base64\_decode(" { A REALLY LONG BASE 64 STRING WAS HERE } ")); ?>
+```
 
 For those of you curious as to what the base64 encoded string revealed, I’ve created a [GitHub gist for it](https://gist.github.com/1891398) here (with some formatting to make it legible).
 
@@ -54,5 +57,3 @@ All of this was possible because of that one open directory.
 The moral of the story (tldr;): It wasn’t WordPress’ fault, it wasn’t Dreamhost’s fault. It probably wasn’t even the other Dreamhost customer’s fault (I’ll bet his account was compromised just like mine was). It was my fault for being a n00b and having a 0777 folder.
 
 ### Never chmod 0777 anything, especially on a shared server.
-
-_Originally published at 24 Feb 2012_

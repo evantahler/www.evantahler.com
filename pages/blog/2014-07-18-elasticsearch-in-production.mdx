@@ -1,8 +1,9 @@
 ---
 title: ElasticSearch in Production
 description: This is cross-posted from tech.taskrabbit.com
-date: "2016-04-22T23:26:24.665Z"
-tags: []
+date: "2014-07-18"
+tags: [taskrabbit, elasticsearch]
+image: /images/medium-export/0__snWdTeknvk2Ksn5W.png
 # slug: /@evantahler/elasticsearch-in-production-ada34b550e1b
 ---
 
@@ -42,17 +43,30 @@ ElasticSearch runs on Java, and tuning the JVM’s memory management is somethin
 
 ElasticSearch has a slowQuery log you can enable in elasticsearch.yml:
 
-index.search.slowlog.threshold.query.warn: 10s index.search.slowlog.threshold.query.info: 5s index.search.slowlog.threshold.query.debug: 2s index.search.slowlog.threshold.query.trace: 500ms
+```bash
+index.search.slowlog.threshold.query.warn: 10s
+index.search.slowlog.threshold.query.info: 5s
+index.search.slowlog.threshold.query.debug: 2s
+index.search.slowlog.threshold.query.trace: 500ms
 
-index.search.slowlog.threshold.fetch.warn: 1s index.search.slowlog.threshold.fetch.info: 800ms index.search.slowlog.threshold.fetch.debug: 500ms index.search.slowlog.threshold.fetch.trace: 200ms
+index.search.slowlog.threshold.fetch.warn: 1s
+index.search.slowlog.threshold.fetch.info: 800ms
+index.search.slowlog.threshold.fetch.debug: 500ms
+index.search.slowlog.threshold.fetch.trace: 200ms
 
-index.indexing.slowlog.threshold.index.warn: 10s index.indexing.slowlog.threshold.index.info: 5s index.indexing.slowlog.threshold.index.debug: 2s index.indexing.slowlog.threshold.index.trace: 500ms
+index.indexing.slowlog.threshold.index.warn: 10s
+index.indexing.slowlog.threshold.index.info: 5s
+index.indexing.slowlog.threshold.index.debug: 2s
+index.indexing.slowlog.threshold.index.trace: 500ms
+```
 
 Enabling this showed us that in the downtime windows, we were still serving queries, but they were taking seconds to complete where normally they take milliseconds. Correlating that with the normal logs, we learned that these slower queries were blocking later queries from being parsed, and they were simply being rejected:
 
+```raw
 ...
 Caused by: org.elasticsearch.common.util.concurrent.EsRejectedExecutionException: rejected execution **(**queue capacity 1000**)** on org.elasticsearch.transport.netty.MessageChannelHandler$RequestHandler
 ...
+```
 
 This indicates that we had a cascade failure! If one node slows down, requests would be routed to the next one, and compound the problem.
 
@@ -62,31 +76,33 @@ Naively, we thought we simply had a throughput problem. We changed our ElasticSe
 
 ElasticSearch will note in its normal logs if any GC is happening which effects a slow query, but we wanted more detail. Another logging option ElasticSearch has is ES_USE_GC_LOGGING which sets some JVM variables:
 
-_\# from elasticsearch.in.sh.erb_
-**if** **\[** "x$ES\_USE\_GC\_LOGGING" !**\=** "x" **\]**; **then**
-  JAVA\_OPTS**\=**"$JAVA_OPTS -XX:+PrintGCDetails"
-JAVA_OPTS**\=**"$JAVA\_OPTS -XX:+PrintGCTimeStamps"
-  JAVA\_OPTS**\=**"$JAVA_OPTS -XX:+PrintClassHistogram"
-JAVA_OPTS**\=**"$JAVA\_OPTS -XX:+PrintTenuringDistribution"
-  JAVA\_OPTS**\=**"$JAVA_OPTS -XX:+PrintGCApplicationStoppedTime"
-JAVA_OPTS**\=**"$JAVA_OPTS -Xloggc:/var/log/elasticsearch/gc.log"
-**fi**
+```ruby
+# from elasticsearch.in.sh.erb
+if [ "x$ES_USE_GC_LOGGING" != "x" ]; then
+  JAVA_OPTS="$JAVA_OPTS -XX:+PrintGCDetails"
+  JAVA_OPTS="$JAVA_OPTS -XX:+PrintGCTimeStamps"
+  JAVA_OPTS="$JAVA_OPTS -XX:+PrintClassHistogram"
+  JAVA_OPTS="$JAVA_OPTS -XX:+PrintTenuringDistribution"
+  JAVA_OPTS="$JAVA_OPTS -XX:+PrintGCApplicationStoppedTime"
+  JAVA_OPTS="$JAVA_OPTS -Xloggc:/var/log/elasticsearch/gc.log"
+fi
+```
 
 With these options enabled, a new log file will be created which will log the occurrences and durations of each GC event. We confirmed that ElasticSearch was in fact garbage collecting for large amounts of time… and with more ram, it took longer when something went wrong. The JVM (unlike ruby) is good at obeying its min and max allocation, so the system ram was never overloaded, which was what we were used to looking for as a problem signal. The ES_HEAP_SIZE environment variable is used for this purpose. You can modify it within /etc/init.d/elasticsearch on Ubuntu.
 
 To fix the long garbage collection time, we switched from openJDK to Oracle’s "official" Java branch. We also switched to the G1GC garbage collector from the default ConcMarkSweepGC method. To change this, you will need to modify bin/elasticsearch.in.sh, as the older options are hard-coded:
 
+```raw
 ...
-_\# JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC"_
-_\# JAVA_OPTS="$JAVA_OPTS -XX:+UseConcMarkSweepGC"_
+# JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC"
+# JAVA_OPTS="$JAVA_OPTS -XX:+UseConcMarkSweepGC"
 
-_\# JAVA_OPTS="$JAVA_OPTS -XX:CMSInitiatingOccupancyFraction=75"_
-_\# JAVA_OPTS="$JAVA_OPTS -XX:+UseCMSInitiatingOccupancyOnly"_
+# JAVA_OPTS="$JAVA_OPTS -XX:CMSInitiatingOccupancyFraction=75"
+# JAVA_OPTS="$JAVA_OPTS -XX:+UseCMSInitiatingOccupancyOnly"
 
-_\# Try new GC_
-JAVA_OPTS**\=**"$JAVA_OPTS -XX:+UseG1GC"
+# Try new GC
+JAVA_OPTS="$JAVA_OPTS -XX:+UseG1GC"
 ...
+```
 
 Depending on your OS, you may also need to modify /etc/init.d/elasticsearch to point to the proper version of the Java binary.
-
-_Originally published at 18 Jul 2014_
