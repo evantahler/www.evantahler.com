@@ -1,6 +1,6 @@
 # www.evantahler.com
 
-[![Build Status](https://circleci.com/gh/evantahler/www.evantahler.com.png)](https://circleci.com/gh/evantahler/www.evantahler.com)
+[![test](https://github.com/evantahler/www.evantahler.com/actions/workflows/test.yml/badge.svg)](https://github.com/evantahler/www.evantahler.com/actions/workflows/test.yml)
 
 ## Install
 This is a [React Project](https://facebook.github.io/react/) utilizing [next.js](https://github.com/zeit/next.js/) and [react-bootstrap](https://react-bootstrap.github.io/)
