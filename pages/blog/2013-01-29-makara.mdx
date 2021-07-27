@@ -1,8 +1,9 @@
 ---
 title: Makara — a read-write splitting adapter for Active Record
 description: This entry is cross-posted from tech.taskrabbit.com
-date: "2016-04-22T22:27:30.966Z"
-tags: []
+date: "2013-01-29"
+tags: [ruby, taskrabbit]
+image: /images/medium-export/0__PQJXKJGTtmUqMwGe.jpg
 # slug: >-
 #  /@evantahler/makara-a-read-write-splitting-adapter-for-active-record-5142df310e44
 ---
@@ -40,15 +41,17 @@ After using Octopus for a while we noticed that, in some rare cases, our web app
 
 Unfortunately, our logic for this while using the Octopus gem was fairly hacky:
 
-1 ActiveRecord**::**ConnectionAdapters**::**AbstractAdapter**.**class_eval **do**
-2 **attr_reader** :last_query
-3 **def** **log_with_last_query**(sql, name, **&**block)
-4 @last_query **\=** **\[**sql, name**\]**
-5 Octopus**::**Proxy**.**master_lock?(sql)
-6 log_without_last_query(sql, name, **&**block)
-7 **end**
-8 alias_method_chain :log, :last_query
-9 **end**
+```ruby
+ActiveRecord::ConnectionAdapters::AbstractAdapter.class_eval do
+  attr_reader :last_query
+  def log_with_last_query(sql, name, &block)
+    @last_query = [sql, name]
+    Octopus::Proxy.master_lock?(sql)
+    log_without_last_query(sql, name, &block)
+  end
+  alias_method_chain :log, :last_query
+end
+```
 
 You will notice that because the Octopus gem didn’t expose the actual query Active Record created, we hijacked the logger to get the final query. Octopus made its choices of which type of database to use by inspecting the method called from Active Record rather than query inspection. The way we handled "un-sticking" from a database was to reset it after the request ended in our Unicorn configuration.
 
@@ -58,29 +61,31 @@ We had some trouble upgrading from Rails 2 to Rails 3 with Octopus so we thought
 
 First and foremost, Makara needed to be able to allow us to scale our database capacity in a way that didn’t require us to change any code within our application (other than a database.yml update). We needed the application to be able to perform on a development laptop running vanilla mySQL and in production with n-geography-specific replication shards. The gem also needed to be able to handle the assignment of roles to these databases. Thus, [the structure of our ideal database.yml was born](https://github.com/taskrabbit/makara/blob/master/database.example.yml):
 
-1 production:
-2 sticky_slave: **true**
-3 sticky_master: **true**
-4 adapter: makara
-5 db_adapter: mysql2
-6 host: xxx
-7 user: xxx
-8 password: xxx
-9 blacklist_duration: 5
-10 databases:
-11 **\-** name: master
-12 role: master
-13 **\-** name: slave1
-14 role: slave
-15 host: xxx
-16 user: xxx
-17 password: xxx
-18 weight: 3
-19 **\-** name: slave2
-20 role: slave
-21 host: xxx
-22 user: xxx
-23 weight: 2
+```yaml
+production:
+  sticky_slave: true
+  sticky_master: true
+  adapter: makara
+  db_adapter: mysql2
+  host: xxx
+  user: xxx
+  password: xxx
+  blacklist_duration: 5
+  databases:
+    - name: master
+      role: master
+    - name: slave1
+      role: slave
+      host: xxx
+      user: xxx
+      password: xxx
+      weight: 3
+    - name: slave2
+      role: slave
+      host: xxx
+      user: xxx
+      weight: 2
+```
 
 You will note that you can define "common" connection parameters (like a database name), and overwrite them or provide specifics for each replica (for example in production we have a read+write user for master, and a read+only user for the slaves).
 
@@ -91,8 +96,3 @@ On to blacklisting. Because we have inserted ourselves as the Active Record adap
 We made the choice to be a Rails-only gem, that allowed us to make use of a middleware that helped us enforce our ‘stickiness’ across requests. We ensured that only one slave was used for all queries in a request by default, adn f your wrote to master, you stayed there for the subsequent request. What about the case where you create a new record in one request, and then instantly want to view it in the next? How can you be sure that whichever slave you hit next has the data you need? With a cookie! We use the rails middleware to drop down a cookie if you have been stuck to master, and on the next request, Makara will ensure that you come back to that same database, just for that next request.
 
 #### [Makara is available now. Enjoy!](https://github.com/taskrabbit/makara)
-
-[**taskrabbit/makara**
-\_makara - A Read-Write Proxy for Connections; Also provides an ActiveRecord adapter.\_github.com](https://github.com/taskrabbit/makara "https://github.com/taskrabbit/makara")[](https://github.com/taskrabbit/makara)
-
-_Originally published at 29 Jan 2013_

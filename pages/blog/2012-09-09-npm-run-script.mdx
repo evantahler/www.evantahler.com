@@ -3,8 +3,9 @@ title: NPM and run-script
 description: >-
   Just a handy reminder that you can add "arbitrary" commands to your node NPM
   modules without creating binaries.
-date: "2016-04-22T22:18:34.588Z"
-tags: []
+date: "2012-09-09"
+tags: [node.js, javascript, actionhero]
+image: /images/medium-export/1__ocEQaLmuC7iloRNrsFaD__Q.jpeg
 # slug: /@evantahler/npm-and-run-script-d0eb0e7f4be
 ---
 
@@ -14,29 +15,39 @@ Just a handy reminder that you can add "arbitrary" commands to your node NPM mod
 
 One of my favorite features of NPM is the option of installing packages either globally or locally (with local as the default). Do you want a special version of [forever](https://github.com/nodejitsu/forever) for project-\_a and not project-\_b? You can!
 
-global: \`forever start app.js\`
-local: \`./node_modules/.bin/forever start app.js\`
+```raw
+global: `forever start app.js`
+local: `./node_modules/.bin/forever start app.js`
+```
 
 You can also add ./node_modules/.bin to your path when developing to make this even easier.
 
 This saves me so many headaches when compared to Ruby. There’s no need for something like [Bundler](http://gembundler.com/) (which is a great solution to Ruby’s problems BTW). I need to explicitly opt do something globally, so I should be aware of what I am getting into. The downside of this is potentially wasted disk space for duplicate packages, but I am OK with that. Because of NPM’s philosophy of local execution, you may not want to create binaries for your packages, but still might want a way to call actions from the command line. NPM to the rescue!
 
-The following syntax can be used: npm run-script #{package} #{command}
+The following syntax can be used:
+
+```raw
+npm run-script #{package} #{command}
+```
 
 You all probably know that you can define a "run" and "test" actions for any package, but you can keep adding more. For example, here’s the relevant scripts block from [actionHero](http://actionherojs.com/):
 
-"scripts": {
-"start": "./scripts/actionHero",
-"startCluster": "./scripts/actionHeroCluster",
-"install": "./scripts/install",
-"test": "./node_modules/.bin/vows spec/\* -v --dot-matrix",
-"generate" : "./scripts/generate",
-"generateAction" : "./scripts/generateAction",
-"generateTask" : "./scripts/generateTask"
+```json
+{
+  "scripts": {
+    "start": "./scripts/actionHero",
+    "startCluster": "./scripts/actionHeroCluster",
+    "install": "./scripts/install",
+    "test": "./node_modules/.bin/vows spec/* -v --dot-matrix",
+    "generate": "./scripts/generate",
+    "generateAction": "./scripts/generateAction",
+    "generateTask": "./scripts/generateTask"
+  }
 }
+```
 
 By default, NPM will use the "run", "start", "stop", "restart" and "test" actions from the directory you are currently in. However, you can run actions from any package available to you (either local or global) with run-script. actionHero uses this to crete new projects with the command "npm run-script actionHero generate". Note the syntax:
 
+```raw
 npm run-script #{package} #{command}
-
-_Originally published at 09 Sep 2012_
+```

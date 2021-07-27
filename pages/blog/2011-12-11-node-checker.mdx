@@ -3,8 +3,8 @@ title: NodeChecker — Big Board Dashboarding
 description: >-
   At ModCloth, our Ops team wanted to have a real time dashboard of important
   site information so they could know ASAP if something was wrong…
-date: "2016-04-22T18:38:33.097Z"
-tags: []
+date: "2011-12-11"
+tags: [node.js, javascript, modcloth]
 # slug: /@evantahler/nodechecker-big-board-dashboarding-e2cc0b77b55c
 ---
 
@@ -14,48 +14,47 @@ At [ModCloth](http://modcloth.com), our Ops team wanted to have a real time dash
 
 So, I decided to build one. Inspired by the [panic status board](http://www.panic.com/blog/2010/03/the-panic-status-board/) and some other big boards I’ve seen, this project is meant to be a simple way for you to monitor anything you want. It’s a small nodeJS project built on the actionHero framework (more coming soon) that uses simple config files to allow you to create real time charts of your important data. Here’s a screen shot:
 
-Configuring checks is as simple as making a new entry in cheks.json:
+Configuring checks is as simple as making a new entry in `checks.json`:
 
+```json
 {
-"name":"http_google_com",
-"type":"httpRequest",
-"frequencyInSeconds":10,
-"entriesToKeep":100,
-"params":{
-"hostname":"http://www.google.com",
-"matcher":"&lt;/div&gt;"
+  "name": "http_google_com",
+  "type": "httpRequest",
+  "frequencyInSeconds": 10,
+  "entriesToKeep": 100,
+  "params": {
+    "hostname": "http://www.google.com",
+    "matcher": "&lt;/div&gt;"
+  }
 }
-}
+```
 
 This check would do a web request to google.com every 10 seconds, and then parse the response for the string </div>. The chart will graph the time this operation took, and the pie graph will show how many times the check was successful (success in this case means having a complete response with the string </div> found).
 
-Because this is \* exactly\* the type of operation node is great at (handling routing while grabbing data from other sources), I also made it easy to add new "checks" to the application. A new proxy checker which would gerate a random number on each cycle would be:
+Because this is _exactly_ the type of operation node is great at (handling routing while grabbing data from other sources), I also made it easy to add new "checks" to the application. A new proxy checker which would generate a random number on each cycle would be:
 
+```js
 var checker = {};
 
 checker.name = "randomNumber";
 checker.params = {
-"required":\[\],
-"optional":\[\]
+  required: [],
+  optional: [],
 };
 
-checker.check = function(api, params, next){
-var response = {};
-response.error = false;
-response.check = false;
-var number = Math.random() \* 100;
-response.number = number;
-response.check = true;
-next(response);
+checker.check = function (api, params, next) {
+  var response = {};
+  response.error = false;
+  response.check = false;
+  var number = Math.random() * 100;
+  response.number = number;
+  response.check = true;
+  next(response);
 };
 
 exports.checker = checker;
+```
 
 Hopefully this is simple as well!
 
 [Check out the project, and have fun!](https://github.com/evantahler/nodeChecker)
-
-[**evantahler/nodeChecker**
-\_nodeChecker - a nde JS application to monitor stuff, show you graphs about it, and let you know when things break_github.com](https://github.com/evantahler/nodeChecker "https://github.com/evantahler/nodeChecker")[](https://github.com/evantahler/nodeChecker)
-
-_Originally published at 11 Dec 2011_

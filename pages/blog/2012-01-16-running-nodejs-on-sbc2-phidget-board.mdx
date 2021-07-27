@@ -3,8 +3,9 @@ title: node.js running on a Phidgets SBC2 board!
 description: >-
   After almost 15 hours or compile-try-fail-repeat, I’ve figured out the formula
   for compiling nodeJS on a Phidget SBC2 board!
-date: "2016-04-22T19:16:24.785Z"
-tags: []
+date: "2012-01-16"
+tags: [node.js, javascript]
+image: /images/medium-export/1__nsVkXw9p4jX04PKNRCsUdA.jpeg
 # slug: /@evantahler/node-js-running-on-a-phidgets-sbc2-board-5b188a6123af
 ---
 
@@ -40,20 +41,23 @@ The v8 stack simply won’t compile on the fidget board. I think that it has to 
 
 SSH to your Debian machine, and su root
 
+```bash
 sudo mkdir /opt/codesourcery
 cd /opt/codesourcery
 wget http://www.codesourcery.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
 tar -xvf arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2z2
+```
 
 #### Get Node and build it for the Phidget board
 
+```bash
 wget http://nodejs.org/dist/v0.6.7/node-v0.6.7.tar.gz
 tar -xvf node-v0.6.7.tar.gz
 cd node-v0.6.7/deps/v8
 export TOOL_PREFIX=/opt/codesourcery/arm-2009q1/bin/arm-none-linux-gnueabi
-export CXX=$TOOL\_PREFIX-g++
+export CXX=$TOOL_PREFIX-g++
 export AR=$TOOL_PREFIX-ar
-export RANLIB=$TOOL\_PREFIX-ranlib
+export RANLIB=$TOOL_PREFIX-ranlib
 export CC=$TOOL_PREFIX-gcc
 export LD=$TOOL_PREFIX-ld
 export CCFLAGS="-march=armv4 -mno-thumb-interwork"
@@ -62,12 +66,15 @@ export ARM_TARGET_LIB=/opt/codesourcery/arm-2009q1/arm-none-linux-gnueabi/libc
 
 scons armeabi=soft wordsize=32 snapshot=off arch=arm library=shared mode=release
 scons armeabi=soft wordsize=32 snapshot=off arch=arm library=shared mode=release sample=shell
+```
 
 #### **Copy the entire v8 directory to the memory stick**
 
 I was running Debian in a virtual machine on my OSX machine, so I rSync’ed it
 
+```bash
 rsync -avz root@{remote_host_ip}:/root/node-v0.6.7/deps/v8 /Volumes/{memory_stick}/node
+```
 
 ### Update the Phidget Board
 
@@ -84,15 +91,18 @@ rsync -avz root@{remote_host_ip}:/root/node-v0.6.7/deps/v8 /Volumes/{memory_stic
 
 #### **Local Configuration (via SSH) on the Phidget board**
 
+```bash
 ssh root@phidgetsbc.local
 apt-get update
 apt-get -u upgrade
 apt-get install gcc wget python openssl make scons libssl-dev libax25 libfile-copy-recursive-perl openbsd-inetd tcpd update-inetd python-software-properties pkg-config htop git subversion
+```
 
 ### Copy over and configure V8
 
 Plug in the USB drive. I kept the now-compiled V8 source in /node/v8 on the memory stick
 
+```bash
 export PATH=$PATH:/opt/bin
 echo "/opt/lib" &gt;&gt; /etc/ld.so.conf
 ldconfig
@@ -100,17 +110,21 @@ mkdir /opt/share/v8
 cp -a /media/{usb_stick_usb_path}/node/v8 /opt/share/.
 echo "/opt/share/v8" &gt;&gt; /etc/ld.so.conf
 ldconfig
+```
 
 ### Add more RAM
 
 This is likely to destroy the memory stick after a lot of use (USB hates random I/O). Create a swap file and configure it (will take ~10 min)
 
+```bash
 dd if=/dev/zero of=/media/usb0/swapfile bs=1M count=256
 mkswap /media/usb0/swapfile
 swapon /media/usb0/swapfile
+```
 
 ### Node.js
 
+```bash
 export JOBS=1
 export CC='gcc -march=armv4 -mfloat-abi=soft'
 export CCFLAGS='-march=armv4 -mfloat-abi=soft'
@@ -120,15 +134,19 @@ wget http://nodejs.org/dist/v0.6.7/node-v0.6.7.tar.gz
 tar -xvf node-v0.6.7.tar.gz
 rm node-v0.6.7.tar.gz
 cd node-v0.6.7
-./configure --shared-v8 --shared-v8-libpath=/opt/share/v8 --shared-v8-includes=/opt/share/v8/include --without-snapshot ## If the configuration isn't all green, something is wrong
+./configure --shared-v8 --shared-v8-libpath=/opt/share/v8 --shared-v8-includes=/opt/share/v8/include --without-snapshot
+    ## If the configuration isn't all green, something is wrong
 make
 make install
+```
 
 Note: For me, a few times various parts of the 35 steps make preforms will crash with a segmentation fault. I guess this has to do with ram? Make will resume where you left off last, so just run it again
 
 ### NPM
 
+```bash
 curl [http://npmjs.org/install.sh](http://npmjs.org/install.sh) | sh
+```
 
 ### Contributors to this guide:
 
@@ -136,5 +154,3 @@ curl [http://npmjs.org/install.sh](http://npmjs.org/install.sh) | sh
 - [http://code.google.com/p/v8/wiki/CrossCompilingForARM](http://code.google.com/p/v8/wiki/CrossCompilingForARM)
 - [http://forum.qnap.com/viewtopic.php?p=242405](http://forum.qnap.com/viewtopic.php?p=242405)
 - [https://github.com/joyent/node/issues/2131#issuecomment-3499634](https://github.com/joyent/node/issues/2131#issuecomment-3499634)
-
-_Originally published at 16 Jan 2012_

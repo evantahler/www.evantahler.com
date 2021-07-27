@@ -1,8 +1,9 @@
 ---
 title: On Domains and Connections with node.js
 description: Solved!
-date: "2016-04-22T22:20:15.413Z"
-tags: []
+date: "2012-12-13"
+tags: [node.js, javascript]
+image: /images/medium-export/1__7MU7Ftjk6tpnGoDdNGLkfw.jpeg
 # slug: /@evantahler/on-domains-and-connections-with-node-js-42f2587b2fd2
 ---
 
@@ -16,6 +17,100 @@ The reason for this question was to ensure that in actionHero exceptions thrown 
 
 I’ve been having trouble lately with domains in node.js, in that I have found a few occasions where what is ‘in scope’ confuses me. Here’s a collection of tests to illustrate my I set up the test to have a domain which I will run each test in, and I expect all of the tests to throw an error and to be caught by the domain’s on(‘error’) event. I chose to use a redis client here (because it’s common), but I do not think that this is a problem with the awesome redis package, and I’ve observed similar behavior with the mysql / seq All of the tests work except #4, which throws an out-of-domain exception and causes the script to crash
 
+```js
+var domain = require("domain");
+var redis = require("redis");
+var eventEmitter = require("events").EventEmitter;
+
+var tests = [];
+var testCounter = 0;
+var runTest = function () {
+  if (tests.length > testCounter) {
+    tests[testCounter]();
+  } else {
+    console.log("all done!");
+    process.exit();
+  }
+};
+
+var myDomain = new domain.create();
+myDomain.on("error", function (err) {
+  console.log("Yo, I just saved you from the error: " + err);
+  testCounter++;
+  runTest();
+});
+
+// PASSING
+tests[0] = function () {
+  myDomain.run(function () {
+    throw new Error("A simple error");
+  });
+};
+
+// PASSING
+tests[1] = function () {
+  myDomain.run(function () {
+    setTimeout(function () {
+      process.nextTick(function () {
+        var E = new eventEmitter();
+        E.on("thing", function () {
+          throw new Error("A deeply nested error");
+        });
+        setTimeout(function () {
+          E.emit("thing");
+        }, 100);
+      });
+    }, 100);
+  });
+};
+
+// PASSING
+var Emm = new eventEmitter();
+Emm.on("thing", function () {
+  throw new Error("Emmited Error defined outside of scope");
+});
+tests[2] = function () {
+  myDomain.run(function () {
+    setTimeout(function () {
+      Emm.emit("thing");
+    }, 100);
+  });
+};
+
+// PASSING
+tests[3] = function () {
+  myDomain.run(function () {
+    clientA = redis.createClient();
+    clientA.hget("hash", "key", function (err, data) {
+      throw new Error("An error after redis (A)");
+    });
+  });
+};
+
+// PASSING
+tests[4] = function () {
+  clientB = redis.createClient();
+  myDomain.run(function () {
+    clientB.hget("hash", "key", function (err, data) {
+      throw new Error("An error after redis (B)");
+    });
+  });
+};
+
+// FAILING
+clientC = redis.createClient();
+tests[5] = function () {
+  myDomain.run(function () {
+    clientC.hget("hash", "key", function (err, data) {
+      throw new Error("An error after redis (C)");
+    });
+  });
+};
+
+// start it up
+runTest();
+```
+
 - Test #0 is a simple throw in the scope of running domian. Everything works great.
 - Test #1 is a very convoluted throw in the scope of the domain involving timeouts, process.nextTick, and event emitters (I was trying to break things). Node preforms like a boss, and the eventual throw is caught.
 - Test #2 defines the emitter outside of the domain, but invokes the event from within it. Still the error is caught.
@@ -24,5 +119,3 @@ I’ve been having trouble lately with domains in node.js, in that I have found 
 - Test #5 fails, and the redis client here is created before the tests begin to run.
 
 In all of these cases, I would have hoped for the domain to catch the exceptions. I also would have also expected tests #4 and #5 to behave the same way regardless of whether or n Can anyone help me to explain why test 5 fails? domain can have their exceptions caught by it. [Cross-Posted on GitHub](https://gist.github.com/4274698)
-
-_Originally published at 13 Dec 2012_
