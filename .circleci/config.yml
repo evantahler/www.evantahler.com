@@ -39,6 +39,9 @@ jobs:
           name: build
           command: ./node_modules/.bin/next build
       - run:
+          name: postbuild
+          command: npm run postbuild
+      - run:
           name: test
           command: ./node_modules/.bin/jest tests --ci
 
