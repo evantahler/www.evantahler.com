@@ -62,7 +62,7 @@ export default function BlogIndex(props) {
                 <Card.Body>
                   <Row>
                     <Col md={3}>
-                      <Link href={`/blog/${post.slug}`}>
+                      <Link href={`/blog/post/${post.slug}`}>
                         <a>
                           <Image
                             style={{ maxWidth: "100%" }}

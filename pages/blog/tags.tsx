@@ -3,8 +3,8 @@ import { Blog } from "../../lib/blog";
 import Link from "next/link";
 import { Table } from "react-bootstrap";
 
-export default function TagsPage({ pageProps }) {
-  const { tags, tagValues } = pageProps;
+export default function TagsPage(props) {
+  const { tags, tagValues } = props;
 
   return (
     <>
@@ -52,7 +52,7 @@ export default function TagsPage({ pageProps }) {
   );
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps(params) {
   const { posts } = await Blog.getAll({
     count: 99999999,
   });
