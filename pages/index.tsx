@@ -65,7 +65,7 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
         <Col md={6}>
           <h2>
             Featured Posts{" "}
-            <Button size="sm" variant="info" href="/writing">
+            <Button size="sm" variant="info" href="/blog">
               See all Posts
             </Button>
           </h2>
