@@ -48,7 +48,7 @@ export default function BlogIndex(props) {
       ) : null}
       <hr />
 
-      {posts
+      {(posts || [])
         .sort((a, b) => {
           return (
             new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime()

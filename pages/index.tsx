@@ -12,9 +12,7 @@ function BoldWords({ text }) {
   return <span style={{ color: "var(--bs-primary)" }}>{text}</span>;
 }
 
-function IndexPage(props) {
-  const { posts }: { posts: Blog.PostData[] } = props;
-
+function IndexPage({ posts }: { posts: Blog.PostData[] }) {
   return (
     <>
       <SEO title="Evan Tahler" path="/" />
@@ -78,11 +76,16 @@ function IndexPage(props) {
             return (
               <Fragment key={post.meta.title}>
                 <Card>
-                  <Card.Img
-                    style={{ maxHeight: 400 }}
-                    variant="top"
-                    src={post.meta.image}
-                  />
+                  <Link href={`/blog/post/${post.slug}`}>
+                    <a>
+                      <Card.Img
+                        style={{ maxHeight: 400 }}
+                        variant="top"
+                        src={post.meta.image}
+                      />
+                    </a>
+                  </Link>
+
                   <Card.Body>
                     <Card.Title>
                       <Link href={`/blog/post/${post.slug}`}>
