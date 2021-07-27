@@ -1,8 +1,8 @@
-import { Blog } from "../../../lib/blog";
-import BlogPage from "../index";
+import { Blog } from "../../../../lib/blog";
+import BlogPage from "../../index";
 
 export default BlogPage;
-export { getStaticProps } from "../index";
+export { getStaticProps } from "../../index";
 
 export async function getStaticPaths() {
   const { posts: allPosts } = await Blog.getAll({ count: 9999 });

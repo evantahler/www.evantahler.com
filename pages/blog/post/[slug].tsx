@@ -58,39 +58,33 @@ const components = {
 };
 
 export default function BlogPage({
-  pageProps,
+  slug,
+  meta,
+  markdown,
 }: {
-  pageProps: {
-    slug: string;
-    meta: Blog.PostMeta;
-    markdown: string;
-  };
+  slug: string;
+  meta: Blog.PostMeta;
+  markdown: string;
 }) {
   return (
     <>
-      <SEO
-        title={pageProps.meta.title}
-        path={`/blog/${pageProps.slug}`}
-        image={pageProps.meta.image}
-      />
+      <SEO title={meta.title} path={`/blog/${slug}`} image={meta.image} />
 
       <Row>
         <Col md={12}>
-          <h1>{pageProps.meta.title}</h1>
+          <h1>{meta.title}</h1>
 
           <p>
             <em>
-              <small>
-                Posted {new Date(pageProps.meta.date).toDateString()}
-              </small>
+              <small>Posted {new Date(meta.date).toDateString()}</small>
             </em>
 
-            {pageProps.meta.tags ? (
+            {meta.tags ? (
               <>
                 <br />
                 <small>
                   Tagged:{" "}
-                  {pageProps.meta.tags.sort().map((tag, idx) => {
+                  {meta.tags.sort().map((tag, idx) => {
                     return (
                       <Fragment key={`tag-${idx}`}>
                         <Link href={`/blog/tag/${tag}`}>
@@ -121,7 +115,7 @@ export default function BlogPage({
               components={components}
               rehypePlugins={[rehypeRaw]}
             >
-              {pageProps.markdown}
+              {markdown}
             </ReactMarkdown>
           </div>
         </Col>

@@ -12,8 +12,8 @@ function BoldWords({ text }) {
   return <span style={{ color: "var(--bs-primary)" }}>{text}</span>;
 }
 
-function IndexPage({ pageProps }) {
-  const { posts }: { posts: Blog.PostData[] } = pageProps;
+function IndexPage(props) {
+  const { posts }: { posts: Blog.PostData[] } = props;
 
   return (
     <>

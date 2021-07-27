@@ -14,14 +14,14 @@ function capitalize(tag: string) {
   return words.join(" ");
 }
 
-export default function BlogIndex({ pageProps }) {
+export default function BlogIndex(props) {
   const {
     posts,
     total,
     page,
     count,
   }: { posts: Blog.PostData[]; total: number; page: number; count: number } =
-    pageProps;
+    props;
   const router = useRouter();
   const tag = router.query?.tag?.toString();
 

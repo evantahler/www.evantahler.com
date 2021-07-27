@@ -4,9 +4,7 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import "../scss/site.scss";
 
-export default function SITE(props) {
-  const { Component } = props;
-
+export default function SITE({ Component, pageProps }) {
   return (
     <>
       <Head>
@@ -47,7 +45,7 @@ export default function SITE(props) {
             <br />
             <br />
             <br />
-            <Component {...props} />
+            <Component {...pageProps} />
           </Col>
         </Row>
       </Container>
