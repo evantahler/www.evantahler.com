@@ -24,7 +24,7 @@ function SpeakingPage() {
 
       <Row>
         {talks.map((talk) => (
-          <Col md={4} key={talk.title}>
+          <Col md={6} key={talk.title}>
             <Card>
               <Card.Img variant="top" src={talk.image} />
               <Card.Body>

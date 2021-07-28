@@ -101,7 +101,7 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
                       <br />
                       <small>
                         {post.meta.tags.map((tag) => (
-                          <>
+                          <Fragment key={`blog-${tag}`}>
                             <Link href={`/blog/tag/${tag}`}>
                               <a>
                                 <Badge
@@ -112,7 +112,7 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
                                 </Badge>
                               </a>
                             </Link>{" "}
-                          </>
+                          </Fragment>
                         ))}
                       </small>
                     </Card.Text>
