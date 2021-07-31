@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 interface PageType {
   href: string;
   title: string;
+  tags: string;
   image?: string;
 }
 
@@ -35,7 +36,7 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
     // console.log("STARTING");
     if (!searchTerm) return;
     const results = await fuzzysort.goAsync(searchTerm, pages, {
-      keys: ["title", "href"],
+      keys: ["title", "href", "tags"],
       limit: 10, // don't return more results than you need!
       allowTypo: false, // if you don't care about allowing typos
       // threshold: -10000, // don't return bad results
@@ -98,11 +99,11 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
 
 export async function getStaticProps() {
   const pages: PageType[] = [
-    { href: "/", title: "home" },
-    { href: "/resume", title: "resume" },
-    { href: "/speaking", title: "speaking" },
-    { href: "/blog", title: "blog" },
-    { href: "/contact", title: "contact" },
+    { href: "/", title: "home", tags: "" },
+    { href: "/resume", title: "resume", tags: "" },
+    { href: "/speaking", title: "speaking", tags: "" },
+    { href: "/blog", title: "blog", tags: "" },
+    { href: "/contact", title: "contact", tags: "" },
   ];
 
   const { posts } = await Blog.getAll({ count: 999 });
@@ -110,6 +111,7 @@ export async function getStaticProps() {
     pages.push({
       href: `/blog/post/${post.slug}`,
       title: post.meta.title,
+      tags: post.meta.tags.join("-"),
     });
   });
 
