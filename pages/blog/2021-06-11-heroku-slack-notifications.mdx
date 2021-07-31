@@ -1,1 +1,18 @@
-TODO
+---
+title: Heroku Slack Notifications
+description: Get a Slack notification when your Heroku App Deploys!
+date: "2021-06-11"
+tags: [Heroku, gitops, grouparoo]
+featured: false
+image: /images/posts/2021-06-11-heroku-slack-notifications/slack.png
+---
+
+At [work](https://www.grouparoo.com), we use Heroku to deploy our staging servers. We also use Slack to centralize all of our notification and monitoring. The one part of out stack that we couldn't get into Slack was staging deployments... so I built a Heroku Buildpack to do just that!
+
+![/images/posts/2021-06-11-heroku-slack-notifications/buildpack.png](/images/posts/2021-06-11-heroku-slack-notifications/buildpack.png)
+
+When you enable it, you'll get messages like this:
+
+![/images/posts/2021-06-11-heroku-slack-notifications/slack.png](/images/posts/2021-06-11-heroku-slack-notifications/slack.png)
+
+See the code and learn more at [https://github.com/evantahler/heroku-buildpack-notify-slack-deploy](https://github.com/evantahler/heroku-buildpack-notify-slack-deploy)
