@@ -9,6 +9,7 @@ export namespace Blog {
   export interface PostMeta {
     title: string;
     description?: string;
+    canonical?: string;
     date: string;
     tags: string[];
     image: string;

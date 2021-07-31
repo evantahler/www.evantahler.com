@@ -1,10 +1,11 @@
 import { Fragment } from "react";
 import SEO from "../../components/seo";
 import { Blog } from "../../lib/blog";
-import { Row, Col, Card, Badge, Image } from "react-bootstrap";
+import { Row, Col, Card, Image } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { PaginationHelper } from "../../components/paginationHelper";
+import { BlogComponents } from "../../components/blog";
 
 function capitalize(tag: string) {
   const words = tag.split(" ");
@@ -80,36 +81,19 @@ export default function BlogIndex(props) {
                         </Link>
                       </h4>
 
-                      <p>
-                        {post.meta.tags && post.meta.tags.length > 0 ? (
-                          <>
-                            <small>
-                              {post.meta.tags.sort().map((tag, idx) => {
-                                return (
-                                  <Fragment key={`tag-${idx}`}>
-                                    <Link href={`/blog/tag/${tag}`}>
-                                      <a>
-                                        <Badge variant="info">{tag}</Badge>
-                                      </a>
-                                    </Link>
-                                    &nbsp;
-                                  </Fragment>
-                                );
-                              })}
-                            </small>{" "}
-                            <br />
-                          </>
-                        ) : (
-                          ""
-                        )}
-                      </p>
+                      {BlogComponents.displayTags(post)}
 
                       {post.meta.description ? (
                         <p>{post.meta.description}</p>
                       ) : null}
 
                       <em>
-                        <small>{new Date(post.meta.date).toDateString()}</small>
+                        <small>
+                          {new Date(post.meta.date).toDateString()}
+                          {post.meta.canonical ? (
+                            <> - {BlogComponents.displayCanonical(post)}</>
+                          ) : null}
+                        </small>
                       </em>
                     </Col>
                   </Row>

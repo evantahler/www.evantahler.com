@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { Row, Col, Badge, Card, Button } from "react-bootstrap";
 import Link from "next/link";
 import SEO from "../../../components/seo";
@@ -7,6 +6,7 @@ import { Blog } from "../../../lib/blog";
 import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { BlogComponents } from "../../../components/blog";
 
 const components = {
   img({ node, src, ...props }) {
@@ -68,39 +68,27 @@ export default function BlogPage({
 }) {
   return (
     <>
-      <SEO title={meta.title} path={`/blog/${slug}`} image={meta.image} />
+      <SEO
+        title={meta.title}
+        path={`/blog/${slug}`}
+        image={meta.image}
+        canonical={meta.canonical}
+      />
 
       <Row>
         <Col md={12}>
           <h1>{meta.title}</h1>
 
           <p>
+            {BlogComponents.displayTags({ meta })}
             <em>
-              <small>Posted {new Date(meta.date).toDateString()}</small>
+              <small>
+                {new Date(meta.date).toDateString()}
+                {meta.canonical ? (
+                  <> - {BlogComponents.displayCanonical({ meta })}</>
+                ) : null}
+              </small>
             </em>
-
-            {meta.tags ? (
-              <>
-                <br />
-                <small>
-                  Tagged:{" "}
-                  {meta.tags.sort().map((tag, idx) => {
-                    return (
-                      <Fragment key={`tag-${idx}`}>
-                        <Link href={`/blog/tag/${tag}`}>
-                          <a>
-                            <Badge variant="info">{tag}</Badge>
-                          </a>
-                        </Link>
-                        &nbsp;
-                      </Fragment>
-                    );
-                  })}
-                </small>
-              </>
-            ) : (
-              ""
-            )}
           </p>
 
           <hr />

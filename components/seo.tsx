@@ -36,10 +36,12 @@ const SEO = ({
   twitterAuthor,
   twitterCard,
   path,
+  canonical,
 }: {
   description?: string;
   image?: string;
   twitterAuthor?: string;
+  canonical?: string;
   twitterCard?: string;
   title: string;
   path: string;
@@ -71,7 +73,7 @@ const SEO = ({
       <ImageTags image={imageUrl} />
 
       <Head>
-        <link rel="canonical" href={url} />
+        <link rel="canonical" href={canonical ? canonical : url} />
 
         <meta
           name="twitter:card"

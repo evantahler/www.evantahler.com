@@ -118,4 +118,4 @@ runTest();
 - Test #4 creates the redis client OUTSIDE of the domain’s scope, but within a containing function. This error is caught by the domain
 - Test #5 fails, and the redis client here is created before the tests begin to run.
 
-In all of these cases, I would have hoped for the domain to catch the exceptions. I also would have also expected tests #4 and #5 to behave the same way regardless of whether or n Can anyone help me to explain why test 5 fails? domain can have their exceptions caught by it. [Cross-Posted on GitHub](https://gist.github.com/4274698)
+In all of these cases, I would have hoped for the domain to catch the exceptions. I also would have also expected tests #4 and #5 to behave the same way regardless of whether or n Can anyone help me to explain why test 5 fails? domain can have their exceptions caught by it.
