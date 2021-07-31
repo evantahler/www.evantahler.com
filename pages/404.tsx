@@ -28,6 +28,8 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
   );
   const [searching, setSearching] = useState(true);
 
+  if (!searchTerm) return <p>Loading...</p>;
+
   useEffect(() => {
     search();
   }, [searchTerm]);
