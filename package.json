@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@types/glob": "^7.1.4",
-    "bootstrap": "^5.1.0",
+    "bootstrap": "^5.1.1",
     "fuzzysort": "^1.1.4",
     "github-api": "^3.4.0",
     "glob": "^7.1.7",
@@ -34,7 +34,7 @@
     "react-markdown": "^6.0.3",
     "react-syntax-highlighter": "^15.4.4",
     "rehype-raw": "^5.1.0",
-    "sass": "^1.37.0",
+    "sass": "^1.42.1",
     "scss-to-json": "^2.0.0"
   },
   "devDependencies": {
