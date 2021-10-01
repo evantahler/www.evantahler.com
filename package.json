@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@types/glob": "^7.1.4",
-    "bootstrap": "^5.1.0",
+    "bootstrap": "^5.1.1",
     "fuzzysort": "^1.1.4",
     "github-api": "^3.4.0",
     "glob": "^7.1.7",
@@ -38,7 +38,7 @@
     "scss-to-json": "^2.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^27.0.1",
+    "@types/jest": "^27.0.2",
     "@types/node": "^16.7.10",
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.9",
