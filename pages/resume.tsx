@@ -67,13 +67,6 @@ function ResumePage() {
 
       <br />
 
-      <Button href="/evan-tahler-resume.pdf" variant="info" size="sm">
-        Download Full Resume
-      </Button>
-
-      <br />
-      <br />
-
       <Row style={{ textAlign: "center" }}>
         <Col md={1}>
           <a href="https://www.grouparoo.com" target="_blank">
