@@ -23,7 +23,7 @@
     "bootstrap": "^5.1.1",
     "fuzzysort": "^1.1.4",
     "github-api": "^3.4.0",
-    "glob": "^7.1.7",
+    "glob": "^7.2.0",
     "gray-matter": "^4.0.3",
     "next": "^11.1.2",
     "next-sitemap": "^1.6.199",
