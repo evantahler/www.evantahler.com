@@ -23,7 +23,7 @@
     "bootstrap": "^5.1.1",
     "fuzzysort": "^1.1.4",
     "github-api": "^3.4.0",
-    "glob": "^7.1.7",
+    "glob": "^7.2.0",
     "gray-matter": "^4.0.3",
     "next": "^11.1.2",
     "next-sitemap": "^1.6.199",
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "@types/node": "^16.7.10",
-    "@types/react": "^17.0.19",
+    "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.9",
     "isomorphic-fetch": "^3.0.0",
     "jest": "^27.3.1",
