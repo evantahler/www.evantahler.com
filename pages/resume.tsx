@@ -22,7 +22,7 @@ function ResumePage() {
         <a href="https://www.grouparoo.com" target="_new">
           Grouparoo
         </a>
-        , a new company building tools that empower marketers to do their best
+        , the Open Source Reverse ETL tool.
         work.
       </p>
 
@@ -49,8 +49,8 @@ function ResumePage() {
         launch new global digital initiatives. He is named on a number of
         patents focusing on mobile interactions and digital entertainment. Evan
         is an open-source innovator, and frequent speaker at software
-        development conferences focusing on Product Management, Node.JS, Rails,
-        and databases.
+        development conferences focusing on Product Management, Node.JS, Typescript, Rails,
+        and DevOps.
       </p>
 
       <p>
