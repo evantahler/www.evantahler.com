@@ -4,7 +4,6 @@ import JumboImage from "../components/jumboImage";
 import Image from "next/image";
 import SEO from "../components/seo";
 
-const title = "Evan Tahler: Resume";
 const logoSize = 100;
 
 function ResumePage() {
@@ -22,8 +21,7 @@ function ResumePage() {
         <a href="https://www.grouparoo.com" target="_new">
           Grouparoo
         </a>
-        , the Open Source Reverse ETL tool.
-        work.
+        , the Open Source Reverse ETL tool. work.
       </p>
 
       <p>
@@ -49,8 +47,8 @@ function ResumePage() {
         launch new global digital initiatives. He is named on a number of
         patents focusing on mobile interactions and digital entertainment. Evan
         is an open-source innovator, and frequent speaker at software
-        development conferences focusing on Product Management, Node.JS, Typescript, Rails,
-        and DevOps.
+        development conferences focusing on Product Management, Node.JS,
+        Typescript, Rails, and DevOps.
       </p>
 
       <p>
