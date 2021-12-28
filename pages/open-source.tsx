@@ -127,7 +127,7 @@ function OpenSourcePage() {
         ) : (
           <Row>
             <Col md={12} style={{ textAlign: "center" }}>
-              <Spinner animation="grow" />
+              <Spinner animation="border" />
             </Col>
           </Row>
         )}

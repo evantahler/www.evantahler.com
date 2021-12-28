@@ -16,7 +16,7 @@ export namespace BlogComponents {
               <Fragment key={`tag-${idx}`}>
                 <Link href={`/blog/tag/${tag}`}>
                   <a>
-                    <Badge variant="info">{tag}</Badge>
+                    <Badge bg="info">{tag}</Badge>
                   </a>
                 </Link>
                 &nbsp;

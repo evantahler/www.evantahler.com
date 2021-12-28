@@ -106,7 +106,7 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
                               <a>
                                 <Badge
                                   key={`${post.meta.title}|${tag}`}
-                                  variant="info"
+                                  bg="info"
                                 >
                                   {tag}
                                 </Badge>
