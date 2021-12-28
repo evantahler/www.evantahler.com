@@ -1,4 +1,4 @@
-import { Blog } from "../../../../lib/blog";
+import { Blog, perPage } from "../../../../lib/blog";
 import BlogPage from "../../index";
 
 export default BlogPage;
@@ -14,8 +14,7 @@ export async function getStaticPaths() {
     .map((tag) => {
       const pages =
         Math.ceil(
-          allPosts.filter((p) => p.meta.tags.includes(tag)).length /
-            Blog.perPage
+          allPosts.filter((p) => p.meta.tags.includes(tag)).length / perPage
         ) + 1;
       return Array.from(Array(pages).keys()).map((page) => {
         return { params: { tag, page: page.toString() } };

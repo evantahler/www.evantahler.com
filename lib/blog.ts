@@ -5,6 +5,8 @@ import glob from "glob";
 
 const blogDirectory = path.join(process.cwd(), "pages", "blog");
 
+export const perPage = 10;
+
 export namespace Blog {
   export interface PostMeta {
     title: string;
@@ -21,8 +23,6 @@ export namespace Blog {
     markdown: string;
     meta: PostMeta;
   }
-
-  export const perPage = 10;
 
   export async function getBySlug(slug: string) {
     const realSlug = slug.replace(/\.mdx$/, "").replace(/\.md$/, "");
