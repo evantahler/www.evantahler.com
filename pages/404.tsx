@@ -59,7 +59,7 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
         <>
           <p>
             Here are the most relevant pages for{" "}
-            <Badge variant="info">{searchTerm}</Badge>:
+            <Badge bg="info">{searchTerm}</Badge>:
           </p>
           {matches.length > 0 ? (
             matches.map(({ page, score }) => {
@@ -90,7 +90,7 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
       ) : (
         <>
           <p>
-            Loading matches for <Badge variant="info">{searchTerm}</Badge>...
+            Loading matches for <Badge bg="info">{searchTerm}</Badge>...
           </p>
           <Spinner animation="grow" />
         </>

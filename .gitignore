@@ -3,6 +3,3 @@ node_modules
 .next
 build
 out
-
-public/sitemap.xml
-public/robots.txt
