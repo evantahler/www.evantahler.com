@@ -51,7 +51,7 @@ const SEO = ({
   }
 
   const baseUrl = `https://www.evantahler.com`;
-  const url = `${baseUrl}${path}`;
+  const url = `${baseUrl}${path.replace("/blog/", "/blog/post/")}`;
 
   let imageUrl;
   if (image) {
