@@ -34,27 +34,26 @@ describe("sitemap and pages", () => {
   beforeAll(async () => {
     const app = next({ dev: false });
     const handle = app.getRequestHandler();
-    const _next = await app.prepare();
-    server = createServer((req, res) => {
-      const parsedUrl = URL.parse(req.url, true);
-      handle(req, res, parsedUrl);
-    }).listen(port);
-
-    // boot up time
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await app.prepare().then(() => {
+      server = createServer((req, res) => {
+        const parsedUrl = URL.parse(req.url, true);
+        handle(req, res, parsedUrl);
+      }).listen(port);
+    });
   });
 
   afterAll(async () => {
     server.close();
   });
 
-  sitemapParsed.forEach(({ loc, changefreq, priority, lastmod }) => {
+  for (const { loc } of sitemapParsed) {
     test(`page: ${loc}`, async () => {
+      console.log(`-----> Testing ${loc}`);
       const page = `${baseUrl}${loc}`;
       const res = await fetch(page);
       expect(res.status).toEqual(200);
     });
-  });
+  }
 
   test("missing pages do not render", async () => {
     const page = `${baseUrl}/missing/page`;
