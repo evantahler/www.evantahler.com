@@ -34,7 +34,7 @@
     "react-markdown": "^6.0.3",
     "react-syntax-highlighter": "^15.4.5",
     "rehype-raw": "^5.1.0",
-    "sass": "1.45.2"
+    "sass": "1.49.8"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
