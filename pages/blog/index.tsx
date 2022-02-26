@@ -91,7 +91,14 @@ export default function BlogIndex(props) {
                         <small>
                           {new Date(post.meta.date).toDateString()}
                           {post.meta.canonical ? (
-                            <> - {BlogComponents.displayCanonical(post)}</>
+                            <>
+                              {" "}
+                              -{" "}
+                              {BlogComponents.displayCanonical({
+                                ...post,
+                                short: true,
+                              })}
+                            </>
                           ) : null}
                         </small>
                       </em>

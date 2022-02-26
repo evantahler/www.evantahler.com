@@ -85,7 +85,10 @@ export default function BlogPage({
               <small>
                 {new Date(meta.date).toDateString()}
                 {meta.canonical ? (
-                  <> - {BlogComponents.displayCanonical({ meta })}</>
+                  <>
+                    {" "}
+                    - {BlogComponents.displayCanonical({ meta, short: false })}
+                  </>
                 ) : null}
               </small>
             </em>
