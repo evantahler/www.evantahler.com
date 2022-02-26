@@ -36,6 +36,22 @@ export namespace Blog {
     return { slug: realSlug, meta: data, markdown };
   }
 
+  export async function getAllTags(tag?: string) {
+    const slugs = getAllSlugs();
+    const tags: Record<string, number> = {};
+    for (const slug of slugs.reverse()) {
+      const post = await getBySlug(slug);
+      if (tag && !post.meta.tags.includes(tag)) continue;
+
+      post.meta.tags.forEach((tag) => {
+        if (!tags[tag]) tags[tag] = 0;
+        tags[tag]++;
+      });
+    }
+
+    return tags;
+  }
+
   export async function getAll({
     page,
     tag,
@@ -54,16 +70,13 @@ export namespace Blog {
     page = parseInt(page.toString());
     count = parseInt(count.toString());
 
-    const slugs = (glob.sync(path.join(blogDirectory, "**/*.mdx")) as string[])
-      .map((p) => p.replace(`${blogDirectory}/`, ""))
-      .map((p) => p.replace(/\.mdx/, ""));
-
     const posts: {
       slug: string;
       meta: PostMeta;
       markdown: string;
     }[] = [];
 
+    const slugs = getAllSlugs();
     for (const slug of slugs.reverse()) {
       const post = await getBySlug(slug);
 
@@ -87,5 +100,13 @@ export namespace Blog {
       tag,
       count,
     };
+  }
+
+  function getAllSlugs() {
+    const slugs = (glob.sync(path.join(blogDirectory, "**/*.mdx")) as string[])
+      .map((p) => p.replace(`${blogDirectory}/`, ""))
+      .map((p) => p.replace(/\.mdx/, ""));
+
+    return slugs;
   }
 }

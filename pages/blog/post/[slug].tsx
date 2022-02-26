@@ -134,12 +134,12 @@ export default function BlogPage({
         </Col>
       </Row>
 
+      <br />
+
       <Row>
         <Col>
-          <hr />
-
           <Button href="/blog" variant="outline-primary">
-            <a>↞ Back to Evan's Blog</a>
+            <a>↞ See all posts</a>
           </Button>
         </Col>
       </Row>

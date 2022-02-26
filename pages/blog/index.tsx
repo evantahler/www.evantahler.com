@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import SEO from "../../components/seo";
 import { Blog } from "../../lib/blog";
-import { Row, Col, Card, Image } from "react-bootstrap";
+import { Row, Col, Card, Image, Button } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { PaginationHelper } from "../../components/paginationHelper";
@@ -21,8 +21,14 @@ export default function BlogIndex(props) {
     total,
     page,
     count,
-  }: { posts: Blog.PostData[]; total: number; page: number; count: number } =
-    props;
+    tags,
+  }: {
+    posts: Blog.PostData[];
+    total: number;
+    page: number;
+    count: number;
+    tags: Record<string, number>;
+  } = props;
   const router = useRouter();
   const tag = router.query?.tag?.toString();
 
@@ -41,11 +47,9 @@ export default function BlogIndex(props) {
         </Link>
       </h1>
       {tag ? (
-        <p>
-          <Link href="/blog">
-            <a>See all posts</a>
-          </Link>
-        </p>
+        <Button href="/blog" variant="outline-primary" size="sm">
+          <a>↞ See all posts</a>
+        </Button>
       ) : null}
       <hr />
 
@@ -111,6 +115,20 @@ export default function BlogIndex(props) {
           );
         })}
 
+      <h2>Tags</h2>
+      <p>
+        {Object.entries(tags).map(([tag, value]) => (
+          <Fragment key={`tag-${tag}`}>
+            <Link href={`/blog/tag/${tag}`}>
+              <a>
+                {tag} ({value})
+              </a>
+            </Link>{" "}
+          </Fragment>
+        ))}
+      </p>
+      <hr />
+
       <br />
 
       <PaginationHelper
@@ -128,6 +146,7 @@ export async function getStaticProps({ params }) {
     page: params?.page,
     tag: params?.tag,
   });
+  const tags = await Blog.getAllTags(params?.tag);
 
   return {
     props: {
@@ -136,6 +155,7 @@ export async function getStaticProps({ params }) {
       tag,
       count,
       posts,
+      tags,
     },
   };
 }
