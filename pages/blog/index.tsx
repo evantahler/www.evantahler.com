@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { PaginationHelper } from "../../components/paginationHelper";
 import { BlogComponents } from "../../components/blog";
+import { TagCloud } from "react-tagcloud";
 
 function capitalize(tag: string) {
   const words = tag.split(" ");
@@ -31,6 +32,13 @@ export default function BlogIndex(props) {
   } = props;
   const router = useRouter();
   const tag = router.query?.tag?.toString();
+
+  const wordCloudData = [];
+  {
+    Object.entries(tags).map(([tag, value]) =>
+      wordCloudData.push({ value: tag, count: value })
+    );
+  }
 
   return (
     <>
@@ -116,17 +124,17 @@ export default function BlogIndex(props) {
         })}
 
       <h2>Tags</h2>
-      <p>
-        {Object.entries(tags).map(([tag, value]) => (
-          <Fragment key={`tag-${tag}`}>
-            <Link href={`/blog/tag/${tag}`}>
-              <a>
-                {tag} ({value})
-              </a>
-            </Link>{" "}
-          </Fragment>
-        ))}
-      </p>
+
+      <TagCloud
+        tags={wordCloudData}
+        minSize={8}
+        maxSize={35}
+        colorOptions={{ hue: "blue" }}
+        onClick={(tag: { value: string }) =>
+          router.push(`/blog/tag/${tag.value}`)
+        }
+      />
+
       <hr />
 
       <br />
