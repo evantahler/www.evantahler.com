@@ -1,5 +1,6 @@
 // -- External Components --
+
+@import "~bootswatch/dist/lumen/variables";
 @import "~bootstrap/scss/bootstrap";
-@import "./_variables";
-@import "./_bootswatch";
+@import "~bootswatch/dist/lumen/bootswatch";
 @import "./_custom";

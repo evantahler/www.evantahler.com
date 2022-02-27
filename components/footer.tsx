@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer>
       <Alert
-        variant="info"
+        variant="secondary"
         style={{ paddingTop: 40, marginTop: 100, marginBottom: 0 }}
       >
         <Container>

@@ -72,7 +72,7 @@ function OpenSourcePage() {
               href="https://github.com/users/evantahler/sponsorship"
               target="_new"
             >
-              <Button>Donate Today</Button>
+              <Button variant="outline-primary">Donate Today</Button>
             </a>
           </p>
         </div>

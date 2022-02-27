@@ -25,7 +25,7 @@ function ContactPage() {
 
       <br />
 
-      <Alert variant="info">
+      <Alert variant="light">
         <p>
           If you are looking to hire me on a contractor basis, please reach out
           via{" "}

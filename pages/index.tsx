@@ -9,7 +9,7 @@ import Link from "next/link";
 import talks from "./../data/talks.json";
 
 function BoldWords({ text }) {
-  return <span style={{ color: "var(--bs-primary)" }}>{text}</span>;
+  return <span style={{ color: "var(--bs-warning)" }}>{text}</span>;
 }
 
 function IndexPage({ posts }: { posts: Blog.PostData[] }) {
