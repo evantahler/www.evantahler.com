@@ -105,6 +105,7 @@ export default function BlogPage({
             <ReactMarkdown
               // @ts-ignore
               components={components}
+              // @ts-expect-error
               remarkPlugins={[remarkFootnotes]}
               rehypePlugins={[rehypeRaw]}
             >
