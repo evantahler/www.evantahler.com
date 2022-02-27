@@ -18,13 +18,13 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
       <SEO title="Evan Tahler" path="/" />
 
       <Card>
-        <Card.Body>
+        <Card.Body style={{ paddingLeft: 0 }}>
           <Row>
-            <Col md={3} style={{ textAlign: "center" }}>
-              <Image width={203} height={376} src="/images/bitmoji.png" />
+            <Col md={3}>
+              <Image width={262} height={398} src="/images/bitmoji/5.png" />
             </Col>
 
-            <Col md={9}>
+            <Col md={9} style={{ paddingLeft: "2rem" }}>
               <Row>
                 <Col md={12}>
                   <h1>Hi, I'm Evan Tahler</h1>
