@@ -22,6 +22,6 @@ describe("Introduction Section", () => {
       render(<ContactPage />, container);
     });
     const header = container.querySelector("p");
-    expect(header.textContent).toContain("Let's chat");
+    expect(header.textContent).toContain("Delicious Hat");
   });
 });
