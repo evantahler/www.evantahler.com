@@ -4,6 +4,7 @@ import SEO from "../../../components/seo";
 import ReactMarkdown from "react-markdown";
 import { Blog } from "../../../lib/blog";
 import rehypeRaw from "rehype-raw";
+import remarkFootnotes from "remark-footnotes";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { BlogComponents } from "../../../components/blog";
@@ -104,6 +105,7 @@ export default function BlogPage({
             <ReactMarkdown
               // @ts-ignore
               components={components}
+              remarkPlugins={[remarkFootnotes]}
               rehypePlugins={[rehypeRaw]}
             >
               {markdown}
