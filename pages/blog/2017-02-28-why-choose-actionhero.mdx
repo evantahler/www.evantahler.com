@@ -26,11 +26,11 @@ Of course Actionhero features a robust RESTful router and HTTP server. But that 
 
 Actionhero is "Cluster Aware". This means that ActionHero is built from the ground-up to run in parallel across multiple machines at once. Nodes can speak to each other both passively (via a shared cache and job-queues; included) and actively with direct RPC communication.
 
-#### **Actionhero knows that background tasks are always required.**
+#### Actionhero knows that background tasks are always required.
 
 Sending your client a "welcome" email doesn’t belong in your web thread. Neither does processing anything else in the background. Actionhero treats background jobs as first class citizens, and any part of your API can enqueue them. Actionhero runs job workers in the proper [Node.js](https://medium.com/u/96cd9a1fb56) way: event-based and many at a time.
 
-#### **Actionhero provides all the help you need, then gets out of the way.**
+#### Actionhero provides all the help you need, then gets out of the way.
 
 Actionhero proposes a standard project layout, including testing and initializers. Actionhero has a REPL and generators to get you up-and-running quickly. Actionhero supports localization and test-driven development. After that… you can do anything you want!
 

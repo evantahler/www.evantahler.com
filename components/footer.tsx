@@ -6,8 +6,8 @@ export default function Footer() {
   return (
     <footer>
       <Alert
-        variant="secondary"
-        style={{ paddingTop: 40, marginTop: 100, marginBottom: 0 }}
+        variant="light"
+        style={{ paddingTop: 40, marginTop: 50, marginBottom: 0 }}
       >
         <Container>
           <Row>
