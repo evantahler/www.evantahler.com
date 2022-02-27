@@ -53,7 +53,7 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
 
               <div style={{ padding: 30 }} />
 
-              <ContactCards />
+              <ContactCards variant="info" />
             </Col>
           </Row>
         </Card.Body>

@@ -34,11 +34,9 @@ export default function BlogIndex(props) {
   const tag = router.query?.tag?.toString();
 
   const wordCloudData = [];
-  {
-    Object.entries(tags).map(([tag, value]) =>
-      wordCloudData.push({ value: tag, count: value })
-    );
-  }
+  Object.entries(tags ?? {}).map(([tag, value]) =>
+    wordCloudData.push({ value: tag, count: value })
+  );
 
   return (
     <>

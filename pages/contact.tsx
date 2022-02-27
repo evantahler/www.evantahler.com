@@ -17,11 +17,9 @@ function ContactPage() {
 
       <JumboImage src="/images/contact.jpg" />
 
-      <strong>
-        <p style={{ textAlign: "center" }}>Let's chat!</p>
-      </strong>
+      <h2 style={{ textAlign: "center" }}>Let's chat!</h2>
 
-      <ContactCards />
+      <ContactCards variant="info" />
 
       <br />
 

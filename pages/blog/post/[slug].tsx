@@ -113,7 +113,7 @@ export default function BlogPage({
 
         <Col>
           <Card>
-            <Card.Img variant="top" src="/images/misc/wave.png" />
+            <Card.Img variant="top" src="/images/bitmoji/4.png" />
             <Card.Body>
               <Card.Title>
                 Hi, I'm{" "}
