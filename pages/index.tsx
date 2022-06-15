@@ -27,7 +27,7 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
             <Col md={9} style={{ paddingLeft: "2rem" }}>
               <Row>
                 <Col md={12}>
-                  <h1>Hi, I'm Evan Tahler</h1>
+                  <h1>Hi, I'm Evan!</h1>
                   <br />
                   <h4>
                     I use my <BoldWords text="Product Management" />,{" "}
