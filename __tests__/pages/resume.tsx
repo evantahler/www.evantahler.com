@@ -22,6 +22,6 @@ describe("Resume Section", () => {
       render(<ResumePage />, container);
     });
     const header = container.querySelector("p");
-    expect(header.textContent).toContain("CTO");
+    expect(header.textContent).toContain("Engineering Manager");
   });
 });
