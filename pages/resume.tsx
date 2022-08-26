@@ -17,18 +17,18 @@ function ResumePage() {
       <JumboImage src="/images/resume-2.jpg" />
 
       <p>
-        Evan Tahler is the CTO and co-founder of{" "}
-        <a href="https://www.grouparoo.com" target="_new">
-          Grouparoo
+        Evan Tahler is the Platform Engineering Manager at{" "}
+        <a href="https://www.airbyte.com" target="_new">
+          Airbyte
         </a>
-        , the Open Source Reverse ETL tool. work.
+        .
       </p>
 
       <p>
-        Prior to that, he was the Chief Product Officer at Voom (an Airbus
-        Company) providing urban air mobility to cities around the world. Evan's
-        expertise lies in building the technical side of digital products, and
-        growing the teams required to do so. He’s helped companies like{" "}
+        Prior to that, he was the CTO and co-founder of Grouparoo, which was
+        acquired by Airbyte. Evan's expertise lies in building the technical
+        side of digital products, and growing the teams required to do so. He’s
+        helped companies like{" "}
         <a target="_new" href="https://www.disney.com">
           Disney
         </a>
@@ -44,11 +44,11 @@ function ResumePage() {
         <a target="_new" href="https://www.airbus.com">
           Airbus
         </a>{" "}
-        launch new global digital initiatives. He is named on a number of
-        patents focusing on mobile interactions and digital entertainment. Evan
-        is an open-source innovator, and frequent speaker at software
-        development conferences focusing on Product Management, Node.JS,
-        Typescript, Rails, and DevOps.
+        launch new global digital initiatives, and has co-founded multiple
+        startups. He is named on a number of patents focusing on mobile
+        interactions and digital entertainment. Evan is an open-source
+        innovator, and frequent speaker at software development conferences
+        focusing on Product Management, Node.JS, Typescript, Rails, and DevOps.
       </p>
 
       <p>
