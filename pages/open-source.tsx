@@ -6,7 +6,7 @@ import JumboImage from "../components/jumboImage";
 import SEO from "../components/seo";
 
 const projects = [
-  {org: "airbytehq", name: "airbyte"},
+  { org: "airbytehq", name: "airbyte" },
   { org: "grouparoo", name: "grouparoo" },
   { org: "actionhero", name: "actionhero" },
   { org: "actionhero", name: "node-resque" },
