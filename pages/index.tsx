@@ -39,11 +39,11 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
                   <br />
 
                   <p>
-                    I am the CTO and co-founder of{" "}
-                    <a href="https://www.grouparoo.com" target="_blank">
-                      Grouparoo
+                    I lead engineering teams at{" "}
+                    <a href="https://www.airbyte.com" target="_blank">
+                      Airbyte
                     </a>{" "}
-                    & Creator of{" "}
+                    & and the creator of{" "}
                     <a href="https://www.actionherojs.com" target="_blank">
                       Actionherojs
                     </a>
