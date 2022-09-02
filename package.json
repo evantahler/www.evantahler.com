@@ -37,7 +37,7 @@
     "react-tagcloud": "^2.3.1",
     "rehype-raw": "^5.1.0",
     "remark-footnotes": "^4.0.1",
-    "sass": "1.53.0"
+    "sass": "1.54.8"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
