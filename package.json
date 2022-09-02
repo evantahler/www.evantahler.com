@@ -19,7 +19,7 @@
     "lint": "prettier --check pages components __tests__"
   },
   "dependencies": {
-    "@types/glob": "^7.2.0",
+    "@types/glob": "^8.0.0",
     "bootstrap": "^5.2.0",
     "bootswatch": "^5.2.0",
     "fuzzysort": "^1.1.4",
