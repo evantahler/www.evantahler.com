@@ -19,7 +19,7 @@
     "lint": "prettier --check pages components __tests__"
   },
   "dependencies": {
-    "@types/glob": "^7.2.0",
+    "@types/glob": "^8.0.0",
     "bootstrap": "^5.2.0",
     "bootswatch": "^5.2.0",
     "fuzzysort": "^1.1.4",
@@ -34,7 +34,7 @@
     "react-fontawesome": "^1.7.1",
     "react-markdown": "^6.0.3",
     "react-syntax-highlighter": "^15.5.0",
-    "react-tagcloud": "^2.2.0",
+    "react-tagcloud": "^2.3.1",
     "rehype-raw": "^5.1.0",
     "remark-footnotes": "^4.0.1",
     "sass": "1.53.0"
