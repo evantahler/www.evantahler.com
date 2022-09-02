@@ -28,7 +28,7 @@
     "gray-matter": "^4.0.3",
     "next": "^12.2.5",
     "next-sitemap": "^1.6.203",
-    "react": "^18.1.0",
+    "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.1.0",
     "react-fontawesome": "^1.7.1",
@@ -42,7 +42,7 @@
   "devDependencies": {
     "@types/jest": "^27.4.0",
     "@types/node": "^18.7.14",
-    "@types/react": "^18.0.10",
+    "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.5",
     "isomorphic-fetch": "^3.0.0",
     "jest": "^27.4.7",
