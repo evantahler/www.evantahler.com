@@ -34,14 +34,14 @@
     "react-fontawesome": "^1.7.1",
     "react-markdown": "^6.0.3",
     "react-syntax-highlighter": "^15.5.0",
-    "react-tagcloud": "^2.2.0",
+    "react-tagcloud": "^2.3.1",
     "rehype-raw": "^5.1.0",
     "remark-footnotes": "^4.0.1",
     "sass": "1.53.0"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
-    "@types/node": "^18.6.3",
+    "@types/node": "^18.7.14",
     "@types/react": "^18.0.10",
     "@types/react-dom": "^18.0.5",
     "isomorphic-fetch": "^3.0.0",
