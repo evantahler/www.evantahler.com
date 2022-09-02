@@ -22,7 +22,7 @@
     "@types/glob": "^7.2.0",
     "bootstrap": "^5.2.0",
     "bootswatch": "^5.2.0",
-    "fuzzysort": "^1.1.4",
+    "fuzzysort": "^2.0.1",
     "github-api": "^3.4.0",
     "glob": "^8.0.3",
     "gray-matter": "^4.0.3",
