@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@types/glob": "^8.0.0",
-    "bootstrap": "^5.2.0",
+    "bootstrap": "^5.2.1",
     "bootswatch": "^5.2.0",
     "fuzzysort": "^1.1.4",
     "github-api": "^3.4.0",
