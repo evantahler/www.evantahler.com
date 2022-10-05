@@ -73,7 +73,7 @@ const SEO = ({
       <ImageTags image={imageUrl} />
 
       <Head>
-        <link rel="canonical" href={canonical ? canonical : url} />
+        {canonical ? <link rel="canonical" href={canonical} /> : null}
 
         <meta
           name="twitter:card"
