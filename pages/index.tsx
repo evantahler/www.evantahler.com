@@ -41,11 +41,12 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
                   <p>
                     I lead engineering teams at{" "}
                     <a href="https://www.airbyte.com" target="_blank">
-                      Airbyte
+                      Airbyte,
                     </a>{" "}
-                    & and the creator of{" "}
+                    advise <Link href="resume">startups</Link>, and and am the
+                    creator of{" "}
                     <a href="https://www.actionherojs.com" target="_blank">
-                      Actionherojs
+                      Actionherojs.
                     </a>
                   </p>
                 </Col>
