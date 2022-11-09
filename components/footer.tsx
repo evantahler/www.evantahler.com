@@ -18,16 +18,22 @@ export default function Footer() {
               <p>
                 <small className="text-muted">
                   Copyright, Evan Tahler {year} <br />
-                  <a
-                    href="https://github.com/evantahler/www.evantahler.com"
-                    target="_new"
-                  >
-                    source for this site
+                  <a target="_blank" href="https://twiter.com/@evantahler">
+                    Twitter
+                  </a>{" "}
+                  |{" "}
+                  <a rel="me" href="https://mastodon.social/@evantahler">
+                    Mastodon
                   </a>
                   <br />
-                  <a target="_blank" href="https://twiter.com/@evantahler">
-                    @evantahler
-                  </a>
+                  <em>
+                    <a
+                      href="https://github.com/evantahler/www.evantahler.com"
+                      target="_new"
+                    >
+                      source for this site
+                    </a>
+                  </em>
                 </small>
               </p>
             </Col>
