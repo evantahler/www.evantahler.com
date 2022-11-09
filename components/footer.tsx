@@ -18,7 +18,7 @@ export default function Footer() {
               <p>
                 <small className="text-muted">
                   Copyright, Evan Tahler {year} <br />
-                  <a target="_blank" href="https://twiter.com/@evantahler">
+                  <a target="_blank" href="https://twitter.com/@evantahler">
                     Twitter
                   </a>{" "}
                   |{" "}
