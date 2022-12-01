@@ -21,7 +21,12 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
         <Card.Body style={{ paddingLeft: 0 }}>
           <Row>
             <Col md={3}>
-              <Image width={262} height={398} src="/images/bitmoji/5.png" />
+              <Image
+                width={262}
+                height={398}
+                src="/images/bitmoji/5.png"
+                alt="evan icon"
+              />
             </Col>
 
             <Col md={9} style={{ paddingLeft: "2rem" }}>
