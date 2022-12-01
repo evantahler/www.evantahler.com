@@ -109,6 +109,7 @@ function OpenSourcePage() {
                 <Row>
                   <Col md={1}>
                     <Image
+                      alt={repository.html_url}
                       width={75}
                       height={75}
                       src={repository.owner.avatar_url}

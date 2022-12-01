@@ -69,6 +69,7 @@ function ResumePage() {
         <Col md={1}>
           <a href="https://www.grouparoo.com" target="_blank">
             <Image
+              alt="grouparoo logo"
               height={logoSize}
               width={logoSize}
               src="/images/logos/grouparoo.png"
@@ -79,6 +80,7 @@ function ResumePage() {
         <Col md={1}>
           <a href="https://www.actionhero.com" target="_blank">
             <Image
+              alt="actionhero logo"
               height={logoSize}
               width={logoSize}
               src="/images/logos/actionhero.png"
@@ -89,6 +91,7 @@ function ResumePage() {
         <Col md={1}>
           <a href="https://www.taskrabbit.com" target="_blank">
             <Image
+              alt="taskrabbit logo"
               height={logoSize}
               width={logoSize}
               src="/images/logos/taskrabbit.png"
@@ -99,6 +102,7 @@ function ResumePage() {
         <Col md={1}>
           <a href="https://www.airbus.com" target="_blank">
             <Image
+              alt="airbus logo"
               height={logoSize}
               width={logoSize * 1.3}
               src="/images/logos/airbus.png"
@@ -109,6 +113,7 @@ function ResumePage() {
         <Col md={1}>
           <a href="https://www.modcloth.com" target="_blank">
             <Image
+              alt="modcloth logo"
               height={logoSize}
               width={logoSize}
               src="/images/logos/modcloth.jpg"
@@ -119,6 +124,7 @@ function ResumePage() {
         <Col md={1}>
           <a href="https://www.disney.com" target="_blank">
             <Image
+              alt="disney logo"
               height={logoSize}
               width={logoSize}
               src="/images/logos/disney.png"
