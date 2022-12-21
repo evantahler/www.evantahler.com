@@ -46,10 +46,8 @@ export default function BlogIndex(props) {
       />
 
       <h1>
-        <Link href="/blog">
-          <a style={{ textDecoration: "none", color: "black" }}>
-            Evan's Blog{tag ? `: ${capitalize(tag)}` : ""}
-          </a>
+        <Link href="/blog" style={{ textDecoration: "none", color: "black" }}>
+          Evan's Blog{tag ? `: ${capitalize(tag)}` : ""}
         </Link>
       </h1>
       {tag ? (
@@ -74,20 +72,21 @@ export default function BlogIndex(props) {
                   <Row>
                     <Col md={3}>
                       <Link href={`/blog/post/${post.slug}`}>
-                        <a>
-                          <Image
-                            style={{ maxWidth: "100%" }}
-                            rounded
-                            src={post.meta.image ?? "/images/misc/announce.png"}
-                          />
-                        </a>
+                        <Image
+                          style={{ maxWidth: "100%" }}
+                          rounded
+                          src={post.meta.image ?? "/images/misc/announce.png"}
+                        />
                       </Link>
                     </Col>
 
                     <Col>
                       <h4>
-                        <Link href={`/blog/post/${post.slug}`}>
-                          <a style={{ color: "black" }}>{post.meta.title}</a>
+                        <Link
+                          href={`/blog/post/${post.slug}`}
+                          style={{ color: "black" }}
+                        >
+                          {post.meta.title}
                         </Link>
                       </h4>
 

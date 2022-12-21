@@ -119,10 +119,7 @@ export default function BlogPage({
             <Card.Img variant="top" src="/images/bitmoji/4.png" />
             <Card.Body>
               <Card.Title>
-                Hi, I'm{" "}
-                <Link href="/">
-                  <a>Evan</a>
-                </Link>
+                Hi, I'm <Link href="/">Evan</Link>
               </Card.Title>
               <Card.Text>
                 I write about Technology, Software, and Startups. I use my

@@ -1,11 +1,9 @@
 import React from "react";
 import ContactCards from "../components/contactCards";
 import JumboImage from "../components/jumboImage";
-import Calendly from "../components/calendly";
 import SEO from "../components/seo";
 import { Alert } from "react-bootstrap";
-
-const title = "Evan Tahler: Contact";
+import { InlineWidget } from "react-calendly";
 
 function ContactPage() {
   return (
@@ -42,7 +40,7 @@ function ContactPage() {
 
       <hr />
       <p>Or schedule a chat with me!</p>
-      <Calendly />
+      <InlineWidget url="https://calendly.com/evantahler/30min"></InlineWidget>
     </>
   );
 }

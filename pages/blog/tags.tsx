@@ -11,17 +11,13 @@ export default function TagsPage(props) {
       <SEO title={`Evan's Blog Tags`} path="/blog" />
 
       <h1>
-        <Link href="/blog">
-          <a style={{ textDecoration: "none", color: "black" }}>
-            Evan's Blog Tags
-          </a>
+        <Link href="/blog" style={{ textDecoration: "none", color: "black" }}>
+          Evan's Blog Tags
         </Link>
       </h1>
 
       <p>
-        <Link href="/blog">
-          <a>See all posts</a>
-        </Link>
+        <Link href="/blog">See all posts</Link>
       </p>
 
       <hr />
@@ -39,9 +35,7 @@ export default function TagsPage(props) {
           {tags.map((tag) => (
             <tr key={`tag-${tag}`}>
               <td>
-                <Link href={`/blog/tag/${tag}`}>
-                  <a>{tag}</a>
-                </Link>
+                <Link href={`/blog/tag/${tag}`}>{tag}</Link>
               </td>
               <td>{tagValues[tag]}</td>
             </tr>

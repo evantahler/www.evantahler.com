@@ -15,9 +15,7 @@ export namespace BlogComponents {
             return (
               <Fragment key={`tag-${idx}`}>
                 <Link href={`/blog/tag/${tag}`}>
-                  <a>
-                    <Badge bg="info">{tag}</Badge>
-                  </a>
+                  <Badge bg="info">{tag}</Badge>
                 </Link>
                 &nbsp;
               </Fragment>
@@ -44,8 +42,8 @@ export namespace BlogComponents {
     return (
       <span className="text-info">
         Originally posted at{" "}
-        <Link href={meta.canonical}>
-          <a target="_blank">{short ? host : meta.canonical}</a>
+        <Link href={meta.canonical} target="_blank">
+          {short ? host : meta.canonical}
         </Link>
       </span>
     );

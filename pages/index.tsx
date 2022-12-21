@@ -83,19 +83,17 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
               <Fragment key={post.meta.title}>
                 <Card>
                   <Link href={`/blog/post/${post.slug}`}>
-                    <a>
-                      <Card.Img
-                        style={{ maxHeight: 400 }}
-                        variant="top"
-                        src={post.meta.image}
-                      />
-                    </a>
+                    <Card.Img
+                      style={{ maxHeight: 400 }}
+                      variant="top"
+                      src={post.meta.image}
+                    />
                   </Link>
 
                   <Card.Body>
                     <Card.Title>
                       <Link href={`/blog/post/${post.slug}`}>
-                        <a>{post.meta.title}</a>
+                        {post.meta.title}
                       </Link>
                     </Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
@@ -109,14 +107,12 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
                         {post.meta.tags.map((tag) => (
                           <Fragment key={`blog-${tag}`}>
                             <Link href={`/blog/tag/${tag}`}>
-                              <a>
-                                <Badge
-                                  key={`${post.meta.title}|${tag}`}
-                                  bg="info"
-                                >
-                                  {tag}
-                                </Badge>
-                              </a>
+                              <Badge
+                                key={`${post.meta.title}|${tag}`}
+                                bg="info"
+                              >
+                                {tag}
+                              </Badge>
                             </Link>{" "}
                           </Fragment>
                         ))}
