@@ -1,0 +1,54 @@
+---
+title: "How to Build Software Products Faster by Thinking Like a Data Engineer"
+date: "2022-12-19"
+author: "Evan Tahler"
+description: "Things I learned at Airbyte"
+image: "/images/posts/2022-12-19-build-software-products-faster-by-thinking-like-a-data-engineer/image.jpg"
+tags: [airbyte, engineering]
+canonical: https://airbyte.com/blog/data-tools-for-software-products
+---
+
+<Image
+  alt="Octavia holding tools"
+  src="/images/posts/2022-12-19-build-software-products-faster-by-thinking-like-a-data-engineer/image.jpg"
+  width={1600}
+  height={837}
+/>
+
+For the majority of my career, I would describe the work I did as “full stack web development”. I’ve made websites, integrated with warehouse and billing systems, built mobile apps, and integrated with a ton of third-party APIs. Now that I’ve joined Airbyte and have become familiar with the [Modern Data Stack](https://glossary.airbyte.com/term/modern-data-stack/), I’ve realized that I could have saved a lot of time reinventing the wheel. Don’t be like me - build your products faster by thinking like a Data Engineer!
+
+I’ve identified 3 types of projects that are a great fit for off-the-shelf Data Engineering tools:
+
+- Bulk Third Party API Integration
+- Timestamps and Audit Trails
+- Slow & Sequential Tasks
+
+The requirements for almost any tool I select for a production system are:
+
+- Open Source or otherwise free to use at a small scale
+- Easy to run (e.g. “docker compose” or a single process to monitor)
+- Expose monitoring and uptime hooks for “productionizing” them
+
+Lucky for us, tools that satisfy these requirements are easy to find!
+
+## Bulk Third-Party API Integration
+
+When I worked at TaskRabbit, we had a project to gather all the data we had about the Taskers in one place to make our Customer Service team as powerful as possible. This meant combining our application data with information from Zendesk, Stripe, and other places, which we then used for customer support and triage. At the time, we allocated weeks and built new services and jobs to consume the Zendesk & Stripe APIs to populate tables in our production database. It worked fine, except for all the hiccups and rate-limits that consuming bulk APIs brings… So then we built retry mechanisms, alerting tools, and whatever else we needed to be sure that things were running smoothly.
+
+Or, I could have just used [Airbyte](https://airbyte.com/) - a custom-made tool for importing everything an API has to offer, and already handles rate-limits and retries, to load data into our database. It’s a bit strange to think about using your database as the integration point, bypassing any application code, but most of the time, the data you get back from the API is all you want anyway.
+
+## Timestamps and Audit Trails
+
+I’ve been involved in many projects to better understand how data was changing in our production systems. Sometimes we wanted to create an audit trail of who did what and when, but other times we just wanted to know when something changed. If tying a change to a user of your application is important, there are great plugins like [PaperTrail](https://github.com/paper-trail-gem/paper_trail) for Rails for this… but if you are only interested in the change itself, check out [CDC](https://airbytehq.github.io/understanding-airbyte/cdc/)!
+
+Change Data Capture (CDC) is the process of reading the database’s own changelogs and storing those in another location. Without adding any additional rows, triggers, or application code, you can see _every_ update, insert, and delete as an event you can then process. From there, you can trigger whatever recalculation, cache flush, or alert you need! Just be ready for a lot of data - it’s a firehose!
+
+## Slow & Sequential Tasks
+
+AKA - “No more nested Cron Jobs”. How many times have you crafted long-running jobs that had complex dependencies or side effects? I’m not talking about the quick background jobs that might exist in your product (e.g. drip campaigns or sending SMS messages - keep using Resque or Kafka), but the slower kinds of jobs that tend to land in the Infrastructure side of the house. An example from my past is “make a nightly backup of this database, upload it to 2 different locations, and then send a slack message that it’s done”. This is, of course, a [DAG](https://glossary.airbyte.com/term/dag-directed-acyclic-graph/), and Data engineers deal with the problem of “[orchestration](https://airbyte.com/blog/data-orchestration-trends#what-is-data-orchestration)” all the time.
+
+Tools like [Dagster](https://dagster.io/) and [Airflow](https://airflow.apache.org/) are great at this work! They provide easy ways to shell out and run scripts or hit APIs and provide UIs and metadata endpoints to monitor your jobs, time, and retry them… all with far more visibility than my cron scripts of yore.
+
+## Summary
+
+Take a look at what the Modern Data Stack includes - it’s [huge](https://www.moderndatastack.xyz/categories)! I’m sure there are more examples of tools that Data Engineers have built that might apply to other engineering disciplines. What can you think of?
