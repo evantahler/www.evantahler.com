@@ -1,10 +1,11 @@
 import React from "react";
-import { render } from "react-dom";
+import { createRoot, Root } from "react-dom/client";
 import { act } from "react-dom/test-utils";
 
 import ResumePage from "../../pages/resume";
 
-let container;
+let container: HTMLDivElement;
+let root: Root;
 
 beforeEach(() => {
   container = document.createElement("div");
@@ -14,12 +15,14 @@ beforeEach(() => {
 afterEach(() => {
   document.body.removeChild(container);
   container = undefined;
+  act(() => root.unmount());
 });
 
 describe("Resume Section", () => {
   it("renders the section", () => {
     act(() => {
-      render(<ResumePage />, container);
+      root = createRoot(container);
+      root.render(<ResumePage />);
     });
     const header = container.querySelector("p");
     expect(header.textContent).toContain("Engineering Manager");
