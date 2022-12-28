@@ -139,7 +139,7 @@ export default function BlogPage({
       <Row>
         <Col>
           <Button href="/blog" variant="outline-primary">
-            <a>↞ See all posts</a>
+            ↞ See all posts
           </Button>
         </Col>
       </Row>
