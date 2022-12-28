@@ -1,4 +1,4 @@
-import { Row, Col, Badge, Card, Button } from "react-bootstrap";
+import { Row, Col, Card, Button } from "react-bootstrap";
 import Link from "next/link";
 import SEO from "../../../components/seo";
 import ReactMarkdown from "react-markdown";
@@ -105,7 +105,6 @@ export default function BlogPage({
             <ReactMarkdown
               // @ts-ignore
               components={components}
-              // @ts-expect-error
               remarkPlugins={[remarkFootnotes]}
               rehypePlugins={[rehypeRaw]}
             >

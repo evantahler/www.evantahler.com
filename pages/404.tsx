@@ -16,9 +16,9 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
   const router = useRouter();
   const [searchTerm, setSearchTem] = useState<string>(
     router.asPath
-      ?.replace(/\//g, "")
+      ?.replace(/\//g, " ")
       ?.replace(/_/g, " ")
-      ?.replace(/-\w+$/, "")
+      ?.replace(/-\w+$/, " ")
       ?.split("-")
       ?.slice(0, 3)
       ?.join("-")
@@ -37,10 +37,9 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
   async function search() {
     // console.log("STARTING");
     if (!searchTerm) return;
-    const results = await fuzzysort.goAsync(searchTerm, pages, {
+    const results = fuzzysort.go(searchTerm, pages, {
       keys: ["title", "href", "tags"],
       limit: 10, // don't return more results than you need!
-      allowTypo: false, // if you don't care about allowing typos
       // threshold: -10000, // don't return bad results
     });
     setMatches(
@@ -71,9 +70,7 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
                     </Card.Header>
                     <Card.Body>
                       <p>
-                        <Link href={page.href}>
-                          <a>{page.href}</a>
-                        </Link>
+                        <Link href={page.href}>{page.href}</Link>
                         <br />
                         <small>Match Score: {score}</small>
                       </p>
