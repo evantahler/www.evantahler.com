@@ -1,10 +1,11 @@
 import React from "react";
-import { render } from "react-dom";
+import { createRoot, Root } from "react-dom/client";
 import { act } from "react-dom/test-utils";
 
 import SpeakingPage from "../../pages/speaking";
 
-let container;
+let container: HTMLDivElement;
+let root: Root;
 
 beforeEach(() => {
   container = document.createElement("div");
@@ -14,12 +15,14 @@ beforeEach(() => {
 afterEach(() => {
   document.body.removeChild(container);
   container = undefined;
+  act(() => root.unmount());
 });
 
 describe("Resume Section", () => {
   it("renders the section", () => {
     act(() => {
-      render(<SpeakingPage />, container);
+      root = createRoot(container);
+      root.render(<SpeakingPage />);
     });
     const header = container.querySelector("h2");
     expect(header.textContent).toContain("Featured Talks");
