@@ -49,7 +49,7 @@ While looking at the mostly gibberish image content in vim, I did find part of t
   height={1024}
 />
 
-That description looks rather sus! Knowing that this challenge has _something_ to do with encryption, I guess I should try to decrypt the string! Being very lazy, I googled "online decryption" and found myself at online [decryption tools](https://www.devglan.com/online-tools/rsa-encryption-decryption). I tried the various formats and various passphrase permutations of `ada` and `lovelace`, with no luck. I also remembered that most AES encrypted strings tend to end with `==`, and this did not. Time to move on to encodings!
+That description looks rather sus! Knowing that this challenge has _something_ to do with encryption, I guess I should try to decrypt the string! Being very lazy, I googled "decryption tools" and found myself at... web-based [decryption tools](https://www.devglan.com/online-tools/rsa-encryption-decryption). I tried various formats and passphrase permutations of `ada` and `lovelace`, with no luck. I also remembered that most AES encrypted strings tend to end with `==`, and this one did not. Time to move on to encodings!
 
 It turns out that this string was base64 encoded (thanks [base64decode.org](https://www.base64decode.org)!). Once you decode it, you get a more traditional-looking AES public key (ending in `==`, but more importantly starting with `--BEGIN PUBLIC KEY--`), and a helpful message!
 
