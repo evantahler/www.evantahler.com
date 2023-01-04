@@ -1,0 +1,79 @@
+---
+title: "Architecture Notes: 2022 CFT"
+date: "2022-12-19"
+author: "Evan Tahler"
+description: "How I solved the Architecture Notes 2022 Capture the Flag Puzzles"
+image: "/images/posts/2023-01-03-architecture-notes-2022-ctf/ctf.png"
+tags: [engineering]
+---
+
+<Image
+  alt="Capture the Flag"
+  src="/images/posts/2023-01-03-architecture-notes-2022-ctf/ctf.png"
+  width={1600}
+  height={900}
+/>
+
+[Capture the Flag](<https://en.wikipedia.org/wiki/Capture_the_flag_(cybersecurity)>) challenges are basically Escape Rooms for software engineers. It's an obscure puzzle with opaque instructions that challenge you to think outside the box and learn new things along the way. They are both fun and frustrating, rewarding and ridiculous.
+
+[Architecture Notes](https://architecturenotes.co) is a new newsletter started in 2022 that covers software architecture and system design, mostly focused on web technologies. I'm a subscriber, and you should be to! This is the first year they've existed, and the first year they have done a CTF.
+
+What follows is are my spoiler-ridden notes on how I solved the challenge(s).
+
+## You can try the CFT yourself [here](https://ctf.architecturenotes.co/)
+
+Good luck!
+
+---
+
+## Flag 1: Encryption
+
+You start on a simple enough page, [ctf.architecturenotes.co](https://ctf.architecturenotes.co/).
+
+There isn't really much explaining what do to, so I decide to read the source of the page. Lucky for us, it's static HTML and (possibly) written by hand, so it's easy to follow. The only thing that looks out-of-place is:
+
+```html
+<img class="resize" src="images/an.jpg" alt="first programmer ever?" />
+```
+
+Ok, so the first programmer ever is probably [Ada, countess of Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace), but what do I do with that information?
+
+I downloaded the image in that tag, and then went to work trying to figure out what to do with it. The first dead-end I hit was looking for slightly-off-color pixels (e.g. [something like this](https://null-byte.wonderhowto.com/how-to/guide-steganography-part-3-hide-text-and-images-pictures-0130893/)) in the image which would reveal information. In Photoshop, I converted the image to grayscale and messed with the saturation, to no avail. For my next dead-end, I remembered reading an article about how you can hide strings within the raw image body, so I opened it up in vim.
+
+While looking at the mostly gibberish image content in vim, I did find part of the contents that was more-or-less human readable XML! This was the EXIF header information for the image. If you open up the image in most viewers, MacOS `preview` included, you can see the EXIF information formatted better:
+
+<Image
+  alt="Capture the Flag"
+  src="/images/posts/2023-01-03-architecture-notes-2022-ctf/exif.png"
+  width={2612}
+  height={1024}
+/>
+
+That description looks rather sus! Knowing that this challenge has _something_ to do with encryption, I guess I should try to decrypt the string! Being very lazy, I googled "online decryption" and found myself at online [decryption tools](https://www.devglan.com/online-tools/rsa-encryption-decryption). I tried the various formats and various passphrase permutations of `ada` and `lovelace`, with no luck. I also remembered that most AES encrypted strings tend to end with `==`, and this did not. Time to move on to encodings!
+
+It turns out that this string was base64 encoded (thanks [base64decode.org](https://www.base64decode.org)!). Once you decode it, you get a more traditional-looking AES public key (ending in `==`, but more importantly starting with `--BEGIN PUBLIC KEY--`), and a helpful message!
+
+> ok, I see you. Now what? maybe there is something at /flag that could help.
+
+If you CURL `htps://ctf.architecturenotes.co/flag` you learn that you are expected to POST some data... but what? Well, after a few tries and help from the fine folks at [Stack Overflow](https://stackoverflow.com/questions/67648523/how-to-encrypt-a-small-text-using-openssl-with-a-given-public-key), I ended up encrypting the word "ada" with the public key and posting it:
+
+```bash
+echo "... the key ..." > pub.key
+echo "ada" > plaintext.txt
+openssl rsautl -encrypt -pubin -inkey pub.key -in plaintext.txt | base64 > encrypted.txt
+curl -d @encrypted.txt "https://ctf.architecturenotes.co/flag" -v
+```
+
+And finally, I had the CTF solved! A novel way to prove you got to the end was the creator of the puzzle, [@myusuf3](https://twitter.com/myusuf3), asked you to tweet something very specific to him. It's a great way for him to boost his Twitter followers, and start a dialogue with the players.
+
+As a note, the headers for `ctf.architecturenotes.co/flag` contain cache information for Cloudflare, which was another dead-end:
+
+```raw
+report-to: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=lCArkhBrXosMGmu8L4d1VHb0Qwlq3pZbWsBj%2BcbllnCsBgkdJLOO%2Ff2gedkaTl%2FSAwxuDQDMGjhMAranlRf7dZIa4%2FHFroO8cEfPntCmZxY50C0N7%2FsvPxTXENyO%2B17tawYenmMB1WtSZL%2FPFlq6UZtjS53qaOs%3D"}],"group":"cf-nel","max_age":604800}
+```
+
+That was fun, and took around an hour to solve. On to the next one!
+
+## Flag 2: Coming Soon
+
+`#TODO`
