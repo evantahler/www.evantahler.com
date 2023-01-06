@@ -78,8 +78,12 @@ function IndexPage({
       </h2>
 
       <Row>
-        <Col>{latestPosts[0] && <BlogPostCard post={latestPosts[0]} />}</Col>
-        <Col>{latestPosts[1] && <BlogPostCard post={latestPosts[1]} />}</Col>
+        <Col md={6}>
+          {latestPosts[0] && <BlogPostCard post={latestPosts[0]} />}
+        </Col>
+        <Col md={6}>
+          {latestPosts[1] && <BlogPostCard post={latestPosts[1]} />}
+        </Col>
       </Row>
 
       <br />
