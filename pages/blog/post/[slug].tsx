@@ -8,6 +8,7 @@ import remarkFootnotes from "remark-footnotes";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { BlogComponents } from "../../../components/blog";
+import { formattedDate } from "../../../components/formattedDate";
 
 const components = {
   img({ node, src, ...props }) {
@@ -84,7 +85,7 @@ export default function BlogPage({
             {BlogComponents.displayTags({ meta })}
             <em>
               <small>
-                {new Date(meta.date).toDateString()}
+                {formattedDate(meta.date)}
                 {meta.canonical ? (
                   <>
                     {" "}

@@ -10,7 +10,7 @@
   "author": "evan@evantahler.com",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "next-remote-watch pages",
+    "dev": "next-remote-watch pages/blog",
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",

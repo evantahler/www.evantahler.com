@@ -1,18 +1,24 @@
-import { Fragment } from "react";
-import { Row, Col, Badge, Button, Card } from "react-bootstrap";
+import { Row, Col, Card } from "react-bootstrap";
 import { Blog } from "../lib/blog";
 import ContactCards from "../components/contactCards";
 import SEO from "../components/seo";
 import Image from "next/image";
 import Link from "next/link";
-
 import talks from "./../data/talks.json";
+import { BlogPostCard } from "../components/BlogPostCard";
+import { SpeakingEngagementCard } from "../components/SpeakingEngagementCard";
 
 function BoldWords({ text }) {
   return <span style={{ color: "var(--bs-warning)" }}>{text}</span>;
 }
 
-function IndexPage({ posts }: { posts: Blog.PostData[] }) {
+function IndexPage({
+  featuredPosts,
+  latestPosts,
+}: {
+  featuredPosts: Blog.PostData[];
+  latestPosts: Blog.PostData[];
+}) {
   return (
     <>
       <SEO title="Evan Tahler" path="/" />
@@ -67,103 +73,43 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
 
       <br />
 
+      <h2>
+        Latest <Link href="/blog">Blog</Link> Posts
+      </h2>
+
+      <Row>
+        <Col>
+          <BlogPostCard post={latestPosts[0]} />
+        </Col>
+        <Col>
+          <BlogPostCard post={latestPosts[1]} />
+        </Col>
+      </Row>
+
+      <br />
+
       <Row>
         <Col md={6}>
           <h2>
-            Featured Posts{" "}
-            <Button size="sm" variant="info" href="/blog">
-              See all Posts
-            </Button>
+            Featured <Link href="/blog">Blog</Link> Posts
           </h2>
 
           <br />
 
-          {posts.map((post) => {
-            return (
-              <Fragment key={post.meta.title}>
-                <Card>
-                  <Link href={`/blog/post/${post.slug}`}>
-                    <Card.Img
-                      style={{ maxHeight: 400 }}
-                      variant="top"
-                      src={post.meta.image}
-                    />
-                  </Link>
-
-                  <Card.Body>
-                    <Card.Title>
-                      <Link href={`/blog/post/${post.slug}`}>
-                        {post.meta.title}
-                      </Link>
-                    </Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      {new Date(post.meta.date).toDateString()}
-                    </Card.Subtitle>
-                    <Card.Text>
-                      {post.meta.description}
-                      <br />
-                      <br />
-                      <small>
-                        {post.meta.tags.map((tag) => (
-                          <Fragment key={`blog-${tag}`}>
-                            <Link href={`/blog/tag/${tag}`}>
-                              <Badge
-                                key={`${post.meta.title}|${tag}`}
-                                bg="info"
-                              >
-                                {tag}
-                              </Badge>
-                            </Link>{" "}
-                          </Fragment>
-                        ))}
-                      </small>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-                <br />
-              </Fragment>
-            );
-          })}
+          {featuredPosts.map((post) => (
+            <BlogPostCard post={post} />
+          ))}
         </Col>
 
         <Col md={6}>
           <h2>
-            Featured Talks{" "}
-            <Button size="sm" variant="info" href="/speaking">
-              See all Talks
-            </Button>
+            Featured <Link href="/speaking">Talks</Link>
           </h2>
 
           <br />
 
           {talks.slice(0, 3).map((talk) => (
-            <Fragment key={talk.title}>
-              <Card>
-                <Card.Img variant="top" src={talk.image} />
-                <Card.Body>
-                  <Card.Title>{talk.title}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">
-                    {talk.date}
-                  </Card.Subtitle>
-                  <Card.Text>
-                    <em>for {talk.where}</em>
-                    <br />
-                    <br />
-                    {talk.description}
-                    <br />
-                    {talk.links.map((l) => (
-                      <Fragment key={`${talk.title}-${l.title}`}>
-                        <br />*{" "}
-                        <a target="_new" href={l.url}>
-                          {l.title}
-                        </a>
-                      </Fragment>
-                    ))}
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-              <br />
-            </Fragment>
+            <SpeakingEngagementCard talk={talk} />
           ))}
         </Col>
       </Row>
@@ -174,17 +120,15 @@ function IndexPage({ posts }: { posts: Blog.PostData[] }) {
 export default IndexPage;
 
 export async function getStaticProps() {
-  const { posts, total, page, tag, count } = await Blog.getAll({
+  const { posts: featuredPosts } = await Blog.getAll({
     featured: true,
   });
 
+  const { posts: latestPosts } = await Blog.getAll({
+    count: 2,
+  });
+
   return {
-    props: {
-      total,
-      page,
-      tag,
-      count,
-      posts,
-    },
+    props: { featuredPosts, latestPosts },
   };
 }

@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { PaginationHelper } from "../../components/paginationHelper";
 import { BlogComponents } from "../../components/blog";
 import { TagCloud } from "react-tagcloud";
+import { formattedDate } from "../../components/formattedDate";
 
 function capitalize(tag: string) {
   const words = tag.split(" ");
@@ -98,7 +99,7 @@ export default function BlogIndex(props) {
 
                       <em>
                         <small>
-                          {new Date(post.meta.date).toDateString()}
+                          {formattedDate(post.meta.date)}
                           {post.meta.canonical ? (
                             <>
                               {" "}
