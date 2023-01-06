@@ -77,16 +77,10 @@ function IndexPage({
         Latest <Link href="/blog">Blog</Link> Posts
       </h2>
 
-      {latestPosts.length > 2 && (
-        <Row>
-          <Col>
-            <BlogPostCard post={latestPosts[0]} />
-          </Col>
-          <Col>
-            <BlogPostCard post={latestPosts[1]} />
-          </Col>
-        </Row>
-      )}
+      <Row>
+        <Col>{latestPosts[0] && <BlogPostCard post={latestPosts[0]} />}</Col>
+        <Col>{latestPosts[1] && <BlogPostCard post={latestPosts[1]} />}</Col>
+      </Row>
 
       <br />
 
