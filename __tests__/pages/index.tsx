@@ -18,11 +18,11 @@ afterEach(() => {
   act(() => root.unmount());
 });
 
-describe("Introcudtion Section", () => {
+describe("Introduction Section", () => {
   it("renders the section", () => {
     act(() => {
       root = createRoot(container);
-      root.render(<IndexPage posts={[]} />);
+      root.render(<IndexPage featuredPosts={[]} latestPosts={[]} />);
     });
     const header = container.querySelector("h1");
     expect(header.textContent).toBe("Hi, I'm Evan!");

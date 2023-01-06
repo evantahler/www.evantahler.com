@@ -77,14 +77,16 @@ function IndexPage({
         Latest <Link href="/blog">Blog</Link> Posts
       </h2>
 
-      <Row>
-        <Col>
-          <BlogPostCard post={latestPosts[0]} />
-        </Col>
-        <Col>
-          <BlogPostCard post={latestPosts[1]} />
-        </Col>
-      </Row>
+      {latestPosts.length > 2 && (
+        <Row>
+          <Col>
+            <BlogPostCard post={latestPosts[0]} />
+          </Col>
+          <Col>
+            <BlogPostCard post={latestPosts[1]} />
+          </Col>
+        </Row>
+      )}
 
       <br />
 
@@ -96,8 +98,8 @@ function IndexPage({
 
           <br />
 
-          {featuredPosts.map((post) => (
-            <BlogPostCard post={post} />
+          {featuredPosts.map((post, idx) => (
+            <BlogPostCard key={`featured-post-${idx}`} post={post} />
           ))}
         </Col>
 
@@ -108,8 +110,8 @@ function IndexPage({
 
           <br />
 
-          {talks.slice(0, 3).map((talk) => (
-            <SpeakingEngagementCard talk={talk} />
+          {talks.slice(0, 3).map((talk, idx) => (
+            <SpeakingEngagementCard key={`talk-${idx}`} talk={talk} />
           ))}
         </Col>
       </Row>
