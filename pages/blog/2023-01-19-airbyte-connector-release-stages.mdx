@@ -1,0 +1,211 @@
+---
+title: "The Road to GA: Understanding Airbyte Connector Release Stages"
+date: "2023-01-19"
+author: "Evan Tahler"
+description: "Airbyte Connector Release Stages"
+image: "/images/posts/2023-01-19-airbyte-connector-release-stages/image.png"
+tags: [engineering, airbyte]
+canonical: https://airbyte.com/blog/connector-release-stages
+---
+
+<Image
+  alt="Connector release stages"
+  src="/images/posts/2023-01-19-airbyte-connector-release-stages/image.png"
+  width={1102}
+  height={680}
+/>
+
+As of the start of 2023, Airbyte has over [300](https://docs.airbyte.com/category/sources/) connectors in our Open-Source repository.
+At [Move(data)](https://movedata.airbyte.com/), our first conference, we [announced](https://airbyte.com/movedata-announcements) that we will soon be bringing most
+of these connectors to Airbyte Cloud - for free while they are in the Alpha or Beta
+Release Stages! In this post, I want to share more details about our Connector Release
+Stages, and how Airbyte uses them to ensure that you only pay for the most reliable
+and well-tested connectors.
+
+My name is Evan, and I’m the Engineering Manager for the Connector Operations team. The Connector Operations Team focuses exclusively on what it means to test, publish, and manage Airbyte connectors. In 2023, we are going to dramatically grow the number of sources and destinations that Airbyte can read and write to. In addition to our normal home-grown and community contributed connectors using the [CDK](https://airbyte.com/connector-development-kit) (connector development kit), we are soon going to release our [low-code connector builder](https://airbyte.com/movedata-announcements). This will make it so that you can build a connector for any API source without even writing a line of code. This will lead to a lot more connectors being developed in 2023!
+
+## Overview
+
+In early 2022 we introduced a grading system for connectors called “Connector Release Stages”, and have been evolving them ever since: From our [docs](https://docs.airbyte.com/integrations/#connector-release-stages):
+
+> Airbyte uses a grading system for connectors to help you understand what to expect from a connector:
+>
+> **Generally** **Available**: A generally available connector has been deemed ready for use in a production environment and is officially supported by Airbyte. Its documentation is considered sufficient to support widespread adoption.
+>
+> **Beta**: A beta connector is considered stable with no backwards incompatible changes but has not been validated by a broader group of users. We expect to find and fix a few issues and bugs in the release before it’s ready for GA.
+>
+> **Alpha**: An alpha connector signifies a connector under development and helps Airbyte gather early feedback and issues reported by early adopters. We strongly discourage using alpha releases for production use cases and do not offer Cloud Support SLAs around these products, features, or connectors.
+
+When we build connectors at Airbyte, of course we write unit and integration tests like any good piece of software. We also write acceptance tests which we run against what we call [SAT](https://airbyte.com/blog/black-box-testing-data-connectors), or the Source Acceptance Test suite against real data in a sandbox account. For destinations, there’s also the DAT, or Destination Acceptance Suite. This collection of robust tests ensure that the connector performs well against our test’s expectations, and that the data we have in our sandbox accounts is properly transformed according to the [Airbyte Protocol](https://docs.airbyte.com/understanding-airbyte/airbyte-protocol/).
+
+However, the world of data integrations is full of complexity. Just because all of the tests are passing, that doesn’t mean that the connector will work performantly, and work for all of our user’s data. Perhaps the source operates differently depending on the type of account you have, exposing or changing the streams available to sync, or the content contained within. Also, in some cases, it’s quite hard to create a robust sandbox account with all the available test data. For example, simulating a Stripe account with every type of refund is non-trivial. It is with this mindset that we’ve added “Certification” to our [Testing Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html) - to account for these unknown unknowns.
+
+<Image
+  alt="Connector testing Pyramid"
+  src="/images/posts/2023-01-19-airbyte-connector-release-stages/pyramid.png"
+  width={1600}
+  height={1155}
+/>
+
+## Release Stage Philosophy
+
+Let’s dive into the connector lifecycle. We group the requirements for connectors into the following categories:
+
+- Usage
+- Test Coverage
+- Reliability
+- Docs
+- Streams
+- Featureset
+- Databases and Destination Specific Concerns
+
+You will notice that the first category is “usage”, and that is intentional. As connectors already are well-tested by this point, the main goal of certifying a connector is ensuring that we’ve seen enough different use-cases which are sufficient to expose any bugs we wouldn’t have gotten from our sandbox dataset. A diverse set of use-cases is most easily measured by counting the distinct Airbyte workspaces (some from OSS users and some from Airbyte Cloud) using the connector, and each release stage has an ever-higher bar. Yes, our community (and soon Airbyte Cloud users) running Alpha and Beta connectors is a requirement of getting a connector to GA. This is one of the many reasons we want to encourage you to give them a try and let us know about your experience with the connector! We’ve built telemetry in to capture crashes and bugs from Airbyte users so that we can be sure that connectors really are performing at the level we expect.
+
+## Requested & Pending Connectors
+
+Connectors begin life with you! When you discover the need to move data from an internal or external API that Airbyte doesn’t yet support, that is when a connector is born. For connectors that we manage, we have a number of ways which you can [request](https://airbyte.com/connectors/request-a-connector) and [vote](https://airbyte.com/connector-requests) for a connector for us to focus on - these are called “Pending” connectors.
+
+## Alpha Connectors
+
+Once the connector exists, and it can move the data for at least one stream, it moves into the Alpha stage. Connectors in this phase are experimental, and can be thought of as a MVP (Minimum Viable Product). Not all streams and edge cases will be supported yet, but you can certainly use these connectors to get some data into your data warehouse!
+
+### Alpha Criteria:
+
+**Usage‍**
+
+- None, as this is a new connector
+
+**Test Coverage**
+
+- The connector passes the SAT test suite
+
+**Reliability‍**
+
+- None, as this is a new connector
+
+**Docs**
+
+- Basic documentation is provided so that a technical user can set up the connector, via a connector’s Setup Guide in the docs
+- The connector’s specification includes all the required information from a user (e.g. API keys and account information)
+- A CHANGELOG for the connector has been started
+
+**Streams**
+
+- All applicable streams have a primary key
+- Incremental Syncs supported on all streams which offer them
+
+**Featureset**
+
+- oAuth, if applicable for this connector, works
+
+**Databases and Destination Specific Concerns**
+
+- Not Applicable
+
+## Beta Connectors
+
+After a connector has been released and we are seeing usage, it can move into the Beta release stage. The goal of Beta is to move a connector from MVP to MLP - Minimum Lovable Product. While an Alpha connector provides the minimum amount of data to be useful, a Beta connector should provide all the data anyone could reasonably want from that source, or at least all the data the source API will provide.
+
+### Beta Criteria:
+
+**Usage‍**
+
+- At least 25 distinct workspaces between Airbyte OSS and Airbyte Cloud are actively using the connector at the time of certification.
+
+**Test Coverage**
+
+- At least 90% unit test coverage.
+
+**Reliability‍**
+
+- All available streams include expected records i.e. save examples of the records produced as snapshots
+- Source can reliably access all streams (or skip them if they can’t) i.e. we can gain the required permissions to sync
+- Any severe open issues have been closed
+- The connector checkpoints i.e: periodically saves its sync progress
+- The connector is on the latest CDK & SAT versions
+
+**Docs**
+
+- Icon required
+- Links to vendor or API docs explaining what each stream is and how to use it
+
+**Streams**
+
+- (same as before)
+
+**Featureset**
+
+- oAuth, if applicable for this connector, works.
+- Secure Connections
+
+**Databases and Destination Specific Concerns**
+
+- Connector properly supports multiple data types
+
+Waiting for the connector to obtain sufficient usage is how we collect bugs and issues that, once triaged, help us become confident in the connector’s quality.
+
+Beta connectors introduce the concept of “expected records”. This is our shorthand for saying that we need to do the work to fully seed our sandbox accounts with data for every stream. Then, we need to capture the data produced from a sync and check it into the codebase as a snapshot of that data. This allows us to run a sync with the connector [every night](https://github.com/airbytehq/airbyte/blob/master/airbyte-integrations/builds.md) and compare the data produced today with the previous snapshot. We will be alerted to 2 different types of failures: code changes that break the connector and changing upstream APIs. While we only publish new connector versions to Docker Hub when we make a change, we do test the build process for every connector against our latest CDK to ensure that the connector still can be published and take advantage of any new features or speedups we add.
+
+The second case, changing APIs, is when an API provider modifies the data returned from an API endpoint. This alerts us so we can decide how to handle it. If a new property is added to a stream, but everything else stays the same, that’s a patch [semver](https://semver.org/) (semantic versioning) change, as Airbyte can handle adding new columns to your data warehouse. But a type-change or a removal is more severe, and that requires us to think about how to handle it, and how to communicate it to our users… usually resulting in a breaking change (and major semver version bump) of the connector. Airbyte’s job is to make sure your data pipelines don’t break, so thoughtfully considering what to do when a provider makes a breaking change is what we are here for!
+
+Beta connectors also are required to checkpoint. Checkpointing is a word we use at Airbyte to mean that data output from the source is frequently “saved” in the destination. Checkpointing is good because it enables a failed incremental sync to be reliably restarted without needing to re-import the majority of the data from the previous sync attempt. The Airbyte Protocol has more detail on the topic, but in essence, we rely on the source emitting state message regularly and the destinations regularly committing data to disk… and then informing the Airbyte Platform that everything has been persisted up to that state message - a checkpoint. State messages indicate a resumable sync location - like the page of the API we are on, or the OFFSET in a SQL source. Beta and GA sources need to emit a State message at least once every 15 minutes, and Beta and GA destinations need to persist the data that they have received at least every 15 minutes. This means that at worst-case, Airbyte will persist all that data that’s been moved to your data warehouse at least once every half hour.
+
+The Airbyte Protocol has support for many different types of data (strings, numbers, dates, nested objects, etc). At the Beta phase, we want to be sure that the connector properly represents its data as correctly as possible using the proper [Data Types](https://docs.airbyte.com/understanding-airbyte/supported-data-types/).
+
+Finally, for all of our connectors, we want to ensure that there is a way to connect securely to the source or destination. For API sources, this usually means connecting via HTTPS. But, for many of our database connectors, the protocol may only have optional SSL or encryption. For example, you can connect to postgres without requiring SSL. At the Beta stage, a connector must provide multiple ways of connecting if a secure protocol is not not required by the upstream source or downstream destination. If a connector cannot connect over a secure protocol, it will not be released on Airbyte Cloud, even though it may be available to our OSS users. In fact, we strip out any insecure connection options for connectors deployed on Airbyte Cloud - you are required to use HTTPS, SSL or a SSH proxy - which is why this requirement exists 🔐.
+
+## Generally Available Connectors (GA)
+
+Finally, a connector can become Generally Available when it passes our strictest criteria. Most importantly, this means that we believe that this connector is as robust as we can make it. We are confident of the connector’s quality, and are therefore able to provide [support](https://airbyte.com/pricing) for it. Only at this point will we charge our customers to use these connectors on Airbye Cloud.
+
+**Usage‍**
+
+- At least 50 distinct workspaces between Aribyte OSS and Airbyte Cloud are actively using the connector at the time of certification.
+
+**Test Coverage**
+
+- (same as before)
+
+**Reliability‍**
+
+- All available streams include expected records and SAT tests.
+- Configuration options can reliably access all streams
+- Any severe open issues have been closed
+- The connector checkpoints
+- The connector is on the latest CDK & SAT versions
+
+**Docs**
+
+- Docs sufficient for a moderately-technical new user to configure the connector.
+
+**Streams**
+
+- (same as before)
+
+**Featureset**
+
+- oAuth, if required by vendor
+- Secure Connection Options
+- Secure Connections
+- Connector checks are fast
+
+**Databases and Destination Specific Concerns**
+
+- Connector properly supports multiple data types
+- Database sources support column selection
+
+Once again, the most important criteria is that a lot of customers are using the connector so we can collect and fix any bugs that might exist.
+
+In addition to a higher testing and usage bar, GA connectors also add the requirement that we can support column selection for databases. This forthcoming feature allows you to specify which columns you want to move to your data warehouse, leaving behind unimportant or secure data.
+
+At this stage, we also work with the API provider (in the case that the connector is an API Source) to meet any criteria they have to be in their catalogs. Usually, this means adhering to rate limits, sending specific headers, and implementing oAuth to their satisfaction.
+
+Finally, GA connectors need to operate at a reasonable speed, including at the setup and check phases of the sync.
+
+## Summary
+
+Airbyte takes connector quality seriously. We plan to offer ever more connectors, and we have a robust program to test and certify these connectors. We want to strike the right balance between having a large catalog so that you connect to the largest breadth of data sources with Airbyte, and also ensure that you are only being charged for top-quality connectors. We do this via our connector release stages - Pending, Alpha, Beta, and Generally Available.
+
+We are constantly evolving what it means to be a “good” connector at Airbyte, and our list of requirements for each stage is getting stricter all the time as we hear feedback from you, our users. We are continuously testing more edge-cases in SAT, and adding new requirements to our certification checklist. With that in mind, some connectors which were certified to the Beta or GA levels in the past, might not pass all the current requirements. However, we have built tools to alert us of this and have a team constantly revisiting and maintaining all of our connectors, and getting them up to the latest standards. As we evolve our connector release stages, we will keep this blog post up-to-date.
+
+Thanks for using Airbyte, and we look forward to making connectors with you!
