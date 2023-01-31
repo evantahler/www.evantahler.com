@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Badge, Card } from "react-bootstrap";
 import { Blog } from "../lib/blog";
 import Link from "next/link";
-import { formattedDate } from "../lib/formattedDate";
+import { FormattedDate } from "./FormattedDate";
 
 export const BlogPostCard = ({ post }: { post: Blog.PostData }) => (
   <Fragment key={post.meta.title}>
@@ -20,7 +20,7 @@ export const BlogPostCard = ({ post }: { post: Blog.PostData }) => (
           <Link href={`/blog/post/${post.slug}`}>{post.meta.title}</Link>
         </Card.Title>
         <Card.Subtitle className="mb-2 text-muted">
-          {formattedDate(post.meta.date)}
+          <FormattedDate dateString={post.meta.date} />
         </Card.Subtitle>
         <Card.Text>
           {post.meta.description}
