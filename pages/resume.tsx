@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Row, Col } from "react-bootstrap";
-import JumboImage from "../components/jumboImage";
+import JumboImage from "../components/JumboImage";
 import Image from "next/image";
-import SEO from "../components/seo";
+import SEO from "../components/Seo";
 
 const logoSize = 100;
 

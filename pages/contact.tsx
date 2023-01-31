@@ -1,7 +1,7 @@
 import React from "react";
-import ContactCards from "../components/contactCards";
-import JumboImage from "../components/jumboImage";
-import SEO from "../components/seo";
+import ContactCards from "../components/ContactCards";
+import JumboImage from "../components/JumboImage";
+import SEO from "../components/Seo";
 import { Alert } from "react-bootstrap";
 import { InlineWidget } from "react-calendly";
 

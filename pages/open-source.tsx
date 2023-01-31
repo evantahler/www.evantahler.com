@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, ListGroup, Spinner, Alert, Button } from "react-bootstrap";
 import Image from "next/image";
 import GitHub from "github-api";
-import JumboImage from "../components/jumboImage";
-import SEO from "../components/seo";
+import JumboImage from "../components/JumboImage";
+import SEO from "../components/Seo";
 
 const projects = [
   { org: "airbytehq", name: "airbyte" },

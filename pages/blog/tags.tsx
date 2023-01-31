@@ -1,4 +1,4 @@
-import SEO from "../../components/seo";
+import SEO from "../../components/Seo";
 import { Blog } from "../../lib/blog";
 import Link from "next/link";
 import { Table } from "react-bootstrap";

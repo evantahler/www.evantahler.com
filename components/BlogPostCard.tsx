@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Badge, Card } from "react-bootstrap";
 import { Blog } from "../lib/blog";
 import Link from "next/link";
-import { formattedDate } from "./formattedDate";
+import { formattedDate } from "../lib/formattedDate";
 
 export const BlogPostCard = ({ post }: { post: Blog.PostData }) => (
   <Fragment key={post.meta.title}>

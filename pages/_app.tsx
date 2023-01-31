@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Container, Row, Col } from "react-bootstrap";
-import Header from "../components/header";
-import Footer from "../components/footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "../scss/site.scss";
 
 export default function SITE({ Component, pageProps }) {
