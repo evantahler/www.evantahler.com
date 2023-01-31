@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Row, Col, Card } from "react-bootstrap";
-import JumboImage from "../components/jumboImage";
-import SEO from "../components/seo";
+import JumboImage from "../components/JumboImage";
+import SEO from "../components/Seo";
 import talks from "./../data/talks.json";
 
 const title = "Evan Tahler: Speaking";

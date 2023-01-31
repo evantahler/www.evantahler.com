@@ -1,7 +1,7 @@
 import { Row, Col, Card } from "react-bootstrap";
 import { Blog } from "../lib/blog";
-import ContactCards from "../components/contactCards";
-import SEO from "../components/seo";
+import ContactCards from "../components/ContactCards";
+import SEO from "../components/Seo";
 import Image from "next/image";
 import Link from "next/link";
 import talks from "./../data/talks.json";
@@ -32,6 +32,7 @@ function IndexPage({
                 height={398}
                 src="/images/bitmoji/5.png"
                 alt="evan icon"
+                priority={true}
               />
             </Col>
 

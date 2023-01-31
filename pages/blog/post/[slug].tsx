@@ -1,14 +1,14 @@
 import { Row, Col, Card, Button } from "react-bootstrap";
-import Link from "next/link";
-import SEO from "../../../components/seo";
+import SEO from "../../../components/Seo";
 import ReactMarkdown from "react-markdown";
 import { Blog } from "../../../lib/blog";
 import rehypeRaw from "rehype-raw";
 import remarkFootnotes from "remark-footnotes";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { BlogComponents } from "../../../components/blog";
-import { formattedDate } from "../../../components/formattedDate";
+import { BlogComponents } from "../../../components/BlogComponents";
+import { FormattedDate } from "../../../components/FormattedDate";
+import { BlogSidebar } from "../../../components/BlogSidebar";
 
 const components = {
   img({ node, src, ...props }) {
@@ -85,7 +85,7 @@ export default function BlogPage({
             {BlogComponents.displayTags({ meta })}
             <em>
               <small>
-                {formattedDate(meta.date)}
+                <FormattedDate dateString={meta.date} />
                 {meta.canonical ? (
                   <>
                     {" "}
@@ -115,22 +115,7 @@ export default function BlogPage({
         </Col>
 
         <Col>
-          <Card>
-            <Card.Img variant="top" src="/images/bitmoji/4.png" />
-            <Card.Body>
-              <Card.Title>
-                Hi, I'm <Link href="/">Evan</Link>
-              </Card.Title>
-              <Card.Text>
-                I write about Technology, Software, and Startups. I use my
-                Product Management, Software Engineering, and Leadership skills
-                to build teams that create world-class digital products.
-              </Card.Text>
-              <Button variant="outline-primary" href="/contact">
-                Get in touch
-              </Button>
-            </Card.Body>
-          </Card>
+          <BlogSidebar />
         </Col>
       </Row>
 
