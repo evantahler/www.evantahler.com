@@ -32,6 +32,7 @@ function IndexPage({
                 height={398}
                 src="/images/bitmoji/5.png"
                 alt="evan icon"
+                priority={true}
               />
             </Col>
 
