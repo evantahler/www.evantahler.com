@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Card } from "react-bootstrap";
 import talks from "../data/talks.json";
 
-type Talk = typeof talks[number];
+type Talk = (typeof talks)[number];
 
 export const SpeakingEngagementCard = ({ talk }: { talk: Talk }) => (
   <Fragment key={talk.title}>
