@@ -3,6 +3,7 @@ import fuzzysort from "fuzzysort";
 import { Fragment, useState, useEffect } from "react";
 import { Spinner, Card, Badge } from "react-bootstrap";
 import Link from "next/link";
+import Head from "next/head";
 import { useRouter } from "next/router";
 
 interface PageType {
@@ -52,6 +53,10 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
 
   return (
     <>
+      <Head>
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
+
       <h1>This page cannot be found</h1>
 
       {!searching ? (
