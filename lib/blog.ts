@@ -77,7 +77,7 @@ export namespace Blog {
     }[] = [];
 
     const slugs = getAllSlugs();
-    for (const slug of slugs.reverse()) {
+    for (const slug of slugs) {
       const post = await getBySlug(slug);
 
       if (post.meta.unlisted) continue;
