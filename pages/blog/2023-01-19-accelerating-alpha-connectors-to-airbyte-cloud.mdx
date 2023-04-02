@@ -1,0 +1,36 @@
+---
+title: "Accelerating Alpha Connectors to Airbyte Cloud: 57 New Connectors Ready For Takeoff"
+date: "2023-03-01"
+author: "Evan Tahler"
+description: "Releasing 57 Connectors to Airbyte Cloud"
+image: "/images/posts/2023-03-01-accelerating-alpha-connectors-to-airbyte-cloud/image.png"
+tags: [engineering, airbyte]
+canonical: https://airbyte.com/blog/accelerating-alpha-connectors-to-airbyte-cloud-57-connectors-now-ready-for-takeoff
+---
+
+<Image
+  alt="Connector release stages"
+  src="/images/posts/2023-03-01-accelerating-alpha-connectors-to-airbyte-cloud/image.png"
+  width={1102}
+  height={680}
+/>
+
+This month, we added **57 new Alpha connectors to Airbyte Cloud**, including CoinMarketCap, Omnisend, S3 Glue, SFTP Bulk, and Twilio Taskrouter. This marks the start of our program to accelerate the release of every eligible alpha connector to Airbyte Cloud as quickly as possible. This makes the free [Alpha and Beta connector program](https://airbyte.com/blog/why-airbyte-made-alpha-and-beta-connectors-free) even more valuable, and lets you signal to us which connectors we should focus on promoting to higher release stages based on your usage.
+
+In my [previous blog post](https://airbyte.com/blog/connector-release-stages), I shared how Airbyte manages our connector release stages. Alpha connectors are MVPs and Generally Available connectors are thoroughly-tested and receive our highest level of support. You only pay for syncs using Generally Available connectors. What wasn’t mentioned in the previous post was what criteria we use to release connectors to Airbyte Cloud.
+
+First, there are some connectors that will never be released to Airbyte Cloud, as they just won’t work in a cloud environment. This mostly includes the class of connectors which look at data on your local filesystem, reading files and such. Other than that, as long as the connector is safe and easy to configure, there should be no reason that you can’t try the connector, for free.
+
+The criteria for releasing a connector on Airbyte Cloud is:‍
+
+1. The connector is “cloud appropriate” as described above
+2. The connector is tested with a sandbox account and passing the Connector Acceptance Test suite
+3. The connector configuration properly denotes secrets within its configuration specification.
+4. The connector provides its metadata (Icon and Documentation)
+5. The connector only communicates via encrypted traffic (e.g. HTTPS or SSL).
+
+To streamline the process for deploying community-contributed connectors to Airbyte Cloud, we’ve created tools which are run every night to test connectors that aren’t yet on Airbyte Cloud and automatically create and merge PRs adding them. This should shrink the time it takes between a new connector contribution on our open source version and when you can start syncing on Airbyte Cloud to less than 24 hours.
+
+The complete and up-to-date list of connectors now available on Airbyte Cloud can be found [here](https://docs.airbyte.com/integrations).
+
+On behalf of the team, Thanks for using Airbyte, and keep those [connectors coming](https://airbyte.com/contributor-program)!
