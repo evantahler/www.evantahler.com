@@ -50,9 +50,8 @@ function buildRFC822Date(dateString) {
 }
 
 function generateRssFeed(posts: Blog.PostData[]) {
-  const items = `
-    ${posts.map((post) => {
-      return `<item>
+  const items = posts.map((post) => {
+    return `<item>
         <title>${escapeHTML(post.meta.title)}</title>
         <link>${site_url}/blog/post/${post.slug}</link>
         <description>${
@@ -64,7 +63,7 @@ function generateRssFeed(posts: Blog.PostData[]) {
           url="${site_url}${post.meta.image}"
           height="600" width="900" />
       </item>`;
-    })}`;
+  });
 
   return `<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -80,7 +79,7 @@ function generateRssFeed(posts: Blog.PostData[]) {
           <title>${feedOptions.title}</title>
           <link>${site_url}/blog</link>
         </image>
-        ${items}
+        ${items.join("\r\n")}
       </channel>
     </rss>`;
 }
