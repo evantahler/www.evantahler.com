@@ -12,11 +12,12 @@
   "scripts": {
     "dev": "next-remote-watch pages/blog",
     "build": "next build",
-    "postbuild": "next-sitemap",
+    "postbuild": "npm run sitemap",
     "start": "next start",
     "test": "jest",
     "pretest": "npm run lint && npm run build && npm run postbuild",
-    "lint": "prettier --check pages components __tests__"
+    "lint": "prettier --check pages components __tests__",
+    "sitemap": "next-sitemap"
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
@@ -37,7 +38,7 @@
     "react-tagcloud": "^2.3.1",
     "rehype-raw": "^6.1.1",
     "remark-footnotes": "^4.0.1",
-    "sass": "1.61.0",
+    "sass": "^1.61.0",
     "sharp": "^0.32.0"
   },
   "devDependencies": {
@@ -53,6 +54,7 @@
     "prettier": "^2.8.7",
     "react-test-renderer": "^18.2.0",
     "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.4",
     "xml2json": "^0.12.0"
   }
