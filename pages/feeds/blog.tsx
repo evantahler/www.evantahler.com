@@ -11,6 +11,44 @@ const feedOptions = {
 const escapeHTML = (str: string | undefined) =>
   str ? str.replace(/&/g, "-") : "";
 
+function addLeadingZero(num) {
+  num = num.toString();
+  while (num.length < 2) num = "0" + num;
+  return num;
+}
+
+function buildRFC822Date(dateString) {
+  const dayStrings = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const monthStrings = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const timeStamp = Date.parse(dateString);
+  const date = new Date(timeStamp);
+
+  const day = dayStrings[date.getDay()];
+  const dayNumber = addLeadingZero(date.getDate());
+  const month = monthStrings[date.getMonth()];
+  const year = date.getFullYear();
+  const time = `${addLeadingZero(date.getHours())}:${addLeadingZero(
+    date.getMinutes()
+  )}:00`;
+
+  //Wed, 02 Oct 2002 13:00:00 GMT
+  return `${day}, ${dayNumber} ${month} ${year} ${time} UTC`;
+}
+
 function generateRssFeed(posts: Blog.PostData[]) {
   const items = `
     ${posts.map((post) => {
@@ -20,10 +58,10 @@ function generateRssFeed(posts: Blog.PostData[]) {
         <description>${
           escapeHTML(post.meta.description) ?? "A blog post"
         }</description>
-        <pubDate>${post.meta.date}</pubDate>
-        <guid>${post.slug}</guid>
+        <pubDate>${buildRFC822Date(post.meta.date)}</pubDate>
+        <guid>${site_url}/blog/post/${post.slug}</guid>
         <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/"
-          url="${post.meta.image}"
+          url="${site_url}${post.meta.image}"
           height="600" width="900" />
       </item>`;
     })}`;
@@ -36,7 +74,7 @@ function generateRssFeed(posts: Blog.PostData[]) {
         <description>${feedOptions.description}</description>
         <atom:link href="${site_url}/feeds/blog" rel="self"/>
         <language>en-US</language>
-        <lastBuildDate>${posts[0].meta.date}</lastBuildDate>
+        <lastBuildDate>${buildRFC822Date(posts[0].meta.date)}</lastBuildDate>
         <image>
           <url>${feedOptions.image_url}</url>
           <title>${feedOptions.title}</title>
