@@ -61,7 +61,7 @@ function generateRssFeed(posts: Blog.PostData[]) {
         <guid>${site_url}/blog/post/${post.slug}</guid>
         <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/"
           url="${site_url}${post.meta.image}"
-          height="600" width="900" />
+         />
       </item>`;
   });
 
