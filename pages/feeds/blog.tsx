@@ -46,7 +46,7 @@ function buildRFC822Date(dateString) {
   )}:00`;
 
   //Wed, 02 Oct 2002 13:00:00 GMT
-  return `${day}, ${dayNumber} ${month} ${year} ${time} UTC`;
+  return `${day}, ${dayNumber} ${month} ${year} ${time} GMT`;
 }
 
 function generateRssFeed(posts: Blog.PostData[]) {
