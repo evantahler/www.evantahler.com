@@ -1,0 +1,74 @@
+---
+title: "Upgrading our Community Pull Requests Experience"
+date: "2023-04-28"
+author: "Evan Tahler"
+description: "Getting the Airbyte Community involved"
+image: "/images/posts/2024-04-28-upgrading-community-prs/image.jpg"
+tags: [engineering, airbyte]
+canonical: https://airbyte.com/blog/upgrading-our-community-pull-requests-experience
+---
+
+<Image
+  alt="Connector release stages"
+  src="/images/posts/2024-04-28-upgrading-community-prs/image.jpg"
+  width={1102}
+  height={680}
+/>
+
+Hello Airbyte Community! I am @evantahler, and I am an Engineering Manager at Airbyte, and part of the Connectors Organization. We wanted to share an update with you about how we are thinking about Community Contributions, your [Pull Requests](https://github.com/airbytehq/airbyte/pulls?q=is%3Aopen+is%3Apr+label%3Acommunity), in 2023.
+
+First, we know that we have not been as responsive as we would like to be - you are creating PRs faster than we can review and merge them! This speaks volumes about the strength of the Airbyte community, how simple it is to enhance our existing connectors, and how easy we’ve made it contribute new connectors. Thank you for your willingness to aid your fellow Data Engineers and make Airbyte the largest collection of data integrations! You enable us to make progress on our mission - to make data available and actionable to everyone, everywhere.
+
+Let’s take a look at why we aren’t able to review and merge your contributions with the speed we would like, and then, what we are going to do about it.
+
+## Connector Contribution Problems we are going to solve in 2023
+
+**Testing a PR requires manual intervention**
+
+We want all the connectors in our [repository](https://github.com/airbytehq/airbyte) to be well-tested and adhere to certain quality standards, especially as they move up the [Connector Certification Stages](https://airbyte.com/blog/connector-release-stages). This requires running integration tests against our test sandbox accounts or sample databases. Because we will be passing in real API keys, this requires a manual review to kick off the tests in our continuous integration environment. We also lack an automated way to share these same credentials with contributors so they can test things out locally. Airbyte connectors are unlike other types of software where you can mock external API calls in tests - that’s the whole point of a connector! We want to ensure that the connector still works as expected, and the upstream API hasn’t changed either.
+
+**The requirements to publish a new version of a connector are opaque**
+
+To provide a good experience for our users, we want every connector (and new version of a connector) to have a good changelog, adhere to [semver](https://docs.airbyte.com/contributing-to-airbyte/#semantic-versioning-for-connectors) for breaking changes, and include additional metadata (like docs, icons, etc). This process is not well documented right now, and often requires an Airbyte team member to add this information or go back-and-forth with the contributor to include this information.
+
+**Our complex connectors are tightly coupled**
+
+Some of our most complex connectors (those that deal with databases and files) share a lot of code. This simplifies _our_ development and maintenance of these connectors, but it creates an environment where changing one file, say for source-mysql might also affect how source-postgres works. This makes reviewing these changes difficult and contributing in these areas extra tricky.
+
+**Airbyte supports all of our connectors for Airbyte Cloud users**
+
+Today, for users of Airbyte Cloud, we provide support if something goes wrong on every sync. As we add connectors from the community that we aren’t familiar with, and possibly don’t have access to, the burden on our support team grows. We currently don’t merge connectors that connect to an API or Database which we can’t test ourselves.
+
+## What are we doing about it?
+
+This year, we will be prioritizing the following projects:
+
+- **Allow the team to focus on community contributions by creating self-serve support tools**
+- **Rethinking how we share secrets and run tests for contributors**
+- **Revamping our Connector Metadata system, and making clear requirements and tests**
+- **Adding CDKs (connector development kits) for our file-based sources and decoupling Java database connectors**
+- **Creating a way for contributors to provide “community-supported” connectors**
+
+On the first topic, you may have seen some new tools and Slack channels in the Airbyte Community Slack and Discourse ([airbyte.com/community](https://airbyte.com/community])). Our #airbyte-help channel has been divided into 5 channels, each focused on a specific topic. This enables our community to easily locate and search for previous help threads. Additionally, we have introduced Kapa.ai, a ChatGPT bot, to assist us in responding to queries from our expanding community. This will free up our team of Technical Support Engineers to get back to working with you on your code.
+
+We don’t have anything to share publicly yet on the remaining projects listed above, but stay tuned! As we roll out each of these features, we will be sure to share them with you.
+
+## What to do in the Short Term?
+
+While we are working on making the developer experience better, which will take some time, we wanted to share guidance about how to contribute in a way that we will be the most likely to accept.
+
+1. **Focus on enhancing existing popular (Generally Available) connectors‍**
+
+Since we already have tests and a sandbox environment set up for our existing connectors, testing enhancements to them is the easiest thing for us to do. We are always working to speed up and enhance our most popular connectors, and since we are working on them ourselves, we will be more likely to address your contribution in a timely manner. Be sure to add tests for any new functionality you add!
+
+2. **Create new connectors using the low-code CDK**
+
+If you find yourself making a new API Source connector, please consider using our low-code CDK. We’ve built a way for you to build API sources using only YAML! This means that there’s almost no code for us to review which makes the review process very quick! Stay tuned for an update in the next few months about how we’ve made making low-code connectors even easier.
+
+3. **Let us make the changes for you**
+
+Finally, please grant us permission to correct small mistakes and add metadata in your PRs. If you [“Allow Edits from Maintainers”](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork#enabling-repository-maintainer-permissions-on-existing-pull-requests) in your PRs, rather than go back-and-forth with you, we can just make the changes ourselves 😀
+
+This doesn’t mean that we won’t review and accept PRs in other areas, but for now, this is where we will be focusing our efforts as we build the enhancements to our tools and processes listed above.
+
+**Thank you for building Airbyte with us.**
