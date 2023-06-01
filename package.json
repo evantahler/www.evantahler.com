@@ -24,7 +24,7 @@
     "bootswatch": "^5.2.3",
     "fuzzysort": "^2.0.4",
     "github-api": "^3.4.0",
-    "glob": "^9.3.4",
+    "glob": "^10.2.6",
     "gray-matter": "^4.0.3",
     "next": "^13.2.4",
     "next-sitemap": "^4.0.9",
