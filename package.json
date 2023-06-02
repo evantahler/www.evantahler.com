@@ -44,7 +44,7 @@
   "devDependencies": {
     "@types/glob": "^8.1.0",
     "@types/jest": "^29.5.0",
-    "@types/node": "^18.15.11",
+    "@types/node": "^20.2.5",
     "@types/react": "^18.2.8",
     "@types/react-dom": "^18.0.11",
     "isomorphic-fetch": "^3.0.0",
