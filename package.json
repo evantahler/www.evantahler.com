@@ -20,6 +20,7 @@
     "sitemap": "next-sitemap"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.0.1",
     "bootstrap": "^5.2.3",
     "bootswatch": "^5.2.3",
     "fuzzysort": "^2.0.4",
