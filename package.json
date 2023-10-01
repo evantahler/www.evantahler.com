@@ -28,7 +28,7 @@
     "glob": "^9.3.4",
     "gray-matter": "^4.0.3",
     "next": "^13.2.4",
-    "next-sitemap": "^4.1.8",
+    "next-sitemap": "^4.2.3",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-calendly": "^4.1.1",
