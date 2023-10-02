@@ -17,18 +17,27 @@ function ResumePage() {
       <JumboImage src="/images/resume-2.jpg" />
 
       <p>
-        Evan Tahler is the Platform Engineering Manager at{" "}
+        Evan Tahler is a Senior Engineering Manager at{" "}
         <a href="https://www.airbyte.com" target="_new">
           Airbyte
         </a>
-        .
+        . During my tenure at Airbyte, I've managed (and founded) a number of
+        feature teams, including Platform Move, Destinations, and Connector
+        Operations. This wide-view of our architecture and product allows me to
+        help grow the Airbyte engineering org and focus our efforts on what is
+        needed most. I'm particularly proud of our cross-team efforts to
+        implement Checkpointing, "Destinations V2", and our connector developer
+        CI/CD suite and CLI.
       </p>
 
       <p>
         Prior to that, he was the CTO and co-founder of Grouparoo, which was
-        acquired by Airbyte. Evan's expertise lies in building the technical
-        side of digital products, and growing the teams required to do so. He’s
-        helped companies like{" "}
+        acquired by Airbyte.
+      </p>
+      <p>
+        Evan's expertise lies in building the technical side of digital
+        products, and growing the teams required to do so. He’s helped companies
+        like{" "}
         <a target="_new" href="https://www.disney.com">
           Disney
         </a>
