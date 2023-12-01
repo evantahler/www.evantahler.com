@@ -39,7 +39,7 @@
     "react-tagcloud": "^2.3.3",
     "rehype-raw": "^6.1.1",
     "remark-footnotes": "^4.0.1",
-    "sass": "^1.66.1",
+    "sass": "^1.69.5",
     "sharp": "^0.32.6"
   },
   "devDependencies": {
