@@ -148,7 +148,7 @@ describe("ah-elasticsearch-orm", function () {
     it("server booted and normal actions work", function (done) {
       api.specHelper.runAction("status", function (response) {
         response.serverInformation.serverName.should.equal(
-          "my_actionhero_project"
+          "my_actionhero_project",
         );
         done();
       });

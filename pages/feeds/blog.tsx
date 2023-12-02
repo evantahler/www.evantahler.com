@@ -42,7 +42,7 @@ function buildRFC822Date(dateString) {
   const month = monthStrings[date.getMonth()];
   const year = date.getFullYear();
   const time = `${addLeadingZero(date.getHours())}:${addLeadingZero(
-    date.getMinutes()
+    date.getMinutes(),
   )}:00`;
 
   //Wed, 02 Oct 2002 13:00:00 GMT

@@ -131,7 +131,7 @@ params.initFunction = function (api, next) {
         "action @ " +
           connection.remoteIP +
           " | params: " +
-          JSON.stringify(connection.params)
+          JSON.stringify(connection.params),
       );
     }
 
@@ -141,7 +141,7 @@ params.initFunction = function (api, next) {
         api.utils.requiredParamChecker(
           api,
           connection,
-          api.actions[connection.action].inputs.required
+          api.actions[connection.action].inputs.required,
         );
         if (connection.error == false) {
           process.nextTick(function () {
@@ -159,7 +159,7 @@ params.initFunction = function (api, next) {
         api.socketServer.socketRoomBroadcast(
           api,
           connection,
-          connection.lastLine
+          connection.lastLine,
         );
         process.nextTick(function () {
           next(connection, true);

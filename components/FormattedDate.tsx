@@ -11,7 +11,7 @@ export const FormattedDate = ({ dateString }: { dateString: string }) => {
         year: "numeric",
         month: "short",
         day: "numeric",
-      }
+      },
     );
     setDate(locallyFormattedDate);
   }, []);

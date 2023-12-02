@@ -60,7 +60,7 @@ api.socketServer.gracefulShutdown = function (api, next, alreadyShutdown) {
     api.log(
       "[socket] waiting on shutdown, there are still " +
         api.socketServer.connections.length +
-        " connected clients waiting on a response"
+        " connected clients waiting on a response",
     );
     setTimeout(function () {
       api.socketServer.gracefulShutdown(api, next, alreadyShutdown);
