@@ -54,10 +54,10 @@ We can use a helper like [`type-fest`’s](https://www.npmjs.com/package/type-fe
 export type UnwrapPromise<T> = T extends Promise<infer U>
   ? U
   : T extends (...args: any) => Promise<infer U>
-  ? U
-  : T extends (...args: any) => infer U
-  ? U
-  : T;
+    ? U
+    : T extends (...args: any) => infer U
+      ? U
+      : T;
 ```
 
 So, the type of the Action’s response is:

@@ -22,10 +22,10 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
       ?.replace(/-\w+$/, " ")
       ?.split("-")
       ?.slice(0, 3)
-      ?.join("-")
+      ?.join("-"),
   );
   const [matches, setMatches] = useState<{ page: PageType; score: number }[]>(
-    []
+    [],
   );
   const [searching, setSearching] = useState(true);
 
@@ -46,7 +46,7 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
     setMatches(
       results.map((result) => {
         return { page: result.obj, score: result.score };
-      })
+      }),
     );
     setSearching(false);
   }

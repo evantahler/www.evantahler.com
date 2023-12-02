@@ -64,7 +64,7 @@ exports.session = function (api, next) {
         if (typeof next == "function") {
           next(error, session, expireTimestamp, createdAt, readAt);
         }
-      }
+      },
     );
   };
 
@@ -88,7 +88,7 @@ exports.session = function (api, next) {
   api.session.checkAuth = function (
     connection,
     successCallback,
-    failureCallback
+    failureCallback,
   ) {
     api.session.load(connection, function (error, session) {
       if (session === null) {
@@ -141,7 +141,7 @@ exports.userAdd = {
       var passwordSalt = api.utils.randomString(64);
       var passwordHash = caluculatePassowrdHash(
         connection.params.password,
-        passwordSalt
+        passwordSalt,
       );
       var user = {
         email: connection.params.email,
@@ -182,7 +182,7 @@ exports.logIn = {
       } else {
         var passwordHash = caluculatePassowrdHash(
           connection.params.password,
-          user.passwordSalt
+          user.passwordSalt,
         );
         if (passwordHash !== user.passwordHash) {
           connection.error = "incorrect password";
@@ -225,7 +225,7 @@ exports.action = {
           next(connection, true);
         });
       },
-      next
+      next,
     );
   },
 };

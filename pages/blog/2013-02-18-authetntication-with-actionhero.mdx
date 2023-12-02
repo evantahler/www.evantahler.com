@@ -123,7 +123,7 @@ exports.mysql = function (api, next) {
       host: api.configData.mySQL.host,
       port: api.configData.mySQL.port,
       dialect: "mysql",
-    }
+    },
   );
 
   api.models = {};
@@ -135,14 +135,14 @@ exports.mysql = function (api, next) {
   }
   models.forEach(function (model) {
     api.models[model] = api.sequelize.import(
-      __dirname + "./../models/" + model + ".js"
+      __dirname + "./../models/" + model + ".js",
     );
   });
 
   var initDB = function (next) {
     var migrator = api.sequelize.getMigrator(
       { path: process.cwd() + "/migrations" },
-      true
+      true,
     );
     migrator
       .migrate()
@@ -209,7 +209,7 @@ exports.sessions = function (api, next) {
       function (error, value, expireTimestamp, createdAt, readAt) {
         connection.session = value;
         next(value, expireTimestamp, createdAt, readAt);
-      }
+      },
     );
   };
 
@@ -224,7 +224,7 @@ exports.sessions = function (api, next) {
   api.session.checkAuth = function (
     connection,
     noAuthCallback,
-    happyAuthCallback
+    happyAuthCallback,
   ) {
     api.session.load(
       connection,
@@ -255,7 +255,7 @@ exports.sessions = function (api, next) {
               });
           }
         }
-      }
+      },
     );
   };
 

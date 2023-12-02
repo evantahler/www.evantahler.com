@@ -162,7 +162,7 @@ export default function PluginContainerPage() {
       ),
     {
       loading: () => <p>Loading...</p>,
-    }
+    },
   );
 
   return (
@@ -242,7 +242,7 @@ plugins.map((plugin) => {
     fs.writeFileSync(
       path.join(__dirname, "tmp", "plugin", pluginName, `${pageName}`),
       `export { default } from "${page.replace(/\.tsx$/, "")}"
-console.info("[Plugin] '${pageName}' from ${pluginName}");`
+console.info("[Plugin] '${pageName}' from ${pluginName}");`,
     );
   });
 });
@@ -284,7 +284,7 @@ export default function PluginContainerPage() {
       ),
     {
       loading: () => <p>Loading...</p>,
-    }
+    },
   );
 
   return (
@@ -356,12 +356,12 @@ module.exports = {
     config.resolve.alias["react"] = path.join(
       __dirname,
       "node_modules",
-      "react"
+      "react",
     );
     config.resolve.alias["react-dom"] = path.resolve(
       __dirname,
       "node_modules",
-      "react-dom"
+      "react-dom",
     );
 
     return config;

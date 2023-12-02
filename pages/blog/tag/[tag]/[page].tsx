@@ -11,7 +11,7 @@ export async function getStaticPaths() {
     .map((tag) => {
       const pages =
         Math.ceil(
-          allPosts.filter((p) => p.meta.tags.includes(tag)).length / perPage
+          allPosts.filter((p) => p.meta.tags.includes(tag)).length / perPage,
         ) + 1;
       return Array.from(Array(pages).keys()).map((page) => {
         return { params: { tag, page: page.toString() } };
