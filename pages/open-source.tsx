@@ -51,21 +51,18 @@ function OpenSourcePage() {
         </p>
         <p>
           Working on these project is far more than just{" "}
-          <a href="https://github.com/actionhero/actionhero/commits/master">
+          <a href="https://github.com/actionhero/actionhero/commits/main">
             writing code
           </a>
           . It includes{" "}
-          <a href="https://docs.actionherojs.com/">documentation</a>,{" "}
+          <a href="https://www.actionherojs.com/tutorials">documentation</a>,{" "}
           <a href="https://www.actionherojs.com/community">
             community management
           </a>
-          ,{" "}
-          <a href="https://blog.evantahler.com/tagged/actionherojs">
-            education
-          </a>
-          , and <a href="https://www.actionherojs.com/solutions">support</a>.
-          Help me continue to provide the open-source community with these
-          tools... and of course, more features and code :D
+          , <a href="/blog/tag/actionhero">education</a>, and{" "}
+          <a href="https://www.actionherojs.com/solutions">support</a>. Help me
+          continue to provide the open-source community with these tools... and
+          of course, more features and code :D
         </p>
         <div style={{ textAlign: "center" }}>
           <p>
