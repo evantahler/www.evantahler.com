@@ -47,7 +47,7 @@ function OpenSourcePage() {
 
       <Alert variant="light">
         <p>
-          <strong>You can now soponsor my work via Github Sponsorships!</strong>
+          <strong>You can now sponsor my work via Github Sponsorships!</strong>
         </p>
         <p>
           Working on these project is far more than just{" "}
@@ -64,7 +64,7 @@ function OpenSourcePage() {
             education
           </a>
           , and <a href="https://www.actionherojs.com/solutions">support</a>.
-          Help me continue to provide the open-source coomunity with these
+          Help me continue to provide the open-source community with these
           tools... and of course, more features and code :D
         </p>
         <div style={{ textAlign: "center" }}>
