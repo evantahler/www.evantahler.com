@@ -31,7 +31,7 @@
     "next": "^14.0.3",
     "next-sitemap": "^4.2.3",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.9.1",
+    "react-bootstrap": "^2.9.2",
     "react-calendly": "^4.3.0",
     "react-dom": "^18.2.0",
     "react-fontawesome": "^1.7.1",
