@@ -43,7 +43,7 @@ function OpenSourcePage() {
       <h1>Open Source</h1>
       <hr />
 
-      <JumboImage src="/images/open-source.jpg" />
+      <JumboImage src="/images/open-source-2.jpg" />
 
       <Alert variant="light">
         <p>

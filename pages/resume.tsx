@@ -14,7 +14,7 @@ function ResumePage() {
       <h1>Resume</h1>
       <hr />
 
-      <JumboImage src="/images/resume-2.jpg" />
+      <JumboImage src="/images/resume-3.jpg" />
 
       <p>
         Evan Tahler is a Senior Engineering Manager at{" "}

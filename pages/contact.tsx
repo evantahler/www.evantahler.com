@@ -13,7 +13,7 @@ function ContactPage() {
       <h1>Contact</h1>
       <hr />
 
-      <JumboImage src="/images/contact.jpg" />
+      <JumboImage src="/images/contact-2.jpg" />
 
       <h2 style={{ textAlign: "center" }}>Let's chat!</h2>
 

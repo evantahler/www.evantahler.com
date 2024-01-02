@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 
 function JumboImage({ src }) {
   const style = {
-    height: 300,
+    height: 500,
     width: "100%",
     paddingTop: 10,
     paddingBottom: 10,
