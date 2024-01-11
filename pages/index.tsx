@@ -4,7 +4,7 @@ import ContactCards from "../components/ContactCards";
 import SEO from "../components/Seo";
 import Image from "next/image";
 import Link from "next/link";
-import talks from "./../data/talks.json";
+import { talks } from "../data/talks";
 import { BlogPostCard } from "../components/BlogPostCard";
 import { SpeakingEngagementCard } from "../components/SpeakingEngagementCard";
 

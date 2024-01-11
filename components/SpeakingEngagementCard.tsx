@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Card } from "react-bootstrap";
-import talks from "../data/talks.json";
+import talks from "../data/talks";
 
 type Talk = (typeof talks)[number];
 
