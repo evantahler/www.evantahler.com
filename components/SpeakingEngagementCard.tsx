@@ -1,8 +1,6 @@
 import { Fragment } from "react";
 import { Card } from "react-bootstrap";
-import talks from "../data/talks";
-
-type Talk = (typeof talks)[number];
+import { talks, Talk } from "../data/talks";
 
 export const SpeakingEngagementCard = ({ talk }: { talk: Talk }) => (
   <Fragment key={talk.title}>
