@@ -1,0 +1,78 @@
+---
+title: "Introducing Airbyte Destinations V2 - Typing & Deduping"
+date: "2023-08-29"
+author: "Evan Tahler"
+description: "Making Database destinations faster better, and stronger"
+image: "/images/posts/2023-08-29-introducing-airbyte-destinations-v2/image-1.png"
+tags: [engineering, airbyte]
+canonical: https://airbyte.com/blog/introducing-airbyte-destinations-v2-typing-deduping
+---
+
+<Image
+  alt="v2!"
+  src="/images/posts/2023-08-29-introducing-airbyte-destinations-v2/image-1.png"
+  width={1102}
+  height={680}
+/>
+
+We're excited to announce the public availability of improvements to the way data is synced and handled in destination tables (previously known as normalization). This is Airbyte Destinations V2, which starting today provides:
+
+- One-to-one table mapping: Data in one stream will always be mapped to one table in your data warehouse. No more sub-tables.
+- Improved per-row error handling with \_airbyte_meta: Airbyte will now populate typing errors in the \_airbyte_meta column instead of failing your sync. You can query these results to audit misformatted or unexpected data.
+- Internal Airbyte tables in the airbyte_internal schema: Airbyte will now generate all raw tables in the airbyte_internal schema. We no longer clutter your desired schema with raw data tables.
+- Incremental delivery for large syncs: Data will be incrementally delivered to your final tables when possible. No more waiting hours to see the first rows in your destination table.
+  ‍
+
+Destinations V2 is now available in the latest versions of our Snowflake and BigQuery destinations. Over the next few weeks, Destinations V2 will be rolled out to many more connectors, including Redshift, Postgres, and more. See this guide to learn how to upgrade your connectors, or check out an [example of Destinations V2](https://docs.airbyte.com/understanding-airbyte/typing-deduping#destinations-v2-example).
+
+<Image
+  alt="v2!"
+  src="/images/posts/2023-08-29-introducing-airbyte-destinations-v2/image-2.png"
+  width={1102}
+  height={680}
+/>
+
+## Audit Content Errors with \_airbyte_meta
+
+<Image
+  alt="v2!"
+  src="/images/posts/2023-08-29-introducing-airbyte-destinations-v2/image-3.png"
+  width={1102}
+  height={680}
+/>
+
+Airbyte now separates data-moving problems from data-content problems. Prior to Destinations V2, both types of errors were handled the same way: by failing the sync. Now, a failing sync only means that Airbyte could not move all of your data. This is a more flexible approach, as you can now decide how to handle rows with content problems on a case-by-case basis.
+
+Per-row error handling also enables you to query the [\_airbyte_meta column](https://docs.airbyte.com/understanding-airbyte/typing-deduping#_airbyte_meta-errors) to see which rows failed for content reasons, and why. The types of errors which will be stored in \_airbyte_meta.errors include:
+
+- Typing errors: the source declared that the type of the column id should be an integer, but a string value was returned.
+- Size errors (coming soon): the source returned content which cannot be stored within this row or column (e.g. a [Redshift Super column has a 16mb limit](https://docs.aws.amazon.com/redshift/latest/dg/limitations-super.html)). Destinations V2 will allow us to trim records which cannot fit into destinations, but retain the primary key(s) and cursors and include "too big" error messages.
+
+## Be in Control of Connector Upgrades
+
+<Image
+  alt="v2!"
+  src="/images/posts/2023-08-29-introducing-airbyte-destinations-v2/image-4.png"
+  width={1102}
+  height={680}
+/>
+
+With Destinations V2, we are also excited to announce tooling to help you manage
+connector updates with breaking changes. Moving forward, whenever there are upcoming
+breaking changes to one of your connectors, you can now:
+
+- Update your source / destination connectors one at a time. This provides an easy path for dual-writing to multiple destinations at once, or testing out new updates before committing to them all at once.
+- (Airbyte Cloud) Upgrade at your own speed. You will be notified when there are breaking changes, then can choose to opt-in at the time of your choosing (within a window) from the Airbyte UI.
+
+You can see [here](https://docs.airbyte.com/release_notes/upgrading_to_destinations_v2#breakdown-of-breaking-changes) the breakdown of breaking changes with Destinations V2. The [quickest path to upgrading](https://docs.airbyte.com/release_notes/upgrading_to_destinations_v2#quick-start-to-upgrading) updates all connections tied to your destination in-place, without ever resyncing your historical data. We also have [additional upgrade paths](https://docs.airbyte.com/release_notes/upgrading_to_destinations_v2#advanced-upgrade-paths) available for dual-writing to multiple destinations, or testing out the new format of data - also never requiring you to resync historical data.
+
+## New Possibilities with Destinations V2
+
+Destinations V2 provides the Airbyte team with many new avenues for improving the speed, cost, and effectiveness of how data is replicated to your data warehouses, including but not limited to:
+
+- Improving the robustness of schema evolution to new data types
+- Retaining JSON data from database sources after replication
+- Reducing cost of typing & deduping on the data warehouse
+- Extending typing & deduping to new destinations
+
+Stay tuned for more information on these releases in the coming months. As always, you can consult our [public roadmap](https://github.com/orgs/airbytehq/projects/37/views/1?pane=issue&itemId=32661141) for more detail on what’s coming next!
