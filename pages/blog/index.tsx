@@ -37,7 +37,7 @@ export default function BlogIndex(props) {
 
   const wordCloudData = [];
   Object.entries(tags ?? {}).map(([tag, value]) =>
-    wordCloudData.push({ value: tag, count: value })
+    wordCloudData.push({ value: tag, count: value }),
   );
 
   const blogSearch = (e: React.FormEvent) => {

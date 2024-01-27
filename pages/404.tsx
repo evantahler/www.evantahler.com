@@ -27,7 +27,7 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
     ?.join("-")
     ?.split("?")[0];
   const [matches, setMatches] = useState<{ page: PageType; score: number }[]>(
-    []
+    [],
   );
   const [loading, setLoading] = useState(true);
 
@@ -48,7 +48,7 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
     setMatches(
       results.map((result) => {
         return { page: result.obj, score: result.score };
-      })
+      }),
     );
     setLoading(false);
   }
