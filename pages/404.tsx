@@ -5,6 +5,7 @@ import { Spinner, Card, Badge } from "react-bootstrap";
 import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 interface PageType {
   href: string;
@@ -15,19 +16,20 @@ interface PageType {
 
 export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
   const router = useRouter();
-  const [searchTerm, setSearchTem] = useState<string>(
-    router.asPath
-      ?.replace(/\//g, " ")
-      ?.replace(/_/g, " ")
-      ?.replace(/-\w+$/, " ")
-      ?.split("-")
-      ?.slice(0, 3)
-      ?.join("-"),
-  );
+  const searchParams = useSearchParams();
+  const searching = searchParams.get("searching")?.toLowerCase() === "true";
+  const searchTerm = router.asPath
+    ?.replace(/\//g, " ")
+    ?.replace(/_/g, " ")
+    ?.replace(/-\w+$/, " ")
+    ?.split("-")
+    ?.slice(0, 3)
+    ?.join("-")
+    ?.split("?")[0];
   const [matches, setMatches] = useState<{ page: PageType; score: number }[]>(
     [],
   );
-  const [searching, setSearching] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   if (!searchTerm) return <p>Loading...</p>;
 
@@ -48,7 +50,7 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
         return { page: result.obj, score: result.score };
       }),
     );
-    setSearching(false);
+    setLoading(false);
   }
 
   return (
@@ -57,13 +59,12 @@ export default function FourOhFourPage({ pages }: { pages: PageType[] }) {
         <meta name="robots" content="noindex, nofollow" />
       </Head>
 
-      <h1>This page cannot be found</h1>
+      <h1>{searching ? "Search Results" : "This page cannot be found"}</h1>
 
-      {!searching ? (
+      {!loading ? (
         <>
           <p>
-            Here are the most relevant pages for{" "}
-            <Badge bg="info">{searchTerm}</Badge>:
+            Here are the most relevant pages for <code>{searchTerm}</code>:
           </p>
           {matches.length > 0 ? (
             matches.map(({ page, score }) => {

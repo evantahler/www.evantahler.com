@@ -1,13 +1,14 @@
 import { Fragment } from "react";
 import SEO from "../../components/Seo";
 import { Blog } from "../../lib/blog";
-import { Row, Col, Card, Image, Button } from "react-bootstrap";
+import { Row, Col, Card, Image, Button, Form } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { PaginationHelper } from "../../components/PaginationHelper";
 import { BlogComponents } from "../../components/BlogComponents";
 import { TagCloud } from "react-tagcloud";
 import { FormattedDate } from "../../components/FormattedDate";
+import { SeeAllPosts } from "../../components/SeeAllPosts";
 
 function capitalize(tag: string) {
   const words = tag.split(" ");
@@ -39,6 +40,12 @@ export default function BlogIndex(props) {
     wordCloudData.push({ value: tag, count: value }),
   );
 
+  const blogSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const searchTerm = e.currentTarget[0].value.split(" ")[0]; // we can't handle spaces
+    window.location.href = `/${searchTerm}?searching=true`;
+  };
+
   return (
     <>
       <SEO
@@ -46,16 +53,36 @@ export default function BlogIndex(props) {
         path="/blog"
       />
 
-      <h1>
-        <Link href="/blog" style={{ textDecoration: "none", color: "black" }}>
-          Evan's Blog{tag ? `: ${capitalize(tag)}` : ""}
-        </Link>
-      </h1>
-      {tag ? (
-        <Button href="/blog" variant="outline-primary" size="sm">
-          <a>↞ See all posts</a>
-        </Button>
-      ) : null}
+      <Row>
+        <Col>
+          <h1>
+            <Link
+              href="/blog"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              Evan's Blog{tag ? `: ${capitalize(tag)}` : ""}
+            </Link>
+          </h1>
+          {tag ? <SeeAllPosts /> : null}
+        </Col>
+        <Col>
+          <Form onSubmit={blogSearch}>
+            <Row style={{ marginTop: 15 }}>
+              <Col>
+                <Form.Group className="mb-3">
+                  <Form.Control size="sm" type="text" placeholder="" />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Button variant="outline-info" type="submit" size="sm">
+                  Find Blog Posts
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
+
       <hr />
 
       {(posts || [])

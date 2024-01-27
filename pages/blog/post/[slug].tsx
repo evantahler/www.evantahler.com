@@ -9,6 +9,7 @@ import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { BlogComponents } from "../../../components/BlogComponents";
 import { FormattedDate } from "../../../components/FormattedDate";
 import { BlogSidebar } from "../../../components/BlogSidebar";
+import { SeeAllPosts } from "../../../components/SeeAllPosts";
 
 const components = {
   img({ node, src, ...props }) {
@@ -92,6 +93,8 @@ export default function BlogPage({
                     - {BlogComponents.displayCanonical({ meta, short: false })}
                   </>
                 ) : null}
+                <br />
+                <SeeAllPosts />
               </small>
             </em>
           </p>
