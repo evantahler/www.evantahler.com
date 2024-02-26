@@ -51,13 +51,14 @@ We can use a helper like [`type-fest`’s](https://www.npmjs.com/package/type-fe
 ```ts
 // from https://www.jpwilliams.dev/how-to-unpack-the-return-type-of-a-promise-in-typescript
 
-export type UnwrapPromise<T> = T extends Promise<infer U>
-  ? U
-  : T extends (...args: any) => Promise<infer U>
+export type UnwrapPromise<T> =
+  T extends Promise<infer U>
     ? U
-    : T extends (...args: any) => infer U
+    : T extends (...args: any) => Promise<infer U>
       ? U
-      : T;
+      : T extends (...args: any) => infer U
+        ? U
+        : T;
 ```
 
 So, the type of the Action’s response is:
