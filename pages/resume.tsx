@@ -17,7 +17,7 @@ function ResumePage() {
       <JumboImage src="/images/resume-3.jpg" />
 
       <p>
-        Evan Tahler is a Senior Engineering Manager at{" "}
+        Evan Tahler is an Engineering Director at{" "}
         <a href="https://www.airbyte.com" target="_new">
           Airbyte
         </a>
