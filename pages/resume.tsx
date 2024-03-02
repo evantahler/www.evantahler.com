@@ -21,13 +21,12 @@ function ResumePage() {
         <a href="https://www.airbyte.com" target="_new">
           Airbyte
         </a>
-        . During my tenure at Airbyte, I've managed (and founded) a number of
-        feature teams, including Platform Move, Destinations, and Connector
-        Operations. This wide-view of our architecture and product allows me to
-        help grow the Airbyte engineering org and focus our efforts on what is
-        needed most. I'm particularly proud of our cross-team efforts to
-        implement Checkpointing, "Destinations V2", and our connector developer
-        CI/CD suite and CLI.
+        . I manage the Sync Foundations engineering organization - including
+        Platform Move (job orchestration), Connector Operations (management of a
+        400+ connector catalog), Database Sources, and Destinations (reading and
+        writing from-and-to high-throughput DBs, data warehouses, and lakes).
+        I'm particularly proud of our cross-team efforts on the Airbyte
+        Protocol, reliability, checkpointing, and our connector developer DX.
       </p>
 
       <p>
