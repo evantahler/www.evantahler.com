@@ -21,12 +21,10 @@ function ResumePage() {
         <a href="https://www.airbyte.com" target="_new">
           Airbyte
         </a>
-        . I manage the Sync Foundations engineering organization - including
+        . He manages the Sync Foundations engineering organization - including
         Platform Move (job orchestration), Connector Operations (management of a
         400+ connector catalog), Database Sources, and Destinations (reading and
         writing from-and-to high-throughput DBs, data warehouses, and lakes).
-        I'm particularly proud of our cross-team efforts on the Airbyte
-        Protocol, reliability, checkpointing, and our connector developer DX.
       </p>
 
       <p>
