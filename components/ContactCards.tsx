@@ -17,6 +17,11 @@ export default function ContactCards({ variant }) {
             variant={variant}
           />
           <BigGlyf
+            name="github"
+            href="https://github.com/evantahler"
+            variant={variant}
+          />
+          <BigGlyf
             name="inbox"
             href="mailto:evan@evantahler.com"
             variant={variant}
