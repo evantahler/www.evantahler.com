@@ -41,7 +41,7 @@
     "rehype-raw": "^6.1.1",
     "remark-footnotes": "^4.0.1",
     "sass": "^1.71.1",
-    "sharp": "^0.33.2"
+    "sharp": "^0.33.3"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
