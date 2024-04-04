@@ -1,0 +1,123 @@
+---
+title: "Announcing Record Change History: Increasing Resilience Against Problematic Rows"
+date: "2024-04-04"
+author: "Evan Tahler"
+description: "Don't stop syncing just because your data is bad."
+image: "/images/posts/2024-04-04-announcing-record-change-history/image-1.png"
+tags: [engineering, airbyte]
+canonical: https://airbyte.com/blog/record-change-history
+---
+
+<Image
+  alt="a big record"
+  src="/images/posts/2024-04-04-announcing-record-change-history/image-1.png"
+  width={1102}
+  height={680}
+/>
+
+Airbyte’s job is to move data between systems in the best possible way. But what exactly does "best" mean in this context? It embodies the balance of many, often competing goals. One of those balancing acts is the compromise between ensuring the highest level of data precision and achieving compatibility across various systems.
+
+## The Challenge of Data Compatibility
+
+In the realm of data movement, one of the most important aspects we deal with is data compatibility. The [Airbyte Protocol](https://docs.airbyte.com/understanding-airbyte/airbyte-protocol) describes a series of [data types](https://docs.airbyte.com/understanding-airbyte/supported-data-types) that all sources must serialize their content into while in transit, and we require that all destinations be able to store every one of these types. This creates a common language and it’s how destinations can be interoperable with [as many sources as possible](https://docs.airbyte.com/integrations).
+
+This setup not only enables compatibility across diverse systems but also allows our platform to effectively validate data from any source and offer features like [column selection](https://airbyte.com/blog/airbyte-column-selection-control-over-the-exact-data-to-sync) for every sync process.
+
+However, these data types, while deliberately chosen for maximum compatibility, are limited. For instance, you might notice the absence of a decimal type. This choice is a strategic one, aiming to ensure that every source and destination can work with the available types. Yet, even within this well-thought-out system, we sometimes encounter challenges.
+
+## Enhancing Sync Reliability with Record Change History
+
+At Airbyte, we’ve been working to ensure that **one bad record won’t break your sync**, and that lead us to the addition of Record Change History. This new feature offers a way to inform you that a record was modified in transit, to prevent such record from otherwise being un-syncable.
+
+When we announced [Destinations V2](https://airbyte.com/blog/introducing-airbyte-destinations-v2-typing-deduping), we called out that this opened the door to new error-handling capabilities, and today we are happy to share one of them!
+
+## How Record Change History Works?
+
+Record Change History can best be demonstrated with an example. Imagine a record like this in a Postgres database:
+
+```js
+{
+  type: "RECORD",
+  record: {
+    stream: "users",
+    emitted_at: 123456789,
+    data: {
+      id: 1,
+      first_name: "Evan",
+      last_name: "Tahler",
+      description: "Hello, my name is Evan, and I like long walks on the beach, but also computers and then also... (25MB of text follows)"
+    }
+  }
+}
+```
+
+In this case, the description column from the users table in this Postgres database holds a very large text entry. Before Record Change History, the source-postges database connector would try to serialize this record and probably succeed. But then, the Snowflake destination would have trouble since [Snowflake semi-structured data can only be 16MB](https://docs.snowflake.com/en/sql-reference/data-types-semistructured), causing the entire sync to fail due to this single oversized record.
+
+Previously, the only workaround would be to use the column selection feature to skip the description column entirely, but then all other rows, with reasonably sized content, would be skipped as well.
+
+Now, with Record Change History, we have the tools to allow Airbyte to modify a record in-transit to solve certain classes of problems which we know won’t be able to make it all the way to the destination. In the previous example, the excessively large description would be nulled, and this modification would be transparently communicated to the users. These changes are recorded in a query-friendly manner in the destination, keeping you informed and your data syncs uninterrupted.
+
+The record with modifications, by the time the destination will store it, becomes:
+
+```js
+{
+  type: "RECORD",
+  record: {
+    stream: "users",
+    emitted_at: 123456789,
+    data: {
+      id: 1,
+      first_name: "Evan",
+      last_name: "Tahler",
+      description: null // <--- changed!
+    },
+    meta: {
+      changes: [
+        {
+    field: "description",
+    	    change: "NULLED",
+    reason: "DESTINATION_FIELD_SIZE_LIMITATION"
+  }
+      ]
+    }
+  }
+}
+```
+
+And that means that you’ll now have new information about each record’s change history in your [V2 Destinations’s final tables](https://docs.airbyte.com/release_notes/upgrading_to_destinations_v2):
+
+<Image
+  alt="final table!"
+  src="/images/posts/2024-04-04-announcing-record-change-history/image-2.png"
+  width={1102}
+  height={680}
+/>
+
+## Benefits of Record Change History
+
+This approach has a number of advantages:
+
+- **Resilience against problematic rows**. A single problematic row no longer means a failed sync, which significantly boosts the reliability of your data movement.
+- **Maintained query experience**. The vast majority of syncs don’t have per-record problems, so the query experience in your destination remains unchanged for most use-cases.
+- **Compatibility with aggregations and analysis**. Even when changes are made to records, the majority of your data analyses, such as aggregations, remain viable. Typically, issues arise from just one oversized column, not the entire row. So, most of your data can still be used effectively.
+- **Informed decision-making**. With detailed information about any changes made to a row, you can decide how to incorporate that row into your analysis. Going to our previous example, perhaps you aren’t using the description column (e.g. you want to count how many new users you had today), so you can consider the changed row in your analysis. On the other hand, if you want to train some machine learning models on user descriptions, you should probably skip that row.
+- **Easy monitoring of changes**. Finally, tracking any modifications made during the sync process is straightforward. You can easily monitor for changes with a simple query or integrate data quality tools like [Great Expectations](https://greatexpectations.io/) for more advanced monitoring.
+
+```sql
+// Check for changed records
+SELECT COUNT(1) from users_final_tale where length(_airbyte_meta.changes) > 0
+```
+
+## Types of Data Challenges The Record Change History Can Handle
+
+Today, Record Change History is used within Airbyte for the following 3 classes of problem:
+
+1. **Record or property size overflows**. If at any point the destination cannot ‘fit’ the record, it will be nulled such that it can. This is especially important for Redshift destinations which not only has a per-SUPER limit, but also a [per-JSON property limit](https://docs.aws.amazon.com/redshift/latest/dg/limitations-super.html). We won’t ever null out a primary key or cursor field - problems with those special properties will still fail the sync, as that would render the record untraceable.
+2. **Serialization issues**. Different databases have different validation and quality guarantees on the data that they can store. For example, in most versions of MySQL, it’s valid to store datetimes that aren’t real (e.g. February 31st as a date). Before Record Change History, Airbyte would validate that the timestamp values are valid, so this would fail to serialize. It would also fail to be loaded into a strict destination, like Snowflake or Redshift. Now, we null out that datetime, lest the whole sync fail.
+3. **Typecasting issues**. At times, we encounter sources that return data with the wrong type. For example, if a source declares that the id column is a number, but returns a string, that wouldn’t work for most destinations: If you try to insert “number” into id on Snowflake, an exception will be raised. “Range” issues often fall into this category as well, for example, if the destination receives a negative value for a year (e.g. B.C.E dates), it would fail to be cast into a datetime, even though the year “200 BCE” is valid. Now, with Record Change History, those situations don’t fail the syncs.
+
+Each of these types of problems will have a unique error reason in your destination data warehouses.
+
+Over the next few months, we will be adding support for Record Change History to all certified sources and destinations at Airbyte. This is just one of many projects underway to dramatically improve our reliability, even in the face of strange data!
+
+Do you have any questions or feedback for us? You can keep in touch by joining our Slack channel. If you would like to keep up to date with new Airbyte features, subscribe to our newsletter.
