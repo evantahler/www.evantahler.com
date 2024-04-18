@@ -1,0 +1,96 @@
+---
+title: "Cost-Conscious Advanced ELT Strategies for Data Deduplication"
+date: "2024-04-17"
+author: "Evan Tahler"
+description: "Saving money while moving data"
+image: "/images/posts/2024-04-17-cost-conscious-elt-strategies/image-1.png"
+tags: [engineering, airbyte]
+canonical: https://airbyte.com/blog/cost-conscious-advanced-elt-strategies-for-data-deduplication
+---
+
+<Image
+  alt="a big record"
+  src="/images/posts/2024-04-17-cost-conscious-elt-strategies/image-1.png"
+  width={1102}
+  height={680}
+/>
+
+Airbyte is already designed to be the most effective and reliable ELT platform, but if you find yourself with a cost-conscious mindset, there is even more you can do to optimize your warehouse spend by adjusting your sync strategy and adding a few more tools and strategies into the mix.
+
+Let's discuss some basics about how Airbyte moves your data. On our blog, Airbyte Engineer Edward Gao [writes](https://airbyte.com/blog/how-airbyte-builds-resilient-syncs):
+
+> Airbyte has always chosen to do that data processing inside your warehouse, rather than within our own systems. This has a number of advantages. For one, it's faster than doing that massive computation within Airbyte's systems. This lets us focus on what we do best - moving data quickly and reliably - and leverages your warehouse for what it does best. And furthermore, doing [typing and deduping](https://docs.airbyte.com/using-airbyte/core-concepts/typing-deduping) in your warehouse is more private and secure by design - Airbyte never persists your data within our infrastructure, and we only hold onto your data, exclusively in-memory, for the shortest time possible.
+
+The largest cost component of a sync is often **deduplication**, which is an optional Airbyte feature supported by many of our database and data warehouse destinations. This is because large amounts of compute and memory are needed to compare all the records in your data warehouse with each other - and the cost scales with the volume of data loaded.
+
+Deduplication is especially costly because it requires checking every row in the database, not just the new records, or those records in the active partition/shard/cluster. If you want deduplication, there’s no way of avoiding this cost: either the deduplication activity happens in your sync tool, or the destination which is holding that data.
+
+How can you tell if deduplication costs are contributing to your warehouse bill? If you move a consistent amount of data each sync, and your sync time (and Airbyte bill) remain constant, but your warehouse costs are increasing - that’s a strong signal. That shows that the processing time needed is not related to the data moved, but to the total data loaded.
+
+So, what can we do to minimize the impact of deduplication on your costs? Here are 4 strategies you can use alongside Airbyte’s append-only sync mode to maximize the cost efficiency of your deduplication efforts.
+
+<Image
+  alt="a big record"
+  src="/images/posts/2024-04-17-cost-conscious-elt-strategies/image-2.png"
+  width={1102}
+  height={680}
+/>
+
+## Strategy 1: Deduplicate Later
+
+Yes, it sounds trite, but do you _really_ need [deduplication](https://docs.airbyte.com/using-airbyte/core-concepts/sync-modes/incremental-append-deduped) _as_ the data is loaded? Without deduplication, and an [append-only](https://docs.airbyte.com/using-airbyte/core-concepts/sync-modes/incremental-append) sync, your data warehouse will contain multiple entries for the same primary key, as it goes through changes:
+
+<Image
+  alt="a big record"
+  src="/images/posts/2024-04-17-cost-conscious-elt-strategies/image-3.png"
+  width={1102}
+  height={680}
+/>
+
+In this example users table, I signed up on April 16, and changed my name on April 17 (user ID #1). Airbyte always includes metadata about when data was extracted at the start of the ELT pipeline so you can determine which entry is the latest for any given primary key, even if your data doesn’t include a logical cursor natively (e.g. an `updated_at` column in the database, or a CDC cursor).
+
+Can your analysis or downstream application make use of these additional columns to pluck the latest entry? Especially if you are using the synced airbyte data to then produce more ergonomic business tables, you can offload deduplication to your transformation step. This helps control costs by decoupling the act of deduplication from syncing - you can sync at a rapid pace, and only deduplicate when it is needed.
+
+## Strategy 2: Deduplicate On Demand
+
+Perhaps you do want to deduplicate your data for many downstream consumers, but those consumers only read the table periodically. This is a great use case for a (standard, non-materialized) view that handles deduplication. You can set a rapid replication frequency with your append-only Airbyte sync, but only incur the deduplication cost at read time via the view.
+
+For example, this is how you might create a view containing the latest entries for the user table above, with Snowflake syntax:
+
+```sql
+CREATE VIEW USERS_DEDUPED AS (
+    SELECT * FROM USERS
+    WHERE
+    _AIRBYTE_RAW_ID IN (
+      SELECT _AIRBYTE_RAW_ID FROM (
+        SELECT _AIRBYTE_RAW_ID, row_number() OVER (
+          PARTITION BY ID ORDER BY _AIRBYTE_EXTRACTED_AT DESC
+        ) as ROW_NUMBER FROM USERS
+      )
+      WHERE ROW_NUMBER = 1
+    )
+);
+```
+
+## Strategy 3: Deduplicate Less Often
+
+Going up in complexity from the previous strategies, perhaps you have many consumers of the data, and still want deduplication… but lag is OK. You can use a materialized view with a materialization frequency (e.g. once-a-day).
+
+This pattern allows you to have both a rapid ingestion frequency, but lock your deduplication cost down with a fixed, single invocation frequency. This decouples the “EL” cost from the “T”, allowing you to tweak the schedules of each independently. And, because you’ll have the loaded data in a non-deduplicated form, you can always do ad-hoc analysis prior to the view re-computing.
+
+Many data warehouses allow for scheduled materialization, or you can use a tool like dbt Cloud to run your transformations on a ‘real’ table at a set cadence.
+
+## Strategy 4: Partial Deduplication
+
+This final strategy is a mix of any of the previous strategies, with an additional twist - bounding boxes! Perhaps you’ve loaded all of your historic data from a large source, but you know that your use case only requires the data for the past year. In that case, you can filter the data that your database needs to consider for deduplication with an added where clause.
+
+For example, if you only want to look at active users this year, you can safely ignore any row that was `updated_at` before January 1st, which means it would also be safe to include `_airbyte_extracted_at` in the filter as well. When possible in the data warehouse, Airbyte automatically sets `_airbyte_extracted_at` as the partition or cluster key, making queries like this efficient. Use these filters when creating your views or business tables, and your database will be able to skip many rows in the deduplication calculation.
+
+Conclusion
+For most Airbyte users, we recommend that you let Airbyte deduplicate your data for you. This will provide the best analysis experience in your data warehouse - your data will be as up-to-date as possible and ready for further analysis, without needing any other tools or orchestration.
+
+Airbyte (when deduplication is selected) will perform the loading of the final table, typecasting, and deduplication into a single transaction, periodically throughout the sync. This guarantees that at no point will there be multiple entries for the same row in your final table - preventing stale reads. You also won’t need to manage additional tools, schedules, or SQL to deduplicate your data.
+
+That said, for certain cost-sensitive use cases or particularly large volumes of data, you may want to control this deduplication process yourself, or opt-out entirely. The strategies listed here, tools in the modern data stack, and the features data warehouse vendors have built make this possible without too much of a headache.
+
+Go forth and sync that data - without breaking the bank!
