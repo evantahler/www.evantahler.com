@@ -42,8 +42,8 @@ function IndexPage({
                   <h1>Hi, I'm Evan!</h1>
                   <br />
                   <h4>
-                    I use my <BoldWords text="Product Management" />,{" "}
-                    <BoldWords text="Software Engineering" />, and{" "}
+                    I use my <BoldWords text="Software Engineering" />,{" "}
+                    <BoldWords text="Product Management" />, and{" "}
                     <BoldWords text="Leadership" /> skills to build teams that
                     create world-class digital products.
                   </h4>
@@ -51,7 +51,7 @@ function IndexPage({
                   <br />
 
                   <p>
-                    I lead engineering teams at{" "}
+                    I lead engineering organizations at{" "}
                     <a href="https://www.airbyte.com" target="_blank">
                       Airbyte,
                     </a>{" "}
