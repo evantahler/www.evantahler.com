@@ -21,11 +21,6 @@ export default function ContactCards({ variant }) {
             href="https://github.com/evantahler"
             variant={variant}
           />
-          <BigGlyf
-            name="inbox"
-            href="mailto:evan@evantahler.com"
-            variant={variant}
-          />
         </ButtonGroup>
       </Col>
     </Row>
