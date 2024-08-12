@@ -17,7 +17,7 @@ function HilightableNavLink({ href, text }) {
 
 function Sidebar() {
   return (
-    <Navbar fixed="top" bg="primary" variant="dark" expand="lg">
+    <Navbar bg="primary" variant="dark" expand="lg">
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Brand href="/">&nbsp;&nbsp;&nbsp;Evan Tahler</Navbar.Brand>
       <Navbar.Collapse id="basic-navbar-nav">
