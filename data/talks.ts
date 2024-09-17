@@ -1,8 +1,17 @@
+import { StaticImageData } from "next/image";
+
+import ELTDatabasePresentation from "../public/images/elt-db-design-principles-presentation.png";
+import SharingTypescriptTypes from "../public/images/types-presentation.png";
+import StopWorryingIllustration from "../public/images/evan-tahler-illustration.png";
+import SeattleJS from "../public/images/seattlejs.jpg";
+import RedisConf from "../public/images/redisconf.jpg";
+import SFNode from "../public/images/sfnode.jpg";
+
 export type Talk = {
   title: string;
   date: string;
   where: string;
-  image: string;
+  image: StaticImageData;
   description: string;
   links: TalkLink[];
 };
@@ -14,7 +23,7 @@ export const talks: Talk[] = [
     title: "Design Principles for ELT Database Destinations",
     date: "December, 2023",
     where: "move(data)",
-    image: "/images/elt-db-design-principles-presentation.png",
+    image: ELTDatabasePresentation,
     description:
       "The session will address issues such as data type errors, schema changes, and data accessibility. Attendees will learn about Airbyte's innovative approach to ensuring easy-to-query tables, decoupling sync errors from data errors, and enhancing overall data observability. ",
     links: [
@@ -28,7 +37,7 @@ export const talks: Talk[] = [
     title: "Sharing Typescript Types Across the Stack",
     date: "February, 2020",
     where: "SeattleJS",
-    image: "/images/types-presentation.png",
+    image: SharingTypescriptTypes,
     description:
       "Use Typescript to share types between your Frontend and Backend.  Discover the shape of your data to avoid mistakes!",
     links: [
@@ -50,7 +59,7 @@ export const talks: Talk[] = [
     title: "How I learned to Stop Worrying and Let the Robot Publish to NPM",
     date: "September, 2020",
     where: "CascadiaJS",
-    image: "/images/evan-tahler-illustration.png",
+    image: StopWorryingIllustration,
     description:
       "As professional developers, we /probably/ don’t deploy code directly to production and we /usually/ test things first. There’s a whole world of tools and best practices like Git Flow, Continuous Integration, and Review Apps to help us build and deploy our apps and websites... but what about the developer tools we use every day? This talk will focus on how to parallel some of these same best-practices when making developer tools and frameworks. Together we will build a CI/CD pipeline for publishing to packages to NPM.",
     links: [
@@ -65,7 +74,7 @@ export const talks: Talk[] = [
       "Using Next.JS to build Static Dynamic Websites… and never pay for font-end hosting again!",
     date: "September, 2019",
     where: "SeattleJS",
-    image: "/images/seattlejs.jpg",
+    image: SeattleJS,
     description:
       "This talk was inspired by a group of students learning to code in Seattle who were being taught tools like React and Angular, but struggling to learn how to deploy their sites using modern methods. Specifically, how to set up CI/CD (Continuous Integration + Continuous Deployment) and HTTPS.",
     links: [
@@ -83,7 +92,7 @@ export const talks: Talk[] = [
     title: "Background Tasks in Node.js: A survey with Redis.",
     date: "May, 2016",
     where: "RedisConf",
-    image: "/images/redisconf.jpg",
+    image: RedisConf,
     description:
       "Node.js' Async programming model allows us to emulate many types of advanced systems. In this talk, we will use node and redis to recreate 7 different types of background job systems, from queues to kafka.",
     links: [
@@ -105,7 +114,7 @@ export const talks: Talk[] = [
     title: "Node for ! (not) HTTP",
     date: "Dec, 2015",
     where: "SF Node",
-    image: "/images/sfnode.jpg",
+    image: SFNode,
     description:
       "Node.js is great for all sorts of projects. In this demo, we will use Node.js to control the lights in our house via the DMX protocol.",
     links: [

@@ -8,6 +8,8 @@ import { talks } from "../data/talks";
 import { BlogPostCard } from "../components/BlogPostCard";
 import { SpeakingEngagementCard } from "../components/SpeakingEngagementCard";
 
+import bitmogi from "../public/images/bitmoji/5.png";
+
 function BoldWords({ text }) {
   return <span style={{ color: "var(--bs-warning)" }}>{text}</span>;
 }
@@ -27,13 +29,7 @@ function IndexPage({
         <Card.Body style={{ paddingLeft: 0 }}>
           <Row>
             <Col md={3}>
-              <Image
-                width={262}
-                height={398}
-                src="/images/bitmoji/5.png"
-                alt="evan icon"
-                priority={true}
-              />
+              <Image src={bitmogi} alt="evan icon" priority={true} />
             </Col>
 
             <Col md={9} style={{ paddingLeft: "2rem" }}>

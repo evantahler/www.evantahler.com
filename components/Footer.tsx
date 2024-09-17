@@ -1,5 +1,8 @@
 import { Container, Alert, Row, Col } from "react-bootstrap";
 
+import dog from "../public/images/dog.png";
+import Image from "next/image";
+
 export default function Footer() {
   const year = new Date().getFullYear();
 
@@ -12,7 +15,11 @@ export default function Footer() {
         <Container>
           <Row>
             <Col md={6}>
-              <img src="/images/dog.png" style={{ width: 75 }} />
+              <Image
+                src={dog}
+                style={{ width: 75, height: 75 }}
+                alt="actionhero dog"
+              />
             </Col>
             <Col md={6} style={{ textAlign: "right" }}>
               <p>
