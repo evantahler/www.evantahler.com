@@ -1,0 +1,102 @@
+---
+title: "Choose a Database with Hybrid Vector Search for your AI Applications"
+date: "2024-10-31"
+author: "Evan Tahler"
+description: "RAG needs a database"
+image: "/images/posts/2024-10-31-choose-a-database-with-hybrid-vector-search-for-your-ai-applications/image-1.png"
+tags: [engineering, airbyte]
+canonical: https://airbyte.com/blog/choose-a-database-with-hybrid-vector-search-for-your-ai-applications
+---
+
+<Image
+  alt="a robot holding a database"
+  src="/images/posts/2024-10-31-choose-a-database-with-hybrid-vector-search-for-your-ai-applications/image-1.png"
+  width={580}
+  height={584}
+/>
+
+At Airbyte, we see more and more folks building data pipelines to move and prepare data for AI use cases. As to not be too buzzwordy, I’ll define “AI use-cases” for this article as a “RAG” (Retrieval Augmented Generation) application to provide documents to a ‘chat’-like application. In our [previous blog post](https://airbyte.com/blog/not-impressed-with-your-ai-experience-its-not-the-model-its-the-data), we went deep into how these types of applications work, but as a refresher, the goal is to “augment” the question you will be posting to an LLM (like ChatGPT) with additional content you “retrieved”, e.g:
+
+```text
+You are a helpful in-store assistant.   Your #1 goal in life is to help our employees and customers find what they need.
+
+Some helpful context is:
+{{ relevant_documents }}
+
+Your task is to answer the question:
+{{ prompt }}
+
+Please don’t make things up. Only return answers based on the context provided in this prompt.
+```
+
+As an example, let’s imagine you work for a large grocery store chain, and you want to build a chat bot for your website to help folks find products in the store. If the experiment goes well, you might even install a kiosk in the store that folks can talk to verbally, and maybe even add wayfinding to get them to the right aisle and shelf… but first things first: the website chatbot. A customer might ask “What kind of cheese do you have?” (the original prompt) and the {{relevant_documents}} should be loaded from the store’s product database for products which are “cheese-adjacent” and are in stock to provide a context-aware answer for the customer. The customer will likely continue the conversation to learn about the various types of cheese, how much each type costs, etc, and eventually select a cheese to buy for their dinner party. So… how do we get that to work? You need a database which can do Hybrid Vector Search!
+
+In the dark days of late 2022, there were very few options for a database which could do vector search at all. You needed to choose a specialized tool like [Pinecone](https://www.pinecone.io/) or [Milvus](https://milvus.io/) which had a custom index type which could operate on vectorized content. These databases were great at one thing - loading up the most relevant content for a given query, but they lacked all the other context around that document. As [predicted](https://news.ycombinator.com/item?id=37747534), all databases that can are gaining vector search as database manufacturers race to be relevant in the “AI era”. This is great news for application developers, as there are now many more options available to you!
+
+<Image
+  alt="a map of databases that work for vector search"
+  src="/images/posts/2024-10-31-choose-a-database-with-hybrid-vector-search-for-your-ai-applications/image-2.png"
+  width={520}
+  height={416}
+/>
+
+> _image from [https://blog.det.life/why-you-shouldnt-invest-in-vector-databases-c0cd3f59d23c](https://blog.det.life/why-you-shouldnt-invest-in-vector-databases-c0cd3f59d23c) - this image is a year old now, there are at least 2x as many today_
+
+For production applications, I posit that you will need a database which can do both vector search and traditional search - also known as **hybrid search**. Consider our shopping example above. Yes, we’ll want to search our product descriptions for the most relevant items for “cheese”, but we likely also want to rank up those items which are in-stock and are available at the closest stores to the user. Assuming that “vector search” means “cosine_similarity” ([learn more from this great DuckDB article](https://motherduck.com/blog/search-using-duckdb-part-1/)), the query you’ll be executing might look something like this:
+
+```sql
+-- part 1: rank in-stock products highest
+SELECT
+document,
+'{"in_stock":true}'::JSON as metadata
+ARRAY_COSINE_SIMILARITY(document_embedded, {query_vector_array}) as score
+price
+FROM vector_product_descriptions
+JOIN product_inventory on product_inventory.product_id = vector_product_descriptions.product_id
+WHERE
+ store_product_inventory.location < {10_km_from_user}
+ SUM(store_product_inventory.stock_count) > 0
+ORDER BY
+ score desc
+LIMIT 100
+
+UNION
+
+-- part 2: include out-of-stock products lower, but still provide them to the LLM context
+(note how score is subtracted by one)
+SELECT
+document,
+'{"in_stock":false}'::JSON as metadata
+ARRAY_COSINE_SIMILARITY(document_embedded, {query_vector_array}) - 1 as score
+price
+FROM vector_product_descriptions
+JOIN product_inventory on product_inventory.product_id = vector_product_descriptions.product_id
+WHERE
+ store_product_inventory.location < {10_km_from_user}
+ SUM(store_product_inventory.stock_count) > 0
+ORDER BY
+ score desc
+LIMIT 100
+```
+
+This query will have the effect of including (up to) the 200 most relevant documents about cheese to the LLM context window, and down-ranking those products that are out-of-stock in nearby stores, but still including them. To build the user experience we want, we needed a blend of both traditional `WHERE` clauses and vector search.
+
+As an aside, you might be wondering what query_vector_array is in the example above. That’s the array representation of the user’s question, as returned to us by the same transformer that we used to calculate the embeddings of our documents. Check out https://platform.openai.com/docs/guides/embeddings or https://sbert.net to learn more.
+
+The need for hybrid search is based on a few design principles:
+
+1. The context and experience for any given user or question will not be the same
+2. Documents are static, but the world around them is not
+3. LLM context windows are limited, and perform better with smaller context
+
+**The context and experience for any given user or question will not be the same.** In this example, every user’s context differed based on what was in stock at the nearest stores to them. Perhaps my local store has brie, but yours is sold out. If the goal is to help customers with a purchasing experience, then your answers should have a lot less brie in them. This is a simple example, but this is an important concept. Perhaps rather than an entirely customer-facing AI application, we are building an HR chatbot to help our employees learn about their healthcare options. Should everyone at the company see the same documents? Are the health plan options in the USA the same as Canada? Building secure and safe AI applications looks a lot like building any other type of software - roles and permissions matter for what folks can see and do, and those are best represented in relational databases.
+
+**Documents are static, but the world around them is not.** In our shopping example the document describing our products (e.g. the description and price of our cheeses) never changed. We paid the chunking and embedding cost to build our collection once, and that’s great. However, the other business information around that product (price, stock levels, etc) are always changing. We don’t want to pay the tax of re-embedding the document for the LLM just because someone purchased our last gouda… A traditional JOIN to the inventory table is a much better approach.
+
+**LLM context windows are limited, and perform better with smaller context.** LLM context window sizes (e.g. how much text you can give them to analyze) are growing rapidly… but that doesn’t mean you should use it. LLMs are great at sifting through text and pulling out the most relevant items… but they do hallucinate and they do mess up at times. The likelihood of hallucination increases as the context grows. Precision matters, not quantity of the context:
+
+> The lack of precise context forces the model to rely more heavily on probabilistic guesses, increasing the chance of hallucinations. Without clear guidance, the model might pull together unrelated pieces of information, creating a plausible response that is factually incorrect.
+>
+> [https://aibusiness.com/ml/why-do-ai-hallucinations-happen](https://aibusiness.com/ml/why-do-ai-hallucinations-happen)
+
+So, your goal as an AI application developer is to reduce the context you provide to only the documents most likely to be relevant. In our cheese shopping example, maybe that means 200 documents is too many, and you’ll want to set a lower bound on what relevance scores are included in the document set. Choosing your inclusion threshold is a very application-specific and content-specific tuning activity that is more of an art then a science today… but I’m pretty sure that a `WHERE` clause will help.
