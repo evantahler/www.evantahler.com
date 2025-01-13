@@ -21,15 +21,11 @@ function ResumePage() {
         <Col>
           {" "}
           <p>
-            Evan Tahler is an Engineering Director at{" "}
+            Evan Tahler is the Director of Engineering of Sync Foundations and AI Pipelines at{" "}
             <a href="https://www.airbyte.com" target="_new">
               Airbyte
             </a>
-            . He manages the Sync Foundations engineering organization -
-            including Platform Move (job orchestration), Connector Operations
-            (management of a 400+ connector catalog), Database Sources, and
-            Destinations (reading and writing from-and-to high-throughput DBs,
-            data warehouses, and lakes).
+            , leading the organizations that focus on high-volume data movement and AI-pipeline products.
           </p>
           <p>
             Prior to that, he was the CTO and co-founder of Grouparoo, which was
