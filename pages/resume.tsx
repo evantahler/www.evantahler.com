@@ -21,7 +21,7 @@ function ResumePage() {
         <Col>
           {" "}
           <p>
-            Evan Tahler is the Director of Engineering of Sync Foundations and AI Pipelines at{" "}
+            Evan Tahler is the Director of Engineering - Sync Foundations and AI Pipelines at{" "}
             <a href="https://www.airbyte.com" target="_new">
               Airbyte
             </a>
