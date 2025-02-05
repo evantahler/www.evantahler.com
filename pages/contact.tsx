@@ -2,8 +2,7 @@ import React from "react";
 import ContactCards from "../components/ContactCards";
 import JumboImage from "../components/JumboImage";
 import SEO from "../components/Seo";
-import { Alert } from "react-bootstrap";
-import { InlineWidget } from "react-calendly";
+import { Alert, Button } from "react-bootstrap";
 
 function ContactPage() {
   return (
@@ -36,11 +35,19 @@ function ContactPage() {
             join the ActionHero community
           </a>
         </p>
+        <p>
+          Otherwise...
+          <br />
+          <br />
+          <Button
+            variant="outline-primary"
+            href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ16A24TTpkRzn9hmftYCLsGXROlTohM1YCsVjklKO7CPv4H56FX00q4-4HOwH5OZvO_EaeSVD67"
+            target="_blank"
+          >
+            schedule a chat with me!
+          </Button>
+        </p>
       </Alert>
-
-      <hr />
-      <p>Or schedule a chat with me!</p>
-      <InlineWidget url="https://calendly.com/evantahler/30min"></InlineWidget>
     </>
   );
 }
