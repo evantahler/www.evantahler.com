@@ -21,6 +21,7 @@ export const BlogPostCard = ({ post }: { post: Blog.PostData }) => (
         </Card.Title>
         <Card.Subtitle className="mb-2 text-muted">
           <FormattedDate dateString={post.meta.date} />
+          {post.meta.canonical && <> - <small><em>Originally posted at <a href={post.meta.canonical} target="_blank">{post.meta.canonical.replace('https://','').split('/')[0]}</a></em></small></>}
         </Card.Subtitle>
         <Card.Text>
           {post.meta.description}
