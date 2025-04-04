@@ -37,6 +37,10 @@ function ResumePage() {
             Evan's expertise lies in building the technical side of digital
             products, and growing the teams required to do so. He's helped
             companies like{" "}
+            <a target="_new" href="https://airbyte.com">
+              Airbyte
+            </a>
+            ,{" "}
             <a target="_new" href="https://www.disney.com">
               Disney
             </a>
@@ -74,8 +78,18 @@ function ResumePage() {
             .
           </p>
           <br />
-          <Row style={{ textAlign: "center" }}>
-            <Col md={1}>
+          <Row>
+            <Col style={{ textAlign: "center" }}>
+              <a href="https://airbyte.com" target="_blank">
+                <Image
+                  alt="airbyte logo"
+                  height={logoSize}
+                  width={logoSize}
+                  src="/images/logos/airbyte.png"
+                />
+              </a>
+            </Col>
+            <Col style={{ textAlign: "center" }}>
               <a href="https://www.grouparoo.com" target="_blank">
                 <Image
                   alt="grouparoo logo"
@@ -85,8 +99,7 @@ function ResumePage() {
                 />
               </a>
             </Col>
-            <Col md={1} />
-            <Col md={1}>
+            <Col style={{ textAlign: "center" }}>
               <a href="https://www.actionhero.com" target="_blank">
                 <Image
                   alt="actionhero logo"
@@ -96,8 +109,7 @@ function ResumePage() {
                 />
               </a>
             </Col>
-            <Col md={1} />
-            <Col md={1}>
+            <Col style={{ textAlign: "center" }}>
               <a href="https://www.taskrabbit.com" target="_blank">
                 <Image
                   alt="taskrabbit logo"
@@ -107,19 +119,20 @@ function ResumePage() {
                 />
               </a>
             </Col>
-            <Col md={1} />
-            <Col md={1}>
+          </Row>
+          <Row>
+            <Col style={{ textAlign: "center" }}>
               <a href="https://www.airbus.com" target="_blank">
                 <Image
                   alt="airbus logo"
                   height={logoSize}
-                  width={logoSize * 1.3}
+                  width={logoSize * 1.2}
+                  style={{ padding: 15 }}
                   src="/images/logos/airbus.png"
                 />
               </a>
             </Col>
-            <Col md={1} />
-            <Col md={1}>
+            <Col style={{ textAlign: "center" }}>
               <a href="https://www.modcloth.com" target="_blank">
                 <Image
                   alt="modcloth logo"
@@ -129,8 +142,7 @@ function ResumePage() {
                 />
               </a>
             </Col>
-            <Col md={1} />
-            <Col md={1}>
+            <Col style={{ textAlign: "center" }}>
               <a href="https://www.disney.com" target="_blank">
                 <Image
                   alt="disney logo"
