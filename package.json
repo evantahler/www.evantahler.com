@@ -23,7 +23,7 @@
   "dependencies": {
     "@vercel/analytics": "^1.4.1",
     "bootstrap": "^5.3.3",
-    "bootswatch": "^5.3.3",
+    "bootswatch": "^5.3.5",
     "fuzzysort": "^3.1.0",
     "github-api": "^3.4.0",
     "glob": "^9.3.4",
