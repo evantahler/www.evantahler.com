@@ -25,7 +25,8 @@ function ResumePage() {
             <a href="https://arcade.dev" target="_blank">
               Arcade.dev
             </a>
-            , building the foundation for secure and scalable agentic tools.{" "}
+            , building the foundation for secure and scalable agentic
+            tools.{" "}
           </p>
           <p>
             Prior to Arcade, Evan was the Director of Engineering of Sync
