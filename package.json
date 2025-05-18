@@ -19,7 +19,7 @@
     "pretest": "npm run lint && npm run build && npm run postbuild",
     "lint": "prettier --check pages components __tests__",
     "pretty": "prettier --write pages components __tests__",
-    "sitemap": "next-sitemap"
+    "sitemap": "next-sitemap --config next-sitemap.config.cjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
