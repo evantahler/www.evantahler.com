@@ -21,17 +21,18 @@ function ResumePage() {
         <Col>
           {" "}
           <p>
-            Evan Tahler is the Director of Engineering - Sync Foundations and AI
-            Pipelines at{" "}
-            <a href="https://www.airbyte.com" target="_new">
-              Airbyte
+            Evan Tahler is the Head of Engineering at{" "}
+            <a href="https://arcade.dev" target="_blank">
+              Arcade.dev
             </a>
-            , leading the organizations that focus on high-volume data movement
-            and AI-pipeline products.
+            , building the foundation for secure and scalable agentic tools.{" "}
           </p>
           <p>
-            Prior to that, he was the CTO and co-founder of Grouparoo, which was
-            acquired by Airbyte.
+            Prior to Arcade, Evan was the Director of Engineering of Sync
+            Foundations at Airbyte, where he built and led the teams that
+            focused on high-volume data movement and AI-pipelines. Evan was the
+            CTO and co-founder of Grouparoo, the open-source reverse-ETL
+            company, which was acquired by Airbyte.
           </p>
           <p>
             Evan's expertise lies in building the technical side of digital
@@ -56,15 +57,12 @@ function ResumePage() {
             <a target="_new" href="https://www.airbus.com">
               Airbus
             </a>{" "}
-            launch new global digital initiatives, and has co-founded multiple{" "}
-            <a target="_new" href="https://www.grouparoo.com">
-              startups
-            </a>
-            . He is named on a number of patents focusing on mobile interactions
+            launch new global digital initiatives, and has co-founded 3
+            startups. He is named on multiple patents focusing on authentication
             and digital entertainment. Evan is an open-source innovator, and
-            frequent speaker at software development conferences focusing on
-            Node.JS, Data Engineering, Product Management, Typescript, Rails,
-            and DevOps.
+            frequent speaker at software development conferences focusing on AI,
+            Product Management, Data Engineering, Node.JS, Typescript and
+            DevOps.
           </p>
           <p>
             Evan holds a Masters in Entertainment Technology and BS in
