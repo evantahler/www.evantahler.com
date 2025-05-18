@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot, Root } from "react-dom/client";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 
 import ResumePage from "../../pages/resume";
 
