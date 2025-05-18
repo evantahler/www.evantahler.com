@@ -3,7 +3,7 @@ import SEO from "../../../components/Seo";
 import ReactMarkdown from "react-markdown";
 import { Blog } from "../../../lib/blog";
 import rehypeRaw from "rehype-raw";
-import remarkFootnotes from "remark-footnotes";
+import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { BlogComponents } from "../../../components/BlogComponents";
@@ -109,7 +109,7 @@ export default function BlogPage({
             <ReactMarkdown
               // @ts-ignore
               components={components}
-              remarkPlugins={[remarkFootnotes]}
+              remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeRaw]}
             >
               {markdown}

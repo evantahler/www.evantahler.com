@@ -1,7 +1,7 @@
 import matter from "gray-matter";
 import path from "path";
 import fs from "fs";
-import glob from "glob";
+import * as glob from "glob";
 
 const blogDirectory = path.join(process.cwd(), "pages", "blog");
 

@@ -1,4 +1,6 @@
-module.exports = {
+import {NextConfig} from "next";
+
+const config = {
   images: {
     domains: [
       "github.com",
@@ -11,4 +13,6 @@ module.exports = {
       "avatars5.githubusercontent.com",
     ],
   },
-};
+} as NextConfig;
+
+export default config;
