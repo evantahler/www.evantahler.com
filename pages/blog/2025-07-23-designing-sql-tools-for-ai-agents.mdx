@@ -16,7 +16,6 @@ featured: false
   height={720}
 />
 
-
 One of the most popular use-cases for AI/LLM Agents is exploring and activating data in your SQL databases and warehouses. How can you build safe and reliable agents? Let's explore the space.
 
 ## Start with Boundaries, Not Prompts
@@ -27,10 +26,10 @@ To get this right, you will need:
 
 1. **Purpose‑built roles** - create one DB role per toolkit so your permission story is self‑documenting.
 2. **Limit surface area**
-   * **Access** - If your agent does not need write access, do not grant it.
-   * **Tables** - expose only the ones the agent genuinely needs.
-   * **Columns** - omit ssn, password_hash, and other PII entirely.
-   * **Rows** - enable Row‑Level Security (RLS) so agents see only their slice of data.
+   - **Access** - If your agent does not need write access, do not grant it.
+   - **Tables** - expose only the ones the agent genuinely needs.
+   - **Columns** - omit ssn, password_hash, and other PII entirely.
+   - **Rows** - enable Row‑Level Security (RLS) so agents see only their slice of data.
 3. **Pin connections to those roles** - use a connection pool that the LLM cannot access, via a remote tool server. Never grant the agent the ability to modify this with commands like SET ROLE. Furthermore, to speed up your agent, keep a connection pool alive that was created when the agent booted up, and don't let the agent change it.
 
 **PostgreSQL example:**
@@ -65,13 +64,13 @@ Operational SQL tools are designed for specific, often transactional, interactio
 
 Agents are _more_ susceptible to [SQL injection attacks](https://owasp.org/www-community/attacks/SQL_Injection) than traditional software due to an added layer of interpretation if you let the LLM write any part of the query. You need to guard against attacks just like any other software application interacting with a database. You shouldn't be letting your LLM write SQL statements whenever possible. What you should be doing instead is building Operational Tools with the following properties:
 
-* **Prepared Statements:** Always utilize prepared SQL statements to prevent SQL injection vulnerabilities. The AI agent should provide parameters that are then bound to the pre-compiled statement, rather than constructing raw SQL queries.
+- **Prepared Statements:** Always utilize prepared SQL statements to prevent SQL injection vulnerabilities. The AI agent should provide parameters that are then bound to the pre-compiled statement, rather than constructing raw SQL queries.
 
-* **Specific Methods and Input Validation:** Each operational tool should expose clearly defined methods (functions) that the AI agent can call. These methods must include robust input validation, ensuring that all incoming data conforms to expected types, formats, and ranges.
+- **Specific Methods and Input Validation:** Each operational tool should expose clearly defined methods (functions) that the AI agent can call. These methods must include robust input validation, ensuring that all incoming data conforms to expected types, formats, and ranges.
 
-* **Enumerate Allowed Values:** For fields with a limited set of valid inputs, use enums or lookup tables to restrict the AI agent's choices. This prevents the generation of invalid or malicious data.
+- **Enumerate Allowed Values:** For fields with a limited set of valid inputs, use enums or lookup tables to restrict the AI agent's choices. This prevents the generation of invalid or malicious data.
 
-* **Least Privilege:** As previously discussed, these tools must operate with the absolute minimum database permissions required.
+- **Least Privilege:** As previously discussed, these tools must operate with the absolute minimum database permissions required.
 
 ### Examples of Operational Tools
 
@@ -98,7 +97,7 @@ SELECT date_trunc($1, created_at) AS period, COUNT(*) AS user_count
   FROM users
   WHERE internal = false
   GROUP BY period
-  ORDER BY period DESC 
+  ORDER BY period DESC
   LIMIT $2
 ```
 
@@ -131,18 +130,19 @@ Exploratory SQL tools, in contrast, are designed for querying and extracting ins
 
 The primary constraint for these tools is that they _must be read-only_. This fundamental restriction significantly reduces the security surface area.
 
-* **Read-Only Enforcement:** The database roles associated with exploratory tools must explicitly have `SELECT` privileges only, with no `INSERT`, `UPDATE`, or `DELETE` permissions. Well-written SQL tools will also enforce that only SELECT queries are allowed to be executed. Again, _Agents are even more susceptible to SQL Injection attacks!_ Prevent them at the connection level.
+- **Read-Only Enforcement:** The database roles associated with exploratory tools must explicitly have `SELECT` privileges only, with no `INSERT`, `UPDATE`, or `DELETE` permissions. Well-written SQL tools will also enforce that only SELECT queries are allowed to be executed. Again, _Agents are even more susceptible to SQL Injection attacks!_ Prevent them at the connection level.
 
-* **Schema Understanding:** Your agents will need to know what tables exist and what they are for. The best pattern would be to load descriptions of the tables you need into the context ahead of time, along with any reference metadata that is available. Perhaps you have a Semantic Layer (e.g. [dbt](https://docs.getdbt.com/docs/use-dbt-semantic-layer/dbt-sl) or [Cube](https://cube.dev/)) you can use, or table annotations which can be loaded from your database. Failing that, describe your schema in plain text.
+- **Schema Understanding:** Your agents will need to know what tables exist and what they are for. The best pattern would be to load descriptions of the tables you need into the context ahead of time, along with any reference metadata that is available. Perhaps you have a Semantic Layer (e.g. [dbt](https://docs.getdbt.com/docs/use-dbt-semantic-layer/dbt-sl) or [Cube](https://cube.dev/)) you can use, or table annotations which can be loaded from your database. Failing that, describe your schema in plain text.
 
-* **Table Descriptions:** To enable effective querying by the AI agent, provide clear and concise descriptions of the tables and their columns. It is unlikely that all of your tables will be needed for all use-cases (and that will waste tokens), so the LLM/Agent should be encouraged to learn the schema of the relevant tables before trying to query them. A "Look → Plan → Query" workflow works great.
+- **Table Descriptions:** To enable effective querying by the AI agent, provide clear and concise descriptions of the tables and their columns. It is unlikely that all of your tables will be needed for all use-cases (and that will waste tokens), so the LLM/Agent should be encouraged to learn the schema of the relevant tables before trying to query them. A "Look → Plan → Query" workflow works great.
 
-* **Querying Best Practices:** While exploratory tools can be more general, encourage practices such as:
-  * **Limiting Result Sets:** Require a `LIMIT` clause in its queries to prevent excessively large result sets.
-  * **Specific Column Selection:** Encourage selecting only necessary columns rather than `SELECT *`.
-  * **`EXPLAIN ANALYZE` (for development/debugging):** While not for the LLM to run directly in production, explaining the query plan can help in tool development.
+- **Querying Best Practices:** While exploratory tools can be more general, encourage practices such as:
 
-* **RetryableToolErrors for Workflow Learning:** Implement custom error types like RetryableToolError when the LLM attempts an invalid exploratory query (e.g. hallucinating columns that don't exist). This signals to the LLM that it needs to inspect the available tables and their descriptions _before_ attempting the next query, teaching it a more robust workflow. Learn more about retryable tool errors [here](https://docs.arcade.dev/home/build-tools/retry-tools-with-improved-prompt).
+  - **Limiting Result Sets:** Require a `LIMIT` clause in its queries to prevent excessively large result sets.
+  - **Specific Column Selection:** Encourage selecting only necessary columns rather than `SELECT *`.
+  - **`EXPLAIN ANALYZE` (for development/debugging):** While not for the LLM to run directly in production, explaining the query plan can help in tool development.
+
+- **RetryableToolErrors for Workflow Learning:** Implement custom error types like RetryableToolError when the LLM attempts an invalid exploratory query (e.g. hallucinating columns that don't exist). This signals to the LLM that it needs to inspect the available tables and their descriptions _before_ attempting the next query, teaching it a more robust workflow. Learn more about retryable tool errors [here](https://docs.arcade.dev/home/build-tools/retry-tools-with-improved-prompt).
 
 ### Examples of Exploratory Tools
 
@@ -257,10 +257,10 @@ You can see an example exploratory Postgres Arcade toolkit [here](https://github
 
 Remember above how we discussed _schema understanding_? Note how these general purpose tools lack that - which means that they won't be as effective as they could be. Imagine that each of these tools could be given additional context about the structure of your database:
 
-* Which are the final/gold tables in your [Medallion Architecture](https://www.databricks.com/glossary/medallion-architecture), and therefore the LLM should prefer them for most queries?
-* Which tables are the most useful to analysis in general (e.g. users or accounts?).
-* Which types of questions prefer which tables (e.g. financial questions should start with the normalized_accounts tables).
-* Any "translations" the LLM might need to find your data (e.g. all payment and transaction information is in USD, listed in cents).
+- Which are the final/gold tables in your [Medallion Architecture](https://www.databricks.com/glossary/medallion-architecture), and therefore the LLM should prefer them for most queries?
+- Which tables are the most useful to analysis in general (e.g. users or accounts?).
+- Which types of questions prefer which tables (e.g. financial questions should start with the normalized_accounts tables).
+- Any "translations" the LLM might need to find your data (e.g. all payment and transaction information is in USD, listed in cents).
 
 Hinting official preferences to the LLM will save a lot of time and tokens!
 
@@ -286,6 +286,7 @@ While general SQL querying tools can be useful, remember that tools specifically
 We can classify the steps on this journey and some of the changing design criteria:
 
 1. **Exploratory (service tier):**
+
    1. Low accuracy tools which require human hand-holding
    2. Highly general tools which require elevated permissions
    3. low token count
@@ -294,10 +295,12 @@ We can classify the steps on this journey and some of the changing design criter
    6. Example: `execute_query()`
 
 2. **Hybrid:**
+
    1. More accurate,
    2. Still general, but limited to a specific domain,
    3. high token count
-   * Example `GetRecentSalesWins()`
+
+   - Example `GetRecentSalesWins()`
 
 3. **Operational (workflow tier)**
    1. Very accurate, appropriate for operationalization
