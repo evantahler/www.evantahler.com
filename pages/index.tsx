@@ -51,11 +51,11 @@ function IndexPage({
                   <br />
 
                   <p>
-                    I lead engineering organizations at{" "}
-                    <a href="https://www.airbyte.com" target="_blank">
-                      Airbyte,
+                    I am the head of engineering at{" "}
+                    <a href="https://www.arcade.dev" target="_blank">
+                      Arcade.dev,
                     </a>{" "}
-                    advise <Link href="resume">startups</Link>, and and am the
+                    I advise <Link href="resume">startups</Link>, and am the
                     creator of{" "}
                     <a href="https://www.actionherojs.com" target="_blank">
                       Actionherojs.
