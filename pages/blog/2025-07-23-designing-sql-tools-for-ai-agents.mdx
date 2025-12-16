@@ -137,7 +137,6 @@ The primary constraint for these tools is that they _must be read-only_. This fu
 - **Table Descriptions:** To enable effective querying by the AI agent, provide clear and concise descriptions of the tables and their columns. It is unlikely that all of your tables will be needed for all use-cases (and that will waste tokens), so the LLM/Agent should be encouraged to learn the schema of the relevant tables before trying to query them. A "Look → Plan → Query" workflow works great.
 
 - **Querying Best Practices:** While exploratory tools can be more general, encourage practices such as:
-
   - **Limiting Result Sets:** Require a `LIMIT` clause in its queries to prevent excessively large result sets.
   - **Specific Column Selection:** Encourage selecting only necessary columns rather than `SELECT *`.
   - **`EXPLAIN ANALYZE` (for development/debugging):** While not for the LLM to run directly in production, explaining the query plan can help in tool development.
@@ -286,7 +285,6 @@ While general SQL querying tools can be useful, remember that tools specifically
 We can classify the steps on this journey and some of the changing design criteria:
 
 1. **Exploratory (service tier):**
-
    1. Low accuracy tools which require human hand-holding
    2. Highly general tools which require elevated permissions
    3. low token count
@@ -295,11 +293,9 @@ We can classify the steps on this journey and some of the changing design criter
    6. Example: `execute_query()`
 
 2. **Hybrid:**
-
    1. More accurate,
    2. Still general, but limited to a specific domain,
    3. high token count
-
    - Example `GetRecentSalesWins()`
 
 3. **Operational (workflow tier)**

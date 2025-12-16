@@ -141,7 +141,7 @@ ansible-playbook -i inventories/staging deploy.yml — extra-vars="application=m
 ansible-playbook -i inventories/production deploy.yml — extra-vars="application=myApp migrate=true"
 ```
 
-The beauty of the line  **_— hosts: ""_** in the playbook is that you can reference the servers in question by the group they belong to, which in our case matches the application names, and then sub-slice the group even further via optional — limit flags.
+The beauty of the line  ***— hosts: ""*** in the playbook is that you can reference the servers in question by the group they belong to, which in our case matches the application names, and then sub-slice the group even further via optional — limit flags.
 
 ### Variables
 
