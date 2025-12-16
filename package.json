@@ -55,7 +55,7 @@
     "next-remote-watch": "^2.0.0",
     "prettier": "^3.5.3",
     "react-test-renderer": "^19.1.0",
-    "ts-jest": "^29.3.4",
+    "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "xml2json": "^0.12.0"
