@@ -1,8 +1,9 @@
+import { test, expect, describe, beforeEach, afterEach, it } from "bun:test";
 import React from "react";
 import { createRoot, Root } from "react-dom/client";
 import { act } from "react";
 
-import OpenSourcePage from "../../pages/open-source";
+import IndexPage from "../../pages/index";
 
 let container: HTMLDivElement;
 let root: Root;
@@ -18,13 +19,13 @@ afterEach(() => {
   act(() => root.unmount());
 });
 
-describe("Resume Section", () => {
-  it("renders the section", async () => {
+describe("Introduction Section", () => {
+  it("renders the section", () => {
     act(() => {
       root = createRoot(container);
-      root.render(<OpenSourcePage />);
+      root.render(<IndexPage featuredPosts={[]} latestPosts={[]} />);
     });
-    const header = container.querySelector("p");
-    expect(header.textContent).toContain("Sponsorships");
+    const header = container.querySelector("h1");
+    expect(header.textContent).toBe("Hi, I'm Evan!");
   });
 });
