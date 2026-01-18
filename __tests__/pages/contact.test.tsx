@@ -1,8 +1,9 @@
+import { test, expect, describe, beforeEach, afterEach, it } from "bun:test";
 import React from "react";
 import { createRoot, Root } from "react-dom/client";
 import { act } from "react";
 
-import SpeakingPage from "../../pages/speaking";
+import ContactPage from "../../pages/contact";
 
 let container: HTMLDivElement;
 let root: Root;
@@ -18,13 +19,13 @@ afterEach(() => {
   act(() => root.unmount());
 });
 
-describe("Resume Section", () => {
+describe("Introduction Section", () => {
   it("renders the section", () => {
     act(() => {
       root = createRoot(container);
-      root.render(<SpeakingPage />);
+      root.render(<ContactPage />);
     });
-    const header = container.querySelector("h2");
-    expect(header.textContent).toContain("Featured Talks");
+    const header = container.querySelector("p");
+    expect(header.textContent).toContain("Delicious Hat");
   });
 });

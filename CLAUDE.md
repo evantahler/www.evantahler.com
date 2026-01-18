@@ -8,25 +8,25 @@ This is a personal website and blog (www.evantahler.com) built with Next.js, Rea
 
 ## Package Manager
 
-This project uses **pnpm** as the package manager. All commands should use `pnpm` instead of `npm`.
+This project uses **bun** as the package manager and runtime. All commands should use `bun` instead of `npm` or `pnpm`.
 
 ## Common Commands
 
 ### Development
-- `pnpm install` - Install dependencies
-- `pnpm run dev` - Start development server with file watching for blog posts
-- `pnpm run build` - Build the Next.js application for production
-- `pnpm start` - Start production server
+- `bun install` - Install dependencies
+- `bun run dev` - Start development server with file watching for blog posts
+- `bun run build` - Build the Next.js application for production
+- `bun start` - Start production server
 
 ### Testing & Quality
-- `pnpm test` - Run full test suite (includes lint, build, and jest tests)
-- `pnpm run lint` - Check code formatting with Prettier
-- `pnpm run pretty` - Auto-format code with Prettier
+- `bun test` - Run full test suite (includes lint, build, and bun tests)
+- `bun run lint` - Check code formatting with Prettier
+- `bun run pretty` - Auto-format code with Prettier
 
 Note: The `pretest` script automatically runs `lint`, `build`, and `postbuild` before tests.
 
 ### Other
-- `pnpm run sitemap` - Generate sitemap (runs automatically after build via `postbuild`)
+- `bun run sitemap` - Generate sitemap (runs automatically after build via `postbuild`)
 
 ## Code Architecture
 
@@ -107,10 +107,10 @@ The blog is powered by MDX files stored in `pages/blog/*.mdx`. The blog infrastr
 
 ### Testing
 
-- Jest with jsdom environment
+- Bun's built-in test runner with jsdom environment
 - Tests use React 19's `createRoot` API
 - Test files in `__tests__/pages/` mirror the pages structure
-- Setup file: `setup.jest.js`
+- Setup file: `test-setup.ts`
 
 ### Deployment
 
@@ -122,4 +122,4 @@ The development server uses `next-remote-watch` to watch the `pages/blog` direct
 
 ## Code Formatting
 
-This project uses Prettier exclusively for code formatting. There are no ESLint or JSHint configurations. Prettier is enforced in CI and must pass for contributions to be accepted. Use `pnpm run pretty` to auto-format code.
+This project uses Prettier exclusively for code formatting. There are no ESLint or JSHint configurations. Prettier is enforced in CI and must pass for contributions to be accepted. Use `bun run pretty` to auto-format code.

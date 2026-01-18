@@ -1,8 +1,9 @@
+import { test, expect, describe, beforeEach, afterEach, it } from "bun:test";
 import React from "react";
 import { createRoot, Root } from "react-dom/client";
 import { act } from "react";
 
-import ResumePage from "../../pages/resume";
+import OpenSourcePage from "../../pages/open-source";
 
 let container: HTMLDivElement;
 let root: Root;
@@ -19,12 +20,12 @@ afterEach(() => {
 });
 
 describe("Resume Section", () => {
-  it("renders the section", () => {
+  it("renders the section", async () => {
     act(() => {
       root = createRoot(container);
-      root.render(<ResumePage />);
+      root.render(<OpenSourcePage />);
     });
     const header = container.querySelector("p");
-    expect(header.textContent).toContain("Engineer");
+    expect(header.textContent).toContain("Sponsorships");
   });
 });

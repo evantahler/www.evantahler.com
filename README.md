@@ -5,10 +5,10 @@
 ## Install
 This is a [React Project](https://facebook.github.io/react/) utilizing [next.js](https://github.com/zeit/next.js/) and [react-bootstrap](https://react-bootstrap.github.io/)
 
-- `pnpm install`
+- `bun install`
 
 ## Running in Development
-- `pnpm run dev`
+- `bun run dev`
 
 ## Building for Production
 

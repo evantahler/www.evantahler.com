@@ -22,9 +22,7 @@ function ResumePage() {
           {" "}
           <p>
             Evan Tahler is the Head of Engineering at{" "}
-            <a
-              href="https://www.arcade.dev?utm_source=evan_test&utm_medium=fake&urm_campaign=evan_test_1"
-            >
+            <a href="https://www.arcade.dev?utm_source=evan_test&utm_medium=fake&urm_campaign=evan_test_1">
               Arcade.dev
             </a>
             , building the foundation for secure and scalable agentic
