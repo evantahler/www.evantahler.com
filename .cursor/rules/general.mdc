@@ -1,7 +1,0 @@
----
-alwaysApply: true
----
-
-We use pnpm not npm for all operations in this project.
-
-After modifying any file, format it with `pnpm run pretty`.
