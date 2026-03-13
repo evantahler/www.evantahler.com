@@ -1,18 +1,15 @@
-import {NextConfig} from "next";
+import { NextConfig } from "next";
 
-const config = {
+const config: NextConfig = {
   images: {
-    domains: [
-      "github.com",
-      "avatars.githubusercontent.com",
-      "avatars0.githubusercontent.com",
-      "avatars1.githubusercontent.com",
-      "avatars2.githubusercontent.com",
-      "avatars3.githubusercontent.com",
-      "avatars4.githubusercontent.com",
-      "avatars5.githubusercontent.com",
+    remotePatterns: [
+      { protocol: "https", hostname: "github.com" },
+      { protocol: "https", hostname: "**.githubusercontent.com" },
     ],
   },
-} as NextConfig;
+  sassOptions: {
+    silenceDeprecations: ["legacy-js-api", "import", "global-builtin", "color-functions", "if-function"],
+  },
+};
 
 export default config;
