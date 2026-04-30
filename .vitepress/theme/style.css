@@ -28,6 +28,12 @@
   );
 }
 
+/* Slight border on images in markdown content (blog post bodies, etc.) */
+.vp-doc img {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+}
+
 /* --- Hero bitmoji: kill the default circular gradient bubble so the
    "bursting through paper" cartoon stands on its own. --- */
 
