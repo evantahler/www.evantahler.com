@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CopyOrDownloadAsMarkdownButtons from "vitepress-plugin-llms/vitepress-components/CopyOrDownloadAsMarkdownButtons.vue";
 import { useData } from "vitepress";
 import { computed } from "vue";
 import BlogSidebar from "../components/BlogSidebar.vue";
@@ -52,6 +53,9 @@ const canonical = computed<string | undefined>(
 
     <div class="row">
       <div class="col-md-9">
+        <ClientOnly>
+          <CopyOrDownloadAsMarkdownButtons />
+        </ClientOnly>
         <article class="vp-doc" id="markdown">
           <Content />
         </article>
