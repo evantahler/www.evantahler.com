@@ -56,7 +56,8 @@ const formattedDate = computed(() => {
 .post-header h1 {
   font-size: 2rem;
   font-weight: 700;
-  margin: 0 0 0.5rem;
+  line-height: 1.25;
+  margin: 0 0 0.75rem;
   letter-spacing: -0.02em;
 }
 .meta {
