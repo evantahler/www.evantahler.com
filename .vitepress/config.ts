@@ -35,7 +35,7 @@ const builtAssetDevServer = {
 export default defineConfig({
   title: "Evan Tahler",
   description:
-    "Evan Tahler — software engineer, leader, writer. Head of engineering at Arcade.dev, creator of Actionhero.",
+    "Evan Tahler — software engineer, leader, writer. Head of engineering at Arcade.dev, creator of Actionhero, Keryx, and more.",
   cleanUrls: true,
   srcDir: ".",
   srcExclude: [
