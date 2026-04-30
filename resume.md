@@ -18,7 +18,7 @@ Evan holds a Masters in Entertainment Technology and BS in Mechanical Engineerin
 ## Companies
 
 <p class="company-logos">
-  <a href="https://www.arcade.dev"><img src="/images/logos/arcade.svg" alt="arcade" /></a>
+  <a href="https://www.arcade.dev"><img src="/images/logos/arcade.png" alt="arcade" /></a>
   <a href="https://airbyte.com"><img src="/images/logos/airbyte.png" alt="airbyte" /></a>
   <a href="https://www.grouparoo.com"><img src="/images/logos/grouparoo.png" alt="grouparoo" /></a>
   <a href="https://www.actionherojs.com"><img src="/images/logos/actionhero.png" alt="actionhero" /></a>

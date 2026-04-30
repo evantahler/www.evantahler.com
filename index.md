@@ -17,22 +17,57 @@ hero:
     - theme: alt
       text: Get in touch
       link: /contact
-
-features:
-  - icon: 📝
-    title: Blog
-    details: Posts on engineering, AI, data, leadership, and the craft of building software.
-    link: /blog
-  - icon: 💼
-    title: Resume
-    details: Head of Engineering at Arcade.dev. Previously Airbyte, Grouparoo, TaskRabbit, ModCloth, Disney, Airbus.
-    link: /resume
-  - icon: 🎤
-    title: Speaking
-    details: Conference talks on Node.js, AI, data engineering, and product management.
-    link: /speaking
-  - icon: ⭐
-    title: Open Source
-    details: Creator and maintainer of Actionhero, node-resque, Grouparoo, and more.
-    link: /open-source
 ---
+
+<script setup>
+import { computed } from "vue";
+import { data as posts } from "./.vitepress/data/posts.data";
+
+const featured = computed(() =>
+  posts.filter((p) => p.meta.featured).slice(0, 4),
+);
+
+function fmt(d) {
+  return new Date(d).toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+</script>
+
+<section class="home-section">
+  <div class="home-section-head">
+    <h2>Featured posts</h2>
+    <a href="/blog" class="home-section-link">All posts →</a>
+  </div>
+  <div class="featured-grid">
+    <a
+      v-for="p in featured"
+      :key="p.slug"
+      :href="p.url"
+      class="featured-card"
+    >
+      <span class="featured-date">{{ fmt(p.meta.date) }}</span>
+      <h3 class="featured-title">{{ p.meta.title }}</h3>
+      <p v-if="p.meta.description" class="featured-desc">
+        {{ p.meta.description }}
+      </p>
+    </a>
+  </div>
+</section>
+
+<section class="home-section llms-section">
+  <div class="llms-card">
+    <div class="llms-icon" aria-hidden="true">🤖</div>
+    <div class="llms-body">
+      <h2>Reading this with an LLM?</h2>
+      <p>
+        This site publishes
+        <a href="/llms.txt"><code>/llms.txt</code></a> and
+        <a href="/llms-full.txt"><code>/llms-full.txt</code></a>
+        so agents and assistants can ingest the content directly. Help yourself.
+      </p>
+    </div>
+  </div>
+</section>
