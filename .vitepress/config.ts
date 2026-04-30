@@ -133,7 +133,12 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [llmstxt(), builtAssetDevServer],
+    plugins: [
+      llmstxt({
+        ignoreFiles: ["blog/page/**", "blog/tag/**", "blog/tags.md", "404.md"],
+      }),
+      builtAssetDevServer,
+    ],
     css: {
       preprocessorOptions: {
         scss: {
