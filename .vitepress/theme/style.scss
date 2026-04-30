@@ -52,3 +52,23 @@ body {
   height: auto;
   border-radius: 6px;
 }
+
+// Bootstrap's .dropdown-menu defaults to `display: none`, which hides the
+// menu rendered by vitepress-plugin-llms's CopyOrDownloadAsMarkdownButtons.
+// Override within the plugin's container so the plugin's own opacity
+// transitions control visibility.
+.markdown-copy-buttons {
+  .dropdown-menu {
+    display: block;
+    padding: 0;
+    margin: 0;
+
+    // Bootstrap also styles .dropdown-item; reset what would conflict.
+    .dropdown-item {
+      width: 100%;
+      clear: none;
+      font-weight: normal;
+      white-space: nowrap;
+    }
+  }
+}
