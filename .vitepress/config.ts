@@ -72,7 +72,10 @@ export default defineConfig({
   },
 
   markdown: {
-    theme: "nord",
+    theme: {
+      light: "github-light",
+      dark: "nord",
+    },
     lineNumbers: true,
   },
 
