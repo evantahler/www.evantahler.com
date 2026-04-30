@@ -1,7 +1,7 @@
 ---
 title: switchboard.chat
 description: 'Today I want to announce the beta of a new website I built, switchboard.chat'
-date: 09 Jan 2016
+date: '2016-01-09'
 tags:
   - actionhero
   - startups

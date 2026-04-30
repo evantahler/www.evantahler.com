@@ -3,7 +3,7 @@ title: San Francisco from a Yinzer’s Point of View
 description: >-
   I have a hard time answering the question "where are you from?". I’ve lived in
   over 15 different homes in 8 cities. I was born in New…
-date: 17 Feb 2012
+date: '2012-02-17'
 tags:
   - misc
 image: /images/medium-export/1__ocGA4k76Nn9lgWEESMShsQ.jpeg

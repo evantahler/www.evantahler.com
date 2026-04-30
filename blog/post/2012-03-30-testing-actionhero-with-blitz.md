@@ -3,7 +3,7 @@ title: Testing actionHero with blitz.io
 description: >-
   I recently had a chance to try out blitz.io (or click my affiliate link thing
   and get me some free tests), a new load-testing tool from…
-date: 30 Mar 2012
+date: '2012-03-30'
 tags:
   - javascript
   - node.js

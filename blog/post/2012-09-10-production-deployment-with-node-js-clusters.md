@@ -1,7 +1,7 @@
 ---
 title: Production Deployment with node.js Clusters
 description: How do you deploy a node.js app reliably?
-date: 10 Sep 2012
+date: '2012-09-10'
 tags:
   - node.js
   - gitops

@@ -12,6 +12,14 @@ const tag = computed(() => params.value?.tag ?? "");
 const filtered = computed(() =>
   posts.filter((p) => (p.meta.tags ?? []).includes(tag.value))
 );
+
+function fmt(date) {
+  return new Date(date).toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
 </script>
 
 # Posts tagged "{{ tag }}"

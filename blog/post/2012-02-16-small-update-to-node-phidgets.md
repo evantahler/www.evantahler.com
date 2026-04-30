@@ -3,7 +3,7 @@ title: Small update to npm phidgets package
 description: >-
   After all the hoopla about node.js and Nerf guns yesterday I revisited the
   phidgets package and fixed a few bugs. Most importantly there…
-date: 16 Feb 2012
+date: '2012-02-16'
 tags:
   - node.js
 ---

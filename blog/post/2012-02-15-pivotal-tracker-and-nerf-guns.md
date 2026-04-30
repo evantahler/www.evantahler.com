@@ -1,7 +1,7 @@
 ---
 title: 'Pivotal Tracker, Phidgets, and Nerf Guns'
 description: Nerf Guns and Product Management
-date: 15 Feb 2012
+date: '2012-02-15'
 tags:
   - javascript
   - product_management

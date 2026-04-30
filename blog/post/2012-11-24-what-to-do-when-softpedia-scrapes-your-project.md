@@ -1,7 +1,7 @@
 ---
 title: What do you do when Softpedia scrapes you projects?
 description: Today I woke up to learn that I had made it big!
-date: 24 Nov 2012
+date: '2012-11-24'
 tags:
   - node.js
   - actionhero

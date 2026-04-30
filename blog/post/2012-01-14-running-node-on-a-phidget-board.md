@@ -3,7 +3,7 @@ title: Running node on a Phidget Board
 description: >-
   My last post was about creating a generic npm package to talk to a phidget
   board. This post is about compiling nodeJS to run on a phidget board
-date: 14 Jan 2012
+date: '2012-01-14'
 tags:
   - node.js
 image: /images/medium-export/1__QYAVA14BeJgLpD7ajTlCWQ.png

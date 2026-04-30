@@ -1,7 +1,7 @@
 ---
 title: Rebuilding Capistrano with Ansible
 description: Solid Ruby deployments with Ansbile
-date: 12 Mar 2015
+date: '2015-03-12'
 tags:
   - ruby
   - gitops

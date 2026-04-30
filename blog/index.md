@@ -16,6 +16,14 @@ const grouped = computed(() => {
   }
   return [...map.entries()].sort(([a], [b]) => b.localeCompare(a));
 });
+
+function fmt(date) {
+  return new Date(date).toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
 </script>
 
 # Blog
@@ -27,7 +35,7 @@ const grouped = computed(() => {
   <ul>
     <li v-for="p in items" :key="p.slug">
       <a :href="`/blog/post/${p.slug}`">{{ p.meta.title }}</a>
-      <span style="color: var(--vp-c-text-2);"> — {{ p.meta.date }}</span>
+      <span style="color: var(--vp-c-text-2);"> — {{ fmt(p.meta.date) }}</span>
     </li>
   </ul>
 </div>

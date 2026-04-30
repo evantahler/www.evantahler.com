@@ -3,7 +3,7 @@ title: The Real Reason I Will Not Be Your Technical CoFounder
 description: >-
   I have been reading quite a few posts lately concerning the topic of becoming
   a ‘technical co-founder’ of a startup. Just search for the…
-date: 28 Feb 2013
+date: '2013-02-28'
 tags:
   - startups
   - legal

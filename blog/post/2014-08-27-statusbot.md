@@ -1,7 +1,7 @@
 ---
 title: StatusBot
 description: Keep track of your uptime with Statuspage.io and Node.js
-date: 27 Aug 2014
+date: '2014-08-27'
 tags:
   - node.js
   - taskrabbit
