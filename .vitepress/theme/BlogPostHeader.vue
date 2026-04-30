@@ -18,11 +18,6 @@ const formattedDate = computed(() => {
   });
 });
 
-const canonicalHost = computed(() => {
-  const c = frontmatter.value.canonical;
-  if (!c) return "";
-  return c.replace(/^https?:\/\//, "").split("/")[0];
-});
 </script>
 
 <template>
@@ -35,7 +30,7 @@ const canonicalHost = computed(() => {
         <em>
           Originally posted at
           <a :href="frontmatter.canonical" target="_blank" rel="noopener">{{
-            canonicalHost
+            frontmatter.canonical
           }}</a>
         </em>
       </template>
