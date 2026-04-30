@@ -85,6 +85,12 @@ export default defineConfig({
     if (path.startsWith("blog/post/") && path.endsWith(".md")) {
       pageData.frontmatter.layout = "blog-post";
     }
+    if (path.startsWith("blog/tag/")) {
+      pageData.frontmatter.layout = "blog-tag";
+    }
+    if (path.startsWith("blog/page/")) {
+      pageData.frontmatter.layout = "blog-index";
+    }
 
     if (
       path.startsWith("blog/tag/") ||
