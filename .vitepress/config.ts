@@ -3,18 +3,26 @@ import { resolve } from "node:path";
 import { defineConfig } from "vitepress";
 import llmstxt from "vitepress-plugin-llms";
 
-// vitepress-plugin-llms 1.12.1's dev middleware rewrites every request to
-// `.md`, so /llms.txt and /llms-full.txt fall through. Serve them from the
-// last build's dist folder during dev. Run `bun run build` once to populate.
-const llmsTxtDevServer = {
-  name: "llms-txt-dev-server",
+// VitePress only generates llms.txt, llms-full.txt, and sitemap.xml at build
+// time, and vitepress-plugin-llms 1.12.1's dev middleware rewrites every
+// request to `.md` (so even /llms.txt falls through). Serve those static
+// assets from the last build's dist folder during dev. Run `bun run build`
+// once to populate.
+const builtAssetDevServer = {
+  name: "built-asset-dev-server",
   configureServer(server: any) {
+    const served: Record<string, string> = {
+      "/llms.txt": "text/plain; charset=utf-8",
+      "/llms-full.txt": "text/plain; charset=utf-8",
+      "/sitemap.xml": "application/xml; charset=utf-8",
+    };
     server.middlewares.use((req: any, res: any, next: any) => {
       const url = (req.url || "").split("?")[0];
-      if (url === "/llms.txt" || url === "/llms-full.txt") {
+      const contentType = served[url];
+      if (contentType) {
         const filePath = resolve(".vitepress/dist", url.slice(1));
         if (existsSync(filePath)) {
-          res.setHeader("Content-Type", "text/plain; charset=utf-8");
+          res.setHeader("Content-Type", contentType);
           res.end(readFileSync(filePath, "utf-8"));
           return;
         }
@@ -125,7 +133,7 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [llmstxt(), llmsTxtDevServer],
+    plugins: [llmstxt(), builtAssetDevServer],
     css: {
       preprocessorOptions: {
         scss: {
