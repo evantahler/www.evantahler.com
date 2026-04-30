@@ -7,11 +7,9 @@ description: Evan Tahler — Head of Engineering at Arcade.dev, formerly Airbyte
 
 <hr />
 
-<div class="row">
-  <div class="col-md-3">
-    <img src="/images/resume-3.jpg" alt="evan" style="width: 100%; height: 500px; object-fit: cover; border-radius: 6px" />
-  </div>
-  <div class="col">
+<div style="display: grid; grid-template-columns: 240px 1fr; gap: 2rem; align-items: start;">
+  <img src="/images/resume-3.jpg" alt="evan" style="width: 100%; height: auto; border-radius: 6px" />
+  <div>
     <p>
       Evan Tahler is the Head of Engineering at <a href="https://www.arcade.dev">Arcade.dev</a>, building the foundation for secure and scalable agentic tools.
     </p>
@@ -31,47 +29,14 @@ description: Evan Tahler — Head of Engineering at Arcade.dev, formerly Airbyte
       Evan holds a Masters in Entertainment Technology and BS in Mechanical Engineering from <a target="_new" href="https://www.cmu.edu/homepage/creativity/2014/fall/the-greater-good.shtml">Carnegie Mellon University</a>.
     </p>
 
-    <br />
-
-    <div class="row">
-      <div class="col" style="text-align: center">
-        <a href="https://airbyte.com" target="_blank">
-          <img alt="airbyte logo" height="100" width="100" src="/images/logos/airbyte.png" />
-        </a>
-      </div>
-      <div class="col" style="text-align: center">
-        <a href="https://www.grouparoo.com" target="_blank">
-          <img alt="grouparoo logo" height="100" width="100" src="/images/logos/grouparoo.png" />
-        </a>
-      </div>
-      <div class="col" style="text-align: center">
-        <a href="https://www.actionhero.com" target="_blank">
-          <img alt="actionhero logo" height="100" width="100" src="/images/logos/actionhero.png" />
-        </a>
-      </div>
-      <div class="col" style="text-align: center">
-        <a href="https://www.taskrabbit.com" target="_blank">
-          <img alt="taskrabbit logo" height="100" width="100" src="/images/logos/taskrabbit.png" />
-        </a>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col" style="text-align: center">
-        <a href="https://www.airbus.com" target="_blank">
-          <img alt="airbus logo" height="100" width="120" style="padding: 15px" src="/images/logos/airbus.png" />
-        </a>
-      </div>
-      <div class="col" style="text-align: center">
-        <a href="https://www.modcloth.com" target="_blank">
-          <img alt="modcloth logo" height="100" width="100" src="/images/logos/modcloth.jpg" />
-        </a>
-      </div>
-      <div class="col" style="text-align: center">
-        <a href="https://www.disney.com" target="_blank">
-          <img alt="disney logo" height="100" width="100" src="/images/logos/disney.png" />
-        </a>
-      </div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.5rem; align-items: center; justify-items: center;">
+      <a href="https://airbyte.com" target="_blank"><img alt="airbyte" height="80" src="/images/logos/airbyte.png" /></a>
+      <a href="https://www.grouparoo.com" target="_blank"><img alt="grouparoo" height="80" src="/images/logos/grouparoo.png" /></a>
+      <a href="https://www.actionhero.com" target="_blank"><img alt="actionhero" height="80" src="/images/logos/actionhero.png" /></a>
+      <a href="https://www.taskrabbit.com" target="_blank"><img alt="taskrabbit" height="80" src="/images/logos/taskrabbit.png" /></a>
+      <a href="https://www.airbus.com" target="_blank"><img alt="airbus" height="80" style="padding: 12px" src="/images/logos/airbus.png" /></a>
+      <a href="https://www.modcloth.com" target="_blank"><img alt="modcloth" height="80" src="/images/logos/modcloth.jpg" /></a>
+      <a href="https://www.disney.com" target="_blank"><img alt="disney" height="80" src="/images/logos/disney.png" /></a>
     </div>
   </div>
 </div>

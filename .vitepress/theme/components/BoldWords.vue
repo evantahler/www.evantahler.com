@@ -3,5 +3,12 @@ defineProps<{ text: string }>();
 </script>
 
 <template>
-  <span style="color: var(--bs-warning)">{{ text }}</span>
+  <span class="bold-words">{{ text }}</span>
 </template>
+
+<style scoped>
+.bold-words {
+  color: var(--vp-c-warning-1);
+  font-weight: 600;
+}
+</style>

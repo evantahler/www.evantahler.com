@@ -64,21 +64,28 @@ watch(searchTerm, search);
       >:
     </p>
     <template v-if="matches.length > 0">
-      <div v-for="m in matches" :key="m.page.href">
-        <div class="card mb-3">
-          <div class="card-header">
-            <h4>{{ m.page.title }}</h4>
-          </div>
-          <div class="card-body">
-            <p>
-              <a :href="m.page.href">{{ m.page.href }}</a>
-              <br />
-              <small>Match Score: {{ m.score }}</small>
-            </p>
-          </div>
-        </div>
-      </div>
+      <article v-for="m in matches" :key="m.page.href" class="match">
+        <h4>{{ m.page.title }}</h4>
+        <p>
+          <a :href="m.page.href">{{ m.page.href }}</a>
+          <br />
+          <small class="muted">Match Score: {{ m.score }}</small>
+        </p>
+      </article>
     </template>
     <p v-else>No Results</p>
   </div>
 </template>
+
+<style scoped>
+.match {
+  padding: 1rem 1.25rem;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+.match h4 {
+  margin: 0 0 0.25rem;
+}
+</style>

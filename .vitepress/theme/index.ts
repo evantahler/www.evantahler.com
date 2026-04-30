@@ -6,7 +6,7 @@ import ContactCards from "./components/ContactCards.vue";
 import FormattedDate from "./components/FormattedDate.vue";
 import SpeakingEngagementCard from "./components/SpeakingEngagementCard.vue";
 import Layout from "./Layout.vue";
-import "./style.scss";
+import "./style.css";
 
 const theme: Theme = {
   extends: DefaultTheme,

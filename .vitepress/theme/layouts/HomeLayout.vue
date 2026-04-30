@@ -14,76 +14,55 @@ const featuredTalks = talks.slice(0, 3);
 
 <template>
   <div>
-    <div class="card">
-      <div class="card-body" style="padding-left: 0">
-        <div class="row">
-          <div class="col-md-3">
-            <img
-              width="262"
-              height="398"
-              src="/images/bitmoji/5.png"
-              alt="evan icon"
-            />
-          </div>
-          <div class="col-md-9" style="padding-left: 2rem">
-            <div class="row">
-              <div class="col-md-12">
-                <h1>Hi, I'm Evan!</h1>
-                <br />
-                <h4>
-                  I use my <BoldWords text="Software Engineering" />,
-                  <BoldWords text="Product Management" />, and
-                  <BoldWords text="Leadership" /> skills to build teams that
-                  create world-class digital products.
-                </h4>
-                <br />
-                <p>
-                  I am the head of engineering at
-                  <a href="https://www.arcade.dev" target="_blank"
-                    >Arcade.dev,</a
-                  >
-                  I advise <a href="/resume">startups</a>, and am the creator of
-                  <a href="https://www.actionherojs.com" target="_blank"
-                    >Actionherojs.</a
-                  >
-                </p>
-              </div>
-            </div>
-            <div style="padding: 30px"></div>
-            <ContactCards variant="info" />
-          </div>
-        </div>
+    <section class="hero">
+      <img
+        class="bitmoji"
+        src="/images/bitmoji/5.png"
+        alt="evan icon"
+        width="262"
+        height="398"
+      />
+      <div class="hero-body">
+        <h1>Hi, I'm Evan!</h1>
+        <h4>
+          I use my <BoldWords text="Software Engineering" />,
+          <BoldWords text="Product Management" />, and
+          <BoldWords text="Leadership" /> skills to build teams that create
+          world-class digital products.
+        </h4>
+        <p>
+          I am the head of engineering at
+          <a href="https://www.arcade.dev" target="_blank">Arcade.dev,</a>
+          I advise <a href="/resume">startups</a>, and am the creator of
+          <a href="https://www.actionherojs.com" target="_blank"
+            >Actionherojs.</a
+          >
+        </p>
+        <ContactCards variant="info" />
       </div>
-    </div>
-
-    <br />
+    </section>
 
     <h2>Latest <a href="/blog">Blog</a> Posts</h2>
-
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-6">
         <BlogPostCard v-if="latestPosts[0]" :post="latestPosts[0]" />
       </div>
-      <div class="col-md-6">
+      <div class="col-6">
         <BlogPostCard v-if="latestPosts[1]" :post="latestPosts[1]" />
       </div>
     </div>
 
-    <br />
-
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-6">
         <h2>Featured <a href="/blog">Blog</a> Posts</h2>
-        <br />
         <BlogPostCard
           v-for="(post, idx) in featuredPosts"
           :key="`featured-post-${idx}`"
           :post="post"
         />
       </div>
-      <div class="col-md-6">
+      <div class="col-6">
         <h2>Featured <a href="/speaking">Talks</a></h2>
-        <br />
         <SpeakingEngagementCard
           v-for="(talk, idx) in featuredTalks"
           :key="`talk-${idx}`"
@@ -93,3 +72,44 @@ const featuredTalks = talks.slice(0, 3);
     </div>
   </div>
 </template>
+
+<style scoped>
+.hero {
+  display: flex;
+  gap: 2rem;
+  padding: 1.5rem;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+.bitmoji {
+  flex: 0 0 auto;
+  width: 220px;
+  height: auto;
+  border-radius: 6px;
+}
+.hero-body {
+  flex: 1;
+}
+.hero-body h1 {
+  margin: 0 0 0.75rem;
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+.hero-body h4 {
+  margin: 0 0 1rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+.hero-body p {
+  margin: 0 0 1.25rem;
+}
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+</style>

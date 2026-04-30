@@ -38,59 +38,104 @@ function capitalize(s: string) {
 
 <template>
   <div>
-    <div class="row">
-      <div class="col">
-        <h1>
-          <a href="/blog" style="text-decoration: none; color: black"
-            >Evan's Blog: {{ capitalize(tag) }}</a
-          >
-        </h1>
-        <a class="btn btn-sm btn-outline-primary" href="/blog">↞ See all posts</a>
-      </div>
-    </div>
+    <h1>
+      <a class="plain" href="/blog">Evan's Blog: {{ capitalize(tag) }}</a>
+    </h1>
+    <p>
+      <a class="btn btn-sm btn-outline-primary" href="/blog">↞ See all posts</a>
+    </p>
 
     <hr />
 
-    <div v-for="post in paged" :key="post.slug" class="card mb-3">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-3">
-            <a :href="`/blog/post/${post.slug}`">
-              <img
-                style="max-width: 100%"
-                class="rounded"
-                :src="post.meta.image || '/images/misc/announce.png'"
-                :alt="post.meta.title"
-              />
-            </a>
-          </div>
-          <div class="col">
-            <h4>
-              <a :href="`/blog/post/${post.slug}`" style="color: black">{{
-                post.meta.title
-              }}</a>
-            </h4>
-            <small>
-              <template v-for="t in [...post.meta.tags].sort()" :key="t">
-                <a :href="`/blog/tag/${t}`">
-                  <span class="badge bg-info">{{ t }}</span> </a
-                >&nbsp;
-              </template>
-            </small>
-            <br />
-            <p v-if="post.meta.description">{{ post.meta.description }}</p>
-            <em>
-              <small><FormattedDate :dateString="post.meta.date" /></small>
-            </em>
-          </div>
+    <article v-for="post in paged" :key="post.slug" class="post-row">
+      <a class="thumb" :href="`/blog/post/${post.slug}`">
+        <img
+          :src="post.meta.image || '/images/misc/announce.png'"
+          :alt="post.meta.title"
+        />
+      </a>
+      <div class="meta">
+        <h4>
+          <a class="plain" :href="`/blog/post/${post.slug}`">{{
+            post.meta.title
+          }}</a>
+        </h4>
+        <div class="tags">
+          <a
+            v-for="t in [...post.meta.tags].sort()"
+            :key="t"
+            :href="`/blog/tag/${t}`"
+            class="badge"
+            >{{ t }}</a
+          >
         </div>
+        <p v-if="post.meta.description">{{ post.meta.description }}</p>
+        <em class="muted"><FormattedDate :dateString="post.meta.date" /></em>
       </div>
-    </div>
+    </article>
 
     <PaginationHelper
       :page="currentPage"
       :totalPages="totalPages"
-      :pageUrl="(n) => (n === 1 ? `/blog/tag/${tag}` : `/blog/tag/${tag}/${n}`)"
+      :pageUrl="(n: number) => (n === 1 ? `/blog/tag/${tag}` : `/blog/tag/${tag}/${n}`)"
     />
   </div>
 </template>
+
+<style scoped>
+h1 .plain,
+h4 .plain {
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+}
+h1 .plain:hover,
+h4 .plain:hover {
+  color: var(--vp-c-brand-1);
+}
+.post-row {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1rem;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.thumb {
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+.thumb img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  display: block;
+}
+.meta {
+  flex: 1;
+  min-width: 0;
+}
+.meta h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+.tags .badge {
+  text-decoration: none;
+}
+@media (max-width: 768px) {
+  .post-row {
+    flex-direction: column;
+  }
+  .thumb {
+    flex-basis: auto;
+    max-width: 100%;
+  }
+}
+</style>

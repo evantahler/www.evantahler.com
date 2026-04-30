@@ -59,19 +59,46 @@ const items = computed(() => {
 </script>
 
 <template>
-  <nav v-if="items.length > 0" aria-label="Pagination">
-    <ul class="pagination">
-      <li
-        v-for="item in items"
-        :key="item.key"
-        class="page-item"
-        :class="{ active: item.active }"
+  <nav v-if="items.length > 0" class="pagination" aria-label="Pagination">
+    <template v-for="item in items" :key="item.key">
+      <a
+        v-if="item.href && !item.active"
+        class="page-link"
+        :href="item.href"
+        >{{ item.label }}</a
       >
-        <a v-if="item.href && !item.active" class="page-link" :href="item.href">
-          {{ item.label }}
-        </a>
-        <span v-else class="page-link">{{ item.label }}</span>
-      </li>
-    </ul>
+      <span v-else class="page-link" :class="{ active: item.active }">{{
+        item.label
+      }}</span>
+    </template>
   </nav>
 </template>
+
+<style scoped>
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 1rem 0;
+}
+.page-link {
+  display: inline-block;
+  padding: 0.4rem 0.7rem;
+  min-width: 2rem;
+  text-align: center;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.page-link:hover {
+  background: var(--vp-c-bg-soft);
+}
+.page-link.active {
+  background: var(--vp-c-brand-1);
+  color: #fff;
+  border-color: var(--vp-c-brand-1);
+}
+</style>

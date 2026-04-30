@@ -8,13 +8,12 @@ import { data as repos } from "../../data/github.data";
     <hr />
 
     <img
+      class="hero-image"
       src="/images/open-source-2.jpg"
       alt="open source"
-      style="width: 100%; height: 500px; object-fit: cover; border-radius: 6px"
     />
-    <br /><br />
 
-    <div class="alert alert-light">
+    <aside class="sponsor-callout">
       <p>
         <strong>You can now sponsor my work via Github Sponsorships!</strong>
       </p>
@@ -31,17 +30,15 @@ import { data as repos } from "../../data/github.data";
         continue to provide the open-source community with these tools... and
         of course, more features and code :D
       </p>
-      <div style="text-align: center">
-        <p>
-          <a
-            href="https://github.com/users/evantahler/sponsorship"
-            target="_new"
-            class="btn btn-outline-primary"
-            >Donate Today</a
-          >
-        </p>
-      </div>
-    </div>
+      <p style="text-align: center">
+        <a
+          href="https://github.com/users/evantahler/sponsorship"
+          target="_new"
+          class="btn btn-outline-primary"
+          >Donate Today</a
+        >
+      </p>
+    </aside>
 
     <p>
       I contribute to a number of Open Source projects because I belive it is a
@@ -55,32 +52,27 @@ import { data as repos } from "../../data/github.data";
       projects, some of which are highlighed below.
     </p>
 
-    <ul class="list-group">
+    <ul class="repo-list">
       <li
         v-for="repository in repos"
         :key="repository.html_url"
-        class="list-group-item"
+        class="repo"
       >
-        <div class="row">
-          <div class="col-md-12">
-            <h5>
-              <a target="_new" :href="repository.html_url">{{
-                repository.full_name
-              }}</a>
-            </h5>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-1">
-            <img
-              :alt="repository.html_url"
-              width="75"
-              height="75"
-              :src="repository.owner.avatar_url"
-            />
-          </div>
-          <div class="col-md-11">
-            <p>
+        <h5>
+          <a target="_new" :href="repository.html_url">{{
+            repository.full_name
+          }}</a>
+        </h5>
+        <div class="repo-body">
+          <img
+            class="avatar"
+            :alt="repository.html_url"
+            width="75"
+            height="75"
+            :src="repository.owner.avatar_url"
+          />
+          <div>
+            <p class="muted">
               ✨ {{ repository.stargazers_count }}, 🍴
               {{ repository.forks_count }}
             </p>
@@ -91,3 +83,42 @@ import { data as repos } from "../../data/github.data";
     </ul>
   </div>
 </template>
+
+<style scoped>
+.hero-image {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+.sponsor-callout {
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+.repo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.repo {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  background: var(--vp-c-bg-soft);
+}
+.repo h5 {
+  margin: 0 0 0.5rem;
+}
+.repo-body {
+  display: flex;
+  gap: 1rem;
+}
+.avatar {
+  border-radius: 6px;
+}
+</style>

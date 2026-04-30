@@ -23,49 +23,65 @@ const canonicalHost = computed(() => {
 </script>
 
 <template>
-  <div>
-    <div class="card">
-      <a :href="`/blog/post/${post.slug}`">
-        <img
-          class="card-img-top"
-          style="max-height: 400px; object-fit: cover"
-          :src="post.meta.image"
-          :alt="post.meta.title"
-        />
-      </a>
-
-      <div class="card-body">
-        <h5 class="card-title">
-          <a :href="`/blog/post/${post.slug}`">{{ post.meta.title }}</a>
-        </h5>
-        <h6 class="card-subtitle mb-2 text-muted">
-          <FormattedDate :dateString="post.meta.date" />
-          <template v-if="post.meta.canonical">
-            -
-            <small>
-              <em>
-                Originally posted at
-                <a :href="post.meta.canonical" target="_blank">{{
-                  canonicalHost
-                }}</a>
-              </em>
-            </small>
-          </template>
-        </h6>
-        <div class="card-text">
-          {{ post.meta.description }}
-          <br /><br />
-          <small>
-            <template v-for="tag in post.meta.tags" :key="tag">
-              <a :href="`/blog/tag/${tag}`">
-                <span class="badge bg-info">{{ tag }}</span>
-              </a>
-              {{ " " }}
-            </template>
-          </small>
-        </div>
+  <div class="card">
+    <a :href="`/blog/post/${post.slug}`">
+      <img class="card-img-top" :src="post.meta.image" :alt="post.meta.title" />
+    </a>
+    <div class="card-body">
+      <h5 class="card-title">
+        <a :href="`/blog/post/${post.slug}`">{{ post.meta.title }}</a>
+      </h5>
+      <div class="card-subtitle">
+        <FormattedDate :dateString="post.meta.date" />
+        <template v-if="post.meta.canonical">
+          —
+          <em>
+            Originally posted at
+            <a :href="post.meta.canonical" target="_blank">{{
+              canonicalHost
+            }}</a>
+          </em>
+        </template>
+      </div>
+      <p class="card-text">{{ post.meta.description }}</p>
+      <div class="tags">
+        <a
+          v-for="tag in post.meta.tags"
+          :key="tag"
+          :href="`/blog/tag/${tag}`"
+          class="badge"
+        >
+          {{ tag }}
+        </a>
       </div>
     </div>
-    <br />
   </div>
 </template>
+
+<style scoped>
+.card-img-top {
+  max-height: 400px;
+}
+.card-title a {
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+}
+.card-title a:hover {
+  color: var(--vp-c-brand-1);
+}
+.card-text {
+  margin: 0.75rem 0;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+.tags .badge {
+  text-decoration: none;
+}
+.tags .badge:hover {
+  filter: brightness(1.1);
+}
+</style>

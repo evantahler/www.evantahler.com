@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <aside class="card">
     <img class="card-img-top" src="/images/bitmoji/4.png" alt="evan icon" />
     <div class="card-body">
       <h5 class="card-title">Hi, I'm <a href="/">Evan</a></h5>
@@ -10,5 +10,5 @@
       </p>
       <a href="/contact" class="btn btn-outline-primary">Get in touch</a>
     </div>
-  </div>
+  </aside>
 </template>

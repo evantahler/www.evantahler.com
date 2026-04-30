@@ -3,7 +3,6 @@ import { useData } from "vitepress";
 import { computed } from "vue";
 import { data as posts } from "../../data/posts.data";
 import { data as tagCounts } from "../../data/tags.data";
-import BlogPostCard from "../components/BlogPostCard.vue";
 import FormattedDate from "../components/FormattedDate.vue";
 import PaginationHelper from "../components/PaginationHelper.vue";
 
@@ -28,92 +27,138 @@ const paged = computed(() => {
 
 <template>
   <div>
-    <div class="row">
-      <div class="col">
-        <h1>
-          <a href="/blog" style="text-decoration: none; color: black"
-            >Evan's Blog</a
-          >
-        </h1>
-      </div>
-    </div>
+    <h1>
+      <a href="/blog" class="plain">Evan's Blog</a>
+    </h1>
 
     <hr />
 
-    <div v-for="post in paged" :key="post.slug" class="card mb-3">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-3">
-            <a :href="`/blog/post/${post.slug}`">
-              <img
-                style="max-width: 100%"
-                class="rounded"
-                :src="post.meta.image || '/images/misc/announce.png'"
-                :alt="post.meta.title"
-              />
-            </a>
-          </div>
-          <div class="col">
-            <h4>
-              <a :href="`/blog/post/${post.slug}`" style="color: black">{{
-                post.meta.title
-              }}</a>
-            </h4>
-            <small>
-              <template v-for="tag in [...post.meta.tags].sort()" :key="tag">
-                <a :href="`/blog/tag/${tag}`">
-                  <span class="badge bg-info">{{ tag }}</span> </a
-                >&nbsp;
-              </template>
-            </small>
-            <br />
-            <p v-if="post.meta.description">{{ post.meta.description }}</p>
-            <em>
-              <small>
-                <FormattedDate :dateString="post.meta.date" />
-                <template v-if="post.meta.canonical">
-                  -
-                  <span class="text-info">
-                    Originally posted at
-                    <a :href="post.meta.canonical" target="_blank">{{
-                      post.meta.canonical
-                        .replace("https://", "")
-                        .replace("http://", "")
-                        .split("/")[0]
-                    }}</a>
-                  </span>
-                </template>
-              </small>
-            </em>
-          </div>
+    <article v-for="post in paged" :key="post.slug" class="post-row">
+      <a class="thumb" :href="`/blog/post/${post.slug}`">
+        <img
+          :src="post.meta.image || '/images/misc/announce.png'"
+          :alt="post.meta.title"
+        />
+      </a>
+      <div class="meta">
+        <h4>
+          <a class="plain" :href="`/blog/post/${post.slug}`">{{
+            post.meta.title
+          }}</a>
+        </h4>
+        <div class="tags">
+          <a
+            v-for="tag in [...post.meta.tags].sort()"
+            :key="tag"
+            :href="`/blog/tag/${tag}`"
+            class="badge"
+            >{{ tag }}</a
+          >
         </div>
+        <p v-if="post.meta.description">{{ post.meta.description }}</p>
+        <em class="muted">
+          <FormattedDate :dateString="post.meta.date" />
+          <template v-if="post.meta.canonical">
+            —
+            <span>
+              Originally posted at
+              <a :href="post.meta.canonical" target="_blank">{{
+                post.meta.canonical
+                  .replace("https://", "")
+                  .replace("http://", "")
+                  .split("/")[0]
+              }}</a>
+            </span>
+          </template>
+        </em>
       </div>
-    </div>
+    </article>
 
     <h2>Tags</h2>
-
-    <p>
+    <p class="tag-cloud">
       <a
         v-for="t in tagCounts"
         :key="t.tag"
         :href="`/blog/tag/${t.tag}`"
-        :style="{
-          fontSize: `${Math.min(35, 8 + Math.round(t.count * 1.5))}px`,
-          marginRight: '8px',
-          color: 'var(--bs-primary)',
-          textDecoration: 'none',
-        }"
+        :style="{ fontSize: `${Math.min(28, 10 + t.count)}px` }"
         >{{ t.tag }}</a
       >
     </p>
 
     <hr />
-    <br />
 
     <PaginationHelper
       :page="currentPage"
       :totalPages="totalPages"
-      :pageUrl="(n) => (n === 1 ? '/blog' : `/blog/page/${n}`)"
+      :pageUrl="(n: number) => (n === 1 ? '/blog' : `/blog/page/${n}`)"
     />
   </div>
 </template>
+
+<style scoped>
+h1 .plain,
+h4 .plain {
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+}
+h1 .plain:hover,
+h4 .plain:hover {
+  color: var(--vp-c-brand-1);
+}
+.post-row {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1rem;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.thumb {
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+.thumb img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  display: block;
+}
+.meta {
+  flex: 1;
+  min-width: 0;
+}
+.meta h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+.tags .badge {
+  text-decoration: none;
+}
+.tag-cloud a {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  margin: 0.15rem 0.25rem;
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+}
+.tag-cloud a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 768px) {
+  .post-row {
+    flex-direction: column;
+  }
+  .thumb {
+    flex-basis: auto;
+    max-width: 100%;
+  }
+}
+</style>
