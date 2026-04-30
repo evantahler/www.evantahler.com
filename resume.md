@@ -30,13 +30,21 @@ Evan holds a Masters in Entertainment Technology and BS in Mechanical Engineerin
 <style scoped>
 .company-logos {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
+  flex-wrap: nowrap;
+  gap: 1rem;
   align-items: center;
+  justify-content: space-between;
 }
 .company-logos img {
-  height: 80px;
+  height: 40px;
   width: auto;
   max-width: 100%;
+  object-fit: contain;
+}
+@media (max-width: 640px) {
+  .company-logos {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 </style>
