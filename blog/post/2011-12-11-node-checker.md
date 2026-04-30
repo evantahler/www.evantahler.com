@@ -1,0 +1,62 @@
+---
+title: NodeChecker — Big Board Dashboarding
+description: >-
+  At ModCloth, our Ops team wanted to have a real time dashboard of important
+  site information so they could know ASAP if something was wrong…
+date: '2011-12-11'
+tags:
+  - node.js
+  - javascript
+  - modcloth
+---
+
+![](/images/medium-export/1__1fdk42KmQdR6Swb1gDjkcw.png)
+
+At [ModCloth](http://modcloth.com), our Ops team wanted to have a real time dashboard of important site information so they could know ASAP if something was wrong with the site. We utilize a number of third party customer tracking tools with excellent dashboards (Google Analytics, Omniture), but they often had a 1 hour or more lag. We also have a number of back-end monitoring tools (AirBrake/HopToad, New Relic), and while these tools are (almost) real time, they don’t have a view into customer behavior. We even have analytic tools which can visualize data from our production database or data warehouse, but these tools are more for data mining than visualization.
+
+So, I decided to build one. Inspired by the [panic status board](http://www.panic.com/blog/2010/03/the-panic-status-board/) and some other big boards I’ve seen, this project is meant to be a simple way for you to monitor anything you want. It’s a small nodeJS project built on the actionHero framework (more coming soon) that uses simple config files to allow you to create real time charts of your important data. Here’s a screen shot:
+
+Configuring checks is as simple as making a new entry in `checks.json`:
+
+```json
+{
+  "name": "http_google_com",
+  "type": "httpRequest",
+  "frequencyInSeconds": 10,
+  "entriesToKeep": 100,
+  "params": {
+    "hostname": "http://www.google.com",
+    "matcher": "&lt;/div&gt;"
+  }
+}
+```
+
+This check would do a web request to google.com every 10 seconds, and then parse the response for the string &lt;/div&gt;. The chart will graph the time this operation took, and the pie graph will show how many times the check was successful (success in this case means having a complete response with the string &lt;/div&gt; found).
+
+Because this is _exactly_ the type of operation node is great at (handling routing while grabbing data from other sources), I also made it easy to add new "checks" to the application. A new proxy checker which would generate a random number on each cycle would be:
+
+```js
+var checker = {};
+
+checker.name = "randomNumber";
+checker.params = {
+  required: [],
+  optional: [],
+};
+
+checker.check = function (api, params, next) {
+  var response = {};
+  response.error = false;
+  response.check = false;
+  var number = Math.random() * 100;
+  response.number = number;
+  response.check = true;
+  next(response);
+};
+
+exports.checker = checker;
+```
+
+Hopefully this is simple as well!
+
+[Check out the project, and have fun!](https://github.com/evantahler/nodeChecker)

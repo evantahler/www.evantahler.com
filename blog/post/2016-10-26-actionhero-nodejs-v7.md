@@ -1,0 +1,20 @@
+---
+title: ActionHero and Node.JS v7
+description: Does ActionHero work with with the newly released Node.js v7?
+date: '2016-10-26T17:41:10.436Z'
+tags:
+  - actionhero
+  - node.js
+  - javascript
+image: /images/medium-export/1__1aBZOO8chVHmePbMxUTl0w.png
+---
+
+Does [ActionHero](http://www.actionherojs.com/) work with with the newly released [Node.js](https://medium.com/u/96cd9a1fb56) v7?
+
+![](/images/medium-export/1__1aBZOO8chVHmePbMxUTl0w.png)
+
+Of course it does!
+
+Also, ActionHero just got a new documentation website. [Check it out!](http://www.actionherojs.com/)
+
+![](/images/medium-export/1__LQu6nx3EOUYtUj__LnrprUg.png)
