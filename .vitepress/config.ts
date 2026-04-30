@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import type { Plugin, ViteDevServer } from "vite";
 import { defineConfig } from "vitepress";
 import llmstxt from "vitepress-plugin-llms";
 
@@ -8,15 +9,15 @@ import llmstxt from "vitepress-plugin-llms";
 // request to `.md` (so even /llms.txt falls through). Serve those static
 // assets from the last build's dist folder during dev. Run `bun run build`
 // once to populate.
-const builtAssetDevServer = {
+const builtAssetDevServer: Plugin = {
   name: "built-asset-dev-server",
-  configureServer(server: any) {
+  configureServer(server: ViteDevServer) {
     const served: Record<string, string> = {
       "/llms.txt": "text/plain; charset=utf-8",
       "/llms-full.txt": "text/plain; charset=utf-8",
       "/sitemap.xml": "application/xml; charset=utf-8",
     };
-    server.middlewares.use((req: any, res: any, next: any) => {
+    server.middlewares.use((req, res, next) => {
       const url = (req.url || "").split("?")[0];
       const contentType = served[url];
       if (contentType) {

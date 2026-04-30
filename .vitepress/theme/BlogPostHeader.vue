@@ -17,7 +17,6 @@ const formattedDate = computed(() => {
     day: "numeric",
   });
 });
-
 </script>
 
 <template>
