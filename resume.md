@@ -17,10 +17,26 @@ Evan holds a Masters in Entertainment Technology and BS in Mechanical Engineerin
 
 ## Companies
 
-[![airbyte](/images/logos/airbyte.png =80x)](https://airbyte.com)
-[![grouparoo](/images/logos/grouparoo.png =80x)](https://www.grouparoo.com)
-[![actionhero](/images/logos/actionhero.png =80x)](https://www.actionherojs.com)
-[![taskrabbit](/images/logos/taskrabbit.png =80x)](https://www.taskrabbit.com)
-[![airbus](/images/logos/airbus.png =100x)](https://www.airbus.com)
-[![modcloth](/images/logos/modcloth.jpg =80x)](https://www.modcloth.com)
-[![disney](/images/logos/disney.png =80x)](https://www.disney.com)
+<p class="company-logos">
+  <a href="https://airbyte.com"><img src="/images/logos/airbyte.png" alt="airbyte" /></a>
+  <a href="https://www.grouparoo.com"><img src="/images/logos/grouparoo.png" alt="grouparoo" /></a>
+  <a href="https://www.actionherojs.com"><img src="/images/logos/actionhero.png" alt="actionhero" /></a>
+  <a href="https://www.taskrabbit.com"><img src="/images/logos/taskrabbit.png" alt="taskrabbit" /></a>
+  <a href="https://www.airbus.com"><img src="/images/logos/airbus.png" alt="airbus" /></a>
+  <a href="https://www.modcloth.com"><img src="/images/logos/modcloth.jpg" alt="modcloth" /></a>
+  <a href="https://www.disney.com"><img src="/images/logos/disney.png" alt="disney" /></a>
+</p>
+
+<style scoped>
+.company-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+}
+.company-logos img {
+  height: 80px;
+  width: auto;
+  max-width: 100%;
+}
+</style>
