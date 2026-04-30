@@ -9,14 +9,19 @@ import { talks } from "./data/talks";
 
 # Speaking
 
-<hr />
+![speaking](/images/speaking-2.jpg)
 
-<img src="/images/speaking-2.jpg" alt="speaking" style="width: 100%; max-height: 360px; object-fit: cover; border-radius: 6px" />
+I've given a number of technical talks, focusing on Node.js, Ruby, AI, and DevOps.
 
-<p>I've given a number of technical talks, focusing on Node.js, Ruby, and DevOps.</p>
+## Featured Talks
 
-<h2>Featured Talks</h2>
-
-<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-  <SpeakingEngagementCard v-for="talk in talks" :key="talk.title" :talk="talk" />
+<div v-for="talk in talks" :key="talk.title" style="margin-bottom: 2rem;">
+  <h3>{{ talk.title }}</h3>
+  <p><em>{{ talk.where }} — {{ talk.date }}</em></p>
+  <p>{{ talk.description }}</p>
+  <ul>
+    <li v-for="l in talk.links" :key="l.title">
+      <a :href="l.url" target="_blank">{{ l.title }}</a>
+    </li>
+  </ul>
 </div>

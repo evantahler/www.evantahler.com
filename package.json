@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
-    "fuzzysort": "^3.1.0",
     "gray-matter": "^4.0.3"
   },
   "devDependencies": {
