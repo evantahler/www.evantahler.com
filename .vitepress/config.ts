@@ -1,5 +1,28 @@
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { defineConfig } from "vitepress";
 import llmstxt from "vitepress-plugin-llms";
+
+// vitepress-plugin-llms 1.12.1's dev middleware rewrites every request to
+// `.md`, so /llms.txt and /llms-full.txt fall through. Serve them from the
+// last build's dist folder during dev. Run `bun run build` once to populate.
+const llmsTxtDevServer = {
+  name: "llms-txt-dev-server",
+  configureServer(server: any) {
+    server.middlewares.use((req: any, res: any, next: any) => {
+      const url = (req.url || "").split("?")[0];
+      if (url === "/llms.txt" || url === "/llms-full.txt") {
+        const filePath = resolve(".vitepress/dist", url.slice(1));
+        if (existsSync(filePath)) {
+          res.setHeader("Content-Type", "text/plain; charset=utf-8");
+          res.end(readFileSync(filePath, "utf-8"));
+          return;
+        }
+      }
+      next();
+    });
+  },
+};
 
 export default defineConfig({
   title: "Evan Tahler",
@@ -102,7 +125,7 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [llmstxt()],
+    plugins: [llmstxt(), llmsTxtDevServer],
     css: {
       preprocessorOptions: {
         scss: {
