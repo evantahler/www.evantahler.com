@@ -169,7 +169,7 @@ gtag('config', 'G-VY35SQM9Y1');`,
     outline: { level: [2, 3] },
     footer: {
       message:
-        '<img src="/images/dog.png" alt="dog" class="footer-dog" /><br /><a href="https://github.com/evantahler/www.evantahler.com" target="_blank">source for this site</a> · <a href="/feed.xml">RSS</a>',
+        '<img src="/images/dog.png" alt="dog" class="footer-dog" /><br /><a href="https://github.com/evantahler/www.evantahler.com" target="_blank">source for this site</a> · <a href="/feed.xml">RSS</a> · <a href="/llms.txt">llms.txt</a>',
       copyright: `Copyright © ${new Date().getFullYear()} Evan Tahler`,
     },
     lastUpdated: { text: "Last updated" },
