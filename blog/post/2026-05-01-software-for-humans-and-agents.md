@@ -13,7 +13,7 @@ tags:
   - typescript
   - ai
   - open-source
-featured: true
+featured: false
 ---
 
 ![Building software for humans and agents](/images/posts/2026-05-01-software-for-humans-and-agents/image.png)
