@@ -196,8 +196,13 @@
   gap: 20px;
   padding: 24px;
   border-radius: 12px;
-  background: var(--vp-c-brand-soft);
-  border: 1px solid var(--vp-c-brand-1);
+  background: rgba(25, 118, 210, 0.06);
+  border: 1px solid rgba(25, 118, 210, 0.35);
+}
+
+.dark .llms-card {
+  background: rgba(100, 181, 246, 0.06);
+  border-color: rgba(100, 181, 246, 0.35);
 }
 
 .llms-icon {
