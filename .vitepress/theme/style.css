@@ -34,6 +34,14 @@
   border-radius: 6px;
 }
 
+/* Footer dog illustration */
+.footer-dog {
+  display: inline-block;
+  width: 75px;
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
 /* --- Hero bitmoji: kill the default circular gradient bubble so the
    "bursting through paper" cartoon stands on its own. --- */
 

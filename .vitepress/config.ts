@@ -122,7 +122,7 @@ export default defineConfig({
     outline: { level: [2, 3] },
     footer: {
       message:
-        '<a href="https://github.com/evantahler/www.evantahler.com" target="_blank">source for this site</a>',
+        '<img src="/images/dog.png" alt="dog" class="footer-dog" /><br /><a href="https://github.com/evantahler/www.evantahler.com" target="_blank">source for this site</a>',
       copyright: `Copyright © ${new Date().getFullYear()} Evan Tahler`,
     },
     lastUpdated: { text: "Last updated" },
