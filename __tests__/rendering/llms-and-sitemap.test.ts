@@ -33,4 +33,20 @@ describe("generated artifacts", () => {
     const xml = readFileSync(distPath("sitemap.xml"), "utf8");
     expect(xml).not.toMatch(/\/404\b/);
   });
+
+  it("emits feed.xml as a well-formed RSS 2.0 channel for the site", () => {
+    const file = distPath("feed.xml");
+    expect(existsSync(file), "feed.xml should exist").toBe(true);
+    const xml = readFileSync(file, "utf8");
+    expect(xml).toMatch(/<rss[\s>]/);
+    expect(xml).toContain("<channel>");
+    expect(xml).toContain("<link>https://www.evantahler.com/</link>");
+  });
+
+  it("includes blog posts as feed items", () => {
+    const xml = readFileSync(distPath("feed.xml"), "utf8");
+    expect(xml).toMatch(
+      /<link>https:\/\/www\.evantahler\.com\/blog\/post\/[^<]+<\/link>/,
+    );
+  });
 });

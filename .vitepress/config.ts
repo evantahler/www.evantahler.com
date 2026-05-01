@@ -3,8 +3,8 @@ import { resolve } from "node:path";
 import type { Plugin, ViteDevServer } from "vite";
 import { defineConfig } from "vitepress";
 import llmstxt from "vitepress-plugin-llms";
-
-const SITE_URL = "https://www.evantahler.com";
+import { generateFeed } from "./data/feed";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "./data/site";
 
 const skipCanonical = (path: string) =>
   path.startsWith("blog/tag/") || path === "blog/tags.md" || path === "404.md";
@@ -29,6 +29,7 @@ const builtAssetDevServer: Plugin = {
       "/llms.txt": "text/plain; charset=utf-8",
       "/llms-full.txt": "text/plain; charset=utf-8",
       "/sitemap.xml": "application/xml; charset=utf-8",
+      "/feed.xml": "application/rss+xml; charset=utf-8",
     };
     server.middlewares.use((req, res, next) => {
       const url = (req.url || "").split("?")[0];
@@ -47,9 +48,8 @@ const builtAssetDevServer: Plugin = {
 };
 
 export default defineConfig({
-  title: "Evan Tahler",
-  description:
-    "Evan Tahler — software engineer, leader, writer. Head of Engineering at Arcade.dev, creator of Actionhero, Keryx, and more.",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   cleanUrls: true,
   srcDir: ".",
   srcExclude: [
@@ -90,6 +90,15 @@ export default defineConfig({
       },
     ],
     ["link", { rel: "manifest", href: "/site.webmanifest" }],
+    [
+      "link",
+      {
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: "Evan Tahler's Blog",
+        href: "/feed.xml",
+      },
+    ],
     [
       "link",
       {
@@ -160,10 +169,14 @@ gtag('config', 'G-VY35SQM9Y1');`,
     outline: { level: [2, 3] },
     footer: {
       message:
-        '<img src="/images/dog.png" alt="dog" class="footer-dog" /><br /><a href="https://github.com/evantahler/www.evantahler.com" target="_blank">source for this site</a>',
+        '<img src="/images/dog.png" alt="dog" class="footer-dog" /><br /><a href="https://github.com/evantahler/www.evantahler.com" target="_blank">source for this site</a> · <a href="/feed.xml">RSS</a>',
       copyright: `Copyright © ${new Date().getFullYear()} Evan Tahler`,
     },
     lastUpdated: { text: "Last updated" },
+  },
+
+  buildEnd(siteConfig) {
+    generateFeed(siteConfig.outDir);
   },
 
   transformPageData(pageData) {
