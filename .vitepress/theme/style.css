@@ -1,11 +1,11 @@
-/* Brand color — keep the Zephyr-ish blue so the site doesn't look generic. */
+/* Brand color — orange. Same accent as the hero "Hi, I'm Evan!" name so
+   links, buttons, badges, and active nav all share the flair. */
 :root {
-  --vp-c-brand-1: #1976d2;
-  --vp-c-brand-2: #1976d2;
-  --vp-c-brand-3: #1565c0;
-  --vp-c-brand-soft: rgba(25, 118, 210, 0.14);
+  --vp-c-brand-1: #ea580c;
+  --vp-c-brand-2: #ea580c;
+  --vp-c-brand-3: #c2410c;
+  --vp-c-brand-soft: rgba(234, 88, 12, 0.14);
 
-  /* Orange highlight for the hero name. */
   --vp-home-hero-name-color: #ea580c;
   --vp-home-hero-name-background: linear-gradient(
     -45deg,
@@ -15,10 +15,10 @@
 }
 
 .dark {
-  --vp-c-brand-1: #64b5f6;
-  --vp-c-brand-2: #64b5f6;
-  --vp-c-brand-3: #90caf9;
-  --vp-c-brand-soft: rgba(100, 181, 246, 0.16);
+  --vp-c-brand-1: #fb923c;
+  --vp-c-brand-2: #fb923c;
+  --vp-c-brand-3: #fdba74;
+  --vp-c-brand-soft: rgba(251, 146, 60, 0.16);
 
   --vp-home-hero-name-color: #fb923c;
   --vp-home-hero-name-background: linear-gradient(
@@ -196,13 +196,13 @@
   gap: 20px;
   padding: 24px;
   border-radius: 12px;
-  background: rgba(25, 118, 210, 0.06);
-  border: 1px solid rgba(25, 118, 210, 0.35);
+  background: rgba(234, 88, 12, 0.06);
+  border: 1px solid rgba(234, 88, 12, 0.35);
 }
 
 .dark .llms-card {
-  background: rgba(100, 181, 246, 0.06);
-  border-color: rgba(100, 181, 246, 0.35);
+  background: rgba(251, 146, 60, 0.06);
+  border-color: rgba(251, 146, 60, 0.35);
 }
 
 .llms-icon {
