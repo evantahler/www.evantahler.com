@@ -5,7 +5,7 @@ description: About Evan Tahler — Head of Engineering at Arcade.dev, formerly A
 
 # About
 
-![evan](/images/resume-3.jpg)
+![evan](/images/resume-4.png)
 
 Evan Tahler is the Head of Engineering at [Arcade.dev](https://www.arcade.dev), building the foundation for secure and scalable agentic tools.
 

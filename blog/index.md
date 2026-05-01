@@ -28,6 +28,8 @@ function fmt(date) {
 
 # Blog
 
+![blog](/images/blog.png)
+
 {{ posts.length }} posts. [Browse by tag](/blog/tags).
 
 <div v-for="[year, items] in grouped" :key="year">

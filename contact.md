@@ -5,7 +5,7 @@ description: Get in touch with Evan Tahler.
 
 # Contact
 
-![contact](/images/contact-2.jpg)
+![contact](/images/contact-3.png)
 
 ## Let's chat!
 
