@@ -90,6 +90,16 @@ export default defineConfig({
       },
     ],
     ["link", { rel: "manifest", href: "/site.webmanifest" }],
+    [
+      "link",
+      {
+        rel: "preload",
+        href: "/fonts/space-grotesk-variable.woff2",
+        as: "font",
+        type: "font/woff2",
+        crossorigin: "",
+      },
+    ],
     ["meta", { name: "twitter:card", content: "summary_large_image" }],
     ["meta", { name: "twitter:site", content: "@evantahler" }],
     [

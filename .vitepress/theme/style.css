@@ -233,3 +233,30 @@
   border-radius: 4px;
   background: var(--vp-c-default-soft);
 }
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/space-grotesk-variable.woff2") format("woff2-variations");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --vp-font-family-heading: "Space Grotesk", ui-sans-serif, system-ui,
+    sans-serif;
+}
+
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4,
+.vp-doc h5,
+.vp-doc h6,
+.VPHero .name,
+.VPHero .text,
+.VPHero .tagline {
+  font-family: var(--vp-font-family-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
