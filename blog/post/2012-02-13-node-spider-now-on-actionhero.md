@@ -23,7 +23,7 @@ Here’s a new conversation between 2 peers (and the server log it generated) as
 
 ### Client 1
 
-```raw
+```text
 > telnet localhost 5555
 
 Trying 127.0.0.1...
@@ -49,7 +49,7 @@ Connection closed by foreign host.
 
 ### Client 2
 
-```raw
+```text
 > telnet localhost 5555
 
 Trying 127.0.0.1...
@@ -74,7 +74,7 @@ Connection closed by foreign host.
 
 ### Server Log:
 
-```raw
+```text
 $ npm start
 
 > spider@2.0.0 start /Users/evantahler/PROJECTS/nodeSpider

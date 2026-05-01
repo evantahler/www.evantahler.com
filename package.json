@@ -11,7 +11,7 @@
   "author": "evan@evantahler.com",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "vitepress dev",
+    "dev": "GITHUB_TOKEN=$(gh auth token 2>/dev/null) vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview",
     "lint": "biome check .",
