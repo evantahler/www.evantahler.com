@@ -1,9 +1,9 @@
 ---
-title: "Evan Tahler: Resume"
-description: Evan Tahler — Head of Engineering at Arcade.dev, formerly Airbyte (via Grouparoo acquisition), Disney, TaskRabbit, ModCloth, Airbus.
+title: "About Evan Tahler"
+description: About Evan Tahler — Head of Engineering at Arcade.dev, formerly Airbyte (via Grouparoo acquisition), Disney, TaskRabbit, ModCloth, Airbus.
 ---
 
-# Resume
+# About
 
 ![evan](/images/resume-3.jpg)
 

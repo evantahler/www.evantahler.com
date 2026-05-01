@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { cleanText, loadPage } from "./_helpers";
 
-describe("resume page (/resume)", () => {
-  const page = loadPage("/resume");
+describe("about page (/about)", () => {
+  const page = loadPage("/about");
 
   it("renders an h1", () => {
     expect(cleanText(page.querySelector("h1")?.textContent)).not.toBe("");
@@ -13,7 +13,7 @@ describe("resume page (/resume)", () => {
     expect(headings.length).toBeGreaterThan(0);
   });
 
-  it("renders the resume photo", () => {
+  it("renders the profile photo", () => {
     const imgs = page.querySelectorAll(".vp-doc img");
     expect(imgs.length).toBeGreaterThan(0);
     expect(imgs[0].getAttribute("src")).toBeTruthy();
@@ -32,8 +32,6 @@ describe("resume page (/resume)", () => {
   it("emits a self-referential canonical link in the head", () => {
     const link = page.querySelector('head link[rel="canonical"]');
     expect(link).toBeTruthy();
-    expect(link?.getAttribute("href")).toBe(
-      "https://www.evantahler.com/resume",
-    );
+    expect(link?.getAttribute("href")).toBe("https://www.evantahler.com/about");
   });
 });
