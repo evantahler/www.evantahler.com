@@ -64,6 +64,13 @@ const formattedDate = computed(() => {
   color: var(--vp-c-text-2);
   font-size: 0.9rem;
 }
+.meta a {
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+}
+.meta a:hover {
+  text-decoration: underline;
+}
 .sep {
   margin: 0 0.4rem;
   opacity: 0.6;
