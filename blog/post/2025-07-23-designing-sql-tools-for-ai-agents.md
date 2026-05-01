@@ -10,9 +10,6 @@ image: >-
 tags:
   - engineering
   - ai
-  - llm
-  - database
-  - mcp
 canonical: 'https://blog.arcade.dev/sql-tools-ai-agents-security'
 featured: false
 ---

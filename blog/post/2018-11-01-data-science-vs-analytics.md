@@ -5,9 +5,8 @@ description: >-
   also heard a number of ways to describe the distinctions…
 date: '2018-11-01T15:32:20.660Z'
 tags:
-  - product_management
-  - data_science
-  - analytics
+  - product-management
+  - data-engineering
 image: /images/medium-export/1__1LI9TzwDU1l6IyJFBRcULw.jpeg
 ---
 

@@ -4,7 +4,7 @@ description: Fast and Stable Elasticsearch
 date: '2014-07-18'
 tags:
   - taskrabbit
-  - elasticsearch
+  - data-engineering
 image: /images/medium-export/0__snWdTeknvk2Ksn5W.png
 canonical: 'https://tech.taskrabbit.com/blog/2014/07/18/elasticsearch-in-production/'
 ---

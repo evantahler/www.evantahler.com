@@ -9,7 +9,6 @@ image: /images/posts/2024-04-04-announcing-record-change-history/image-1.png
 tags:
   - engineering
   - airbyte
-  - data
   - data-engineering
 canonical: 'https://airbyte.com/blog/record-change-history'
 ---

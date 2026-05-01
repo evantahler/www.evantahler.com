@@ -6,7 +6,6 @@ description: >-
 date: '2012-01-14'
 tags:
   - node.js
-  - phidgets
 image: /images/medium-export/1__HxL8cV__wrobhi5strUoFuQ.jpeg
 ---
 

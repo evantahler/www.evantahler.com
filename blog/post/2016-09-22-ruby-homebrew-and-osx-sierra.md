@@ -4,7 +4,7 @@ description: Say you are a developer and you recently updated to OSX Sierra…
 date: '2016-09-22T22:25:08.328Z'
 tags:
   - ruby
-  - osx
+  - devops
 image: /images/medium-export/1__nG5K39SYOMiqX9SHwn__3lg.jpeg
 ---
 

@@ -10,9 +10,9 @@ canonical: 'https://www.grouparoo.com/blog/nextjs-plugins'
 tags:
   - grouparoo
   - node.js
-  - react
-  - next.js
+  - frontend
   - engineering
+
 ---
 
 ![computer and fern](/images/posts/2020-07-23-nextjs-plugins/computer-and-fern.jpeg)

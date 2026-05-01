@@ -4,7 +4,7 @@ description: Nerf Guns and Product Management
 date: '2012-02-15'
 tags:
   - javascript
-  - product_management
+  - product-management
 image: /images/medium-export/1__j7dGWlXBg__zVQtw0tHlE2A.jpeg
 ---
 

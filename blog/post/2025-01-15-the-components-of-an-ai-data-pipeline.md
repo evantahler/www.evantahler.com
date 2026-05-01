@@ -7,11 +7,8 @@ image: /images/posts/2025-01-15-the-components-of-an-ai-data-pipeline/image-1.pn
 tags:
   - engineering
   - airbyte
-  - data
   - data-engineering
   - ai
-  - llm
-  - rag
 canonical: 'https://airbyte.com/blog/the-components-of-an-ai-context-pipeline'
 featured: true
 ---

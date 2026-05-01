@@ -6,7 +6,7 @@ description: >-
 date: '2016-08-07T00:29:56.849Z'
 tags:
   - actionhero
-  - open_source
+  - open-source
   - javascript
   - node.js
 image: /images/medium-export/1__0QCxQAd2jc1P8__yHWNWIUQ.png

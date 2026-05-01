@@ -3,7 +3,8 @@ title: On Inclusion
 description: The topic of the day is inclusion.
 date: '2013-10-14'
 tags:
-  - open_source
+  - open-source
+
 ---
 
 The topic of the day is inclusion.

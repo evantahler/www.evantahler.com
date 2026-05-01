@@ -5,8 +5,9 @@ description: >-
   the world-famous pivotal labs about our unique "agile" way of…
 date: '2011-11-02'
 tags:
-  - product_management
+  - product-management
   - modcloth
+
 ---
 
 A few months ago, Kate, Jenn, and I (all [Modcloth](http://modcloth.com) co-workers) gave a talk at the world-famous [pivotal labs](http://pivotallabs.com/) about our unique "agile" way of approaching business intelligence problems in a Agile-development sort of way. We also spoke to developers can use come common/free BI tools to make their lives easier.

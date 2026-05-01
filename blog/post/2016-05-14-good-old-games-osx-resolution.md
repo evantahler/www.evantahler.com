@@ -3,8 +3,7 @@ title: 'Good Old Games, Modern Resolutions, and Windows gaming on OSX'
 description: I’ve been itching for some nostalgic games lately.
 date: '2016-05-14T21:04:29.226Z'
 tags:
-  - games
-  - osx
+  - devops
 image: /images/medium-export/1__EL__0uaqprD23nf__HtsqZFQ.jpeg
 ---
 

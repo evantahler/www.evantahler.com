@@ -5,9 +5,7 @@ description: >-
   cluster. If you don’t know, Flynn is a an open-source self-hosted…
 date: '2016-10-29T17:56:27.607Z'
 tags:
-  - gitops
-  - flynn
-  - ci
+  - devops
 image: /images/medium-export/1__yZ45b6I1QGRBwWtQqNqBiA.png
 ---
 

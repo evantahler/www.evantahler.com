@@ -7,7 +7,6 @@ image: /images/posts/2023-06-01-airbyte-checkpointing/image.jpg
 tags:
   - engineering
   - airbyte
-  - data
   - data-engineering
 canonical: 'https://airbyte.com/blog/checkpointing'
 ---

@@ -7,7 +7,6 @@ image: /images/posts/2024-04-17-cost-conscious-elt-strategies/image-1.png
 tags:
   - engineering
   - airbyte
-  - data
   - data-engineering
 canonical: >-
   https://airbyte.com/blog/cost-conscious-advanced-elt-strategies-for-data-deduplication

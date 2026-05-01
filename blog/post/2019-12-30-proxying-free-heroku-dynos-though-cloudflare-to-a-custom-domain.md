@@ -5,11 +5,9 @@ description: >-
   community — documentation, sample apps, etc. We often rely on Heroku’s free…
 date: '2019-12-30T16:59:31.387Z'
 tags:
-  - heroku
-  - cloudflare
   - devops
   - javascript
-  - react
+  - frontend
 image: /images/medium-export/1__uL59CYZ1RV31uze3vgG2wQ.png
 ---
 

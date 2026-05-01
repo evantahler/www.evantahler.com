@@ -10,8 +10,6 @@ image: /images/posts/2026-03-13-curl-for-mcp/image1.png
 tags:
   - engineering
   - ai
-  - mcp
-  - cli
 canonical: 'https://blog.arcade.dev/curl-for-mcp'
 featured: true
 ---

@@ -11,7 +11,6 @@ tags:
   - engineering
   - typescript
   - node.js
-  - mcp
   - ai
   - open-source
 featured: true

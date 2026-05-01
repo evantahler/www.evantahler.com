@@ -7,7 +7,7 @@ image: /images/posts/2020-10-16-typescript-frontend-backend/keyboard.jpeg
 tags:
   - grouparoo
   - node.js
-  - react
+  - frontend
   - typescript
   - engineering
 featured: true

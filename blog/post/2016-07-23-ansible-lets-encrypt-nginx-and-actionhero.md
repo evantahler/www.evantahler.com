@@ -8,7 +8,7 @@ tags:
   - actionhero
   - node.js
   - javascript
-  - ansible
+  - devops
 image: /images/medium-export/1__bKxD__GvU2YDGkBdZNhVXcQ.png
 ---
 

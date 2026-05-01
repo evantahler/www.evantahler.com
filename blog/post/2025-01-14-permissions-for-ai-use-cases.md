@@ -7,11 +7,8 @@ image: /images/posts/2025-01-14-permissions-for-ai-use-cases/image-1.png
 tags:
   - engineering
   - airbyte
-  - data
   - data-engineering
   - ai
-  - llm
-  - rag
 canonical: 'https://airbyte.com/blog/permissions-for-ai-use-cases'
 ---
 

@@ -3,7 +3,7 @@ title: 'ownCloud + DreamHost: Your own Unlimited DropBox for 13$/mo'
 description: Intro
 date: '2013-01-07'
 tags:
-  - sef-hosting
+  - devops
 image: /images/medium-export/1__DL3CdUDzttWP5FxDvsO9hg.png
 ---
 

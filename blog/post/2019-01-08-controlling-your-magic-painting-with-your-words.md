@@ -5,7 +5,6 @@ description: >-
   things!
 date: '2019-01-08T03:44:49.973Z'
 tags:
-  - meural
   - node.js
   - javascript
 image: /images/medium-export/1__yLVPs76k5HvU5iULe45maw.jpeg

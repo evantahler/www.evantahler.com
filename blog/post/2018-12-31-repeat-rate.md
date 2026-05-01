@@ -3,9 +3,8 @@ title: 'Repeat Rate: What are you Actually Measuring?'
 description: Second-Order Measurements and your Product
 date: '2018-12-31T18:46:35.181Z'
 tags:
-  - product_management
+  - product-management
   - voom
-  - marketing
 image: /images/medium-export/1__XYGVsmFM9b0lnRDHJHfOyQ.jpeg
 ---
 

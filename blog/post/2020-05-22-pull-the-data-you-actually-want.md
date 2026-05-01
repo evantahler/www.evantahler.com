@@ -7,7 +7,6 @@ description: >-
 image: /images/posts/2020-05-22-pull-the-data-you-actually-want/doughnuts.jpeg
 tags:
   - grouparoo
-  - marketing
   - engineering
 canonical: 'https://www.grouparoo.com/blog/pull-the-data-you-actually-want'
 ---

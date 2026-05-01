@@ -5,7 +5,7 @@ description: >-
   built-in develop tools. There is one catch that I need to keep…
 date: '2011-12-03'
 tags:
-  - chrome
+  - frontend
   - javascript
   - modcloth
 image: /images/medium-export/0__4Z9kHURSwJ720SdZ.jpeg

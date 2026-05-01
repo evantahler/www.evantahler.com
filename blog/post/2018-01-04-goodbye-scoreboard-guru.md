@@ -3,8 +3,7 @@ title: Goodbye Scoreboard Guru
 description: Feb 1 Scoreboard Guru shuts down
 date: '2018-01-04T05:12:18.644Z'
 tags:
-  - games
-  - product_management
+  - product-management
 image: /images/medium-export/1__E6ZIx0OxnxDZ6dWw4o10og.png
 ---
 

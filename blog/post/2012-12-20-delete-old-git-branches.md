@@ -3,7 +3,7 @@ title: Delete old git branches already merged into master
 description: Keep your git branches clean!
 date: '2012-12-20'
 tags:
-  - git
+  - engineering
   - ruby
   - taskrabbit
 image: /images/medium-export/1__HArdB4tMciWUivKfh4XWxg.jpeg

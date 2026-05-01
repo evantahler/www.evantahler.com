@@ -6,7 +6,7 @@ description: >-
 date: '2018-10-09T01:07:17.646Z'
 tags:
   - voom
-  - product_management
+  - product-management
 image: /images/medium-export/1__kPialmqAJFyZG3FCt1JC__A.jpeg
 ---
 

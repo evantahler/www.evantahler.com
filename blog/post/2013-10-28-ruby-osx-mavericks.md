@@ -6,7 +6,8 @@ description: >-
 date: '2013-10-28'
 tags:
   - ruby
-  - osx
+  - devops
+
 ---
 
 Are you developing in Ruby and have just upgraded your OSX Machine to Mavericks (OSX 10.9)? Are you suddenly having trouble installing or compiling gems? I’ve seen a few articles on the topic, but none of them really worked for me. Here’s what did:

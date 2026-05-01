@@ -5,8 +5,8 @@ description: >-
   Advertising, Fake News and ‘Attention Harvesting’
 date: '2016-12-23T19:59:19.838Z'
 tags:
-  - product_management
-  - legal
+  - product-management
+  - career
 image: /images/medium-export/1__JjPI1__tSIP__7rv5N0p__v9g.png
 ---
 

@@ -3,8 +3,7 @@ title: Scoreboard Guru Initial Release
 description: I’m happy to announce the initial release of Scoreboard Guru!
 date: '2017-03-23T03:35:46.268Z'
 tags:
-  - games
-  - product_management
+  - product-management
 image: /images/medium-export/1__W__ZjnVPX889X__uzE9GXMmg.png
 ---
 

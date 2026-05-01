@@ -5,8 +5,8 @@ description: >-
   opaque and hard to understand. So in 2011 I created a satirical license.
 date: '2017-04-03T18:09:02.461Z'
 tags:
-  - open_source
-  - legal
+  - open-source
+  - career
 image: /images/medium-export/1__K59NnX6vCMF8__MRPKcvScg.png
 ---
 
