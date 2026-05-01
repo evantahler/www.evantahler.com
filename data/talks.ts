@@ -11,6 +11,48 @@ export type TalkLink = { title: string; url: string };
 
 export const talks: Talk[] = [
   {
+    title: "Tools! — A History of Agents Doing Stuff",
+    date: "December, 2025",
+    where: "AI Agents SF #9: Past, Present, and Future",
+    image: "/images/talks/ai-agents-sf-9.jpg",
+    description:
+      "How agents escaped the chat box and gained access to hundreds of MCP servers, the patterns emerging for keeping them safe, and where things are heading next — with risky live demos. Followed by a panel on the past, present, and future of AI Agents alongside Erik Meijer (Normal Computing), Vincent Koc, and Allie Jones.",
+    links: [
+      {
+        title: "Event Page",
+        url: "https://luma.com/kff29lg4",
+      },
+    ],
+  },
+  {
+    title: "MCP After Dark: Live Demo of MongoDB × Arcade",
+    date: "October, 2025",
+    where: "SF Tech Week (Arcade.dev HQ)",
+    image: "/images/talks/mcp-after-dark.png",
+    description:
+      "A live demo of the MongoDB integration with Arcade, co-presented with Anaiya R (Senior Technical Evangelist, MongoDB), at Arcade.dev's SF Tech Week event. The night also featured a panel on the next generation of products built on MCP with Nate Barbettini (Arcade), Max Gerber (Stytch), David Garnitz (Yapify), and Apoorva Joshi (MongoDB), moderated by Gabriela de Queiroz.",
+    links: [
+      {
+        title: "Event Page",
+        url: "https://partiful.com/e/6j92SfgQDCFZOJCHzPsT",
+      },
+    ],
+  },
+  {
+    title: "AI in the Data Stack: From Dashboards to Agents",
+    date: "August, 2025",
+    where: "Arcade × Airbyte Webinar",
+    image: "/images/talks/ai-in-the-data-stack.jpg",
+    description:
+      "A conversation with Alex Girard (Airbyte) about AI security in the modern data stack, landing on a mental model that changes everything: your LLM is just another user. We dig into the patterns and pitfalls of letting agents touch real data systems.",
+    links: [
+      {
+        title: "Video",
+        url: "https://www.youtube.com/watch?v=E39LhjEpo-I",
+      },
+    ],
+  },
+  {
     title: "Design Principles for ELT Database Destinations",
     date: "December, 2023",
     where: "move(data)",
@@ -21,6 +63,38 @@ export const talks: Talk[] = [
       {
         title: "Speaker Page",
         url: "https://movedata.airbyte.com/event/design-principles-for-elt-database-destinations",
+      },
+    ],
+  },
+  {
+    title: "git push your data stack with Airbyte, Airflow and dbt",
+    date: "May, 2022",
+    where: "Airflow Summit",
+    image: "/images/talks/airflow-summit-2022.jpg",
+    description:
+      "Treat your data stack like a software project. Co-presented with Marcos Marx (Airbyte), this session walks through using Git, Airflow, and dbt to manage Airbyte connections as code — so the people who build your pipelines can ship them with the same workflow they use for everything else.",
+    links: [
+      {
+        title: "Video",
+        url: "https://www.youtube.com/watch?v=_pLDo04sv2U",
+      },
+      {
+        title: "Session Page",
+        url: "https://airflowsummit.org/sessions/2022/git-push-your-data-stack-with-airbyte-airflow-and-dbt/",
+      },
+    ],
+  },
+  {
+    title: "How I learned to Stop Worrying and Let the Robot Publish to NPM",
+    date: "September, 2020",
+    where: "CascadiaJS",
+    image: "/images/evan-tahler-illustration.png",
+    description:
+      "As professional developers, we /probably/ don’t deploy code directly to production and we /usually/ test things first. There’s a whole world of tools and best practices like Git Flow, Continuous Integration, and Review Apps to help us build and deploy our apps and websites... but what about the developer tools we use every day? This talk will focus on how to parallel some of these same best-practices when making developer tools and frameworks. Together we will build a CI/CD pipeline for publishing to packages to NPM.",
+    links: [
+      {
+        title: "Speaker Page",
+        url: "https://2020.cascadiajs.com/speakers/evan-tahler",
       },
     ],
   },
@@ -43,20 +117,6 @@ export const talks: Talk[] = [
       {
         title: "Video",
         url: "https://www.youtube.com/watch?v=tJtL4LtKQnA",
-      },
-    ],
-  },
-  {
-    title: "How I learned to Stop Worrying and Let the Robot Publish to NPM",
-    date: "September, 2020",
-    where: "CascadiaJS",
-    image: "/images/evan-tahler-illustration.png",
-    description:
-      "As professional developers, we /probably/ don’t deploy code directly to production and we /usually/ test things first. There’s a whole world of tools and best practices like Git Flow, Continuous Integration, and Review Apps to help us build and deploy our apps and websites... but what about the developer tools we use every day? This talk will focus on how to parallel some of these same best-practices when making developer tools and frameworks. Together we will build a CI/CD pipeline for publishing to packages to NPM.",
-    links: [
-      {
-        title: "Speaker Page",
-        url: "https://2020.cascadiajs.com/speakers/evan-tahler",
       },
     ],
   },
