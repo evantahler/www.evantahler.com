@@ -4,6 +4,19 @@ import type { Plugin, ViteDevServer } from "vite";
 import { defineConfig } from "vitepress";
 import llmstxt from "vitepress-plugin-llms";
 
+const SITE_URL = "https://www.evantahler.com";
+
+const skipCanonical = (path: string) =>
+  path.startsWith("blog/tag/") || path === "blog/tags.md" || path === "404.md";
+
+function pageUrlFromRelativePath(relativePath: string): string {
+  const noExt = relativePath.replace(/\.md$/, "");
+  if (noExt === "index") return `${SITE_URL}/`;
+  if (noExt.endsWith("/index"))
+    return `${SITE_URL}/${noExt.slice(0, -"index".length)}`;
+  return `${SITE_URL}/${noExt}`;
+}
+
 // VitePress only generates llms.txt, llms-full.txt, and sitemap.xml at build
 // time, and vitepress-plugin-llms 1.12.1's dev middleware rewrites every
 // request to `.md` (so even /llms.txt falls through). Serve those static
@@ -82,7 +95,7 @@ export default defineConfig({
   ],
 
   sitemap: {
-    hostname: "https://www.evantahler.com",
+    hostname: SITE_URL,
     transformItems(items) {
       return items.filter((item) => {
         const url = item.url || "";
@@ -132,6 +145,13 @@ export default defineConfig({
     const path = pageData.relativePath;
     if (path.startsWith("blog/tag/") || path === "404.md") {
       pageData.frontmatter.sitemap = { exclude: true };
+    }
+
+    const explicitCanonical = pageData.frontmatter.canonical;
+    if (explicitCanonical || !skipCanonical(path)) {
+      const href = explicitCanonical ?? pageUrlFromRelativePath(path);
+      pageData.frontmatter.head = pageData.frontmatter.head ?? [];
+      pageData.frontmatter.head.push(["link", { rel: "canonical", href }]);
     }
   },
 

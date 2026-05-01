@@ -47,4 +47,8 @@ describe("blog tag page (/blog/tag/<tag>)", () => {
     }
     expect(renderedHrefs.size).toBe(expectedSlugs.size);
   });
+
+  it("does not emit a canonical link in the head", () => {
+    expect(page.querySelector('head link[rel="canonical"]')).toBeFalsy();
+  });
 });

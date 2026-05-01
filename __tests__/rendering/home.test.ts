@@ -28,4 +28,10 @@ describe("home page (/)", () => {
     const postLinks = page.querySelectorAll('a[href^="/blog/post/"]');
     expect(postLinks.length).toBeGreaterThan(0);
   });
+
+  it("emits a self-referential canonical link in the head", () => {
+    const link = page.querySelector('head link[rel="canonical"]');
+    expect(link).toBeTruthy();
+    expect(link?.getAttribute("href")).toBe("https://www.evantahler.com/");
+  });
 });

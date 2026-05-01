@@ -28,4 +28,12 @@ describe("resume page (/resume)", () => {
     const text = page.querySelector(".vp-doc")?.textContent ?? "";
     expect(text.length).toBeGreaterThan(800);
   });
+
+  it("emits a self-referential canonical link in the head", () => {
+    const link = page.querySelector('head link[rel="canonical"]');
+    expect(link).toBeTruthy();
+    expect(link?.getAttribute("href")).toBe(
+      "https://www.evantahler.com/resume",
+    );
+  });
 });
