@@ -5,7 +5,7 @@ description: Evan Tahler — Software Engineer, Product Manager, and Leader. Hea
 
 hero:
   name: "Hi, I'm Evan!"
-  text: "Software Engineering, Product Management, and Leadership."
+  text: "Software Engineering and Product Management Leadership."
   tagline: I build teams that create world-class digital products. I'm the Head of Engineering at Arcade.dev and the creator of Actionhero, Keryx, and more.
   image:
     src: /images/bitmoji/4.png
