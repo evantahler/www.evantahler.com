@@ -8,6 +8,7 @@ type Repo = {
 };
 
 const projects = [
+  { org: "ArcadeAI", name: "arcade-mcp" },
   { org: "airbytehq", name: "airbyte" },
   { org: "grouparoo", name: "grouparoo" },
   { org: "actionhero", name: "actionhero" },
