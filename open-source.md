@@ -15,12 +15,17 @@ You can [sponsor my open source work via GitHub Sponsorships](https://github.com
 
 ## Featured Projects
 
-<div v-for="r in repos" :key="r.html_url" style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--vp-c-divider);">
-  <h3>
-    <a :href="r.html_url" target="_blank">{{ r.full_name }}</a>
-  </h3>
-  <p>{{ r.description }}</p>
-  <p style="color: var(--vp-c-text-2); font-size: 0.9rem;">
-    ✨ {{ r.stargazers_count }} stars · 🍴 {{ r.forks_count }} forks
-  </p>
+<div v-for="r in repos" :key="r.html_url" style="display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--vp-c-divider);">
+  <a :href="r.html_url" target="_blank" style="flex-shrink: 0;">
+    <img :src="`${r.owner.avatar_url}&s=80`" :alt="`${r.full_name} owner avatar`" width="48" height="48" style="border-radius: 6px; display: block;" />
+  </a>
+  <div style="flex: 1; min-width: 0;">
+    <h3 style="margin-top: 0;">
+      <a :href="r.html_url" target="_blank">{{ r.full_name }}</a>
+    </h3>
+    <p>{{ r.description }}</p>
+    <p style="color: var(--vp-c-text-2); font-size: 0.9rem;">
+      ✨ {{ r.stargazers_count.toLocaleString("en-US") }} stars · 🍴 {{ r.forks_count.toLocaleString("en-US") }} forks
+    </p>
+  </div>
 </div>

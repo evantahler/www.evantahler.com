@@ -15,7 +15,7 @@ Google Forms is a great product. It allows just about anyone (academics, compani
 
 A common use case is capturing demographic data. When asking about gender, an inclusive best practice, according to the [Human Rights Campaign](https://www.hrc.org/resources/collecting-transgender-inclusive-gender-data-in-workplace-and-other-surveys) is to provide the following options:
 
-```raw
+```text
 What is your Gender Identity?
 
 * Male

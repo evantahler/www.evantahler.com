@@ -14,7 +14,6 @@ tags:
   - devops
 image: /images/medium-export/1__lOqD__NHM7gQY9Ax9TF4wZg.jpeg
 featured: true
-canonical: null
 ---
 
 ![](/images/medium-export/1__lOqD__NHM7gQY9Ax9TF4wZg.jpeg)

@@ -17,7 +17,7 @@ We recently found & solved a memory leak in ActionHero. If you use ActionHero to
 
 This leak was discovered by the [TaskRabbit](https://www.taskrabbit.com) team when one of their micro-services kept restarting every few days. TaskRabbit uses [monit](https://mmonit.com/monit/) to run all of their applications, and when an app uses too much RAM, it will HUP the app (preforming a graceful restart) and notify the team via PagerDuty:
 
-```raw
+```text
 # managed by ansible
 
 CHECK PROCESS actionhero-{{ application }}

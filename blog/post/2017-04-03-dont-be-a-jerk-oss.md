@@ -20,7 +20,7 @@ Today, I ran across this license in the wild! This license has been translated i
 
 Here is the English text of the **Don’t be a Jerk** Open-Source software license, as of April 3, 2017.
 
-```raw
+```text
 Don't Be a Jerk: The Open Source Software License.
 Last Update: March 19, 2015
 

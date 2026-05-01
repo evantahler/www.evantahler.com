@@ -37,7 +37,7 @@ Still looking good, actionHero!
 
 This time when I ran the test, I decided to tail the actionHero log to see what was going on. All the requests were truly unique, but they all did appear to be coming from the same IP address (although it did change between each "rush”):
 
-```raw
+```text
 2012-03-30 21:00:52 | action @ 10.72.245.143 | params: {"key":"key_23cc985520c55346d9de7a0e9e300d0f7f07a225","value":"val_23cc985520c55346d9de7a0e9e300d0f7f07a225","action":"cacheTest","limit":100,"offset":0}
 
 2012-03-30 21:00:52 | > web request from 10.72.245.143 | responded in : 4ms

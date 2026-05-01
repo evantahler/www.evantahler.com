@@ -106,7 +106,7 @@ Error writing CA certificate: Get https://dashboard.site.com/ca-cert: pinned: th
 
 The reason for this is that if you look in `~/.flynnrc`, you’ll see that your cluster has the following information saved about it:
 
-```raw
+```text
 default = "mycluster"
 [[cluster]]
   Name = "mycluster"
@@ -218,7 +218,7 @@ remote: Internal server errorfatal: unable to access 'https://git.site.com/proje
 
 This is because there is one more system setting that Flynn modifies: your `~/.gitconfig`. If you look at it you’ll see 2 entries Flynn created: A authentication block and a certificate block:
 
-```raw
+```text
 [http "https://git.site.com"]
  sslCAInfo = /Users/evan/.flynn/ca-certs/flynn-abc123.pem
 [credential "https://git.site.com"]

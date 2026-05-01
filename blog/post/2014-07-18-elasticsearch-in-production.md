@@ -64,7 +64,7 @@ index.indexing.slowlog.threshold.index.trace: 500ms
 
 Enabling this showed us that in the downtime windows, we were still serving queries, but they were taking seconds to complete where normally they take milliseconds. Correlating that with the normal logs, we learned that these slower queries were blocking later queries from being parsed, and they were simply being rejected:
 
-```raw
+```text
 ...
 Caused by: org.elasticsearch.common.util.concurrent.EsRejectedExecutionException: rejected execution **(**queue capacity 1000**)** on org.elasticsearch.transport.netty.MessageChannelHandler$RequestHandler
 ...
@@ -94,7 +94,7 @@ With these options enabled, a new log file will be created which will log the oc
 
 To fix the long garbage collection time, we switched from openJDK to Oracle’s "official" Java branch. We also switched to the G1GC garbage collector from the default ConcMarkSweepGC method. To change this, you will need to modify bin/elasticsearch.in.sh, as the older options are hard-coded:
 
-```raw
+```text
 ...
 # JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC"
 # JAVA_OPTS="$JAVA_OPTS -XX:+UseConcMarkSweepGC"

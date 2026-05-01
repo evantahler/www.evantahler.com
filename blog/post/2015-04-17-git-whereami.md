@@ -58,7 +58,7 @@ In whichever git repository you want to use this on, copy the prepare-commit-msg
 
 Now, whenever you make a git commit, we will use whereami to source your lat/lng, and then ask Google’s geocoder what your address is, resulting in:
 
-```raw
+```text
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 # On branch master
