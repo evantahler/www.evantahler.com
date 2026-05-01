@@ -7,7 +7,7 @@ date: '2016-05-11T01:07:44.308Z'
 tags:
   - node.js
   - javascript
-  - redis
+  - devops
 image: /images/medium-export/1__o4crV68ZzYEiJ__l9zgqmXQ.png
 ---
 

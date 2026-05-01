@@ -4,8 +4,7 @@ description: Using Ansible with a Dynamic list of hosts
 date: '2015-03-12'
 tags:
   - taskrabbit
-  - gitops
-  - ansible
+  - devops
 image: /images/medium-export/1__MpJklbc7MeGNCgX3TvL1HQ.png
 canonical: 'https://tech.taskrabbit.com/blog/2015/03/12/ansible-dynamic-static-inventory/'
 ---

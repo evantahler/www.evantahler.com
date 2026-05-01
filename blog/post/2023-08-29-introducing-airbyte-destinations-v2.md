@@ -7,7 +7,6 @@ image: /images/posts/2023-08-29-introducing-airbyte-destinations-v2/image-1.png
 tags:
   - engineering
   - airbyte
-  - data
   - data-engineering
 canonical: 'https://airbyte.com/blog/introducing-airbyte-destinations-v2-typing-deduping'
 ---

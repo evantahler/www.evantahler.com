@@ -3,8 +3,7 @@ title: Heroku Slack Notifications
 description: Get a Slack notification when your Heroku App Deploys!
 date: '2021-06-11'
 tags:
-  - heroku
-  - gitops
+  - devops
   - grouparoo
   - voom
 featured: false

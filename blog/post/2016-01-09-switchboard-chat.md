@@ -4,8 +4,7 @@ description: 'Today I want to announce the beta of a new website I built, switch
 date: '2016-01-09'
 tags:
   - actionhero
-  - startups
-  - product_management
+  - product-management
 image: /images/medium-export/1__k7TOA8rMJW3wFmqxLyJsCw.png
 ---
 

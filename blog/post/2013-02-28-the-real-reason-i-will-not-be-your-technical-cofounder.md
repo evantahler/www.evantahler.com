@@ -5,8 +5,8 @@ description: >-
   a ‘technical co-founder’ of a startup. Just search for the…
 date: '2013-02-28'
 tags:
-  - startups
-  - legal
+  - career
+
 ---
 
 I have been reading quite a few posts lately concerning the topic of becoming a ‘technical co-founder’ of a startup. Just search for the term on Hacker News, and I’m sure you will find posts on the topic from within the current week. Many other people have spoken eloquently on the topic, but I have always felt that the conversation was dancing around one key issue:

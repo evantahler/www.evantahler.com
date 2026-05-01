@@ -6,7 +6,7 @@ description: >-
 date: '2017-08-14T01:05:13.352Z'
 tags:
   - javascript
-  - react
+  - frontend
 image: /images/medium-export/1__a__JQaj2nymx62m1RjVuGFA.png
 ---
 

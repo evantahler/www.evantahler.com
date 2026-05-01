@@ -5,9 +5,8 @@ description: >-
   Meetup entitled "TaskRabbit’s Ansible Tips & Tricks”.
 date: '2015-07-14'
 tags:
-  - gitops
+  - devops
   - speaking
-  - ansible
 image: /images/medium-export/1__w0iIGUfsxNXvUBKqrC__uSA.png
 ---
 

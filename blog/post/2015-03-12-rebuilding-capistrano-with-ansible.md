@@ -4,8 +4,7 @@ description: Solid Ruby deployments with Ansbile
 date: '2015-03-12'
 tags:
   - ruby
-  - gitops
-  - ansible
+  - devops
   - taskrabbit
 image: /images/medium-export/1__w0iIGUfsxNXvUBKqrC__uSA.png
 canonical: >-

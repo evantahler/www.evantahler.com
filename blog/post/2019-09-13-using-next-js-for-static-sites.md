@@ -8,9 +8,10 @@ description: >-
 image: /images/medium-export/1__SWbmOATNSu__AnPWW__DKeLw.jpeg
 date: '2019-09-13T17:22:55.993Z'
 tags:
-  - next.js
+  - frontend
   - javascript
   - node.js
+
 ---
 
 ![](/images/medium-export/1__SWbmOATNSu__AnPWW__DKeLw.jpeg)

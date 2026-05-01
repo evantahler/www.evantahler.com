@@ -4,7 +4,7 @@ description: How do you deploy a node.js app reliably?
 date: '2012-09-10'
 tags:
   - node.js
-  - gitops
+  - devops
   - javascript
 image: /images/medium-export/1__VUhrsBC1AkJ0UDL4PgPG8Q.png
 ---

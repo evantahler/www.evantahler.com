@@ -3,9 +3,9 @@ title: Customizable "Other" Option in Google Forms
 description: Hi Google!
 date: '2018-06-22T05:04:10.203Z'
 tags:
-  - product_management
+  - product-management
   - voom
-  - accessability
+  - meta
 image: /images/medium-export/1__3rOVI36gT6fubqDUaEflhw.png
 ---
 

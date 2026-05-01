@@ -3,9 +3,7 @@ title: Productionizing Flynn and Hosting your Root Domain(s)
 description: Flynn is a an open-source self-hosted Heroku replacement… and it is great.
 date: '2016-10-28T18:55:25.279Z'
 tags:
-  - gitops
-  - flynn
-  - ci
+  - devops
 image: /images/medium-export/1__k9__uGIssdqP4JtbdaGeYNQ.png
 ---
 

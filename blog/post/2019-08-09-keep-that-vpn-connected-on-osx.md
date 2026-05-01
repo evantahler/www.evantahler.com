@@ -5,8 +5,7 @@ description: >-
   matter when I opened my laptop, that my connection would be…
 date: '2019-08-09T21:15:40.166Z'
 tags:
-  - vpn
-  - osx
+  - devops
 image: /images/medium-export/1__8DMeHvOIF__nDLjL4TYrk9A.jpeg
 ---
 

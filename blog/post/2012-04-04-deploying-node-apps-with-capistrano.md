@@ -5,7 +5,7 @@ date: '2012-04-04'
 tags:
   - node.js
   - javascript
-  - gitops
+  - devops
 image: /images/medium-export/1__GOljYLFswSUI6EC7NCFkLg.jpeg
 ---
 

@@ -3,7 +3,7 @@ title: Actionhero Community - Now on Slack
 description: This week the Actionhero Community moved from Gitter to Slack
 date: '2016-05-16T04:06:56.640Z'
 tags:
-  - open_source
+  - open-source
   - actionhero
 image: /images/medium-export/1__myDepyzyDisjRxKGEbj6tA.png
 ---

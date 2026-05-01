@@ -5,7 +5,7 @@ description: >-
   docs.actionherojs.com to the main Actionhero website…
 date: '2019-12-02T00:54:12.808Z'
 tags:
-  - react
+  - frontend
   - actionhero
   - javascript
 image: /images/medium-export/1__iW7bsn__oLc__LD9HWaD__xbw.jpeg

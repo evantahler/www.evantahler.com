@@ -5,7 +5,7 @@ description: >-
   reboot API-First.com.
 date: '2013-03-10'
 tags:
-  - product_management
+  - product-management
 image: /images/medium-export/1__ngHc__S43t468vMf7KDKpiw.jpeg
 ---
 

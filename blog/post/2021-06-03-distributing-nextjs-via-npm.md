@@ -7,7 +7,7 @@ image: /images/posts/2021-06-03-distributing-nextjs-via-npm/210603-npm-nextjs.pn
 tags:
   - engineering
   - grouparoo
-  - next.js
+  - frontend
   - node.js
 canonical: 'https://www.grouparoo.com/blog/distributing-nextjs-via-npm'
 ---

@@ -6,7 +6,8 @@ description: >-
 date: '2015-04-17'
 tags:
   - meta
-  - gitops
+  - devops
+
 ---
 
 I’ve been traveling a lot for work, and I thought it might be cool to somehow signal where I was **physically** when checking in code. I knew my Mac has a Geolocation framework, but I couldn’t figure out a way to access it via the command line.

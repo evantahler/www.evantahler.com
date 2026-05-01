@@ -4,8 +4,9 @@ description: My dream of working on Actionhero full time
 date: '2019-10-19T00:51:03.657Z'
 image: /images/medium-export/1__CrF__V9wBPsZJBFMzr69gQA.jpeg
 tags:
-  - github
+  - open-source
   - actionhero
+
 ---
 
 ![](/images/medium-export/1__CrF__V9wBPsZJBFMzr69gQA.jpeg)

@@ -5,7 +5,7 @@ description: >-
   the steps with cURL. For those of you who have been living
 date: '2012-04-04'
 tags:
-  - tools
+  - meta
 image: /images/medium-export/1__5h6hxUUaZjLmz5qpH6uPpA.png
 ---
 

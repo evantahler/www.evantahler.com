@@ -8,13 +8,9 @@ description: >-
 date: '2020-02-18T04:11:19.262Z'
 tags:
   - actionhero
-  - code
+  - engineering
   - javascript
   - node.js
-  - resque
-  - docker
-  - kubernetes
-  - heroku
   - devops
 image: /images/medium-export/1__lOqD__NHM7gQY9Ax9TF4wZg.jpeg
 featured: true

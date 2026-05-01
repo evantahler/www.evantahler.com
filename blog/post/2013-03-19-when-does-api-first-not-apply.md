@@ -3,7 +3,7 @@ title: When does API-First Not Apply?
 description: When should you not use an API-First methodology?
 date: '2013-03-19'
 tags:
-  - product_management
+  - product-management
 image: /images/medium-export/1__Df3z03ju7EPaTPnzqtCavw.jpeg
 ---
 

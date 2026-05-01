@@ -8,11 +8,8 @@ image: >-
 tags:
   - engineering
   - airbyte
-  - data
   - data-engineering
   - ai
-  - llm
-  - rag
 canonical: >-
   https://airbyte.com/blog/choose-a-database-with-hybrid-vector-search-for-your-ai-applications
 ---

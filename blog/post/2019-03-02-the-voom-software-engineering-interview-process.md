@@ -7,7 +7,7 @@ date: '2019-03-21T00:03:45.682Z'
 tags:
   - voom
   - engineering
-  - hiring
+  - career
 image: /images/medium-export/1__9HNP1gUTyhHlUcbJBNYpgg.jpeg
 featured: true
 ---

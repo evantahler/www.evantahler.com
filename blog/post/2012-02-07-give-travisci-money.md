@@ -5,7 +5,7 @@ description: >-
   server up and running. This is an awesome service which I use…
 date: '2012-02-07'
 tags:
-  - open_source
+  - open-source
 image: /images/medium-export/1__u4zG6GFiZMoQd__LfW23W0g.png
 ---
 
