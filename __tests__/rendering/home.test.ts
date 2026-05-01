@@ -20,8 +20,19 @@ describe("home page (/)", () => {
     expect(page.querySelector(".VPHero, .vp-hero")).toBeTruthy();
   });
 
-  it("renders the llms-card callout", () => {
-    expect(page.querySelector(".llms-card")).toBeTruthy();
+  it("renders both callout cards (llms.txt and RSS)", () => {
+    const cards = page.querySelectorAll(".callout-card");
+    expect(cards.length).toBe(2);
+    const text = cleanText(
+      page.querySelector(".callout-grid")?.textContent,
+    ).toLowerCase();
+    expect(text).toContain("llms.txt");
+    expect(text).toContain("feed.xml");
+  });
+
+  it("links to the RSS feed from the home callout", () => {
+    const rssLink = page.querySelector('.callout-grid a[href="/feed.xml"]');
+    expect(rssLink).toBeTruthy();
   });
 
   it("links to at least one blog post (featured grid)", () => {

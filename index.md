@@ -62,17 +62,30 @@ function fmt(d) {
   </div>
 </section>
 
-<section class="home-section llms-section">
-  <div class="llms-card">
-    <div class="llms-icon" aria-hidden="true">🤖</div>
-    <div class="llms-body">
-      <h2>Reading this with an LLM?</h2>
-      <p>
-        This site publishes
-        <a href="/llms.txt"><code>/llms.txt</code></a> and
-        <a href="/llms-full.txt"><code>/llms-full.txt</code></a>
-        so agents and assistants can ingest the content directly. Help yourself.
-      </p>
+<section class="home-section callout-section">
+  <div class="callout-grid">
+    <div class="callout-card">
+      <div class="callout-icon" aria-hidden="true">🤖</div>
+      <div class="callout-body">
+        <h2>Reading this with an LLM?</h2>
+        <p>
+          This site publishes
+          <a href="/llms.txt"><code>/llms.txt</code></a> and
+          <a href="/llms-full.txt"><code>/llms-full.txt</code></a>
+          so agents and assistants can ingest the content directly. Help yourself.
+        </p>
+      </div>
+    </div>
+    <div class="callout-card">
+      <div class="callout-icon" aria-hidden="true">📡</div>
+      <div class="callout-body">
+        <h2>Prefer a feed reader?</h2>
+        <p>
+          Subscribe to the blog via
+          <a href="/feed.xml"><code>/feed.xml</code></a>
+          — drop it into Feedly, NetNewsWire, or any RSS reader of your choice.
+        </p>
+      </div>
     </div>
   </div>
 </section>

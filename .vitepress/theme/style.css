@@ -209,9 +209,21 @@
   overflow: hidden;
 }
 
-/* --- llms.txt callout --- */
+/* --- home page callouts (llms.txt, RSS) --- */
 
-.llms-card {
+.callout-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 720px) {
+  .callout-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.callout-card {
   display: flex;
   align-items: flex-start;
   gap: 20px;
@@ -221,17 +233,17 @@
   border: 1px solid rgba(234, 88, 12, 0.35);
 }
 
-.dark .llms-card {
+.dark .callout-card {
   background: rgba(251, 146, 60, 0.06);
   border-color: rgba(251, 146, 60, 0.35);
 }
 
-.llms-icon {
+.callout-icon {
   font-size: 36px;
   line-height: 1;
 }
 
-.llms-body h2 {
+.callout-body h2 {
   margin: 0 0 6px;
   padding-top: 0;
   border-top: none;
@@ -241,14 +253,14 @@
   color: var(--vp-c-brand-1);
 }
 
-.llms-body p {
+.callout-body p {
   margin: 0;
   font-size: 15px;
   line-height: 1.55;
   color: var(--vp-c-text-2);
 }
 
-.llms-body code {
+.callout-body code {
   font-size: 0.95em;
   padding: 1px 6px;
   border-radius: 4px;
