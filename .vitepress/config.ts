@@ -139,7 +139,6 @@ export default defineConfig({
     plugins: [
       llmstxt({
         ignoreFiles: ["blog/tag/**", "blog/tags.md", "404.md"],
-        injectLLMHint: false,
       }),
       builtAssetDevServer,
     ],
