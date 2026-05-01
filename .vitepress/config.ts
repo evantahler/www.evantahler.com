@@ -139,7 +139,7 @@ gtag('config', 'G-VY35SQM9Y1');`,
   themeConfig: {
     siteTitle: "Evan Tahler",
     nav: [
-      { text: "Resume", link: "/resume" },
+      { text: "About", link: "/about" },
       { text: "Blog", link: "/blog" },
       { text: "Open Source", link: "/open-source" },
       { text: "Speaking", link: "/speaking" },

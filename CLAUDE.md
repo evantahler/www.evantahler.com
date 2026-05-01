@@ -23,7 +23,7 @@ CI (`.github/workflows/test.yml`) runs `bun run lint`, `bun run build`, then `SK
 
 ### VitePress layout — repo root is `srcDir`
 
-`.vitepress/config.ts` sets `srcDir: "."`, so top-level Markdown files (`index.md`, `resume.md`, `contact.md`, `speaking.md`, `open-source.md`, `404.md`) are pages. `srcExclude` keeps `README.md`, `CLAUDE.md`, and `node_modules` out of the build. Output goes to `.vitepress/dist`; cache to `.vitepress/cache` (both gitignored).
+`.vitepress/config.ts` sets `srcDir: "."`, so top-level Markdown files (`index.md`, `about.md`, `contact.md`, `speaking.md`, `open-source.md`, `404.md`) are pages. `srcExclude` keeps `README.md`, `CLAUDE.md`, and `node_modules` out of the build. Output goes to `.vitepress/dist`; cache to `.vitepress/cache` (both gitignored).
 
 ### Two parallel post loaders — pick the right one
 
