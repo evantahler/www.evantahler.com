@@ -92,6 +92,21 @@ export default defineConfig({
     ["link", { rel: "manifest", href: "/site.webmanifest" }],
     ["meta", { name: "twitter:card", content: "summary_large_image" }],
     ["meta", { name: "twitter:site", content: "@evantahler" }],
+    [
+      "script",
+      {
+        async: "",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-VY35SQM9Y1",
+      },
+    ],
+    [
+      "script",
+      {},
+      `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-VY35SQM9Y1');`,
+    ],
   ],
 
   sitemap: {
