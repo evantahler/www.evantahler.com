@@ -24,7 +24,7 @@ By no means is this a "full" production-ready authentication system, but this sh
 
 There are a few new folders we need to make to keep our project sane. Here’s my folder structure (with non-standard actionHero directories **bolded**):
 
-```raw
+```text
 \
 | - actions
 | - initializers

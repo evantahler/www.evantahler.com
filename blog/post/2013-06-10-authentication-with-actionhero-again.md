@@ -235,7 +235,7 @@ exports.action = {
 
 ### Run it!
 
-```raw
+```text
 http://localhost:8080/api/userAdd?email=evan@evantahler.com&password=password&firstName=Evan&lastName=tahler
 http://localhost:8080/api/logIn?email=evan@evantahler.com&password=password
 http://localhost:8080/api/authenticatedAction

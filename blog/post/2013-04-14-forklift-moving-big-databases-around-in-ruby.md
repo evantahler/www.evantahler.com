@@ -223,7 +223,7 @@ SQL Transformations can be used to [generate new tables like this](http://stacko
 
 The defaults for a new Forklift::Plan are:
 
-```raw
+```text
  1 {
  2    :project_root => Dir.pwd,
  3    :lock_with_pid? => true,
@@ -247,7 +247,7 @@ The defaults for a new Forklift::Plan are:
 
 #### Test
 
-```raw
+```text
  1 forklift.check_local_source({
  2   :name => STRING,     # A name for the test
  3   :database => STRING, # The Database to test
@@ -266,7 +266,7 @@ The defaults for a new Forklift::Plan are:
 
 #### Extract
 
-```raw
+```text
  1 forklift.import_local_database({
  2   :database => STRING,              # The Database to Extract
  3   :prefix => BOOLEAN,               # Should we prefix the names of all tables in this database when imported wight the database?
@@ -288,7 +288,7 @@ The defaults for a new Forklift::Plan are:
 
 #### Transform
 
-```raw
+```text
 1 forklift.transform_sql({
 2   :file => STRING,                 # The transformation file to run
 3   :frequency => INTEGER (seconds), # How often should we run this transformation?

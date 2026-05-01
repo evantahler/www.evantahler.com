@@ -39,7 +39,7 @@ I’m happy to say that TaskRabbit now deploys all of our applications via Ansib
 - We have a specific user, denoted by \`\` in these roles.
 - Our application directory structure exactly mirrors that of Capistrano (it’s a great layout), IE:
 
-```raw
+```text
 /home/{{ deploy_user }}/www/{{ application }}/
   - current (symlink to release)
   - releases
@@ -62,7 +62,7 @@ I’m happy to say that TaskRabbit now deploys all of our applications via Ansib
 
 We define inventories by RAILS_ENV (or NODE_ENV as the case may be), and then divide up each application to the sub-roles that it requires. I’ll be using the following example inventories/production file as reference:
 
-```raw
+```text
 myApp-web1.domain.com
 myApp-web2.domain.com
 myApp-worker1.domain.com
@@ -577,7 +577,7 @@ Here’s how to grab the variables you need:
 
 and our email template is:
 
-```raw
+```text
 From: {{ deploy_email_deployer_email.stdout_lines[0] }}
 Subject: Deployment: {{ application }} [ {{ cluster_env }} ]
 Content-Type: text/html

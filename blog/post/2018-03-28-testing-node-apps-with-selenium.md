@@ -90,7 +90,7 @@ describe("www.actionherojs.com#index", () => {
 
 Your test can now be run via the normal `jest` command*.* That’s it!
 
-```raw
+```text
 jest __tests__/integration/simple.js
  PASS  __tests__/integration/simple.js
   www.actionherojs.com#index

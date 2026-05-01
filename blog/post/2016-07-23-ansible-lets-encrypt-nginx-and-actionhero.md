@@ -139,7 +139,7 @@ Our NGINX.conf (and the Ansible role to manage NGINX) looks like this:
   service: name=nginx state=reloaded
 ```
 
-```raw
+```text
 # templates/production.conf.j2
 
 #user  nobody;

@@ -27,14 +27,14 @@ _For illustrative purposes, we can simplify things and assume Voom only sells 1 
 
 **January 2018:**
 
-```raw
+```text
 Customers Acquired (2 total) \* Evan \* Christina
 Journeys Purchased this month (10 total by 2 possible customers) \* Evan: 1 \* Christina: 9
 ```
 
 **February 2018:**
 
-```raw
+```text
 Customers Acquired (1 total) \* Megan
 Journeys Purchased this month(3 total by 3 possible customers) \* Christina: 2 \* Evan: 0 \* Megan: 1
 ```

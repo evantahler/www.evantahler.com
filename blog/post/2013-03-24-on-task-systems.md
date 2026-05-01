@@ -32,7 +32,7 @@ For Redis based task systems (like Resque and sidekiq), Redis is a single-thread
 
 For Database-backed queues, it’s still possible to ensure an "atomic" pop, but it’s a little trickier. Lets assume we have table with the following structure:
 
-```raw
+```text
 id | created_at | data | run_at | locked_by | locked_at
 --------------------------------------------------------
 ```

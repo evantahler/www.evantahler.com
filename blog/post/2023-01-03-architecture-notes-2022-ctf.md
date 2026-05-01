@@ -59,7 +59,7 @@ And finally, I had the CTF solved! A novel way to prove you got to the end was t
 
 As a note, the headers for `ctf.architecturenotes.co/flag` contain cache information for Cloudflare, which was another dead-end:
 
-```raw
+```text
 report-to: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=lCArkhBrXosMGmu8L4d1VHb0Qwlq3pZbWsBj%2BcbllnCsBgkdJLOO%2Ff2gedkaTl%2FSAwxuDQDMGjhMAranlRf7dZIa4%2FHFroO8cEfPntCmZxY50C0N7%2FsvPxTXENyO%2B17tawYenmMB1WtSZL%2FPFlq6UZtjS53qaOs%3D"}],"group":"cf-nel","max_age":604800}
 ```
 
