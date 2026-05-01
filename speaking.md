@@ -9,7 +9,7 @@ import { talks } from "./data/talks";
 
 # Speaking
 
-![speaking](/images/speaking-2.jpg)
+![speaking](/images/speaking-3.png)
 
 I've given a number of technical talks, focusing on Node.js, Ruby, AI, and DevOps.
 

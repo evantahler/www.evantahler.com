@@ -9,6 +9,8 @@ import { data as repos } from "./.vitepress/data/github.data";
 
 # Open Source
 
+![open source](/images/open-source-3.png)
+
 I contribute to a number of open source projects because I believe it is a great way to give back to the programming community in both a professional and personal capacity — and a great way to learn about new technologies and tools.
 
 You can [sponsor my open source work via GitHub Sponsorships](https://github.com/users/evantahler/sponsorship).

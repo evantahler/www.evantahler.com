@@ -34,6 +34,27 @@
   border-radius: 6px;
 }
 
+/* Neon-glow header image on top-of-page hero shots (about, contact,
+   speaking, open-source). The selector targets the first image after the
+   page <h1>; blog post bodies render the title via BlogPostHeader.vue
+   outside .vp-doc, so they never match this rule. */
+.vp-doc h1 + p img {
+  border: 2px solid #ec4899;
+  border-radius: 10px;
+  box-shadow:
+    0 0 8px #ec4899,
+    0 0 20px rgba(236, 72, 153, 0.55),
+    0 0 40px rgba(236, 72, 153, 0.3);
+}
+
+.dark .vp-doc h1 + p img {
+  border-color: #f472b6;
+  box-shadow:
+    0 0 8px #f472b6,
+    0 0 20px rgba(244, 114, 182, 0.6),
+    0 0 40px rgba(244, 114, 182, 0.35);
+}
+
 /* Footer dog illustration */
 .footer-dog {
   display: inline-block;
