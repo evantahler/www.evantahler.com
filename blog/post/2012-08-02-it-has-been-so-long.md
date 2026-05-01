@@ -1,0 +1,18 @@
+---
+title: It has been so long
+description: >-
+  I’ve been pretty bad at posting lately, but that’s not to say that I haven’t
+  been busy!
+date: '2016-04-22T22:18:17.832Z'
+tags:
+  - meta
+image: /images/medium-export/1__LzV__pBMrIVln2B0SicLS8Q.jpeg
+---
+
+![](/images/medium-export/1__LzV__pBMrIVln2B0SicLS8Q.jpeg)
+
+I’ve been pretty bad at posting lately, but that’s not to say that I haven’t been busy!
+
+Since we last spoke, I’ve joined [TaskRabbit](http://taskrabbit.com) as their senior systems engineer. I get to play with ruby, node, cloud hosts (Joyent), BI, and everything in between. I’ll have more to say soon!
+
+[Oh, and if you want $10 off of a task, click here](https://www.taskrabbit.com/PAL/307359) :D

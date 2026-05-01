@@ -1,0 +1,184 @@
+---
+title: 'Pivotal Tracker, Phidgets, and Nerf Guns'
+description: Nerf Guns and Product Management
+date: '2012-02-15'
+tags:
+  - javascript
+  - product_management
+image: /images/medium-export/1__j7dGWlXBg__zVQtw0tHlE2A.jpeg
+---
+
+![](/images/medium-export/1__j7dGWlXBg__zVQtw0tHlE2A.jpeg)
+
+#### Update:
+
+It seems that the good folks on Hacker News also like the internet and nerf guns (who knew!?). [There is a growing collection of other folk’s hacks regarding testing, project management, and foam weaponry](http://news.ycombinator.com/item?id=3594587) \*\*
+
+---
+
+[In previous posts](http://blog.evantahler.com/on-nodejs-and-phidgets), I have talked about how to use [node.js](http://nodejs.org/) to talk to a phidget board. I have even talked about [how to run node.js ON a phidget board](http://blog.evantahler.com/node-js-running-on-a-phidgets-sbc2-board). Now you may be wondering what kind of projects you might do with a small embedded computer that has a solid http I/O stack.
+
+Here is a "suggestion".
+
+At [ModCloth](http://modcloth.com) we used [pivotal tracker](http://www.pivotaltracker.com), an awesome agile project management tool from the folks over at [Pivotal Labs](http://pivotallabs.com/). I have fallen in love with the tool for a number of reasons, but the most important reason for this article is how they really "get" the modern web-development workflow, and the tool fits nicely. They have tons of third-party integrations (Jira, GitHub, ect) and a great API.
+
+As a Product Manager with a remote team, I was always thinking about ways for our team to keep in touch better. While I was working on the phidget library, I thought I might use it and the tracker API to ring a small gong (or something similar) whenever a story was accepted as a proxy for me being able to quickly yell "thanks" (a story is a "small unit of work" for the uninitiated, like an item on your to-do list). I never found a gong, but I did find a [motorized nerf gun](http://www.amazon.com/Nerf-N-Strike-Vulcan-EBF-25-Blaster/dp/B0013U95U2)… and you can imagine where this is going :D Unfortunately, I didn’t get this project done in time before I left ModCloth, but I’m sure that I’ll find a use for it in the future!
+
+The first step was to hack the gun so that I could control it "digitally" without needing to squeeze the trigger. As it turns out, children’s toys are REALLY well made these days, and it took about an hour to pry everything apart. I forgot to take detailed photos, but what I ended up doing was soldering 2 new contact wires to the bridge on the on/off switch, and the motor itself. This was done in series with the trigger’s gate so it still worked and would complete the same circuit. I drilled a small hole in the base of the handle for the new wires to come out
+
+![](/images/medium-export/0__yE4FPa__KrztRYOYt.jpeg)
+
+The gun used the trigger to transfer the current rather than be a relay for the motor, and this meant that my new cables would be carrying a significant amount of amperage from its 6 "D" Batteries. I couldn’t just complete the circuit with the phidget board (it would fry the computer, or at least be grounded out). Luckily, I had [a 10-amp relay board](http://www.phidgets.com/products.php?product_id=3051) which worked with the phidget board.
+
+Now with everything wired up, I needed a way to talk to the pivotal tracker API. [Wizcorp](https://github.com/Wizcorp/node-pivotal) had made a basic polling node.js wrapper the Tracker V3 API which did what I needed. Thanks WizCorp!
+
+The application logic is simple:
+
+- Connect to the Phidget board
+- Authenticate with Pivotal Tacker
+- Poll your project every so often and look for story state-changes
+- "fire" if a story you own was rejected.
+
+You can also use a similar mechanism for story acceptance. The next steps in this project are obviously to pour your engineers a drink automatically when a story is accepted :D
+
+Here is the application (written for node v0.6.x). This code is pretty terrible (as I limited myself to 4 hours for this project, including the construction), and lacks any failure / error handling, but hopefully it is easy enough to understand.
+
+```js
+var phidgets = require("phidgets").phidgets;
+var pivotal = require("pivotal");
+
+// curl -d username=$USERNAME -d password=$PASSWORD -X POST https://www.pivotaltracker.com/services/v3/tokens/active
+var apiToken = "XXXXXXXXXXXXXXXXXXX";
+var projectID = 12345;
+var OwnedBy = "Evan Tahler";
+var checkTimerMS = 500;
+var newer_than_version = 0;
+var PhidgetHost = "phidgetsbc.local";
+var phidgetsReady = false;
+var phidgetData = {};
+
+var init = function (next) {
+  phidgets.on("data", function (type, id, value) {
+    if (phidgetsReady) {
+      console.log("phidgets >> " + type + " #" + id + " now at @ " + value);
+    }
+  });
+
+  phidgets.on("log", function (data) {
+    if (typeof data != "object") {
+      console.log("phidgets log >> " + data);
+    }
+  });
+
+  phidgets.on("error", function (e) {
+    console.log("phidgets error >> " + e);
+  });
+
+  phidgets.connect(
+    {
+      host: PhidgetHost,
+    },
+    function (p) {
+      phidgetsReady = true;
+      phidgets.setOutput(0, false);
+      phidgets.setOutput(1, false);
+      phidgetData = p;
+      pivotal.useToken(apiToken);
+      pivotal.getProjects(function (err, resp) {
+        if (err != null) {
+          console.log(err.desc);
+          process.exit();
+        } else {
+          var found = false;
+          for (var i in resp.project) {
+            var project = resp.project[i];
+            if (project.id == projectID) {
+              found = true;
+              break;
+            }
+          }
+          if (found == false) {
+            console.log(
+              "This user does not have access to project #" + projectID,
+            );
+            process.exit();
+          } else {
+            checkForTrackerStatus();
+            next();
+          }
+        }
+      });
+    },
+  );
+};
+
+var checkForTrackerStatus = function () {
+  var filters = {
+    project: projectID,
+    limit: 1,
+    newer_than_version: newer_than_version,
+  };
+  pivotal.getActivities(filters, function (err, activities) {
+    if (err != null) {
+      console.log(err.desc);
+      process.exit();
+    } else {
+      if (activities.activity != null) {
+        if (
+          activities.activity.event_type == "story_update" &&
+          newer_than_version > 0
+        ) {
+          pivotal.getStory(
+            projectID,
+            activities.activity.stories.story.id,
+            function (err, story) {
+              if (err != null) {
+                console.log(err.desc);
+                process.exit();
+              } else {
+                if (story.owned_by == OwnedBy) {
+                  if (story.current_state == "rejected") {
+                    fireGun();
+                  } else if (story.current_state == "accepted") {
+                    happyness();
+                  }
+                }
+              }
+            },
+          );
+        }
+        newer_than_version = activities.activity.version;
+      }
+      setTimeout(checkForTrackerStatus, checkTimerMS);
+    }
+  });
+};
+
+var fireGun = function (next) {
+  console.log("BANG!");
+  phidgets.setOutput(0, true);
+  setTimeout(phidgets.setOutput, 1000, 0, false);
+  if (typeof next == "function") {
+    next();
+  }
+  100;
+};
+
+var happyness = function (next) {
+  console.log("Yay!");
+  phidgets.setOutput(1, true);
+  setTimeout(phidgets.setOutput, 1000, 1, false);
+  if (typeof next == "function") {
+    next();
+  }
+};
+
+init(function () {
+  console.log("READY!");
+  111;
+});
+```
+
+### And here is a [video of everything working](http://www.youtube.com/watch?v=d4KIeTTp3qA)
+
+Enjoy!

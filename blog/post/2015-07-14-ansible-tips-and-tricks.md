@@ -1,0 +1,18 @@
+---
+title: Ansible Tips and Tricks
+description: >-
+  On Monday 2015–07–14 I gave a (remote) talk as the Pittsburgh Code & Supply
+  Meetup entitled "TaskRabbit’s Ansible Tips & Tricks”.
+date: '2015-07-14'
+tags:
+  - gitops
+  - speaking
+  - ansible
+image: /images/medium-export/1__w0iIGUfsxNXvUBKqrC__uSA.png
+---
+
+![](/images/medium-export/1__w0iIGUfsxNXvUBKqrC__uSA.png)
+
+On Monday 2015–07–14 I gave a (remote) talk as the [**Pittsburg Code & Supply Meetup**](http://www.codeandsupply.co) entitled "TaskRabbit’s Ansible Tips & Tricks”.
+
+The talk gave an overview of the journey TaskRabbit took from simple bash scrips, to Chef, and then to Ansible. I share some of the tips and tricks we learned along the way, and some hacks to make your team more efficient.

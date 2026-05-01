@@ -1,5 +1,6 @@
 {
-  "framework": "nextjs",
+  "framework": null,
   "installCommand": "curl -fsSL https://bun.sh/install | bash && ~/.bun/bin/bun install",
-  "buildCommand": "~/.bun/bin/bun run build"
+  "buildCommand": "~/.bun/bin/bun run build",
+  "outputDirectory": ".vitepress/dist"
 }

@@ -1,33 +1,25 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "downlevelIteration": true,
-    "incremental": true
+    "allowJs": true,
+    "types": ["node"]
   },
-  "exclude": [
-    "node_modules"
-  ],
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "__tests__/pages/contact.tsx",
-    "__tests__/pages/index.tsx"
-  ]
+    ".vitepress/**/*.ts",
+    ".vitepress/**/*.vue",
+    "blog/**/*.ts",
+    "data/**/*.ts"
+  ],
+  "exclude": ["node_modules", ".vitepress/dist", ".vitepress/cache"]
 }

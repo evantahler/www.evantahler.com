@@ -1,0 +1,68 @@
+---
+title: Keep that VPN Connected (MacOS)
+description: >-
+  I recently found myself traveling regularly, and I wanted to ensure that no
+  matter when I opened my laptop, that my connection would be…
+date: '2019-08-09T21:15:40.166Z'
+tags:
+  - vpn
+  - osx
+image: /images/medium-export/1__8DMeHvOIF__nDLjL4TYrk9A.jpeg
+---
+
+![](/images/medium-export/1__8DMeHvOIF__nDLjL4TYrk9A.jpeg)
+
+I recently found myself regularly traveling, and I wanted to ensure that no matter when I opened my laptop, that my wifi connection would be secure. However, there’s no way using built-in OSX VPN client to connect on boot or wake-from-sleep, nor is there any way retry after the failure of your VPN connection. _Good thing that Apple made AppleScript!_
+
+I have a personal VPN server running on a 5$/mo [Digital Ocean](https://www.digitalocean.com/) server which is configured with this amazing script: [https://github.com/hwdsl2/setup-ipsec-vpn](https://github.com/hwdsl2/setup-ipsec-vpn). I’ve got my VPN configured in the MacOS Network settings as `vpn-evan` and I’ve got "all network traffic" going though it. That **_should_** keep me safe…
+
+### Create the Reconnection Script
+
+Open `Script Editor` and paste in the following:
+
+```applescript
+on idle
+	tell application "System Events"
+		tell current location of network preferences
+			set VPNService to the service "vpn-evan" -- replace this with the name of your VPN connection
+			if VPNService is not null then
+				if current configuration of VPNService is not connected then
+					beep
+					beep
+					beep
+					connect VPNService
+				end if
+			end if
+		end tell
+	end tell
+	-- in "idle" blocks, the number returned is how long to sleep until running again
+	return 60
+end idle
+```
+
+Let’s break dow this script:
+
+1. When the application is idle
+1. Find your VPN connection
+1. If it’s disconnected, beep at us (so we know what’s happening), and then try to connect
+1. Sleep for 60 seconds and check again
+
+Be sure to replace "vpn-evan" above with the name of your VPN connection
+
+So if this program is always running in the background, every minute, you will try to connect to your VPN!
+
+### Configure the Application to Run at Boot
+
+Now, we want to turn this little script into a program.
+
+**1\.** In \`Script Editor\`, go to "export" and save your script as an "application". Click "Stay open after Run Handler"
+
+![](/images/medium-export/1__dCHUfz9YeBrasiBIciXQcw.jpeg)
+
+**2\.** Open up \`System Preferences\` and then navigate to "Users" and "Startup Items". Drag and Drop your new application there!
+
+![](/images/medium-export/1__Gc5Sia3PbwpNoLGYD__RWJw.jpeg)
+
+That’s it!
+
+Thanks to [http://osxdaily.com/2016/08/10/auto-connect-vpn-mac-boot-login](http://osxdaily.com/2016/08/10/auto-connect-vpn-mac-boot-login/]%28http://osxdaily.com/2016/08/10/auto-connect-vpn-mac-boot-login/%29)

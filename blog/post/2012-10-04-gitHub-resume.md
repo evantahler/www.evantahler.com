@@ -1,0 +1,18 @@
+---
+title: GitHub Resume
+description: >-
+  This site had the wonderful idea to generate resumes from Github. I like this
+  idea. The more time passes, the more invaluable to the…
+date: '2012-10-04'
+tags:
+  - meta
+image: /images/medium-export/1__Rkwpr__BRt7ocxaqxnjnc9Q.jpeg
+---
+
+![](/images/medium-export/1__Rkwpr__BRt7ocxaqxnjnc9Q.jpeg)
+
+[This site](http://resume.github.com/) had the wonderful idea to generate resumes from Github. I like this idea. The more time passes, the more invaluable to the ecosystem gitHub becomes. I would invest now.
+
+This resume is all client-side JS, and updates on the fly.
+
+[Here’s mine](http://resume.github.com/?evantahler).
