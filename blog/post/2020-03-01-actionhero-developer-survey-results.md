@@ -10,7 +10,6 @@ tags:
   - javascript
   - node.js
 featured: false
-canonical: null
 image: /images/medium-export/1__xttMYnX__HSXA2VFjXiS__Tw.png
 ---
 

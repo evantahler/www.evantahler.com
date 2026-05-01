@@ -12,7 +12,8 @@
       "!.vitepress/cache",
       "!.vitepress/dist",
       "!blog/post",
-      "!public"
+      "!public",
+      "!coverage"
     ]
   },
   "formatter": {

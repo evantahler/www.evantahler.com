@@ -14,8 +14,10 @@ Personal site and blog (www.evantahler.com) built with **VitePress 1.x** and Vue
 - `bun run preview` — preview the built site
 - `bun run lint` — Biome check (run in CI; must pass)
 - `bun run format` — Biome auto-format
+- `bun run test` — full Vitest suite (builds the site first; see "Testing" below)
+- `bun run test:unit` — fast Vitest suite (no build)
 
-There is no test runner. CI (`.github/workflows/test.yml`) runs only `bun run lint` and `bun run build` on Ubuntu with the latest bun.
+CI (`.github/workflows/test.yml`) runs `bun run lint`, `bun run build`, then `SKIP_BUILD=1 bun run test` on Ubuntu with the latest bun.
 
 ## Architecture
 
@@ -66,6 +68,26 @@ Biome (`biome.json`) is the single source of truth — Prettier and ESLint are n
 - Lint rules: `recommended` plus `noUnusedImports` / `noUnusedVariables` / `noTsIgnore` turned **off**.
 - Vue files have linting disabled (formatting only) via the override.
 - Style: 2-space indent, 80-char line width, double quotes, trailing commas, semicolons.
+
+## Testing
+
+Vitest with happy-dom; run via `bun run test`.
+
+- `bun run test:unit` — fast suite (data loaders, content integrity, Vue component); no build required
+- `bun run test` — full suite, including the rendering suite that runs `vitepress build` first via Vitest `globalSetup`
+- `bun run test:coverage` — text + html coverage report
+
+Skip-flags for the rendering suite's `globalSetup`:
+- `SKIP_BUILD=1` — skip the build step but still run rendering tests against an existing `.vitepress/dist/` (used in CI after the dedicated Build step)
+- `SKIP_RENDERING=1` — skip the build entirely (use when running only the unit/content/component suites locally)
+
+Test layout:
+- `__tests__/data/` — data loader unit tests (`posts`, `tags`, `tag-paths`, `talks`)
+- `__tests__/content/` — frontmatter integrity across every blog post + slug-uniqueness
+- `__tests__/components/` — Vue component tests (`BlogPostHeader.vue`)
+- `__tests__/rendering/` — built-HTML assertions per page type, using `node-html-parser`
+
+`bun test` (Bun's built-in runner) is intercepted by `bunfig.toml`'s `[test] preload` and redirected to `bun run test`, since the suite uses Vitest-only APIs (`vi.mock`) and `@vue/test-utils` against happy-dom.
 
 ## Adding a blog post
 
