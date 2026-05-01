@@ -17,7 +17,7 @@ Just a handy reminder that you can add "arbitrary" commands to your node NPM mod
 
 One of my favorite features of NPM is the option of installing packages either globally or locally (with local as the default). Do you want a special version of [forever](https://github.com/nodejitsu/forever) for project-\_a and not project-\_b? You can!
 
-```raw
+```text
 global: `forever start app.js`
 local: `./node_modules/.bin/forever start app.js`
 ```
@@ -28,7 +28,7 @@ This saves me so many headaches when compared to Ruby. There’s no need for som
 
 The following syntax can be used:
 
-```raw
+```text
 npm run-script #{package} #{command}
 ```
 
@@ -50,6 +50,6 @@ You all probably know that you can define a "run" and "test" actions for any pac
 
 By default, NPM will use the "run", "start", "stop", "restart" and "test" actions from the directory you are currently in. However, you can run actions from any package available to you (either local or global) with run-script. actionHero uses this to crete new projects with the command "npm run-script actionHero generate". Note the syntax:
 
-```raw
+```text
 npm run-script #{package} #{command}
 ```

@@ -33,7 +33,7 @@ The [nodeCheker](https://github.com/evantahler/nodeChecker) project which I [spo
 
 which parses a response like:
 
-```raw
+```text
 Filesystem           1K-blocks      Used Available Use% Mounted on
 /dev/xvda1             8256952   1407440   6765640  18% /
 tmpfs                   305624         0    305624   0% /dev/shm

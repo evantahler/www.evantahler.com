@@ -54,7 +54,7 @@ When diving into the myriad of task types, It also became clear that analyzing s
 
 An example of the new api.stats.getAll method (showing off both local and global data):
 
-```raw
+```text
 stats: {
         global: {
             tasks:tasksRun: 1006,

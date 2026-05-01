@@ -63,7 +63,7 @@ What all the code above did was allow JS to access the "getToken" iOS method. Co
 
 You also need to tell the **cordova.plst** to enable the plugin by adding
 
-```raw
+```text
 <key>PushToken</key>
 <string>PushToken</string>
 ```
@@ -92,7 +92,7 @@ Just like before, I now have access to the iOs "getLastPushMessage" method. Now,
 
 You also need to tell the cordova.plst to enable the plugin by adding
 
-```raw
+```text
 <key>LastPushMessage</key>
 <string>LastPushMessage</string>
 ```
