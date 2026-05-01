@@ -1,0 +1,4 @@
+[test]
+# Tests are run by Vitest (`bun run test`), not Bun's built-in test runner.
+# This preload prints a redirect message and exits if anyone runs `bun test`.
+preload = ["./scripts/bun-test-guard.ts"]

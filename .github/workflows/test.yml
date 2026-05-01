@@ -25,3 +25,7 @@ jobs:
         run: bun run lint
       - name: Build
         run: bun run build
+      - name: Test
+        env:
+          SKIP_BUILD: "1"
+        run: bun run test

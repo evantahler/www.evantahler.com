@@ -107,10 +107,21 @@ The blog is powered by MDX files stored in `pages/blog/*.mdx`. The blog infrastr
 
 ### Testing
 
-- Bun's built-in test runner with jsdom environment
-- Tests use React 19's `createRoot` API
-- Test files in `__tests__/pages/` mirror the pages structure
-- Setup file: `test-setup.ts`
+Vitest with happy-dom; run via `bun run test`.
+
+- `bun run test:unit` — fast suite (data loaders, content integrity, Vue component); no build required
+- `bun run test` — full suite, including the rendering suite that runs `vitepress build` first via Vitest `globalSetup`
+- `bun run test:coverage` — text + html coverage report
+
+Skip-flags for the rendering suite's `globalSetup`:
+- `SKIP_BUILD=1` — skip the build step but still run rendering tests against an existing `.vitepress/dist/` (used in CI after the dedicated Build step)
+- `SKIP_RENDERING=1` — skip the build entirely (use when running only the unit/content/component suites locally)
+
+Test layout:
+- `__tests__/data/` — data loader unit tests (`posts`, `tags`, `tag-paths`, `talks`)
+- `__tests__/content/` — frontmatter integrity across every blog post + slug-uniqueness
+- `__tests__/components/` — Vue component tests (`BlogPostHeader.vue`)
+- `__tests__/rendering/` — built-HTML assertions per page type, using `node-html-parser`
 
 ### Deployment
 
