@@ -76,6 +76,24 @@ describe("blog post (/blog/post/<slug>)", () => {
   });
 });
 
+describe("blog post without canonical frontmatter", () => {
+  const sampleNoCanonical = POSTS.find((p) => !p.meta.canonical);
+
+  if (!sampleNoCanonical) {
+    it.skip("no post without canonical found", () => {});
+    return;
+  }
+
+  it("emits a self-referential canonical link in the head", () => {
+    const page = loadPage(sampleNoCanonical.url);
+    const link = page.querySelector('head link[rel="canonical"]');
+    expect(link).toBeTruthy();
+    expect(link?.getAttribute("href")).toBe(
+      `https://www.evantahler.com/blog/post/${sampleNoCanonical.slug}`,
+    );
+  });
+});
+
 describe("blog post with canonical link", () => {
   const sampleWithCanonical = POSTS.find((p) => p.meta.canonical);
 
@@ -93,5 +111,12 @@ describe("blog post with canonical link", () => {
     );
     expect(link, "canonical link should appear in meta").toBeTruthy();
     expect(link?.getAttribute("target")).toBe("_blank");
+  });
+
+  it("emits an external canonical link in the head", () => {
+    const page = loadPage(sampleWithCanonical.url);
+    const link = page.querySelector('head link[rel="canonical"]');
+    expect(link).toBeTruthy();
+    expect(link?.getAttribute("href")).toBe(sampleWithCanonical.meta.canonical);
   });
 });
