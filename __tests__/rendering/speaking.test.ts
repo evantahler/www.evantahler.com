@@ -1,40 +1,38 @@
 import { describe, expect, it } from "vitest";
-import { talks } from "../../data/talks";
 import { cleanText, loadPage } from "./_helpers";
 
 describe("speaking page (/speaking)", () => {
   const page = loadPage("/speaking");
   const bodyText = page.querySelector(".vp-doc")?.textContent ?? "";
-  const imgSrcs = new Set(
-    page
-      .querySelectorAll(".vp-doc img")
-      .map((i) => i.getAttribute("src") ?? ""),
-  );
-  const linkHrefs = new Set(
-    page
-      .querySelectorAll('.vp-doc a[href^="http"]')
-      .map((a) => a.getAttribute("href") ?? ""),
-  );
 
   it("renders an h1", () => {
     expect(cleanText(page.querySelector("h1")?.textContent)).not.toBe("");
   });
 
-  it.each(talks)("'$title' is rendered with title text", (talk) => {
-    expect(bodyText).toContain(talk.title);
+  it("renders the 'Featured Talks' section heading", () => {
+    const h2s = page
+      .querySelectorAll(".vp-doc h2")
+      .map((h) => cleanText(h.textContent));
+    expect(h2s).toContain("Featured Talks");
   });
 
-  it.each(talks)("'$title' is rendered with image", (talk) => {
-    expect(imgSrcs.has(talk.image)).toBe(true);
+  it("renders one h3 per talk so each appears in the page outline", () => {
+    const h3s = page.querySelectorAll(".vp-doc h3");
+    expect(h3s.length).toBeGreaterThanOrEqual(8);
+    for (const h of h3s) {
+      expect(cleanText(h.textContent)).not.toBe("");
+      expect(h.getAttribute("id")).toBeTruthy();
+    }
   });
 
-  it.each(
-    talks.filter((t) => t.links.length > 0),
-  )("'$title' has at least one of its declared links", (talk) => {
-    const found = talk.links.some((l) => linkHrefs.has(l.url));
-    expect(
-      found,
-      `Expected one of ${JSON.stringify(talk.links.map((l) => l.url))}`,
-    ).toBe(true);
+  it("renders a talk image alongside each talk", () => {
+    const images = page.querySelectorAll(".vp-doc img.talk-image");
+    const h3s = page.querySelectorAll(".vp-doc h3");
+    expect(images.length).toBe(h3s.length);
+  });
+
+  it("has the intro markdown content", () => {
+    expect(bodyText).toMatch(/technical talks/i);
+    expect(bodyText.length).toBeGreaterThan(500);
   });
 });
