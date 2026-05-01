@@ -4,3 +4,6 @@ node_modules
 .vitepress/dist
 public/sitemap*.xml
 coverage
+
+# Conductor workspace context
+.context/
