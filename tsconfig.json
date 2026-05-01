@@ -13,14 +13,13 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "allowJs": true,
-    "types": ["node", "bun"]
+    "types": ["node"]
   },
   "include": [
     ".vitepress/**/*.ts",
     ".vitepress/**/*.vue",
     "blog/**/*.ts",
-    "data/**/*.ts",
-    "scripts/**/*.ts"
+    "data/**/*.ts"
   ],
   "exclude": ["node_modules", ".vitepress/dist", ".vitepress/cache"]
 }
