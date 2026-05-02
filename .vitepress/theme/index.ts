@@ -1,7 +1,9 @@
 import type { Theme } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import { h } from "vue";
+import BlogPostFooter from "./BlogPostFooter.vue";
 import BlogPostHeader from "./BlogPostHeader.vue";
+import SiteFooter from "./SiteFooter.vue";
 import "./style.css";
 
 const theme: Theme = {
@@ -9,6 +11,8 @@ const theme: Theme = {
   Layout() {
     return h(DefaultTheme.Layout, null, {
       "doc-before": () => h(BlogPostHeader),
+      "doc-after": () => h(BlogPostFooter),
+      "layout-bottom": () => h(SiteFooter),
     });
   },
   enhanceApp({ router }) {

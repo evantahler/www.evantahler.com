@@ -7,7 +7,7 @@ description: Talks Evan Tahler has given on Node.js, Ruby, DevOps, AI, Data Engi
 
 ![speaking](/images/speaking-3.png)
 
-I've given a number of technical talks, focusing on Node.js, Ruby, AI, and DevOps.
+I've given a number of technical talks over the years on Node.js, Ruby, DevOps, data engineering, and lately AI agents and MCP. If you'd like me to speak at your event, guest on your podcast, or join a panel, [get in touch](/contact). I take a few of these a year and I'm happy to consider more.
 
 ## Featured Talks
 
@@ -135,6 +135,9 @@ This talk was inspired by a group of students learning to code in Seattle who we
 </div>
 </div>
 
+<details class="earlier-talks">
+<summary>Earlier talks (2015–2016)</summary>
+
 <div class="talk">
 <img class="talk-image" src="/images/redisconf.jpg" alt="Background Tasks in Node.js: A survey with Redis" />
 <div class="talk-body">
@@ -168,6 +171,12 @@ Node.js is great for all sorts of projects. In this demo, we will use Node.js to
 </div>
 </div>
 
+</details>
+
+## Want me to speak?
+
+If you're organizing a conference, meetup, podcast, or panel and any of the above looks relevant, I'd love to hear from you: [/contact](/contact). I'm especially interested in talks on AI agents, MCP, framework design, and the engineering-leadership side of building developer tools.
+
 <style scoped>
 .talk {
   display: grid;
@@ -185,6 +194,21 @@ Node.js is great for all sorts of projects. In this demo, we will use Node.js to
 }
 .talk-body h3 {
   margin: 0 0 0.5rem;
+}
+.earlier-talks {
+  margin: 1rem 0 2rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+}
+.earlier-talks summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.5rem 0;
+}
+.earlier-talks[open] summary {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 @media (max-width: 640px) {
   .talk {
