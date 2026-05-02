@@ -7,6 +7,8 @@ description: Evan Tahler's blog on software engineering, AI, data engineering, a
 import { computed } from "vue";
 import { data as posts } from "../.vitepress/data/posts.data";
 
+const latest = computed(() => posts.slice(0, 2));
+
 const grouped = computed(() => {
   const map = new Map();
   for (const p of posts) {
@@ -32,6 +34,31 @@ function fmt(date) {
 
 {{ posts.length }} posts. [Browse by tag](/blog/tags).
 
+<section class="latest-section">
+  <h2 class="latest-heading">Latest posts</h2>
+  <div class="featured-grid">
+    <a
+      v-for="p in latest"
+      :key="p.slug"
+      :href="p.url"
+      class="featured-card"
+    >
+      <div v-if="p.meta.image" class="featured-image">
+        <img :src="p.meta.image" :alt="p.meta.title" loading="lazy" />
+      </div>
+      <div class="featured-body">
+        <span class="featured-date">{{ fmt(p.meta.date) }}</span>
+        <h3 class="featured-title">{{ p.meta.title }}</h3>
+        <p v-if="p.meta.description" class="featured-desc">
+          {{ p.meta.description }}
+        </p>
+      </div>
+    </a>
+  </div>
+</section>
+
+<h2 class="archive-heading">Archive</h2>
+
 <div v-for="[year, items] in grouped" :key="year">
   <h2 :id="year">{{ year }}</h2>
   <ul class="post-list">
@@ -55,6 +82,9 @@ function fmt(date) {
 </div>
 
 <style scoped>
+.latest-section {
+  margin: 1.5rem 0 2rem;
+}
 .post-list {
   list-style: none;
   padding: 0;
