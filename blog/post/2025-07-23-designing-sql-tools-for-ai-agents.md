@@ -11,7 +11,7 @@ tags:
   - engineering
   - ai
 canonical: 'https://blog.arcade.dev/sql-tools-ai-agents-security'
-featured: false
+featured: true
 ---
 
 ![Additional workflow example showing SQL tool implementation](/images/posts/2025-07-23-designing-sql-tools-for-ai-agents/additional-workflow.png)

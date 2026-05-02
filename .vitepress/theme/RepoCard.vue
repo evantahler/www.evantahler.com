@@ -30,6 +30,19 @@ const repo = computed(() => repos.find((r) => r.full_name === props.name));
       </p>
     </div>
   </div>
+  <div v-else class="repo-card repo-card-fallback">
+    <div class="repo-body">
+      <p>
+        <a :href="`https://github.com/${name}`" target="_blank" rel="noopener">{{
+          name
+        }}</a>
+        — view on GitHub.
+      </p>
+      <p class="repo-stats">
+        Live repo data couldn't be fetched at build time.
+      </p>
+    </div>
+  </div>
 </template>
 
 <style scoped>

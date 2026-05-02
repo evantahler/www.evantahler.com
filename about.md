@@ -1,19 +1,44 @@
 ---
 title: "About Evan Tahler"
-description: About Evan Tahler — Head of Engineering at Arcade.dev, formerly Airbyte (via Grouparoo acquisition), Disney, TaskRabbit, ModCloth, Airbus.
+description: "About Evan Tahler. Head of Engineering at Arcade.dev, formerly Airbyte (via Grouparoo acquisition), Disney, TaskRabbit, ModCloth, Airbus. Creator of Actionhero and Keryx."
 ---
 
 # About
 
-![evan](/images/resume-4.png)
+![Evan Tahler](/images/resume-4.png)
 
-Evan Tahler is the Head of Engineering at [Arcade.dev](https://www.arcade.dev), building the foundation for secure and scalable agentic tools.
+Hi! I'm Evan. I've been building software professionally since 2009. My expertise sits at the intersection of two things: building the technical side of digital products, and growing the engineering teams required to do so. Most of my work has been on developer-facing infrastructure: open-source frameworks, data pipelines, and now agentic tools. I write about what I'm working on at [/blog](/blog).
 
-Prior to Arcade, Evan was the Director of Engineering of Sync Foundations at Airbyte, where he built and led the teams that focused on high-volume data movement and AI-pipelines. Evan was the CTO and co-founder of Grouparoo, the open-source reverse-ETL company, which was acquired by Airbyte.
+Currently **Head of Engineering** at [Arcade.dev](https://www.arcade.dev). Previously Director of Engineering at [Airbyte](https://airbyte.com), CTO and co-founder of [Grouparoo](https://www.grouparoo.com).
 
-Evan's expertise lies in building the technical side of digital products, and growing the teams required to do so. He's helped companies like [Airbyte](https://airbyte.com), [Disney](https://www.disney.com), [TaskRabbit](https://www.taskrabbit.com), [ModCloth](https://www.modcloth.com), and [Airbus](https://www.airbus.com) launch new global digital initiatives, and has co-founded 3 startups. He is named on multiple patents focusing on authentication and digital entertainment. Evan is an open-source innovator, and frequent speaker at software development conferences focusing on AI, Product Management, Data Engineering, Node.JS, Typescript and DevOps.
+## What I'm working on now
 
-Evan holds a Masters in Entertainment Technology and BS in Mechanical Engineering from [Carnegie Mellon University](https://www.cmu.edu/homepage/creativity/2014/fall/the-greater-good.shtml).
+At [Arcade.dev](https://www.arcade.dev) I lead the engineering team building the runtime for secure, scalable agentic tools: the layer that lets AI models actually take real-world actions on a user's behalf without the whole thing collapsing into a security incident.
+
+In my spare time I'm building [Keryx](https://www.keryxjs.com), a fullstack TypeScript framework where one Action class becomes an HTTP API, an MCP server, a WebSocket handler, a CLI tool, and a background task runner. I'm also building [macos-ts](https://github.com/evantahler/macos-ts), which gives you typed APIs over your iCloud data.
+
+## What I've built
+
+I'm probably best known in open source for **[Actionhero](https://www.actionherojs.com)** and **[node-resque](https://github.com/actionhero/node-resque)**: the realtime multi-transport Node.js framework and the Redis-backed background-job system I've maintained since 2012. Other projects:
+
+- **[Keryx](https://www.keryxjs.com)**: fullstack TypeScript framework for APIs and MCP servers (current focus)
+- **[elasticsearch-dump](https://github.com/elasticsearch-dump/elasticsearch-dump)**: import/export tools for Elasticsearch and OpenSearch (~7.9k stars, started at TaskRabbit)
+- **[Grouparoo](https://github.com/grouparoo/grouparoo)**: open-source reverse-ETL, acquired by Airbyte in 2021
+
+The full list lives at [/open-source](/open-source). If any of it's useful to you, [GitHub Sponsors](https://github.com/users/evantahler/sponsorship) keeps the lights on.
+
+## How I got here
+
+The through-line across every role has been the same: developer tools, data, and middleware. The infrastructure that sits between an application and what makes it work, and the engineering teams that ship it.
+
+- **[Arcade.dev](https://www.arcade.dev)**: Head of Engineering. Leading the team building the runtime for secure, scalable agentic tools.
+- **[Airbyte](https://airbyte.com)**: Director of Engineering, Sync Foundations. Built and led the teams focused on high-volume data movement and AI pipelines.
+- **[Grouparoo](https://www.grouparoo.com)**: CTO and co-founder of the open-source reverse-ETL company. Built the engineering team and the platform; acquired by Airbyte in 2021.
+- **Earlier**: engineering and product roles helping [Disney](https://www.disney.com), [TaskRabbit](https://www.taskrabbit.com), [ModCloth](https://www.modcloth.com), and [Airbus](https://www.airbus.com) launch new global digital initiatives. Co-founded three successful startups along the way; named on multiple patents around authentication and digital entertainment.
+
+I'm also a frequent speaker at software development conferences on AI, product management, data engineering, Node.js, TypeScript, and DevOps. The full list of talks is at [/speaking](/speaking).
+
+I went to [Carnegie Mellon](https://www.cmu.edu/homepage/creativity/2014/fall/the-greater-good.shtml) for both undergrad (BS, Mechanical Engineering) and grad school (MS, Entertainment Technology), which is a less surprising combination than it sounds.
 
 ## Companies
 
@@ -27,6 +52,13 @@ Evan holds a Masters in Entertainment Technology and BS in Mechanical Engineerin
   <a href="https://www.modcloth.com"><img src="/images/logos/modcloth.jpg" alt="modcloth" /></a>
   <a href="https://www.disney.com"><img src="/images/logos/disney.png" alt="disney" /></a>
 </p>
+
+## Stay in touch
+
+- Read what I'm thinking about → [/blog](/blog)
+- Talks I've given → [/speaking](/speaking)
+- Open source projects → [/open-source](/open-source)
+- Email, calendar, and socials → [/contact](/contact)
 
 <style scoped>
 .company-logos {

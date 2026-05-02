@@ -13,7 +13,7 @@ tags:
   - typescript
   - ai
   - open-source
-featured: false
+featured: true
 ---
 
 ![Building software for humans and agents](/images/posts/2026-05-01-software-for-humans-and-agents/image.png)
@@ -128,5 +128,3 @@ The shift is the audience. "The consumer of your software" used to mean a person
 The libraries that ship that way will be the libraries that get used. The frameworks that ship that way will be the frameworks that build them. And honestly — having now done both — the work is mostly the work I should have been doing for human readers all along. The agents just don't let me cheat.
 
 Onward.
-
-_Evan Tahler is Head of Engineering at [Arcade](https://arcade.dev). He's the creator of [Actionhero](https://github.com/actionhero/actionhero), [Keryx](https://www.keryxjs.com/), [macos-ts](https://github.com/evantahler/macos-ts), and [mcpx](https://github.com/evantahler/mcpx)._

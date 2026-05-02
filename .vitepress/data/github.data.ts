@@ -10,11 +10,15 @@ type Repo = {
 const projects = [
   { org: "ArcadeAI", name: "arcade-mcp" },
   { org: "airbytehq", name: "airbyte" },
+  { org: "actionhero", name: "keryx" },
   { org: "grouparoo", name: "grouparoo" },
   { org: "actionhero", name: "actionhero" },
   { org: "actionhero", name: "node-resque" },
   { org: "actionhero", name: "ah-sequelize-plugin" },
-  { org: "taskrabbit", name: "elasticsearch-dump" },
+  { org: "evantahler", name: "mcpx" },
+  { org: "evantahler", name: "botholomew" },
+  { org: "evantahler", name: "macos-ts" },
+  { org: "elasticsearch-dump", name: "elasticsearch-dump" },
   { org: "taskrabbit", name: "empujar" },
   { org: "evantahler", name: "dont-be-a-jerk" },
 ];
