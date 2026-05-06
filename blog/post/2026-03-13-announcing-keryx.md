@@ -34,7 +34,7 @@ A single Keryx Action automatically becomes:
 - A **background task** via Resque workers
 - An **MCP tool, resource, or prompt** that AI agents can discover and call
 
-Same validation. Same middleware. Same error handling. Five transports, one class.  Oh, and Actions are composabile now. 
+Same validation, same middleware, same error handling. Five transports, one class. Oh, and Actions are composable now.
 
 ## One Action, Every Transport
 
@@ -60,23 +60,23 @@ export class UserView implements Action {
 
 That's it. This class is simultaneously a `GET /user` endpoint, a WebSocket action, a `user:view` CLI command, and an MCP tool. The Zod schema drives input validation for every transport, and it auto-generates your OpenAPI documentation. An AI agent running `user:view` gets the same validation and error handling as a curl request hitting `/user` — because it's the same code path.
 
-If you've used Actionhero, this should feel familiar. If you haven't, the idea is straightforward: your business logic shouldn't care how a request arrived, and in-fact, any sophsticated application will need multiple transports. 
+If you've used Actionhero, this should feel familiar. If you haven't, the idea is straightforward: your business logic shouldn't care how a request arrived. Any sophisticated application will need multiple transports anyway.
 
 ## What You Get on Day One
 
-A scaffolded Keryx app boots with cookie sessions, OAuth 2.1, rate limiting, security headers, CORS, WebSocket origin validation, OpenTelemetry metrics, structured logging with correlation IDs, automatic Drizzle migrations, an OpenAPI 3 spec at `/api/swagger`, an MCP server, fan-out background tasks, real-time channels with presence tracking, and a CLI that registers every action as a command. None of these are plugins you bolt on later... but we also have a plugin system and a nacent colletion of plugins. 
+A scaffolded Keryx app boots with cookie sessions, OAuth 2.1, rate limiting, security headers, CORS, WebSocket origin validation, OpenTelemetry metrics, structured logging with correlation IDs, automatic Drizzle migrations, an OpenAPI 3 spec at `/api/swagger`, an MCP server, fan-out background tasks, real-time channels with presence tracking, and a CLI that registers every action as a command. None of these are plugins you bolt on later — but there's also a plugin system and a nascent collection of plugins.
 
 ## Why MCP Changes Things
 
-The first four transports — HTTP, WebSocket, CLI, tasks — those are table stakes for a full-stack framework. Actionhero had all of them (well, CLI was a stretch). The reason I built Keryx instead of continuing to evolve Actionhero is the fifth one: MCP.
+The first four transports — HTTP, WebSocket, CLI, tasks — every full-stack framework should have those. Actionhero had all of them (well, CLI was a stretch). The reason I built Keryx instead of continuing to evolve Actionhero is the fifth one: MCP.
 
 [MCP](https://modelcontextprotocol.io/) (Model Context Protocol) is how AI agents discover and use tools. It's becoming the standard interface between agents and the services they interact with. If you're already defining your actions with typed inputs, descriptions, and structured outputs… you're 90% of the way to an MCP tool. The shape of a good Action and the shape of a good MCP tool are nearly identical.
 
 Keryx makes the last 10% automatic. Every Action can be registered as an MCP tool with zero additional configuration. Your Zod schema becomes the tool's input schema. Your Action's name becomes the tool name. An AI agent can discover your API the same way a human developer reads your OpenAPI docs — except the agent gets a protocol it natively understands.
 
-That also means Keryx gives you per-session agent isolation and OAuth 2.1 with PKCE out of the box. Because when agents are calling your API, authentication and scoping aren't optional.  Note: we are talking about MCP-over HTTP (not stdio) - Keryx is for a deployed, remote, application.
+That also means Keryx gives you per-session agent isolation and OAuth 2.1 with PKCE out of the box. Because when agents are calling your API, authentication and scoping aren't optional. (To be clear: this is MCP over HTTP, not stdio. Keryx is for deployed, remote applications.)
 
-The same Action class can also become an MCP **resource** (URI-addressed, read-only context that agents fetch) or an MCP **prompt** (a named template surfaced as a slash command in clients like Claude Desktop). Keryx aims to support /all/ of MCP.
+The same Action class can also become an MCP **resource** (URI-addressed, read-only context that agents fetch) or an MCP **prompt** (a named template surfaced as a slash command in clients like Claude Desktop). Keryx aims to support *all* of MCP.
 
 ## Design Tools as Intentions, Not CRUD
 
