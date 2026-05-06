@@ -20,7 +20,7 @@ featured: true
 
 I've been building a few things in my spare time. A library — [macos-ts](https://github.com/evantahler/macos-ts), which gives you typed APIs over your iCloud data (Notes, Messages, Photos, Contacts) and absorbs the SQLite madness so you don't have to. And a framework — [Keryx](https://www.keryxjs.com/), the fullstack TypeScript framework for MCP and APIs: one Action class, five transports, your API is automatically an MCP server, a WebSocket handler, a CLI tool, and a background task runner.
 
-I've learned that every piece of software I write now has two audiences: a human, and an agent acting on a human's behalf. They want different things. They forgive different things. They fail differently. And building for both at once changes how you write the code.
+I've learned that every piece of software I write now has two audiences: a human, and an agent acting on a human's behalf. They want different things from the same call, and they fail in completely different ways when they don't get it. Building for both at once changes how you write the code.
 
 That sounds like a fluffy thought-leader sentence, so let me make it concrete.
 
@@ -34,7 +34,7 @@ That's not enough anymore. Your users are running agents now, and those agents w
 
 Half the internet is calling MCP "USB for agents." It's a goofy phrase, but it's basically right. MCP is the universal bus — and the underrated part is that it transcends the language your library was written in. A Python agent can call a TypeScript library. A Rust agent can call a Ruby library. The protocol is the contract; whatever your library is written in is now an implementation detail.
 
-The good news: the rules for shipping a good MCP server are the same rules for shipping a good library. Hide complexity. Return errors that explain what to do next. Write documentation that actually documents.
+The good news: the rules for shipping a good MCP server are the same rules for shipping a good library. Hide complexity, and return errors that explain what to do next.
 
 The bad news: most existing libraries fail those rules in ways that humans politely tolerate and agents don't.
 
@@ -123,8 +123,8 @@ A few things this reframing buys you, beyond the obvious "write less code":
 
 It's tempting to read all of this as "ship MCP," and stop there. That's not the point.
 
-The shift is the audience. "The consumer of your software" used to mean a person at a keyboard, or another piece of code a person wrote. Now it includes an agent acting on someone's behalf — sometimes the same person, sometimes not. That audience needs the same care you'd give a human reader of your README. Clear names. Useful errors. Docs that don't make them guess.
+The shift is the audience. "The consumer of your software" used to mean a person at a keyboard, or another piece of code a person wrote. Now it includes an agent acting on someone's behalf — sometimes the same person, sometimes not. That audience needs the same care you'd give a human reader of your README. Clear names, useful errors, and docs that don't make them guess.
 
-The libraries that ship that way will be the libraries that get used. The frameworks that ship that way will be the frameworks that build them. And honestly — having now done both — the work is mostly the work I should have been doing for human readers all along. The agents just don't let me cheat.
+The libraries and frameworks that ship that way are the ones that get used. The rest get politely worked around. And honestly — having now done both — the work is mostly the work I should have been doing for human readers all along. The agents just don't let me cheat.
 
 Onward.
