@@ -10,6 +10,7 @@ image: >-
 tags:
   - engineering
   - ai
+  - arcade
 canonical: 'https://blog.arcade.dev/sql-tools-ai-agents-security'
 featured: true
 ---

@@ -13,6 +13,7 @@ tags:
   - typescript
   - ai
   - open-source
+  - arcade
 featured: true
 ---
 
