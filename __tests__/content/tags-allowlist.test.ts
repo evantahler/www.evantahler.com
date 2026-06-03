@@ -22,6 +22,7 @@ const ALLOWED_TAGS = new Set([
   "frontend",
   "career",
   // companies & projects
+  "arcade",
   "actionhero",
   "grouparoo",
   "taskrabbit",
