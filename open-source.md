@@ -40,7 +40,7 @@ The realtime multi-transport Node.js framework I started in 2012 and still maint
 
 <RepoCard name="grouparoo/grouparoo" />
 
-The open-source reverse-ETL company I co-founded as CTO. Acquired by Airbyte in 2021; the repo is archived but the ideas live on inside Airbyte's data sync foundation.
+The open-source reverse-ETL company I co-founded as CTO. Acquired by Airbyte in 2022; the repo is archived but the ideas live on inside Airbyte's data sync foundation.
 
 ### [elasticsearch-dump/elasticsearch-dump](https://github.com/elasticsearch-dump/elasticsearch-dump)
 
