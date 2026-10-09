@@ -34,7 +34,7 @@ The through-line across every role has been the same: developer tools, data, and
 - **[Arcade.dev](https://www.arcade.dev)**: Head of Engineering. Leading the team building the runtime for secure, scalable agentic tools.
 - **[Airbyte](https://airbyte.com)**: Director of Engineering, Sync Foundations. Built and led the teams focused on high-volume data movement and AI pipelines.
 - **[Grouparoo](https://www.grouparoo.com)**: CTO and co-founder of the open-source reverse-ETL company. Built the engineering team and the platform; acquired by Airbyte in 2022.
-- **Earlier**: engineering and product roles helping [Disney](https://www.disney.com), [TaskRabbit](https://www.taskrabbit.com), [ModCloth](https://www.modcloth.com), and [Airbus](https://www.airbus.com) launch new global digital initiatives. Co-founded three successful startups along the way; named on multiple patents around authentication and digital entertainment.
+- **Earlier**: engineering and product roles helping [Disney](https://www.disney.com), [TaskRabbit](https://www.taskrabbit.com), [ModCloth](https://www.modcloth.com), and [Airbus](https://www.airbus.com) launch new global digital initiatives. Co-founded three successful startups along the way; named on multiple [patents](/patents) around authentication and digital entertainment.
 
 I'm also a frequent speaker at software development conferences on AI, product management, data engineering, Node.js, TypeScript, and DevOps. The full list of talks is at [/speaking](/speaking).
 
