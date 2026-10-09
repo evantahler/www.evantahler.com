@@ -34,4 +34,9 @@ describe("about page (/about)", () => {
     expect(link).toBeTruthy();
     expect(link?.getAttribute("href")).toBe("https://www.evantahler.com/about");
   });
+
+  it("links to the patents page", () => {
+    const hrefs = page.querySelectorAll("a").map((a) => a.getAttribute("href"));
+    expect(hrefs).toContain("/patents");
+  });
 });

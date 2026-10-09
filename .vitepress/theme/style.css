@@ -35,9 +35,9 @@
 }
 
 /* Neon-glow header image on top-of-page hero shots (about, contact,
-   speaking, open-source). The selector targets the first image after the
-   page <h1>; blog post bodies render the title via BlogPostHeader.vue
-   outside .vp-doc, so they never match this rule. */
+   speaking, open-source, patents). The selector targets the first image
+   after the page <h1>; blog post bodies render the title via
+   BlogPostHeader.vue outside .vp-doc, so they never match this rule. */
 .vp-doc h1 + p img {
   border: 2px solid #ec4899;
   border-radius: 10px;
@@ -53,6 +53,55 @@
     0 0 8px #f472b6,
     0 0 20px rgba(244, 114, 182, 0.6),
     0 0 40px rgba(244, 114, 182, 0.35);
+}
+
+/* Shared two-column rows for /speaking (.talk) and /patents (.patent). */
+.talk,
+.patent {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.talk-image,
+.patent-image {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+.patent-image {
+  background: #fff;
+}
+.talk-body h3,
+.patent-body h3 {
+  margin: 0 0 0.5rem;
+}
+.earlier-talks,
+.other-applications {
+  margin: 1rem 0 2rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+}
+.earlier-talks summary,
+.other-applications summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.5rem 0;
+}
+.earlier-talks[open] summary,
+.other-applications[open] summary {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+@media (max-width: 640px) {
+  .talk,
+  .patent {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Footer dog illustration */
