@@ -152,7 +152,7 @@ gtag('config', 'G-VY35SQM9Y1');`,
       { text: "Blog", link: "/blog" },
       { text: "Open Source", link: "/open-source" },
       { text: "Speaking", link: "/speaking" },
-      { text: "Awards", link: "/awards" },
+      { text: "Patents", link: "/patents" },
       { text: "Contact", link: "/contact" },
     ],
     socialLinks: [

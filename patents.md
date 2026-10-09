@@ -1,13 +1,13 @@
 ---
-title: "Evan Tahler: Patents & Awards"
-description: Evan Tahler's US patents in digital media and authentication, plus awards and honors.
+title: "Evan Tahler: Patents"
+description: Evan Tahler's US patents in digital media and authentication.
 ---
 
-# Patents & Awards
+# Patents
 
 ![Drawings from Evan Tahler's patents](/images/patents/patents-hero.png)
 
-Before I spent my days building developer tools, I was designing interactive experiences for Blu-ray, Digital Copy, and the web. That work — figuring out how a disc in your living room could know who you are, talk to the internet, and connect you with your friends — produced a stack of patents. Here they are, along with a few other things I'm proud of.
+Before I spent my days building developer tools, I was designing interactive experiences for Blu-ray, Digital Copy, and the web. That work — figuring out how a disc in your living room could know who you are, talk to the internet, and connect you with your friends — produced a stack of patents. Here they are.
 
 ## Patents
 
@@ -179,45 +179,6 @@ These applications were published but not (yet) granted as separate patents:
 The full list is also on [Google Scholar](https://scholar.google.com/citations?user=OweTZNQAAAAJ&hl=en).
 
 </details>
-
-## Awards & Honors
-
-<div class="honor">
-<img class="honor-image" src="/images/awards/imaginations.svg" alt="Blueprint sketch of a theme park with a castle and ferris wheel" loading="lazy" />
-<div class="honor-body">
-
-### Disney Imagineering “Imaginations” Finalist
-
-*Walt Disney Imagineering*
-
-[Imaginations](https://disneyimaginations.com) is Walt Disney Imagineering's annual design competition, founded by Disney Legend Marty Sklar to find the next generation of theme park designers. Student teams pitch a new attraction or experience to a panel of Imagineers. My team was selected as a finalist.
-
-</div>
-</div>
-
-<div class="honor">
-<img class="honor-image" src="/images/awards/hack-day.svg" alt="A trophy above a laptop showing '1st place'" loading="lazy" />
-<div class="honor-body">
-
-### Hack Day Winner — Multiple Times, at Multiple Companies
-
-I love a good hack day: a deadline, a demo, and permission to build the weird idea. I've won company hack days several times, at more than one company.
-
-</div>
-</div>
-
-<div class="honor">
-<img class="honor-image" src="/images/awards/eagle-scout.svg" alt="A medal with an eagle on a red, white, and blue ribbon" loading="lazy" />
-<div class="honor-body">
-
-### Eagle Scout
-
-*Boy Scouts of America*
-
-The highest rank in Scouting, earned by completing a leadership service project for the community.
-
-</div>
-</div>
 
 <style scoped>
 .honor {
