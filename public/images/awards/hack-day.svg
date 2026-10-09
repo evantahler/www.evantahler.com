@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Trophy on a laptop">
+  <rect width="400" height="300" fill="#1e1b4b"/>
+  <g fill="#312e81" opacity="0.6">
+    <circle cx="60" cy="50" r="3"/><circle cx="340" cy="70" r="3"/><circle cx="90" cy="230" r="2"/><circle cx="320" cy="220" r="2"/><circle cx="200" cy="30" r="2"/>
+  </g>
+  <!-- laptop -->
+  <rect x="110" y="170" width="180" height="90" rx="8" fill="#334155"/>
+  <rect x="120" y="180" width="160" height="72" rx="3" fill="#0f172a"/>
+  <path d="M90 262 h220 l-12 14 h-196 z" fill="#475569"/>
+  <g font-family="monospace" font-size="13" fill="#4ade80">
+    <text x="130" y="200">$ ship it</text>
+    <text x="130" y="220" fill="#a5b4fc">✓ demo ready</text>
+    <text x="130" y="240" fill="#fbbf24">🏆 1st place</text>
+  </g>
+  <!-- trophy -->
+  <g transform="translate(200 40)">
+    <path d="M-40 0 h80 v28 a40 40 0 0 1 -80 0 z" fill="#fbbf24"/>
+    <path d="M-40 6 h-18 a18 18 0 0 0 18 30" fill="none" stroke="#fbbf24" stroke-width="7"/>
+    <path d="M40 6 h18 a18 18 0 0 1 -18 30" fill="none" stroke="#fbbf24" stroke-width="7"/>
+    <rect x="-7" y="66" width="14" height="22" fill="#f59e0b"/>
+    <rect x="-30" y="88" width="60" height="14" rx="3" fill="#d97706"/>
+    <path d="M-25 6 v26 a25 25 0 0 0 14 22" fill="none" stroke="#fde68a" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

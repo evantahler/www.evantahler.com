@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Blueprint sketch of a theme park">
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0V20" fill="none" stroke="#3b82f6" stroke-width="0.6" opacity="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="300" fill="#1e3a8a"/>
+  <rect width="400" height="300" fill="url(#grid)"/>
+  <g fill="none" stroke="#e0f2fe" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+    <!-- castle -->
+    <path d="M60 250 V160 h20 v-15 h10 v15 h20 v-15 h10 v15 h20 V250"/>
+    <path d="M100 250 v-30 a10 10 0 0 1 20 0 v30"/>
+    <path d="M60 160 l20 -40 l20 40 M120 160 l20 -40 l20 40"/>
+    <path d="M80 120 v-15 l12 5 l-12 5"/>
+    <!-- ferris wheel -->
+    <circle cx="270" cy="150" r="70"/>
+    <circle cx="270" cy="150" r="8"/>
+    <path d="M270 80 V220 M200 150 H340 M220.5 100.5 L319.5 199.5 M319.5 100.5 L220.5 199.5"/>
+    <path d="M250 250 L270 150 L290 250 M235 250 h70"/>
+    <g fill="#fbbf24" stroke="none">
+      <circle cx="270" cy="80" r="7"/><circle cx="340" cy="150" r="7"/><circle cx="270" cy="220" r="7"/><circle cx="200" cy="150" r="7"/>
+      <circle cx="319.5" cy="100.5" r="7"/><circle cx="220.5" cy="199.5" r="7"/><circle cx="319.5" cy="199.5" r="7"/><circle cx="220.5" cy="100.5" r="7"/>
+    </g>
+    <path d="M20 250 H380" stroke-dasharray="6 6"/>
+  </g>
+  <g fill="#fde68a" font-family="sans-serif" font-size="13">
+    <text x="20" y="32">SITE PLAN — CONCEPT A</text>
+    <text x="300" y="285">SCALE 1:500</text>
+  </g>
+  <path d="M190 40 l6 12 l13 2 l-10 9 l3 13 l-12 -7 l-12 7 l3 -13 l-10 -9 l13 -2z" fill="#fbbf24"/>
+</svg>
